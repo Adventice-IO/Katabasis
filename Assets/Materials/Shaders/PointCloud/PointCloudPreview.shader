@@ -3,8 +3,6 @@ Shader "Custom/PointCloudDistanceFade"
     Properties
     {
         [Header(Appearance)]
-        _Color ("Main Color", Color) = (1,1,1,1)
-        _MainTex ("Point Texture", 2D) = "white" {}
         _MinAlpha ("Minimum Visibility", Range(0, 1)) = 0.1 // <--- NEW: Floor for opacity
         
         [Header(Distance Settings)]
@@ -36,7 +34,7 @@ Shader "Custom/PointCloudDistanceFade"
             struct appdata
             {
                 float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
+				float4 color : COLOR;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -45,6 +43,7 @@ Shader "Custom/PointCloudDistanceFade"
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
                 float camDist : TEXCOORD1;
+				float4 color : COLOR;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -72,7 +71,7 @@ Shader "Custom/PointCloudDistanceFade"
                 o.camDist = distance(worldPos, _WorldSpaceCameraPos);
 
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.color = v.color;
                 return o;
             }
 
@@ -80,7 +79,7 @@ Shader "Custom/PointCloudDistanceFade"
             {
                 UNITY_SETUP_INSTANCE_ID(i);
                 
-                fixed4 col = tex2D(_MainTex, i.uv) * UNITY_ACCESS_INSTANCED_PROP(Props, _Color);
+                fixed4 col =  i.color;
 
                 float dist = i.camDist;
                 
