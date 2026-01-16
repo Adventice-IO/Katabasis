@@ -122,16 +122,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 5223925736340888276}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e442944a6b7f2f458c1c92e0a4ba115, type: 3}
+  m_Script: {fileID: 11500000, guid: a57132ab64de587439840132e6d3b33e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tunnel
   salleDepart: {fileID: 0}
   salleArrivee: {fileID: 0}
-  cornerSlowdown: 0.5
-  curvatureSensitivity: 0.2
-  curvatureSampleRadius: 0.005
+  cornerSlowdown: 0.6
+  curvatureSensitivity: 15
+  curvatureSampleRadius: 0.05
   curvatureSampleCount: 5
   manualSlowdowns: []
   showHeatmap: 1
-  vizResolution: 0.005
+  vizResolution: 0.01
   previzResolution: 0.05
