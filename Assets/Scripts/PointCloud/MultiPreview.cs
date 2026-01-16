@@ -4,7 +4,6 @@ using BAPointCloudRenderer.Loading;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,6 +19,7 @@ namespace BAPointCloudRenderer.CloudController
     /// In general, the preview doesn't always update live, so please use the "Update Preview"-Button in the editor
     /// to update the preview after you made changes.
     /// </summary>
+    
     [ExecuteAlways]
     public class MultiPreview : MonoBehaviour
     {
@@ -56,11 +56,10 @@ namespace BAPointCloudRenderer.CloudController
 
         public void Start()
         {
+            gameObject.hideFlags = HideFlags.DontSaveInBuild;
             gameObject.SetActive(!Application.isPlaying);
-            if (!Application.isPlaying)
-            {
-                previewScene = EnsurePreviewSceneLoaded();
-            }
+            previewScene = EnsurePreviewSceneLoaded();
+            if(Application.isPlaying) EditorSceneManager.UnloadSceneAsync(previewScene);
         }
 
         public void OnDestroy()
@@ -121,12 +120,16 @@ namespace BAPointCloudRenderer.CloudController
 
         public void KillPreview()
         {
-            GameObject[] rootObjects = previewScene.GetRootGameObjects();
-            for (int i = 0; i < rootObjects.Length; i++)
+            if (previewScene != null)
             {
-                DestroyImmediate(rootObjects[i]);
+                GameObject[] rootObjects = previewScene.GetRootGameObjects();
+
+                for (int i = 0; i < rootObjects.Length; i++)
+                {
+                    DestroyImmediate(rootObjects[i]);
+                }
+                EditorSceneManager.SaveScene(previewScene, PreviewScenePath);
             }
-            EditorSceneManager.SaveScene(previewScene, PreviewScenePath);
 
             //PreviewObject[] previewChildren = GetComponentsInChildren<PreviewObject>(true);
             //for (int i = 0; i < previewChildren.Length; ++i)
