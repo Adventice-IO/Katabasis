@@ -58,7 +58,6 @@ public class PointCloudBlock : MonoBehaviour
 
     public void kill()
     {
-        Debug.Log("PointCloudBlock: kill()");
         timeAtKill = Time.time;
     }
 }

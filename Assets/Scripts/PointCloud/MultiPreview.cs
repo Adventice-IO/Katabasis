@@ -1,12 +1,13 @@
-using System;
-using System.Threading;
-using UnityEngine;
-using UnityEditor;
-
 using BAPointCloudRenderer.CloudData;
-using BAPointCloudRenderer.Loading;
-using System.Collections.Generic;
 using BAPointCloudRenderer.Controllers;
+using BAPointCloudRenderer.Loading;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace BAPointCloudRenderer.CloudController
 {
@@ -49,9 +50,27 @@ namespace BAPointCloudRenderer.CloudController
         /// </summary>
         public int PointBudget = 65000;
 
+        private const string PreviewScenePath = "Assets/Scenes/Local/PreviewData.unity";
+        private GameObject _previewRoot;
+        private Scene previewScene;
+
         public void Start()
         {
             gameObject.SetActive(!Application.isPlaying);
+            if (!Application.isPlaying)
+            {
+                previewScene = EnsurePreviewSceneLoaded();
+            }
+        }
+
+        public void OnDestroy()
+        {
+            Debug.Log("MultiPreview destroyed");
+            //unload preview scene
+            if (previewScene.IsValid() && previewScene.isLoaded)
+            {
+                EditorSceneManager.CloseScene(previewScene, true);
+            }
         }
 
         public void UpdatePreview()
@@ -71,6 +90,12 @@ namespace BAPointCloudRenderer.CloudController
             }
             //Delete Preview of old set
             KillPreview();
+
+
+            _previewRoot = new GameObject("Preview_Root");
+            _previewRoot.transform.rotation = transform.rotation;
+            _previewRoot.transform.position = transform.position;
+
             //Copy current values to make sure they are consistent
             _setToPreview = SetToPreview;
             _showPoints = ShowPoints;
@@ -96,32 +121,58 @@ namespace BAPointCloudRenderer.CloudController
 
         public void KillPreview()
         {
-            PreviewObject[] previewChildren = GetComponentsInChildren<PreviewObject>(true);
-            for (int i = 0; i < previewChildren.Length; ++i)
+            GameObject[] rootObjects = previewScene.GetRootGameObjects();
+            for (int i = 0; i < rootObjects.Length; i++)
             {
-                DestroyImmediate(previewChildren[i].gameObject);
+                DestroyImmediate(rootObjects[i]);
             }
+            EditorSceneManager.SaveScene(previewScene, PreviewScenePath);
 
-            // Backward compatibility: also remove previews parented directly to the point cloud set transform
-            if (_setTransform != null)
-            {
-                List<GameObject> toRemove = new List<GameObject>();
-                for (int i = 0; i < _setTransform.childCount; i++)
-                {
-                    Transform child = _setTransform.GetChild(i);
-                    if (child.GetComponent<PreviewObject>() != null)
-                    {
-                        toRemove.Add(child.gameObject);
-                    }
-                }
-                for (int i = 0; i < toRemove.Count; i++)
-                {
-                    DestroyImmediate(toRemove[i]);
-                }
-            }
+            //PreviewObject[] previewChildren = GetComponentsInChildren<PreviewObject>(true);
+            //for (int i = 0; i < previewChildren.Length; ++i)
+            //{
+            //    DestroyImmediate(previewChildren[i].gameObject);
+            //}
+
+            //// Backward compatibility: also remove previews parented directly to the point cloud set transform
+            //if (_setTransform != null)
+            //{
+            //    List<GameObject> toRemove = new List<GameObject>();
+            //    for (int i = 0; i < _setTransform.childCount; i++)
+            //    {
+            //        Transform child = _setTransform.GetChild(i);
+            //        if (child.GetComponent<PreviewObject>() != null)
+            //        {
+            //            toRemove.Add(child.gameObject);
+            //        }
+            //    }
+            //    for (int i = 0; i < toRemove.Count; i++)
+            //    {
+            //        DestroyImmediate(toRemove[i]);
+            //    }
+            //}
 
             _currentBB = null;
 
+        }
+
+        private Scene EnsurePreviewSceneLoaded()
+        {
+            Scene scene = SceneManager.GetSceneByPath(PreviewScenePath);
+
+            // Case 1: Scene is already loaded in hierarchy
+            if (scene.IsValid() && scene.isLoaded) return scene;
+
+            // Case 2: Scene file exists on disk, but not loaded -> Open it Additively
+            if (System.IO.File.Exists(PreviewScenePath))
+            {
+                return EditorSceneManager.OpenScene(PreviewScenePath, OpenSceneMode.Additive);
+            }
+
+            // Case 3: File doesn't exist -> Create new Scene
+            scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
+            EditorSceneManager.SaveScene(scene, PreviewScenePath);
+            return scene;
         }
 
         //This loads bounding boxes and also point cloud meta data (if showpoints is enabled).
@@ -223,6 +274,7 @@ namespace BAPointCloudRenderer.CloudController
                 _loaders = null;
                 _nodes = null;
             }
+
         }
 
         public void OnDrawGizmos()
@@ -303,8 +355,9 @@ namespace BAPointCloudRenderer.CloudController
                     go.transform.localPosition = Vector3.zero;
                     go.transform.localRotation = Quaternion.identity;
                     go.transform.localScale = new Vector3(1, 1, 1);
-                    go.transform.SetParent(transform, false);
-                    go.hideFlags = HideFlags.DontSave;
+                    go.transform.SetParent(_previewRoot.transform, false);
+
+                    //go.hideFlags = HideFlags.DontSave;
 
                     // Apply version-specific translation and center offset
                     Vector3 extra = Vector3.zero;
@@ -327,6 +380,10 @@ namespace BAPointCloudRenderer.CloudController
                     createdParts++;
                 }
             }
+
+            Debug.Log("Preview: Created preview with total " + data.Count + " point clouds.");
+            SceneManager.MoveGameObjectToScene(_previewRoot, previewScene);
+            EditorSceneManager.SaveScene(previewScene, PreviewScenePath);
         }
 
         //Samples the point clouds, so to choose the points equally from all the clouds.

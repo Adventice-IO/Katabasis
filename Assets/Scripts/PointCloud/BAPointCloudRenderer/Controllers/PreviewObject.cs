@@ -15,10 +15,12 @@ namespace BAPointCloudRenderer.Controllers
     {
         public void Start()
         {
-            if (Application.isPlaying)
-            {
-                Destroy(gameObject);
-            }
+ 
+        }
+
+        public void OnDestroy()
+        {
+            Debug.Log("Preview Object Destroyed");
         }
     }
 }
