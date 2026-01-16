@@ -51,6 +51,7 @@ namespace BAPointCloudRenderer.CloudController
 
         public void Start()
         {
+            gameObject.SetActive(!Application.isPlaying);
         }
 
         public void UpdatePreview()
@@ -69,14 +70,13 @@ namespace BAPointCloudRenderer.CloudController
                 _createMesh = false;
             }
             //Delete Preview of old set
-            HidePreview();
+            KillPreview();
             //Copy current values to make sure they are consistent
             _setToPreview = SetToPreview;
             _showPoints = ShowPoints;
             _setTransform = _setToPreview.transform;
             _pointBudget = PointBudget;
-            //Hide old Preview
-            HidePreview();
+
             //Look for loaders for the given set
             PointCloudLoader[] allLoaders = FindObjectsOfType<PointCloudLoader>();
             _loaders = new List<PointCloudLoader>();
@@ -93,9 +93,9 @@ namespace BAPointCloudRenderer.CloudController
             loadingThread.Start();
         }
 
-        public void HidePreview()
+
+        public void KillPreview()
         {
-            // Remove all preview objects parented to this MultiPreview
             PreviewObject[] previewChildren = GetComponentsInChildren<PreviewObject>(true);
             for (int i = 0; i < previewChildren.Length; ++i)
             {
@@ -119,7 +119,9 @@ namespace BAPointCloudRenderer.CloudController
                     DestroyImmediate(toRemove[i]);
                 }
             }
+
             _currentBB = null;
+
         }
 
         //This loads bounding boxes and also point cloud meta data (if showpoints is enabled).
