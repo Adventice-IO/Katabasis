@@ -5,6 +5,8 @@ using Unity.Mathematics;
 using UnityEditor.Splines;
 using UnityEditor;
 using System.Linq;
+using System;
+
 
 
 
@@ -14,7 +16,7 @@ using UnityEditor.Splines.Editor;    // Required for SplineTool
 #endif
 
 [RequireComponent(typeof(SplineContainer))]
-[ExecuteInEditMode]
+[ExecuteAlways]
 public class Tunnel : MonoBehaviour
 {
     [Header("General Settings")]
@@ -40,6 +42,9 @@ public class Tunnel : MonoBehaviour
     [Header("Manual Triggers")]
     public List<ManualSlowdown> manualSlowdowns = new List<ManualSlowdown>();
 
+    [Header("Manipulation")]
+    public bool autoGroundKnots = true;
+
     [Header("Editor Viz")]
     public bool showHeatmap = true;
     [Range(0.005f, 0.01f)]
@@ -57,6 +62,8 @@ public class Tunnel : MonoBehaviour
     private bool heatmapDirty = true;
     private bool pendingHeatmapOnEditEnd = false;
     private bool lastWasSelected = false;
+
+    private float3[] lastKnotsPositions;
 
     [System.Serializable]
     public class ManualSlowdown
@@ -321,6 +328,7 @@ public class Tunnel : MonoBehaviour
                 splineContainer.Spline.SetKnot(last, new BezierKnot(localPos));
         }
         gameObject.name = $"{salleDepart?.name} > {salleArrivee?.name}";
+
     }
 
     // --- VISUALIZATION ONLY ---
@@ -364,7 +372,7 @@ public class Tunnel : MonoBehaviour
             }
             else
             {
-                Debug.Log("Still editing spline, skipping heatmap regeneration this frame.");
+                //Debug.Log("Still editing spline, skipping heatmap regeneration this frame.");
                 return;
             }
 #endif
@@ -425,7 +433,7 @@ public class Tunnel : MonoBehaviour
         bool needRegen = heatmapDirty || hash != lastHeatmapHash || cachedHeatPositions.Count == 0;
         if (needRegen)
         {
-            Debug.Log("Regenerating Tunnel Heatmap Visualization Cache");
+            //Debug.Log("Regenerating Tunnel Heatmap Visualization Cache");
             cachedHeatPositions.Clear();
             cachedHeatValues.Clear();
 
@@ -516,7 +524,7 @@ public class Tunnel : MonoBehaviour
         float3 tanOut = (float3)tangentWorld * handleLen;
         float3 tanIn = -tanOut;
         tanIn.y = 0;
-        tanOut.y =0;
+        tanOut.y = 0;
         var newKnot = new BezierKnot(nearestLocal, tanIn, tanOut);
 
 #if UNITY_EDITOR

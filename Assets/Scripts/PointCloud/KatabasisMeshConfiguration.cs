@@ -4,7 +4,7 @@ using BAPointCloudRenderer.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 
-class KatabasisMeshConfiguration : MeshConfiguration
+public class KatabasisMeshConfiguration : MeshConfiguration
 {
     public PointCloudProfile profile = null;
     public Material material;

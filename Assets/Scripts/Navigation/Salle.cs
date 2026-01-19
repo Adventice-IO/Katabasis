@@ -21,7 +21,7 @@ public class Salle : MonoBehaviour
 
         // draw centered text at position
 #if UNITY_EDITOR
-        var labelPos = transform.position + Vector3.up * 6;
+        var labelPos = transform.position + Vector3.up * 10;
         var style = new GUIStyle
         {
             alignment = TextAnchor.MiddleCenter

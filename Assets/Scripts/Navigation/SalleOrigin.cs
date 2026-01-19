@@ -16,7 +16,7 @@ public class SalleOrigin : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.blue;
+        Gizmos.color = Color.cyan;
         Gizmos.DrawWireCube(transform.position + Vector3.up * 0.5f, new Vector3(1, 1, 1));
 
         //Draw down arrow

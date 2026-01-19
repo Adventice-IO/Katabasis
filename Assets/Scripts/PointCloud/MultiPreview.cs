@@ -19,7 +19,7 @@ namespace BAPointCloudRenderer.CloudController
     /// In general, the preview doesn't always update live, so please use the "Update Preview"-Button in the editor
     /// to update the preview after you made changes.
     /// </summary>
-    
+
     [ExecuteAlways]
     public class MultiPreview : MonoBehaviour
     {
@@ -36,6 +36,7 @@ namespace BAPointCloudRenderer.CloudController
         private const int MaxVerticesPerMesh = 65000; // Unity 16-bit index limit safe cap
         private Dictionary<PointCloudLoader, PointCloudMetaData> _loaderMeta = null; // meta per loader
         private Vector3 _centerOffset = Vector3.zero; // applied to all preview GOs
+
 
         /// <summary>
         /// PointCloudSet for which to create the preview
@@ -59,7 +60,9 @@ namespace BAPointCloudRenderer.CloudController
             gameObject.hideFlags = HideFlags.DontSaveInBuild;
             gameObject.SetActive(!Application.isPlaying);
             previewScene = EnsurePreviewSceneLoaded();
-            if(Application.isPlaying) EditorSceneManager.UnloadSceneAsync(previewScene);
+
+            if (Application.isPlaying) EditorSceneManager.UnloadSceneAsync(previewScene);
+
         }
 
         public void OnDestroy()
@@ -518,6 +521,23 @@ namespace BAPointCloudRenderer.CloudController
             }
 
             return result;
+        }
+
+        public Transform getPreviewRoot()
+        {
+            if(Application.isPlaying)
+            {
+                return null;
+            }
+
+            previewScene = EnsurePreviewSceneLoaded();
+            GameObject[] previewRoots = previewScene.GetRootGameObjects();
+            if (previewRoots.Length > 0)
+            {
+                return previewRoots[0].transform;
+            }
+
+            return null;
         }
     }
 }
