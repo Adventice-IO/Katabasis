@@ -63,7 +63,7 @@ public class Tunnel : MonoBehaviour
     private bool pendingHeatmapOnEditEnd = false;
     private bool lastWasSelected = false;
 
-    private float3[] lastKnotsPositions;
+    LineRenderer lineRenderer;
 
     [System.Serializable]
     public class ManualSlowdown
@@ -84,12 +84,18 @@ public class Tunnel : MonoBehaviour
         }
 
         spline = splineContainer.Spline;
+        lineRenderer = GetComponent<LineRenderer>();
+        UpdateLineRenderer();
+
+
     }
 
     private void OnEnable()
     {
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
         Spline.Changed += OnSplineChanged;
+        UpdateLineRenderer();
+
     }
 
     private void OnDisable()
@@ -106,6 +112,10 @@ public class Tunnel : MonoBehaviour
             // Defer regeneration when spline changes; mark pending. Actual rebuild occurs when editing stops
             pendingHeatmapOnEditEnd = true;
         }
+
+        //recalculate lineRenderer
+
+        UpdateLineRenderer();
     }
 
     private void OnValidate()
@@ -119,9 +129,6 @@ public class Tunnel : MonoBehaviour
         heatmapDirty = true;
     }
 
-    /// <summary>
-    /// PUBLIC API: Returns the ideal speed at a specific normalized point (0-1) on the spline.
-    /// </summary>
     // PLAN / PSEUDOCODE:
     // 1. Keep ComputeBaseSpeed(tLocal) as before (curvature + manual zones).
     // 2. Choose a deltaT (based on vizResolution with sensible clamps).
@@ -548,4 +555,36 @@ public class Tunnel : MonoBehaviour
         EditorUtility.SetDirty(splineContainer);
 #endif
     }
+
+
+    void UpdateLineRenderer()
+    {
+        if (lineRenderer == null)
+        {
+            lineRenderer = GetComponent<LineRenderer>();
+            if (lineRenderer == null)
+            {
+                lineRenderer = gameObject.AddComponent<LineRenderer>();
+                lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+                lineRenderer.widthMultiplier = 0.1f;
+                lineRenderer.positionCount = 0;
+                lineRenderer.loop = false;
+                lineRenderer.useWorldSpace = true;
+                lineRenderer.startColor = Color.white;
+                lineRenderer.endColor = Color.white;
+            }
+        }
+        if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
+        if (splineContainer == null || splineContainer.Spline == null) return;
+        List<Vector3> points = new List<Vector3>();
+        float resolution = 0.005f;
+        for (float t = 0; t <= 1.0f; t += resolution)
+        {
+            Vector3 pos = splineContainer.EvaluatePosition(t);
+            points.Add(pos);
+        }
+        lineRenderer.positionCount = points.Count;
+        lineRenderer.SetPositions(points.ToArray());
+    }
+
 }
