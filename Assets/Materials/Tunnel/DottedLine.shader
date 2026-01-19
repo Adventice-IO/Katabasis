@@ -4,12 +4,15 @@ Shader "Katabasis/DottedLine"
     {
         [MainColor] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
         [MainTexture] _BaseMap("Base Map", 2D) = "white" {}
-        [Gap] _Gap("Gap", Range(0.001, 1)) = 0.1
+        [Gap] _Gap("Gap", Range(0.001, .01)) = 0.1
+        [Round] _Round("Round Corners", Range(0,1))= 0.5
     }
 
     SubShader
     {
-        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
+        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
+        Blend SrcAlpha OneMinusSrcAlpha
+        ZWrite Off
 
         Pass
         {
@@ -39,6 +42,7 @@ Shader "Katabasis/DottedLine"
                 half4 _BaseColor;
                 float4 _BaseMap_ST;
                 float _Gap;
+                float _Round;
             CBUFFER_END
 
             Varyings vert(Attributes IN)
@@ -51,10 +55,45 @@ Shader "Katabasis/DottedLine"
 
             half4 frag(Varyings IN) : SV_Target
             {
-                if(IN.uv.x % _Gap > _Gap/2)
+                float modPos = fmod(IN.uv.x, _Gap) *2.0/ _Gap;
+                if(modPos > 1)
                 {
                     discard;
                 }
+                //round corners
+                float rc = _Round/2.0;
+                float2 relUV = float2(modPos, IN.uv.y);
+                if(relUV.x < rc)
+                {
+                    if(relUV.y < rc)
+                    {
+                        float dist = distance(relUV, float2(rc, rc));
+                        if(dist > rc)
+                            discard;
+                    }
+                    else if(relUV.y > 1.0 - rc)
+                    {
+                        float dist = distance(relUV, float2(rc, 1.0 - rc));
+                        if(dist > rc)
+                            discard;
+                    }
+                }else if(relUV.x > 1.0 - rc)
+                {
+                    if(relUV.y < rc)
+                    {
+                        float dist = distance(relUV, float2(1.0 - rc, rc));
+                        if(dist > rc)
+                            discard;
+                    }
+                    else if(relUV.y > 1.0 - rc)
+                    {
+                        float dist = distance(relUV, float2(1.0 - rc, 1.0 - rc));
+                        if(dist > rc)
+                            discard;
+                    }
+                }
+
+
                 half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
                 return color;
             }

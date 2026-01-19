@@ -84,7 +84,7 @@ public class Tunnel : MonoBehaviour
         }
 
         spline = splineContainer.Spline;
-        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer = GetComponentInChildren<LineRenderer>();
         UpdateLineRenderer();
 
 
