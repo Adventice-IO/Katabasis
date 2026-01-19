@@ -17,11 +17,11 @@ public class Salle : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = color;
-        Gizmos.DrawWireCube(transform.position + Vector3.up * 5, new Vector3(2, 10, 2));
+        Gizmos.DrawWireCube(transform.position + Vector3.up * 1.5f, new Vector3(5, 3 , 5));
 
         // draw centered text at position
 #if UNITY_EDITOR
-        var labelPos = transform.position + Vector3.up * 12;
+        var labelPos = transform.position + Vector3.up * 6;
         var style = new GUIStyle
         {
             alignment = TextAnchor.MiddleCenter
@@ -30,4 +30,7 @@ public class Salle : MonoBehaviour
         UnityEditor.Handles.Label(labelPos, gameObject.name, style);
 #endif
     }
+
+    public Transform origin { get { return transform.Find("Origin"); } }
+    public Interview[] interviews { get { return GetComponentsInChildren<Interview>(); } }
 }

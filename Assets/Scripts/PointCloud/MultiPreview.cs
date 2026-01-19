@@ -102,7 +102,7 @@ namespace BAPointCloudRenderer.CloudController
             _pointBudget = PointBudget;
 
             //Look for loaders for the given set
-            PointCloudLoader[] allLoaders = FindObjectsOfType<PointCloudLoader>();
+            PointCloudLoader[] allLoaders = FindObjectsByType<PointCloudLoader>(FindObjectsSortMode.None);
             _loaders = new List<PointCloudLoader>();
             _nodes = new List<Node>();
             _loaderMeta = new Dictionary<PointCloudLoader, PointCloudMetaData>();

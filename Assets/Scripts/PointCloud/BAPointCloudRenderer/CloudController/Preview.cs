@@ -73,7 +73,7 @@ namespace BAPointCloudRenderer.CloudController
             //Hide old Preview
             HidePreview();
             //Look for loaders for the given set
-            PointCloudLoader[] allLoaders = FindObjectsOfType<PointCloudLoader>();
+            PointCloudLoader[] allLoaders = FindObjectsByType<PointCloudLoader>(FindObjectsSortMode.None);
             _loaders = new List<PointCloudLoader>();
             _nodes = new List<Node>();
             for (int i = 0; i < allLoaders.Length; ++i)
@@ -89,7 +89,7 @@ namespace BAPointCloudRenderer.CloudController
 
         public void HidePreview()
         {
-            PreviewObject[] previewObjects = FindObjectsOfType<PreviewObject>();
+            PreviewObject[] previewObjects = FindObjectsByType<PreviewObject>(FindObjectsSortMode.None);
             for (int i = 0; i < previewObjects.Length; ++i)
             {
                 if (previewObjects[i].transform.parent == _setTransform)

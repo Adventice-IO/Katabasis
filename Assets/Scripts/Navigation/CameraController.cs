@@ -105,7 +105,7 @@ public class CameraController : MonoBehaviour
     {
         if (salle != null)
         {
-            transform.position = salle.transform.position;
+            transform.position = salle.origin.position;
             return;
         }
 
@@ -149,9 +149,11 @@ public class CameraController : MonoBehaviour
             if (animateRotation)
             {
                 Vector3 forward = splineContainer.EvaluateTangent(trackPosition);
-                Vector3 up = splineContainer.EvaluateUpVector(trackPosition);
+                Vector3 up = Vector3.up;
                 if (forward != Vector3.zero)
+                {
                     transform.rotation = Quaternion.LookRotation(forward, up);
+                }
             }
         }
     }

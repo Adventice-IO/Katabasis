@@ -3,6 +3,10 @@ using UnityEngine.Splines;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEditor.Splines;
+using UnityEditor;
+using System.Linq;
+
+
 
 #if UNITY_EDITOR
 using UnityEditor.EditorTools; // Required for ToolManager
@@ -22,13 +26,13 @@ public class Tunnel : MonoBehaviour
     [Range(0f, 1f)]
     public float cornerSlowdown = 0.6f;
     [Tooltip("How sensitive the system is to curves.")]
-    [Range(0.001f, 0.3f)]
-    public float curvatureSensitivity = 15f;
+    [Range(0.001f, 0.1f)]
+    public float curvatureSensitivity = .01f;
 
     [Header("Curvature Smoothing")]
     [Tooltip("How far (in normalized spline parameter) to sample curvature when computing a smoothed curvature value.")]
-    [Range(0f, 0.5f)]
-    public float curvatureSampleRadius = 0.05f;
+    [Range(0f, 0.1f)]
+    public float curvatureSampleRadius = 0.01f;
     [Tooltip("How many samples (odd) to take across the sample radius for smoothing. Higher -> smoother but more expensive.")]
     [Range(1, 21)]
     public int curvatureSampleCount = 5;
@@ -44,6 +48,7 @@ public class Tunnel : MonoBehaviour
     public float previzResolution = 0.05f;
 
     private SplineContainer splineContainer;
+    private Spline spline;
 
     // --- Heatmap cache ---
     private int lastHeatmapHash = 0;
@@ -70,6 +75,8 @@ public class Tunnel : MonoBehaviour
             //Add two knots if none exist
             splineContainer.Spline.Add(new BezierKnot(Vector3.zero));
         }
+
+        spline = splineContainer.Spline;
     }
 
     private void OnEnable()
@@ -298,7 +305,7 @@ public class Tunnel : MonoBehaviour
 
         if (salleDepart != null && splineContainer != null)
         {
-            Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleDepart.transform.position);
+            Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleDepart.origin.position);
             var current = splineContainer.Spline[0];
             Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
             if ((curPos - localPos).sqrMagnitude > 1e-6f)
@@ -307,7 +314,7 @@ public class Tunnel : MonoBehaviour
         if (salleArrivee != null && splineContainer != null)
         {
             int last = splineContainer.Spline.Count - 1;
-            Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleArrivee.transform.position);
+            Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleArrivee.origin.position);
             var current = splineContainer.Spline[last];
             Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
             if ((curPos - localPos).sqrMagnitude > 1e-6f)
@@ -463,19 +470,74 @@ public class Tunnel : MonoBehaviour
             Gizmos.color = Color.Lerp(Color.red, stdColor, cachedHeatValues[i / 2]);
             Gizmos.DrawLine(cachedHeatPositions[i], cachedHeatPositions[i + 1]);
         }
+    }
 
-        //// Draw Slowdown Zones (Spheres)z
-        //foreach (var zone in manualSlowdowns)
-        //{
-        //    Vector3 zonePos = splineContainer.EvaluatePosition(zone.position);
-        //
-        //    // Draw filled sphere with transparency
-        //    Gizmos.color = new Color(1f, 0f, 0f, 0.05f);
-        //    Gizmos.DrawSphere(zonePos, zone.radius);
-        //
-        //    // Draw wireframe
-        //    Gizmos.color = new Color(1f, 0f, 0f, 0.1f);
-        //    Gizmos.DrawWireSphere(zonePos, zone.radius);
-        //}
+
+    public void AddKnotAtPosition(Vector3 position)
+    {
+        float3 localProj = splineContainer.transform.InverseTransformPoint(position);
+        SplineUtility.GetNearestPoint(spline, localProj, out float3 nearestLocal, out float refinedT);
+
+        int index = 0;
+
+        // Compute insertion index from refinedT
+        int curveCount = 0;
+        try
+        {
+            curveCount = spline.GetCurveCount();
+        }
+        catch
+        {
+            curveCount = Mathf.Max(1, spline.Count - 1);
+        }
+
+        if (curveCount <= 0)
+        {
+            return;
+        }
+
+        var knots = spline.ToList();
+        for (var i = 0; i < knots.Count; i++)
+        {
+            SplineUtility.GetNearestPoint(spline, knots[i].Position, out float3 nearestLocalKnot, out float refinedKnot);
+            if (refinedT < refinedKnot)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        // Build knot data at refined position
+        Vector3 worldNearest = splineContainer.transform.TransformPoint((Vector3)nearestLocal);
+        float3 tangentWorldF3 = splineContainer.EvaluateTangent(refinedT);
+        Vector3 tangentWorld = new Vector3(tangentWorldF3.x, tangentWorldF3.y, tangentWorldF3.z).normalized;
+        float handleLen = HandleUtility.GetHandleSize(worldNearest) * 0.3f;
+
+        float3 tanOut = (float3)tangentWorld * handleLen;
+        float3 tanIn = -tanOut;
+        tanIn.y = 0;
+        tanOut.y =0;
+        var newKnot = new BezierKnot(nearestLocal, tanIn, tanOut);
+
+#if UNITY_EDITOR
+        Undo.RecordObject(splineContainer, "Add Spline Knot");
+#endif
+
+        try
+        {
+            spline.Insert(index, newKnot);
+            spline.SetTangentMode(index, TangentMode.Mirrored);
+            Debug.Log("Inserted knot at index " + index);
+        }
+        catch
+        {
+            // Fallback to appending if Insert is unavailable
+            spline.Add(newKnot);
+            spline.SetTangentMode(spline.Count - 1, TangentMode.Mirrored);
+        }
+
+#if UNITY_EDITOR
+        EditorUtility.SetDirty(splineContainer);
+#endif
     }
 }

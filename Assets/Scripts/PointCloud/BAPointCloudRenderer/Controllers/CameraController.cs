@@ -7,9 +7,9 @@ namespace BAPointCloudRenderer.Controllers {
     public class CameraController : MonoBehaviour {
 
         //Current yaw
-        private float yaw = 0.0f;
+        //private float yaw = 0.0f;
         //Current pitch
-        private float pitch = 0.0f;
+        //private float pitch = 0.0f;
 
         public float normalSpeed = 100;
 

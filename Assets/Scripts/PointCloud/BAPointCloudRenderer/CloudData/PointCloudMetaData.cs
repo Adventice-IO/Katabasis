@@ -126,7 +126,7 @@ namespace BAPointCloudRenderer.CloudData
         public Hierarchy hierarchy;
         public string pointAttributes;
         public List<float> offset;
-        public new List<double> scale;
+        public List<double> scale;
         public BoundingBoxV2 boundingBox;
         public string encoding = "DEFAULT";
         public List<PointAttributeV2_0> attributes;
