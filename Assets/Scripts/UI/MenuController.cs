@@ -1,0 +1,168 @@
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
+using static UnityEngine.Analytics.IAnalytic;
+
+
+[ExecuteAlways]
+public class MenuController : MonoBehaviour
+{
+    [SerializeField] private UIDocument uiDocument;
+    [SerializeField] private InputActionProperty menuButtonAction;
+
+
+    CameraController cameraController;
+
+    public Transform salles;
+    public Transform tunnels;
+    public
+
+    ListView sallesList;
+    ListView tunnelsList;
+
+    public enum MotionMode
+    {
+        Free,
+        Curve
+    }
+
+    public enum CurrentTool
+    {
+        Move,
+        Rotate
+    }
+
+    public static MotionMode currentMotionMode = MotionMode.Free;
+    public static CurrentTool currentTool = CurrentTool.Move;
+
+    private void OnEnable()
+    {
+        // Safety check: ensure we have the document reference
+        SetupMenu();
+
+        if (Application.isPlaying && menuButtonAction.action != null)
+        {
+            menuButtonAction.action.Enable();
+            menuButtonAction.action.performed += OnMenuButtonPressed;
+        }
+
+        uiDocument.enabled = false;
+    }
+
+    private void OnDisable()
+    {
+        if (Application.isPlaying && menuButtonAction.action != null)
+        {
+            menuButtonAction.action.performed -= OnMenuButtonPressed;
+            menuButtonAction.action.Disable();
+        }
+    }
+
+    private void OnMenuButtonPressed(InputAction.CallbackContext obj)
+    {
+        uiDocument.enabled = !uiDocument.enabled;
+        if (uiDocument.enabled)
+        {
+            SetupMenu();
+
+        }
+    }
+
+    // 3. Called when you change values in the Inspector (useful for live updates)
+    private void OnValidate()
+    {
+        if (Application.isPlaying) return; // Skip in Play Mode
+        SetupMenu();
+    }
+
+    private void SetupMenu()
+    {
+        uiDocument = GetComponent<UIDocument>();
+        cameraController = FindAnyObjectByType<CameraController>();
+
+        if (salles == null)
+        {
+            var salleParent = GameObject.Find("Salles");
+            if (salleParent != null)
+            {
+                salles = salleParent.transform;
+            }
+        }
+
+        if (tunnels == null)
+        {
+            var tunnelParent = GameObject.Find("Tunnels");
+            if (tunnelParent != null)
+            {
+                tunnels = tunnelParent.transform;
+            }
+        }
+
+        if (uiDocument == null || cameraController == null || salles == null || tunnels == null) return;
+        var root = uiDocument.rootVisualElement;
+        if (root == null) return;
+
+
+
+        sallesList = root.Q<ListView>("salleslist");
+        tunnelsList = root.Q<ListView>("tunnelslist");
+
+        List<Salle> sallesItems = salles.GetComponentsInChildren<Salle>().ToList();
+        List<Tunnel> tunnelsItems = tunnels.GetComponentsInChildren<Tunnel>().ToList();
+        sallesList.itemsSource = sallesItems;
+        tunnelsList.itemsSource = tunnelsItems;
+
+        sallesList.makeItem = () =>
+        {
+            var button = new Button();
+            return button;
+        };
+
+        tunnelsList.makeItem = () =>
+        {
+            var button = new Button();
+            return button;
+        };
+
+        sallesList.bindItem = (element, index) =>
+        {
+            var button = element as Button;
+            button.clicked -= () => OnSalleClicked(index);
+            button.clicked += () => OnSalleClicked(index);
+            button.text = sallesItems[index].gameObject.name;
+        };
+
+        tunnelsList.bindItem = (element, index) =>
+        {
+            var button = element as Button;
+            button.clicked -= () => OnTunnelClicked(index);
+            button.clicked += () => OnTunnelClicked(index);
+
+            button.text = tunnelsItems[index].gameObject.name;
+        };
+
+        sallesList.Rebuild();
+        tunnelsList.Rebuild();
+    }
+
+
+    private void OnSalleClicked(int index)
+    {
+
+        var salle = sallesList.itemsSource[index] as Salle;
+        cameraController.TeleportToSalle(salle);
+    }
+
+    private void OnTunnelClicked(int index)
+    {
+        var tunnel = tunnelsList.itemsSource[index] as Tunnel;
+        cameraController.salle = null;
+        cameraController.tunnel = tunnel;
+        cameraController.ResetPosition();
+
+        tunnelsList.SetSelectionWithoutNotify(new List<int> { });
+    }
+
+}

@@ -129,6 +129,36 @@ public class Tunnel : MonoBehaviour
         heatmapDirty = true;
     }
 
+    private void Update()
+    {
+        if (salleDepart == null || salleArrivee == null)
+        {
+            return;
+        }
+
+        if (salleDepart != null && splineContainer != null)
+        {
+            Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleDepart.origin.position);
+            var current = splineContainer.Spline[0];
+            Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
+            if ((curPos - localPos).sqrMagnitude > 1e-6f)
+                splineContainer.Spline.SetKnot(0, new BezierKnot(localPos));
+        }
+        if (salleArrivee != null && splineContainer != null)
+        {
+            int last = splineContainer.Spline.Count - 1;
+            Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleArrivee.origin.position);
+            var current = splineContainer.Spline[last];
+            Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
+            if ((curPos - localPos).sqrMagnitude > 1e-6f)
+                splineContainer.Spline.SetKnot(last, new BezierKnot(localPos));
+        }
+
+        gameObject.name = $"{salleDepart?.name} > {salleArrivee?.name}";
+
+    }
+
+
     // PLAN / PSEUDOCODE:
     // 1. Keep ComputeBaseSpeed(tLocal) as before (curvature + manual zones).
     // 2. Choose a deltaT (based on vizResolution with sensible clamps).
@@ -310,33 +340,7 @@ public class Tunnel : MonoBehaviour
         return finalSpeed;
     }
 
-    private void Update()
-    {
-        if (salleDepart == null || salleArrivee == null)
-        {
-            return;
-        }
-
-        if (salleDepart != null && splineContainer != null)
-        {
-            Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleDepart.origin.position);
-            var current = splineContainer.Spline[0];
-            Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
-            if ((curPos - localPos).sqrMagnitude > 1e-6f)
-                splineContainer.Spline.SetKnot(0, new BezierKnot(localPos));
-        }
-        if (salleArrivee != null && splineContainer != null)
-        {
-            int last = splineContainer.Spline.Count - 1;
-            Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleArrivee.origin.position);
-            var current = splineContainer.Spline[last];
-            Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
-            if ((curPos - localPos).sqrMagnitude > 1e-6f)
-                splineContainer.Spline.SetKnot(last, new BezierKnot(localPos));
-        }
-        gameObject.name = $"{salleDepart?.name} > {salleArrivee?.name}";
-
-    }
+    
 
     // --- VISUALIZATION ONLY ---
     private void OnDrawGizmos()
