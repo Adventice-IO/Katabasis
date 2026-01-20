@@ -4,14 +4,10 @@
         <ui:ListView name="salleslist" enabled="true" fixed-item-height="25" show-border="false" virtualization-method="FixedHeight" data-source="project://database/Assets/Scripts/UI/TunnelListUI.asset?fileID=11400000&amp;guid=50a3821cb77427f419531ead4b50c4f1&amp;type=2#TunnelListUI" data-source-type="TunneUIList, Assembly-CSharp" data-source-path="" allow-add="false" allow-remove="false" header-title="Salles" show-add-remove-footer="false" show-foldout-header="false" horizontal-scrolling="false" show-alternating-row-backgrounds="None" selection-type="None"/>
         <ui:VisualElement style="flex-grow: 1;">
             <ui:GroupBox style="height: 100%; left: auto; right: auto; top: auto; bottom: auto; width: auto;">
-                <ui:Button text="Spline" style="height: 36px; width: 71px; left: 48px; top: 45px; position: absolute;"/>
-                <ui:Button text="Fly" style="height: 36px; width: 75px; left: 137px; top: 44px; position: absolute;"/>
-                <ui:Label text="Motion Mode" emoji-fallback-support="true" style="-unity-text-align: upper-center; color: rgb(255, 255, 255); -unity-font-style: bold;"/>
+                <ui:Button text="Free Motion&#10;" name="freemotionbt" style="height: 36px; width: 128px; left: 59px; top: 32px; position: absolute;"/>
             </ui:GroupBox>
         </ui:VisualElement>
         <ui:GroupBox/>
         <ui:ListView name="tunnelslist"/>
     </ui:GroupBox>
-    <ui:GroupBox/>
-    <ui:Label text="Label"/>
 </ui:UXML>

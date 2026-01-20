@@ -1,6 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
+using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
+
+
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -40,6 +46,22 @@ public class CameraController : MonoBehaviour
     private double lastEditorTime;
 #endif
 
+
+    public enum CurrentTool
+    {
+        Move,
+        Rotate
+    }
+
+
+    [Header("Interaction")]
+    public bool freeMotion;
+    public DynamicMoveProvider moveProvider;
+    public CurrentTool currentTool = CurrentTool.Move;
+    [SerializeField] private InputActionProperty joystickAction;
+
+
+
     private void Start()
     {
         // Initialize salle
@@ -55,11 +77,21 @@ public class CameraController : MonoBehaviour
             EditorApplication.update -= EditorTick;
             EditorApplication.update += EditorTick;
         }
+
+        if (Application.isPlaying && joystickAction.action != null)
+        {
+            joystickAction.action.Enable();
+        }
     }
 
     private void OnDisable()
     {
         EditorApplication.update -= EditorTick;
+
+        if (Application.isPlaying && joystickAction.action != null)
+        {
+            joystickAction.action.Disable();
+        }
     }
 
     private void EditorTick()
@@ -103,6 +135,9 @@ public class CameraController : MonoBehaviour
 
     private void Tick(float deltaTime)
     {
+        moveProvider.enabled = freeMotion;
+        if (freeMotion) return;
+
         if (salle != null)
         {
             transform.position = salle.origin.position;
@@ -112,6 +147,11 @@ public class CameraController : MonoBehaviour
         if (tunnel == null)
             return;
 
+        if (Application.isPlaying)
+        {
+            Vector2 joystickInput = joystickAction.action?.ReadValue<Vector2>() ?? Vector2.zero;
+            trackPosition += joystickInput.y * maxSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f);
+        }
         // Cache the container if we switched paths
         var tunnelContainer = tunnel.GetComponent<SplineContainer>();
         if (splineContainer != tunnelContainer)
@@ -199,7 +239,7 @@ public class CameraController : MonoBehaviour
         }
         return outTunnels;
     }
-    
+
     public void Toggle()
     {
         if (isRunning)
@@ -237,6 +277,10 @@ public class CameraController : MonoBehaviour
     }
     public void ResetPosition()
     {
+        if (salle != null)
+        {
+            transform.position = salle.origin.position;
+        }
         isRunning = false;
         trackPosition = 0f;
         currentSpeed = 0f;

@@ -22,20 +22,7 @@ public class MenuController : MonoBehaviour
     ListView sallesList;
     ListView tunnelsList;
 
-    public enum MotionMode
-    {
-        Free,
-        Curve
-    }
-
-    public enum CurrentTool
-    {
-        Move,
-        Rotate
-    }
-
-    public static MotionMode currentMotionMode = MotionMode.Free;
-    public static CurrentTool currentTool = CurrentTool.Move;
+    Button freeMotionButton;
 
     private void OnEnable()
     {
@@ -48,7 +35,7 @@ public class MenuController : MonoBehaviour
             menuButtonAction.action.performed += OnMenuButtonPressed;
         }
 
-        uiDocument.enabled = false;
+        //uiDocument.enabled = false;
     }
 
     private void OnDisable()
@@ -145,8 +132,21 @@ public class MenuController : MonoBehaviour
 
         sallesList.Rebuild();
         tunnelsList.Rebuild();
+
+
+        freeMotionButton = root.Q<Button>("freemotionbt");
+        freeMotionButton.clicked -= FreeMotionButton_clicked;
+        freeMotionButton.clicked += FreeMotionButton_clicked;
+        if (cameraController.freeMotion) freeMotionButton.AddToClassList("active");
+        else freeMotionButton.RemoveFromClassList("active");
     }
 
+    private void FreeMotionButton_clicked()
+    {
+        cameraController.freeMotion = !cameraController.freeMotion;
+        if (cameraController.freeMotion) freeMotionButton.AddToClassList("active");
+        else freeMotionButton.RemoveFromClassList("active");
+    }
 
     private void OnSalleClicked(int index)
     {

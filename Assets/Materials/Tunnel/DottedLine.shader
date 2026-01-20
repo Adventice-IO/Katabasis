@@ -20,6 +20,7 @@ Shader "Katabasis/DottedLine"
 
             #pragma vertex vert
             #pragma fragment frag
+            #pragma multi_compile_instancing
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
@@ -27,12 +28,14 @@ Shader "Katabasis/DottedLine"
             {
                 float4 positionOS : POSITION;
                 float2 uv : TEXCOORD0;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
+                UNITY_VERTEX_OUTPUT_STEREO // Required for VR Single Pass
             };
 
             TEXTURE2D(_BaseMap);
@@ -47,7 +50,15 @@ Shader "Katabasis/DottedLine"
 
             Varyings vert(Attributes IN)
             {
-                Varyings OUT;
+                // FIX 1: Initialize the struct directly to 0 (replaces UNITY_INITIALIZE_OUTPUT)
+                Varyings OUT = (Varyings)0; 
+
+                UNITY_SETUP_INSTANCE_ID(IN); 
+                // UNITY_INITIALIZE_OUTPUT(Varyings, OUT); // <--- DELETE THIS LINE
+                
+                // FIX 2: This is still required for VR!
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
+
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
                 return OUT;
@@ -55,44 +66,43 @@ Shader "Katabasis/DottedLine"
 
             half4 frag(Varyings IN) : SV_Target
             {
-                float modPos = fmod(IN.uv.x, _Gap) *2.0/ _Gap;
+                float modPos = fmod(IN.uv.x, _Gap) * 2.0 / _Gap;
+                
                 if(modPos > 1)
                 {
                     discard;
                 }
-                //round corners
-                float rc = _Round/2.0;
+
+                // Round corners logic
+                float rc = _Round / 2.0;
                 float2 relUV = float2(modPos, IN.uv.y);
+                
                 if(relUV.x < rc)
                 {
                     if(relUV.y < rc)
                     {
                         float dist = distance(relUV, float2(rc, rc));
-                        if(dist > rc)
-                            discard;
+                        if(dist > rc) discard;
                     }
                     else if(relUV.y > 1.0 - rc)
                     {
                         float dist = distance(relUV, float2(rc, 1.0 - rc));
-                        if(dist > rc)
-                            discard;
+                        if(dist > rc) discard;
                     }
-                }else if(relUV.x > 1.0 - rc)
+                }
+                else if(relUV.x > 1.0 - rc)
                 {
                     if(relUV.y < rc)
                     {
                         float dist = distance(relUV, float2(1.0 - rc, rc));
-                        if(dist > rc)
-                            discard;
+                        if(dist > rc) discard;
                     }
                     else if(relUV.y > 1.0 - rc)
                     {
                         float dist = distance(relUV, float2(1.0 - rc, 1.0 - rc));
-                        if(dist > rc)
-                            discard;
+                        if(dist > rc) discard;
                     }
                 }
-
 
                 half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
                 return color;
