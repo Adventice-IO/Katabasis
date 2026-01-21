@@ -99,21 +99,6 @@ public class Tunnel : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-      
-
-        if (!Application.isPlaying)
-        {
-            //mark spline is dirty to be rerendered in scene view
-            EditorUtility.SetDirty(splineContainer);
-
-        }
-
-        UpdateLineRenderer();
-        updateHandles();
-    }
-
     private void OnEnable()
     {
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
