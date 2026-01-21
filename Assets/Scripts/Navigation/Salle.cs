@@ -1,3 +1,4 @@
+using Framework.Utils.Editor;
 using UnityEngine;
 
 public class Salle : MonoBehaviour
@@ -5,8 +6,12 @@ public class Salle : MonoBehaviour
     public Color color = Color.green;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
+        if(Application.isPlaying)
+        {
+            UnityPlayModeSaver.SaveComponent(transform);
+        }
     }
 
     // Update is called once per frame

@@ -50,6 +50,7 @@ public class MenuController : MonoBehaviour
     private void OnMenuButtonPressed(InputAction.CallbackContext obj)
     {
         uiDocument.enabled = !uiDocument.enabled;
+        GetComponent<BoxCollider>().enabled = uiDocument.enabled;
         if (uiDocument.enabled)
         {
             SetupMenu();

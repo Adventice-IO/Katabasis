@@ -3,8 +3,9 @@ Shader "Katabasis/DottedLine"
     Properties
     {
         [MainColor] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
-        [MainTexture] _BaseMap("Base Map", 2D) = "white" {}
-        [Gap] _Gap("Gap", Range(0.001, .01)) = 0.1
+        [Length] _Length("Length", float) = 10
+        [Width] _Width("Width", float) = 1
+        [Gap] _Gap("Gap", Range(.1,2)) = 1
         [Round] _Round("Round Corners", Range(0,1))= 0.5
     }
 
@@ -38,14 +39,13 @@ Shader "Katabasis/DottedLine"
                 UNITY_VERTEX_OUTPUT_STEREO // Required for VR Single Pass
             };
 
-            TEXTURE2D(_BaseMap);
-            SAMPLER(sampler_BaseMap);
 
             CBUFFER_START(UnityPerMaterial)
                 half4 _BaseColor;
-                float4 _BaseMap_ST;
                 float _Gap;
                 float _Round;
+                float _Width;
+                float _Length;
             CBUFFER_END
 
             Varyings vert(Attributes IN)
@@ -60,13 +60,15 @@ Shader "Katabasis/DottedLine"
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
 
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
-                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
+                OUT.uv = IN.uv;
                 return OUT;
             }
 
             half4 frag(Varyings IN) : SV_Target
             {
-                float modPos = fmod(IN.uv.x, _Gap) * 2.0 / _Gap;
+                float ratio = _Length / _Width;
+                float relX = IN.uv.x * ratio / 2;
+                float modPos = fmod(relX, _Gap) * 2.0 / _Gap;
                 
                 if(modPos > 1)
                 {
@@ -104,7 +106,7 @@ Shader "Katabasis/DottedLine"
                     }
                 }
 
-                half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
+                half4 color = _BaseColor;
                 return color;
             }
             ENDHLSL

@@ -6,26 +6,6 @@ using UnityEngine.Splines;
 [CustomEditor(typeof(Tunnel))]
 public class TunnelEditor : Editor
 {
-    // PSEUDOCODE PLAN:
-    // - In OnSceneGUI:
-    //   - Retrieve Tunnel and its SplineContainer; early-out if missing.
-    //   - Handle Ctrl+Shift+LeftClick:
-    //     - If Event is MouseDown with left button and control+shift:
-    //       - Build a world ray from the mouse.
-    //       - Coarse sample along spline to find t whose world position is closest to this ray.
-    //       - Refine this t: project the closest coarse point onto the ray, then call SplineUtility.GetNearestPoint
-    //         (with that projected point in local space) to get more accurate t and nearest local pos.
-    //       - Determine segment index from t (curve count based).
-    //       - Build a BezierKnot at the refined nearest position:
-    //         - Position: local-space nearest point.
-    //         - Tangents: ±tangentDir * handleLen (tangentDir from container.EvaluateTangent at t).
-    //         - Rotation: look rotation along tangent (fallback math.up if needed).
-    //       - Undo.RecordObject on the container, insert the knot at segIndex + 1, mark dirty, consume the event.
-    //   - Draw existing slowdown handles (unchanged).
-    //
-    // - Helper methods:
-    //   - ClosestPointOnRay: returns closest point on a ray to a given position.
-
     private void OnSceneGUI()
     {
         var script = (Tunnel)target;

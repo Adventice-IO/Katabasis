@@ -20,7 +20,7 @@ namespace BAPointCloudRenderer.Controllers
 
         public void OnDestroy()
         {
-            Debug.Log("Preview Object Destroyed");
+            //Debug.Log("Preview Object Destroyed");
         }
     }
 }

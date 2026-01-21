@@ -6,6 +6,8 @@ using UnityEditor.Splines;
 using UnityEditor;
 using System.Linq;
 using System;
+using Framework.Utils.Editor;
+
 
 
 
@@ -44,6 +46,7 @@ public class Tunnel : MonoBehaviour
 
     [Header("Manipulation")]
     public bool autoGroundKnots = true;
+    public GameObject handlePrefab;
 
     [Header("Editor Viz")]
     public bool showHeatmap = true;
@@ -64,6 +67,7 @@ public class Tunnel : MonoBehaviour
     private bool lastWasSelected = false;
 
     LineRenderer lineRenderer;
+
 
     [System.Serializable]
     public class ManualSlowdown
@@ -86,8 +90,28 @@ public class Tunnel : MonoBehaviour
         spline = splineContainer.Spline;
         lineRenderer = GetComponentInChildren<LineRenderer>();
         UpdateLineRenderer();
+        updateHandles();
 
+        if (Application.isPlaying)
+        {
+            UnityPlayModeSaver.SaveComponent(splineContainer);
+            UnityPlayModeSaver.SaveComponent(this);
+        }
+    }
 
+    void Start()
+    {
+      
+
+        if (!Application.isPlaying)
+        {
+            //mark spline is dirty to be rerendered in scene view
+            EditorUtility.SetDirty(splineContainer);
+
+        }
+
+        UpdateLineRenderer();
+        updateHandles();
     }
 
     private void OnEnable()
@@ -95,8 +119,11 @@ public class Tunnel : MonoBehaviour
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
         Spline.Changed += OnSplineChanged;
         UpdateLineRenderer();
+        updateHandles();
 
     }
+
+   
 
     private void OnDisable()
     {
@@ -116,6 +143,7 @@ public class Tunnel : MonoBehaviour
         //recalculate lineRenderer
 
         UpdateLineRenderer();
+        updateHandles();
     }
 
     private void OnValidate()
@@ -155,7 +183,6 @@ public class Tunnel : MonoBehaviour
         }
 
         gameObject.name = $"{salleDepart?.name} > {salleArrivee?.name}";
-
     }
 
 
@@ -340,7 +367,7 @@ public class Tunnel : MonoBehaviour
         return finalSpeed;
     }
 
-    
+
 
     // --- VISUALIZATION ONLY ---
     private void OnDrawGizmos()
@@ -545,19 +572,22 @@ public class Tunnel : MonoBehaviour
         try
         {
             spline.Insert(index, newKnot);
-            spline.SetTangentMode(index, TangentMode.Mirrored);
+            spline.SetTangentMode(index, TangentMode.Continuous);
             Debug.Log("Inserted knot at index " + index);
         }
         catch
         {
             // Fallback to appending if Insert is unavailable
             spline.Add(newKnot);
-            spline.SetTangentMode(spline.Count - 1, TangentMode.Mirrored);
+            spline.SetTangentMode(spline.Count - 1, TangentMode.Continuous);
         }
+
+        updateHandles();
 
 #if UNITY_EDITOR
         EditorUtility.SetDirty(splineContainer);
 #endif
+
     }
 
 
@@ -582,13 +612,74 @@ public class Tunnel : MonoBehaviour
         if (splineContainer == null || splineContainer.Spline == null) return;
         List<Vector3> points = new List<Vector3>();
         float resolution = 0.005f;
+        float length = 0;
+        Vector3 prevPos = Vector3.zero;
         for (float t = 0; t <= 1.0f; t += resolution)
         {
             Vector3 pos = splineContainer.EvaluatePosition(t);
             points.Add(pos);
+            if (prevPos != Vector3.zero)
+            {
+                length += Vector3.Distance(pos, prevPos);
+            }
+            prevPos = pos;
         }
         lineRenderer.positionCount = points.Count;
         lineRenderer.SetPositions(points.ToArray());
+
+        if (Application.isPlaying)
+        {
+            lineRenderer.material.SetFloat("_Width", lineRenderer.startWidth * lineRenderer.widthMultiplier);
+            lineRenderer.material.SetFloat("_Length", length);
+        }
+
     }
 
+    public void updateHandles()
+    {
+        if (!Application.isPlaying) return;
+
+        Transform handlesRoot = transform.Find("Handles");
+        if (handlesRoot == null)
+        {
+            handlesRoot = new GameObject("Handles").transform;
+            handlesRoot.parent = transform;
+            handlesRoot.localPosition = Vector3.zero;
+            handlesRoot.localRotation = Quaternion.identity;
+            handlesRoot.localScale = Vector3.one;
+        }
+
+        while (handlesRoot.childCount > spline.Count)
+        {
+            Transform child = handlesRoot.GetChild(handlesRoot.childCount - 1);
+            DestroyImmediate(child.gameObject);
+        }
+
+        int curChildCount = handlesRoot.childCount;
+
+        while (curChildCount < spline.Count)
+        {
+            var knot = spline[curChildCount];
+            Vector3 worldPos = splineContainer.transform.TransformPoint(knot.Position);
+            Transform handleTransform = handlesRoot.Find("Handle_" + curChildCount);
+            if (handleTransform == null)
+            {
+                GameObject handleObj = Instantiate(handlePrefab, worldPos, Quaternion.identity, handlesRoot);
+                handleObj.name = "Handle_" + curChildCount;
+                handleTransform = handleObj.transform;
+
+                KnotHandle handle = handleObj.GetComponent<KnotHandle>();
+                handle.splineContainer = splineContainer;
+                handle.knotIndex = curChildCount;
+
+
+            }
+            else
+            {
+                KnotHandle handle = handleTransform.GetComponent<KnotHandle>();
+
+            }
+            curChildCount++;
+        }
+    }
 }
