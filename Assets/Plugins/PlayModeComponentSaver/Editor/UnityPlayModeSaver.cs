@@ -173,7 +173,7 @@ namespace Framework
                             RegisterSavedObject(component);
                         }
 
-                        UnityPlayModeSaverWindow.Open(false);
+                        //UnityPlayModeSaverWindow.Open(false);
                     }
                 }
 

@@ -54,7 +54,8 @@ public class Tunnel : MonoBehaviour
     public float vizResolution = 0.01f;
     [Range(0.01f, 0.1f)]
     public float previzResolution = 0.05f;
-
+    [Range(0.0001f, 0.01f)]
+    public float lineResolution = 0.0005f;
     private SplineContainer splineContainer;
     private Spline spline;
 
@@ -596,7 +597,7 @@ public class Tunnel : MonoBehaviour
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
         if (splineContainer == null || splineContainer.Spline == null) return;
         List<Vector3> points = new List<Vector3>();
-        float resolution = 0.005f;
+        float resolution = lineResolution;
         float length = 0;
         Vector3 prevPos = Vector3.zero;
         for (float t = 0; t <= 1.0f; t += resolution)
