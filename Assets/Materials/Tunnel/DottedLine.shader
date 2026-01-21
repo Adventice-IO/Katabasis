@@ -14,6 +14,8 @@ Shader "Katabasis/DottedLine"
         Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
         Blend SrcAlpha OneMinusSrcAlpha
         ZWrite Off
+        Cull Off
+         
 
         Pass
         {
@@ -54,9 +56,6 @@ Shader "Katabasis/DottedLine"
                 Varyings OUT = (Varyings)0; 
 
                 UNITY_SETUP_INSTANCE_ID(IN); 
-                // UNITY_INITIALIZE_OUTPUT(Varyings, OUT); // <--- DELETE THIS LINE
-                
-                // FIX 2: This is still required for VR!
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
 
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);

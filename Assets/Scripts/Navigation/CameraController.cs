@@ -4,6 +4,8 @@ using UnityEngine.Splines;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
+
 
 
 
@@ -47,20 +49,15 @@ public class CameraController : MonoBehaviour
 #endif
 
 
-    public enum CurrentTool
-    {
-        Move,
-        Rotate
-    }
 
 
     [Header("Interaction")]
     public bool freeMotion;
-    public DynamicMoveProvider moveProvider;
-    public CurrentTool currentTool = CurrentTool.Move;
+    public ContinuousMoveProvider moveProvider;
     [SerializeField] private InputActionProperty joystickAction;
+    [SerializeField] private InputActionProperty toggleFreeMoveAction;
 
-
+    public GameObject lockInfoPlane;
 
     private void Start()
     {
@@ -78,19 +75,30 @@ public class CameraController : MonoBehaviour
             EditorApplication.update += EditorTick;
         }
 
-        if (Application.isPlaying && joystickAction.action != null)
+        if (Application.isPlaying )
         {
-            joystickAction.action.Enable();
+            if(joystickAction.action != null) joystickAction.action.Enable();
+            if (toggleFreeMoveAction.action != null)
+            {
+                toggleFreeMoveAction.action.Enable();
+                toggleFreeMoveAction.action.performed += ctx =>
+                {
+                    freeMotion = !freeMotion;
+                };
+            }
         }
+
+
     }
 
     private void OnDisable()
     {
         EditorApplication.update -= EditorTick;
 
-        if (Application.isPlaying && joystickAction.action != null)
+        if (Application.isPlaying)
         {
-            joystickAction.action.Disable();
+           if (joystickAction.action != null) joystickAction.action.Disable();
+              if (toggleFreeMoveAction.action != null) toggleFreeMoveAction.action.Disable();
         }
     }
 
@@ -127,10 +135,10 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        if (Application.isPlaying)
-            return;
-
-        // In edit mode we run from EditorApplication.update for consistent updates.
+        if(lockInfoPlane != null)
+        {
+            lockInfoPlane.SetActive(!freeMotion);
+        }
     }
 
     private void Tick(float deltaTime)
@@ -220,6 +228,7 @@ public class CameraController : MonoBehaviour
 
     public void TeleportToSalle(Salle targetSalle)
     {
+        freeMotion = true;
         salle = targetSalle;
         tunnel = null;
         ResetPosition();
@@ -250,6 +259,7 @@ public class CameraController : MonoBehaviour
 
     public void Play()
     {
+        freeMotion = false;
         isRunning = true;
         // Optional: If we are at the end, restart
         if (trackPosition >= 0.99f)
