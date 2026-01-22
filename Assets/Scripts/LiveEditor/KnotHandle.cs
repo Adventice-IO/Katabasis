@@ -1,6 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Splines;
-using UnityEngine.UIElements;
 
 public class KnotHandle : MonoBehaviour
 {
@@ -15,7 +15,9 @@ public class KnotHandle : MonoBehaviour
     Transform manipPlane;
     Transform knot;
     Transform upKnot;
+    Transform snap;
 
+    MainController mainController;
 
     BezierKnot originalKnot;
 
@@ -23,6 +25,8 @@ public class KnotHandle : MonoBehaviour
     public SplineContainer splineContainer;
 
     Renderer[] snapRenderers;
+
+    [SerializeField] private InputActionProperty removeAction;
 
     public enum ManipState
     {
@@ -35,11 +39,14 @@ public class KnotHandle : MonoBehaviour
         MovingKnot,
         MovingUpKnot,
         MovingPrevHandle,
-        MovingNextHandle
+        MovingNextHandle,
+        RemoveKnot
     }
 
     //make it usable in an event
     public ManipState manipState = ManipState.None;
+
+    bool removePressed = false;
 
     void OnEnable()
     {
@@ -57,7 +64,10 @@ public class KnotHandle : MonoBehaviour
         upKnot = transform.Find("Up");
 
 
-        snapRenderers = transform.Find("Snap").GetComponentsInChildren<Renderer>();
+        snap = transform.Find("Snap");
+        snapRenderers = snap.GetComponentsInChildren<Renderer>();
+
+        mainController = FindAnyObjectByType<MainController>();
 
         if (Application.isPlaying)
         {
@@ -65,12 +75,50 @@ public class KnotHandle : MonoBehaviour
             nextHandle.GetComponent<Renderer>().material.color = Color.green;
             prevLine.material.color = Color.lightPink;
             nextLine.material.color = Color.lightGreen;
+
+            if (removeAction != null && removeAction.action != null)
+            {
+                removeAction.action.Enable();
+
+                removeAction.action.performed += ctx =>
+                {
+                    if (!removePressed)
+                    {
+                        if (isHover())
+                        {
+                            removePressed = true;
+                            manipState = ManipState.RemoveKnot;
+                            mainController.removedInSpawnMode = true;
+                        }
+                    }
+                };
+                removeAction.action.canceled += ctx =>
+                {
+                    removePressed = false;
+                    if (manipState == ManipState.RemoveKnot)
+                    {
+                        RuntimeUndoManager.removeKnot(splineContainer.Spline, knotIndex);
+                    }
+                };
+            }
         }
 
     }
 
+    private void OnDisable()
+    {
+        if (Application.isPlaying)
+        {
+            if (removeAction != null && removeAction.action != null)
+            {
+                removeAction.action.Disable();
+            }
+        }
+    }
+
     void Update()
     {
+
 
         prevLine.SetPosition(0, transform.position);
         prevLine.SetPosition(1, prevHandle.position);
@@ -83,6 +131,7 @@ public class KnotHandle : MonoBehaviour
         float maxDist = Mathf.Max(localInPos.magnitude, localOutPos.magnitude);
 
         if (manipPlane != null) manipPlane.localScale = Vector3.one * maxDist * 2 / 10;
+
 
         switch (manipState)
         {
@@ -128,6 +177,20 @@ public class KnotHandle : MonoBehaviour
                 }
                 break;
 
+
+            case ManipState.RemoveKnot:
+                knot.GetComponent<Renderer>().material.color = Color.red;
+                upKnot.GetComponent<Renderer>().material.color = Color.red;
+                prevHandle.GetComponent<Renderer>().material.color = Color.red;
+                nextHandle.GetComponent<Renderer>().material.color = Color.red;
+                prevLine.material.color = Color.red;
+                nextLine.material.color = Color.red;
+                foreach (var rend in snapRenderers)
+                {
+                    rend.material.color = Color.red;
+                }
+                break;
+
             case ManipState.None:
             default:
                 knot.GetComponent<Renderer>().material.color = Color.white;
@@ -154,14 +217,25 @@ public class KnotHandle : MonoBehaviour
             {
                 return;
             }
+
             var spline = splineContainer.Spline;
-            var knot = spline[knotIndex];
-            transform.position = splineContainer.transform.TransformPoint(knot.Position);
-            transform.rotation = knot.Rotation;
-            prevHandle.localPosition = knot.TangentIn;
-            nextHandle.localPosition = knot.TangentOut;
+            if (knotIndex < spline.Count)
+            {
+                var knot = spline[knotIndex];
+                transform.position = splineContainer.transform.TransformPoint(knot.Position);
+                transform.rotation = knot.Rotation;
+                prevHandle.localPosition = knot.TangentIn;
+                nextHandle.localPosition = knot.TangentOut;
+            }
+            else
+            {
+                Debug.LogWarning("Knot index out of range in KnotHandle: " + knotIndex + " / " + spline.Count);
+            }
+
         }
     }
+
+
 
     void updateKnotPosition()
     {
@@ -193,9 +267,32 @@ public class KnotHandle : MonoBehaviour
         splineContainer.Spline.SetKnot(knotIndex, newKnot);
     }
 
+    public void updateActive()
+    {
+        bool value = knotIndex >= 0 && splineContainer != null && knotIndex < splineContainer.Spline.Count;
+
+        knot.gameObject.SetActive(value);
+        upKnot.gameObject.SetActive(value);
+
+        prevHandle.gameObject.SetActive(knotIndex > 0);
+        prevLine.gameObject.SetActive(knotIndex > 0);
+
+        nextHandle.gameObject.SetActive(knotIndex < splineContainer.Spline.Count - 1);
+        nextLine.gameObject.SetActive(knotIndex < splineContainer.Spline.Count - 1);
+
+        snap.gameObject.SetActive(value);
+
+        GetComponent<Renderer>().enabled = value;
+        GetComponent<Collider>().enabled = value;
+    }
     public bool isMoving()
     {
         return manipState == ManipState.MovingKnot || manipState == ManipState.MovingNextHandle || manipState == ManipState.MovingPrevHandle || manipState == ManipState.MovingUpKnot;
+    }
+
+    public bool isHover()
+    {
+        return manipState == ManipState.HoverKnot || manipState == ManipState.HoverPrevHandle || manipState == ManipState.HoverNextHandle || manipState == ManipState.HoverUpKnot;
     }
     public void hoverKnot() { if (!isMoving()) manipState = ManipState.HoverKnot; }
     public void hoverUpKnot() { if (!isMoving()) manipState = ManipState.HoverUpKnot; }

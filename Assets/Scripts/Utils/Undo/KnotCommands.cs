@@ -1,7 +1,6 @@
 
 
 using UnityEngine;
-using UnityEngine;
 using UnityEngine.Splines;
 
 public class AddKnotCommand : ICommand

@@ -179,6 +179,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuController
   uiDocument: {fileID: 1472898280075405299}
+  menuButtonAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: 
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 698dfb15-5ebe-4ba7-b3c6-fee809f6b937
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  enabledAtStart: 0
   salles: {fileID: 0}
   tunnels: {fileID: 0}
 --- !u!1 &6320349957039822099
@@ -787,6 +800,58 @@ MonoBehaviour:
   deceleration: 5
   currentSpeed: 0
   isRunning: 0
+  freeMotion: 0
+  moveProvider: {fileID: 0}
+  joystickAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Joystick
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: f8a4cfeb-48db-4cf8-81e5-61fea986eb29
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  toggleFreeMoveAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Toggle Free Move
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: cfbdd716-3b08-4436-a2b0-2ccfb1862437
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  spawnAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Spawn
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 1c2aa67c-035e-497b-8310-9f8179b564d6
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  cancelAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Cancel
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 7d6d6c10-cec9-4219-8c43-cadfeacfb02f
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  removedInSpawnMode: 0
+  lockInfoPlane: {fileID: 0}
 --- !u!4 &6345937160527462039 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}

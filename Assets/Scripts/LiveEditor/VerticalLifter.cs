@@ -10,14 +10,11 @@ public class VerticalHandleDriver : MonoBehaviour
     private XRGrabInteractable interactable;
     private Transform currentInteractor;
 
-    // We store the position of the parent relative to the controller
     private Vector3 localOffsetFromHand;
 
-    // State memory
-    private bool wasKinematic;
-    private bool usedGravity;
-
     private Vector3 initLocalPosition;
+    private Vector3 initWorldPosition;
+    private Vector3 initParentPosition;
 
     void Awake()
     {
@@ -44,30 +41,13 @@ public class VerticalHandleDriver : MonoBehaviour
         if (parentRigidbody == null) return;
 
         currentInteractor = args.interactorObject.transform;
-
-        // 1. Snapshot Physics
-        wasKinematic = parentRigidbody.isKinematic;
-        usedGravity = parentRigidbody.useGravity;
-        parentRigidbody.isKinematic = true;
-        parentRigidbody.useGravity = false;
-
-        // 2. Calculate "Smart" Offset (Relative to Controller Rotation/Position)
-        // This converts the Parent's world position into the Controller's LOCAL space.
-        // It effectively "saves" the distance and angle of the beam.
-        localOffsetFromHand = currentInteractor.InverseTransformPoint(parentRigidbody.position);
+        initWorldPosition = transform.position;
+        initParentPosition = parentRigidbody.position;
     }
 
     private void OnRelease(SelectExitEventArgs args)
     {
         currentInteractor = null;
-
-        if (parentRigidbody != null)
-        {
-            parentRigidbody.isKinematic = wasKinematic;
-            parentRigidbody.useGravity = usedGravity;
-        }
-
-        // Reset local position to initial
         transform.localPosition = initLocalPosition;
     }
 
@@ -75,20 +55,8 @@ public class VerticalHandleDriver : MonoBehaviour
     {
         if (currentInteractor != null && parentRigidbody != null)
         {
-            // 3. Calculate where the object SHOULD be in World Space
-            // based on the controller's current rotation and position.
-            Vector3 virtualTargetPosition = currentInteractor.TransformPoint(localOffsetFromHand);
-
-            // 4. Move Parent ONLY on Y
-            // We take the X and Z from the current parent (locking them)
-            // And take the Y from our calculated "virtual" beam target
-            Vector3 finalPosition = new Vector3(
-                parentRigidbody.position.x,
-                virtualTargetPosition.y,
-                parentRigidbody.position.z
-            );
-
-            parentRigidbody.position = finalPosition;
+            Vector3 delta = transform.position - initWorldPosition;
+            parentRigidbody.position = initParentPosition+delta;
         }
     }
 }

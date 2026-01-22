@@ -75,6 +75,7 @@ public class Tunnel : MonoBehaviour
 
     MainController MainController;
 
+    int splineLastCount = 0;
 
     [System.Serializable]
     public class ManualSlowdown
@@ -94,7 +95,11 @@ public class Tunnel : MonoBehaviour
             splineContainer.Spline.Add(new BezierKnot(Vector3.zero));
         }
 
+
         spline = splineContainer.Spline;
+
+        splineLastCount = spline.Count;
+
         lineRenderer = GetComponentInChildren<LineRenderer>();
         UpdateLineRenderer();
         updateHandles();
@@ -153,6 +158,13 @@ public class Tunnel : MonoBehaviour
 
     private void Update()
     {
+
+        if (spline.Count != splineLastCount)
+        {
+            splineLastCount = spline.Count;
+            updateHandles();
+        }
+
         if (salleDepart == null || salleArrivee == null)
         {
             return;
@@ -179,6 +191,7 @@ public class Tunnel : MonoBehaviour
         gameObject.name = $"{salleDepart?.name} > {salleArrivee?.name}";
 
         if (Application.isPlaying) lineRenderer.material.color = MainController.salle == null && MainController.tunnel == this ? Color.yellow : Color.white;
+
     }
 
 
@@ -682,25 +695,34 @@ public class Tunnel : MonoBehaviour
             var knot = spline[curChildCount];
             Vector3 worldPos = splineContainer.transform.TransformPoint(knot.Position);
             Transform handleTransform = handlesRoot.Find("Handle_" + curChildCount);
+            KnotHandle handle = null;
             if (handleTransform == null)
             {
                 GameObject handleObj = Instantiate(handlePrefab, worldPos, Quaternion.identity, handlesRoot);
                 handleObj.name = "Handle_" + curChildCount;
                 handleTransform = handleObj.transform;
+                handle = handleObj.GetComponent<KnotHandle>();
 
-                KnotHandle handle = handleObj.GetComponent<KnotHandle>();
-                handle.splineContainer = splineContainer;
-                handle.knotIndex = curChildCount;
-
-
+                Debug.Log("Created handle for knot " + curChildCount);
             }
             else
             {
-                KnotHandle handle = handleTransform.GetComponent<KnotHandle>();
-
+                Debug.Log("Reusing existing handle for knot " + curChildCount);
+                handle = handleTransform.GetComponent<KnotHandle>();
             }
+
+            handle.knotIndex = curChildCount;
+            handle.splineContainer = splineContainer;
+
             curChildCount++;
         }
+
+        KnotHandle[] allHandles = handlesRoot.GetComponentsInChildren<KnotHandle>();
+        for(int i = 0; i < allHandles.Length; i++)
+        {
+            allHandles[i].updateActive();
+        }
+
     }
 
     public float getClosestTrackPosition(Vector3 position)

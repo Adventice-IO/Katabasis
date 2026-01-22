@@ -51,7 +51,7 @@ Shader "Custom/GridShader"
                 Varyings OUT;
                 UNITY_SETUP_INSTANCE_ID(IN); 
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
-                OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
+                OUT.positionHCS = TransformObjectToHClip(IN.positionOS);
                 OUT.uv = IN.uv;
                 return OUT;
             }

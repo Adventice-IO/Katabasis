@@ -66,6 +66,7 @@ public class MainController : MonoBehaviour
     [SerializeField] private InputActionProperty cancelAction;
 
     bool spawningMode;
+    public bool removedInSpawnMode;
 
     float timeAtSpawnMode;
 
@@ -183,12 +184,16 @@ public class MainController : MonoBehaviour
                     if (spawningMode) timeAtSpawnMode = (float)EditorApplication.timeSinceStartup;
                     else
                     {
-                        float duration = (float)(EditorApplication.timeSinceStartup - timeAtSpawnMode);
-                        if (duration < .3f)
+                        if (!removedInSpawnMode)
                         {
-                            tunnel.AddKnotAtPosition(GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6));
+                            float duration = (float)(EditorApplication.timeSinceStartup - timeAtSpawnMode);
+                            if (duration < .3f)
+                            {
+                                tunnel.AddKnotAtPosition(GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6));
+                            }
+                            timeAtSpawnMode = 0f;
                         }
-                        timeAtSpawnMode = 0f;
+                        removedInSpawnMode = false;
                     }
                 }
             }
@@ -353,7 +358,7 @@ public class MainController : MonoBehaviour
 
 
     //Spawning
-   
+
     public void handleFakeFloorSelect(HoverExitEventArgs args)
     {
         if (!spawningMode) return;

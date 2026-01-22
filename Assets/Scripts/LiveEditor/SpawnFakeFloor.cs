@@ -22,6 +22,9 @@ public class SpawnFakeFloor : MonoBehaviour
     public float spawnLongPress = .5f;
 
     public GameObject spawnInteractor;
+    public GameObject nearFarInteractor;
+
+    MainController mainController;
 
     void Start()
     {
@@ -38,6 +41,8 @@ public class SpawnFakeFloor : MonoBehaviour
 
         showingFloor = false;
 
+        mainController = FindAnyObjectByType<MainController>();
+
         spawnInteractor.SetActive(false);
     }
 
@@ -50,6 +55,7 @@ public class SpawnFakeFloor : MonoBehaviour
                 ShowFloor();
                 spawnMode = true;
                 spawnInteractor.SetActive(true);
+                nearFarInteractor.SetActive(false);
             }
         }
 
@@ -101,12 +107,6 @@ public class SpawnFakeFloor : MonoBehaviour
 
     }
 
-    private void TeleportActivated(InputAction.CallbackContext ctx)
-    {
-        ShowFloor();
-        spawnMode = false;
-    }
-
     private void ShowFloor()
     {
         if (floorRenderer == null) return;
@@ -118,6 +118,8 @@ public class SpawnFakeFloor : MonoBehaviour
 
     private void SpawnActivated(InputAction.CallbackContext ctx)
     {
+        if (mainController.removedInSpawnMode) return;
+
         spawnActivated = true;
         timeAtSpawnPress = Time.time;
 
@@ -128,5 +130,6 @@ public class SpawnFakeFloor : MonoBehaviour
         showingFloor = false;
         spawnMode = false;
         spawnInteractor.SetActive(false);
+        nearFarInteractor.SetActive(true);
     }
 }
