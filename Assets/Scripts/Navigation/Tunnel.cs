@@ -7,6 +7,10 @@ using UnityEditor;
 using System.Linq;
 using System;
 using Framework.Utils.Editor;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
+
+
 
 
 
@@ -69,6 +73,8 @@ public class Tunnel : MonoBehaviour
 
     LineRenderer lineRenderer;
 
+    CameraController cameraController;
+
 
     [System.Serializable]
     public class ManualSlowdown
@@ -93,6 +99,8 @@ public class Tunnel : MonoBehaviour
         UpdateLineRenderer();
         updateHandles();
 
+        cameraController = FindFirstObjectByType<CameraController>();
+
         if (Application.isPlaying)
         {
             UnityPlayModeSaver.SaveComponent(splineContainer);
@@ -109,7 +117,7 @@ public class Tunnel : MonoBehaviour
 
     }
 
-   
+
 
     private void OnDisable()
     {
@@ -169,6 +177,8 @@ public class Tunnel : MonoBehaviour
         }
 
         gameObject.name = $"{salleDepart?.name} > {salleArrivee?.name}";
+
+        if (Application.isPlaying) lineRenderer.material.color = cameraController.salle == null && cameraController.tunnel == this ? Color.yellow : Color.white;
     }
 
 
@@ -371,8 +381,7 @@ public class Tunnel : MonoBehaviour
         }
 #endif
 
-        CameraController camCtrl = FindFirstObjectByType<CameraController>();
-        if (camCtrl == null) return;
+        if (cameraController == null) return;
 
         // If we have a pending heatmap requested during spline editing, only apply it after editing stops
         if (pendingHeatmapOnEditEnd)
@@ -409,15 +418,15 @@ public class Tunnel : MonoBehaviour
         static int QuantizeFloat(float v, float scale = 100f) { return Mathf.RoundToInt(v * scale); }
 
         // coarser quantization to avoid tiny FP jitter causing cache misses
-        hash = CombineHash(hash, QuantizeFloat(camCtrl.minSpeed, 100));
-        hash = CombineHash(hash, QuantizeFloat(camCtrl.maxSpeed, 100));
+        hash = CombineHash(hash, QuantizeFloat(cameraController.minSpeed, 100));
+        hash = CombineHash(hash, QuantizeFloat(cameraController.maxSpeed, 100));
         hash = CombineHash(hash, QuantizeFloat(cornerSlowdown, 100));
         hash = CombineHash(hash, QuantizeFloat(curvatureSensitivity, 10));
         hash = CombineHash(hash, QuantizeFloat(curvatureSampleRadius, 1000));
         hash = CombineHash(hash, curvatureSampleCount);
         hash = CombineHash(hash, QuantizeFloat(vizResolution, 10000));
-        hash = CombineHash(hash, QuantizeFloat(camCtrl.acceleration, 100));
-        hash = CombineHash(hash, QuantizeFloat(camCtrl.deceleration, 100));
+        hash = CombineHash(hash, QuantizeFloat(cameraController.acceleration, 100));
+        hash = CombineHash(hash, QuantizeFloat(cameraController.deceleration, 100));
 
         // include manual slowdown zones
         hash = CombineHash(hash, manualSlowdowns.Count);
@@ -466,10 +475,10 @@ public class Tunnel : MonoBehaviour
             for (float t = 0; t < 1.0f; t += resolution)
             {
                 Vector3 currentPos = splineContainer.EvaluatePosition(t);
-                float targetSpeed = GetTargetSpeedAt(t, camCtrl.minSpeed, camCtrl.maxSpeed, camCtrl.acceleration, camCtrl.deceleration);
+                float targetSpeed = GetTargetSpeedAt(t, cameraController.minSpeed, cameraController.maxSpeed, cameraController.acceleration, cameraController.deceleration);
 
                 // Color: Red = Slow, standard color when fast
-                float ratio = Mathf.Clamp01(targetSpeed / camCtrl.maxSpeed);
+                float ratio = Mathf.Clamp01(targetSpeed / cameraController.maxSpeed);
 
                 cachedHeatPositions.Add(prevPos);
                 cachedHeatPositions.Add(currentPos);
@@ -483,8 +492,8 @@ public class Tunnel : MonoBehaviour
                 float t = 1.0f;
                 Vector3 currentPos = splineContainer.EvaluatePosition(t);
                 // At exact end we want to arrive very slow (minSpeed)
-                float targetSpeed = GetTargetSpeedAt(t, camCtrl.minSpeed, camCtrl.maxSpeed, camCtrl.acceleration, camCtrl.deceleration);
-                float ratio = Mathf.Clamp01(targetSpeed / camCtrl.maxSpeed);
+                float targetSpeed = GetTargetSpeedAt(t, cameraController.minSpeed, cameraController.maxSpeed, cameraController.acceleration, cameraController.deceleration);
+                float ratio = Mathf.Clamp01(targetSpeed / cameraController.maxSpeed);
 
                 cachedHeatPositions.Add(prevPos);
                 cachedHeatPositions.Add(currentPos);
@@ -505,7 +514,22 @@ public class Tunnel : MonoBehaviour
     }
 
 
-    public void AddKnotAtPosition(Vector3 position)
+    public void SpawnKnot(SelectEnterEventArgs args)
+    {
+        if (args == null)
+        {
+            return;
+        }
+
+        IXRRayProvider rayProvider = args.interactorObject as IXRRayProvider;
+
+        if (rayProvider != null)
+        {
+            AddKnotAtPosition(rayProvider.rayEndPoint);
+        }
+    }
+
+    public void AddKnotAtPosition(Vector3 position, bool forceOnCurve = false)
     {
         float3 localProj = splineContainer.transform.InverseTransformPoint(position);
         SplineUtility.GetNearestPoint(spline, localProj, out float3 nearestLocal, out float refinedT);
@@ -539,17 +563,20 @@ public class Tunnel : MonoBehaviour
             }
         }
 
+
         // Build knot data at refined position
-        Vector3 worldNearest = splineContainer.transform.TransformPoint((Vector3)nearestLocal);
+        Vector3 targetLocalPos = forceOnCurve ? nearestLocal : splineContainer.transform.InverseTransformPoint(position);
+        Vector3 targetWorldPos = splineContainer.transform.TransformPoint((Vector3)nearestLocal);
+
         float3 tangentWorldF3 = splineContainer.EvaluateTangent(refinedT);
         Vector3 tangentWorld = new Vector3(tangentWorldF3.x, tangentWorldF3.y, tangentWorldF3.z).normalized;
-        float handleLen = HandleUtility.GetHandleSize(worldNearest) * 0.3f;
+        float handleLen = HandleUtility.GetHandleSize(targetWorldPos) * 0.3f;
 
         float3 tanOut = (float3)tangentWorld * handleLen;
         float3 tanIn = -tanOut;
         tanIn.y = 0;
         tanOut.y = 0;
-        var newKnot = new BezierKnot(nearestLocal, tanIn, tanOut);
+        var newKnot = new BezierKnot(targetLocalPos, tanIn, tanOut);
 
 #if UNITY_EDITOR
         Undo.RecordObject(splineContainer, "Add Spline Knot");

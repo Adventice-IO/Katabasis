@@ -5,6 +5,8 @@ using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
+using System.Runtime.CompilerServices;
+
 
 
 
@@ -56,6 +58,11 @@ public class CameraController : MonoBehaviour
     public ContinuousMoveProvider moveProvider;
     [SerializeField] private InputActionProperty joystickAction;
     [SerializeField] private InputActionProperty toggleFreeMoveAction;
+    [SerializeField] private InputActionProperty spawnAction;
+
+    bool spawningMode;
+
+    float timeAtSpawnMode;
 
     public GameObject lockInfoPlane;
 
@@ -75,9 +82,9 @@ public class CameraController : MonoBehaviour
             EditorApplication.update += EditorTick;
         }
 
-        if (Application.isPlaying )
+        if (Application.isPlaying)
         {
-            if(joystickAction.action != null) joystickAction.action.Enable();
+            if (joystickAction.action != null) joystickAction.action.Enable();
             if (toggleFreeMoveAction.action != null)
             {
                 toggleFreeMoveAction.action.Enable();
@@ -86,20 +93,26 @@ public class CameraController : MonoBehaviour
                     freeMotion = !freeMotion;
                 };
             }
+
+            if (spawnAction.action != null)
+            {
+                spawnAction.action.Enable();
+
+            }
         }
-
-
     }
 
     private void OnDisable()
     {
         EditorApplication.update -= EditorTick;
-
         if (Application.isPlaying)
         {
-           if (joystickAction.action != null) joystickAction.action.Disable();
-              if (toggleFreeMoveAction.action != null) toggleFreeMoveAction.action.Disable();
+            if (joystickAction.action != null) joystickAction.action.Disable();
+            if (toggleFreeMoveAction.action != null) toggleFreeMoveAction.action.Disable();
+            if (spawnAction.action != null) spawnAction.action.Disable();
         }
+
+
     }
 
     private void EditorTick()
@@ -135,9 +148,31 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        if(lockInfoPlane != null)
+        if (lockInfoPlane != null)
         {
             lockInfoPlane.SetActive(!freeMotion);
+        }
+
+        if (!Application.isPlaying)
+        {
+            if (spawnAction.action != null)
+            {
+                bool pressed = spawnAction.action.IsPressed();
+                if (pressed != spawningMode)
+                {
+                    spawningMode = pressed;
+                    if (spawningMode) timeAtSpawnMode = (float)EditorApplication.timeSinceStartup;
+                    else
+                    {
+                        float duration = (float)(EditorApplication.timeSinceStartup - timeAtSpawnMode);
+                        if (duration < .3f)
+                        {
+                            tunnel.AddKnotAtPosition(GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6));
+                        }
+                        timeAtSpawnMode = 0f;
+                    }
+                }
+            }
         }
     }
 
@@ -157,6 +192,7 @@ public class CameraController : MonoBehaviour
 
         if (Application.isPlaying)
         {
+
             Vector2 joystickInput = joystickAction.action?.ReadValue<Vector2>() ?? Vector2.zero;
             trackPosition += joystickInput.y * maxSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f);
         }

@@ -80,7 +80,7 @@ public class KnotHandle : MonoBehaviour
         Vector3 localOutPos = transform.InverseTransformPoint(nextHandle.position);
         float maxDist = Mathf.Max(localInPos.magnitude, localOutPos.magnitude);
 
-        manipPlane.localScale = Vector3.one * maxDist * 2 / 10;
+        if(manipPlane != null) manipPlane.localScale = Vector3.one * maxDist * 2 / 10;
 
         switch (manipState)
         {

@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "Katabasis Actions",
+    "maps": [
+        {
+            "name": "Kata Right Controller",
+            "id": "99ce76d3-82c5-4289-9670-2ecffa6833fd",
+            "actions": [
+                {
+                    "name": "Spawn Mode",
+                    "type": "Button",
+                    "id": "a6c7231d-c55d-4dd4-9e87-877bb5522ef5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "62690862-4688-4010-975b-b3d9c6062157",
+                    "path": "<XRController>{RightHand}/triggerButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Spawn Mode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
