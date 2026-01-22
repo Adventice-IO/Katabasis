@@ -1615,7 +1615,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 5, y: 4, z: 0.4}
   m_Center: {x: 0, y: 0, z: 0}
@@ -1740,7 +1740,7 @@ MonoBehaviour:
       m_SingletonActionBindings:
       - m_Name: 
         m_Id: c5358c42-9617-496e-ad85-41ad55be6740
-        m_Path: <XRController>/primaryButton
+        m_Path: <XRController>{LeftHand}/primaryButton
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -3107,6 +3107,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1767192439, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: far clip plane
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 1767192439, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_BackGroundColor.b
       value: 0
       objectReference: {fileID: 0}
@@ -3482,6 +3486,26 @@ MonoBehaviour:
         m_Processors: 
         m_Groups: 
         m_Action: Spawn
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  cancelAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Cancel
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: da228235-aab5-48af-81db-08c72c493bcf
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: f6a7ede6-3cbe-4aa3-9c4b-724f4f8d5d3b
+        m_Path: <XRController>{RightHand}/secondaryButton
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Cancel
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
