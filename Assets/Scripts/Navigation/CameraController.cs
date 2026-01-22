@@ -6,6 +6,10 @@ using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
 using System.Runtime.CompilerServices;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
+
+
 
 
 
@@ -90,7 +94,12 @@ public class CameraController : MonoBehaviour
                 toggleFreeMoveAction.action.Enable();
                 toggleFreeMoveAction.action.performed += ctx =>
                 {
-                    freeMotion = !freeMotion;
+                    bool newFreeMotion = !freeMotion;
+                    if(!newFreeMotion && salle == null && tunnel != null)
+                    {
+                        trackPosition = tunnel.getClosestTrackPosition(transform.position);
+                    }
+                    freeMotion = newFreeMotion;
                 };
             }
 
@@ -153,7 +162,7 @@ public class CameraController : MonoBehaviour
             lockInfoPlane.SetActive(!freeMotion);
         }
 
-        if (!Application.isPlaying)
+        if (Application.isPlaying)
         {
             if (spawnAction.action != null)
             {
@@ -330,6 +339,22 @@ public class CameraController : MonoBehaviour
         isRunning = false;
         trackPosition = 0f;
         currentSpeed = 0f;
+    }
+
+
+    //Spawning
+
+    public void handleFakeFloorSelect(SelectEnterEventArgs args)
+    {
+        if (!spawningMode) return;
+        if (salle == null && tunnel != null)
+        {
+            IXRRayProvider rayProvider = args.interactorObject as IXRRayProvider;
+            if (rayProvider != null && rayProvider.rayEndPoint != null)
+            {
+                tunnel.AddKnotAtPosition(rayProvider.rayEndPoint);
+            }
+        }
     }
 
 #if UNITY_EDITOR

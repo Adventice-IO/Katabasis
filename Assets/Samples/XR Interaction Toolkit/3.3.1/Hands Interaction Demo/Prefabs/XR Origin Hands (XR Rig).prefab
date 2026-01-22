@@ -403,9 +403,9 @@ GameObject:
   - component: {fileID: 8103978805196517378}
   - component: {fileID: 3884056177995004978}
   - component: {fileID: 2403916763093303750}
-  - component: {fileID: 4586929503665703935}
-  - component: {fileID: 8733316530383454540}
   - component: {fileID: 9167892766432708302}
+  - component: {fileID: 8733316530383454540}
+  - component: {fileID: 4586929503665703935}
   m_Layer: 6
   m_Name: FakeFloor
   m_TagString: Untagged
@@ -485,27 +485,25 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4586929503665703935
-BoxCollider:
+--- !u!114 &9167892766432708302
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1242843341806959984}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 10, y: 0.01, z: 10}
-  m_Center: {x: 0, y: -0.005, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c76267786f79d844d81b88bbacdf9b61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TeleportFloorVisuals
+  floorRenderer: {fileID: 2403916763093303750}
+  teleportActivateAction: {fileID: 0}
+  spawnActivateAction: {fileID: 0}
+  teleportColor: {r: 0, g: 0.598968, b: 1, a: 1}
+  spawnColor: {r: 1, g: 0, b: 0.53220177, a: 1}
+  spawnLongPress: 0.5
+  spawnInteractor: {fileID: 0}
 --- !u!114 &8733316530383454540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,20 +587,27 @@ MonoBehaviour:
   m_Teleporting:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &9167892766432708302
-MonoBehaviour:
+--- !u!65 &4586929503665703935
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1242843341806959984}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c76267786f79d844d81b88bbacdf9b61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TeleportFloorVisuals
-  floorRenderer: {fileID: 2403916763093303750}
-  teleportActivateAction: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 10, y: 0.01, z: 10}
+  m_Center: {x: 0, y: -0.005, z: 0}
 --- !u!1 &1595562925454861938
 GameObject:
   m_ObjectHideFlags: 0
@@ -1530,6 +1535,7 @@ MonoBehaviour:
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
+  enabledAtStart: 0
   salles: {fileID: 0}
   tunnels: {fileID: 0}
 --- !u!1 &3731119764064029736
@@ -3066,7 +3072,6 @@ MonoBehaviour:
   isRunning: 0
   freeMotion: 0
   moveProvider: {fileID: 7417599109105183109}
-  currentTool: 0
   joystickAction:
     m_UseReference: 0
     m_Action:
@@ -3087,6 +3092,31 @@ MonoBehaviour:
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
+  toggleFreeMoveAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: 
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: e63ccf1a-aec7-427f-bc7f-22f0418c3c61
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  spawnAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: 
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: edb8e072-00f2-425a-8837-772e92c12727
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  lockInfoPlane: {fileID: 0}
 --- !u!114 &6140885551018592312 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6640002710935096923, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}

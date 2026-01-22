@@ -695,4 +695,11 @@ public class Tunnel : MonoBehaviour
             curChildCount++;
         }
     }
+
+    public float getClosestTrackPosition(Vector3 position)
+    {
+        
+        SplineUtility.GetNearestPoint(splineContainer.Spline, splineContainer.transform.InverseTransformPoint(position), out float3 nearestLocal, out float refinedT);
+        return refinedT;
+    }
 }

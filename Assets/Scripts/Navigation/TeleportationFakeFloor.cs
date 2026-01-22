@@ -20,6 +20,12 @@ public class TeleportFloorVisuals : MonoBehaviour
     public Color teleportColor;
     public Color spawnColor;
 
+    bool spawnActivated = false;
+    float timeAtSpawnPress = 0f;
+    public float spawnLongPress = .5f;
+
+    public GameObject spawnInteractor;
+
     void Start()
     {
         // Ensure floor is invisible to start
@@ -34,12 +40,26 @@ public class TeleportFloorVisuals : MonoBehaviour
         }
 
         showingFloor = false;
+
+        spawnInteractor.SetActive(false);
     }
 
     private void Update()
     {
+        if (spawnActivated && !spawnMode)
+        {
+            if (Time.time > timeAtSpawnPress + spawnLongPress)
+            {
+                ShowFloor();
+                spawnMode = true;
+                spawnInteractor.SetActive(true);
+            }
+        }
+
+
         // Optional: You can add smooth fade-in/out logic here if desired
         if (floorRenderer == null) return;
+
         Color color = spawnMode ? spawnColor : teleportColor;
         if (showingFloor && alpha < 1f)
         {
@@ -66,13 +86,13 @@ public class TeleportFloorVisuals : MonoBehaviour
     {
         if (teleportActivateAction != null)
         {
-            teleportActivateAction.action.started += ShowFloor;
+            teleportActivateAction.action.started += TeleportActivated;
             teleportActivateAction.action.canceled += HideFloor;
         }
 
         if (spawnActivateAction != null)
         {
-            spawnActivateAction.action.started += ShowFloor;
+            spawnActivateAction.action.started += SpawnActivated;
             spawnActivateAction.action.canceled += HideFloor;
         }
 
@@ -82,30 +102,44 @@ public class TeleportFloorVisuals : MonoBehaviour
     {
         if (teleportActivateAction != null)
         {
-            teleportActivateAction.action.started -= ShowFloor;
+            teleportActivateAction.action.started -= TeleportActivated;
             teleportActivateAction.action.canceled -= HideFloor;
         }
 
         if (spawnActivateAction != null)
         {
-            spawnActivateAction.action.started -= ShowFloor;
+            spawnActivateAction.action.started -= SpawnActivated;
             spawnActivateAction.action.canceled -= HideFloor;
         }
 
     }
 
-    private void ShowFloor(InputAction.CallbackContext ctx)
+    private void TeleportActivated(InputAction.CallbackContext ctx)
+    {
+        ShowFloor();
+        spawnMode = false;
+    }
+
+    private void ShowFloor()
     {
         if (floorRenderer == null) return;
         floorRenderer.enabled = true;
         floorCollider.enabled = true; // Enable collider when floor is visible
         showingFloor = true;
-        spawnMode = ctx.action == spawnActivateAction.action;
+
     }
 
+    private void SpawnActivated(InputAction.CallbackContext ctx)
+    {
+        spawnActivated = true;
+        timeAtSpawnPress = Time.time;
+
+    }
     private void HideFloor(InputAction.CallbackContext ctx)
     {
-        if (floorRenderer == null) return;
+        spawnActivated = false;
         showingFloor = false;
+        spawnMode = false;
+        spawnInteractor.SetActive(false);
     }
 }

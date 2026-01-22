@@ -15,9 +15,11 @@ public class MenuController : MonoBehaviour
 
     CameraController cameraController;
 
+    
+    public bool enabledAtStart = false;
+    
     public Transform salles;
     public Transform tunnels;
-    public
 
     ListView sallesList;
     ListView tunnelsList;
@@ -35,7 +37,7 @@ public class MenuController : MonoBehaviour
             menuButtonAction.action.performed += OnMenuButtonPressed;
         }
 
-        //uiDocument.enabled = false;
+        if(!enabledAtStart) uiDocument.enabled = false;
     }
 
     private void OnDisable()
