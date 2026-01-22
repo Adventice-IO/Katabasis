@@ -225,22 +225,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 657184242118504724, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-      propertyPath: far clip plane
-      value: 60
-      objectReference: {fileID: 0}
     - target: {fileID: 665326919092368300, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: menuButtonAction.m_Reference
       value: 
       objectReference: {fileID: 644943638}
-    - target: {fileID: 665326919092368300, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-      propertyPath: menuButtonAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Path
-      value: <XRController>{LeftHand}/primaryButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 970454911123765593, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2218496723442559053, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_LocalPosition.x
       value: 58.778362
@@ -297,26 +285,6 @@ PrefabInstance:
       propertyPath: spawnAction.m_Reference
       value: 
       objectReference: {fileID: 1482636197}
-    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-      propertyPath: cancelAction.m_Action.m_Name
-      value: Cancel
-      objectReference: {fileID: 0}
-    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-      propertyPath: cancelAction.m_Action.m_SingletonActionBindings.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-      propertyPath: cancelAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Id
-      value: f6a7ede6-3cbe-4aa3-9c4b-724f4f8d5d3b
-      objectReference: {fileID: 0}
-    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-      propertyPath: cancelAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Path
-      value: <XRController>{RightHand}/secondaryButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-      propertyPath: cancelAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Action
-      value: Cancel
-      objectReference: {fileID: 0}
     - target: {fileID: 8058045973433173201, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: spawnActivateAction
       value: 
