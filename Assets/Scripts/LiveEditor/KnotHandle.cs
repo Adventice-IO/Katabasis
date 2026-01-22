@@ -269,10 +269,10 @@ public class KnotHandle : MonoBehaviour
 
     public void updateActive()
     {
-        bool value = knotIndex >= 0 && splineContainer != null && knotIndex < splineContainer.Spline.Count;
+        bool isMiddle = knotIndex > 0 && knotIndex < splineContainer.Spline.Count - 1;
 
-        knot.gameObject.SetActive(value);
-        upKnot.gameObject.SetActive(value);
+        knot.gameObject.SetActive(isMiddle);
+        upKnot.gameObject.SetActive(isMiddle);
 
         prevHandle.gameObject.SetActive(knotIndex > 0);
         prevLine.gameObject.SetActive(knotIndex > 0);
@@ -280,10 +280,9 @@ public class KnotHandle : MonoBehaviour
         nextHandle.gameObject.SetActive(knotIndex < splineContainer.Spline.Count - 1);
         nextLine.gameObject.SetActive(knotIndex < splineContainer.Spline.Count - 1);
 
-        snap.gameObject.SetActive(value);
+        snap.gameObject.SetActive(isMiddle);
 
-        GetComponent<Renderer>().enabled = value;
-        GetComponent<Collider>().enabled = value;
+        GetComponent<Collider>().enabled = isMiddle;
     }
     public bool isMoving()
     {

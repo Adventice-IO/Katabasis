@@ -581,14 +581,16 @@ public class Tunnel : MonoBehaviour
         Vector3 targetLocalPos = forceOnCurve ? nearestLocal : splineContainer.transform.InverseTransformPoint(position);
         Vector3 targetWorldPos = splineContainer.transform.TransformPoint((Vector3)nearestLocal);
 
-        float3 tangentWorldF3 = splineContainer.EvaluateTangent(refinedT);
-        Vector3 tangentWorld = new Vector3(tangentWorldF3.x, tangentWorldF3.y, tangentWorldF3.z).normalized;
-        float handleLen = HandleUtility.GetHandleSize(targetWorldPos) * 0.3f;
+        // Use local-space tangent at the refined insertion parameter and convert
+        // the derivative to Bezier handle length (derivative is ~3 * handle vector).
+        float3 tangent = spline.EvaluateTangent(refinedT);
 
-        float3 tanOut = (float3)tangentWorld * handleLen;
+        float3 tanOut = tangent / 8f;
         float3 tanIn = -tanOut;
+        // Keep planar tangents if your tunnels are intended to stay level.
         tanIn.y = 0;
         tanOut.y = 0;
+
         var newKnot = new BezierKnot(targetLocalPos, tanIn, tanOut);
 
 #if UNITY_EDITOR
@@ -688,7 +690,20 @@ public class Tunnel : MonoBehaviour
             DestroyImmediate(child.gameObject);
         }
 
+        for (int i = 0; i < handlesRoot.childCount; i++)
+        {
+            Transform child = handlesRoot.GetChild(i);
+            KnotHandle handle = child.GetComponent<KnotHandle>();
+            if (handle != null)
+            {
+                handle.knotIndex = i;
+                handle.gameObject.name = "Handle_" + i;
+                handle.updateActive();
+            }
+        }
+
         int curChildCount = handlesRoot.childCount;
+
 
         while (curChildCount < spline.Count)
         {
@@ -703,22 +718,20 @@ public class Tunnel : MonoBehaviour
                 handleTransform = handleObj.transform;
                 handle = handleObj.GetComponent<KnotHandle>();
 
-                Debug.Log("Created handle for knot " + curChildCount);
+                handle.knotIndex = curChildCount;
+                handle.splineContainer = splineContainer;
+
             }
             else
             {
-                Debug.Log("Reusing existing handle for knot " + curChildCount);
-                handle = handleTransform.GetComponent<KnotHandle>();
             }
 
-            handle.knotIndex = curChildCount;
-            handle.splineContainer = splineContainer;
 
             curChildCount++;
         }
 
         KnotHandle[] allHandles = handlesRoot.GetComponentsInChildren<KnotHandle>();
-        for(int i = 0; i < allHandles.Length; i++)
+        for (int i = 0; i < allHandles.Length; i++)
         {
             allHandles[i].updateActive();
         }
