@@ -343,8 +343,8 @@ public class CameraController : MonoBehaviour
 
 
     //Spawning
-
-    public void handleFakeFloorSelect(SelectEnterEventArgs args)
+   
+    public void handleFakeFloorSelect(HoverExitEventArgs args)
     {
         if (!spawningMode) return;
         if (salle == null && tunnel != null)
