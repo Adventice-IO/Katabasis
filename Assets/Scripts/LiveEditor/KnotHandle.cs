@@ -24,9 +24,17 @@ public class KnotHandle : MonoBehaviour
     public int knotIndex = 0;
     public SplineContainer splineContainer;
 
+    Renderer[] knotRenderers;
+    Renderer upKnotRenderer;
+    Renderer nextRenderer;
+    Renderer prevRenderer;
     Renderer[] snapRenderers;
 
     [SerializeField] private InputActionProperty removeAction;
+
+
+    bool showHandles = true;
+    float showAnim = 1.0f;
 
     public enum ManipState
     {
@@ -55,13 +63,19 @@ public class KnotHandle : MonoBehaviour
 
         nextHandle = transform.Find("NextHandle");
         nextLine = nextHandle.GetComponent<LineRenderer>();
+        nextRenderer = nextHandle.GetComponentInChildren<MeshRenderer>();
+        prevRenderer = prevHandle.GetComponentInChildren<MeshRenderer>();
 
         prevLine.positionCount = 2;
         nextLine.positionCount = 2;
 
         manipPlane = transform.Find("ManipPlane");
+
         knot = transform.Find("Knot");
+        knotRenderers = knot.GetComponentsInChildren<Renderer>();
+
         upKnot = transform.Find("Up");
+        upKnotRenderer = upKnot.GetComponentInChildren<Renderer>();
 
 
         snap = transform.Find("Snap");
@@ -119,70 +133,74 @@ public class KnotHandle : MonoBehaviour
     void Update()
     {
 
-
-        prevLine.SetPosition(0, transform.position);
-        prevLine.SetPosition(1, prevHandle.position);
-
-        nextLine.SetPosition(0, transform.position);
-        nextLine.SetPosition(1, nextHandle.position);
-
         Vector3 localInPos = transform.InverseTransformPoint(prevHandle.position);
         Vector3 localOutPos = transform.InverseTransformPoint(nextHandle.position);
         float maxDist = Mathf.Max(localInPos.magnitude, localOutPos.magnitude);
 
         if (manipPlane != null) manipPlane.localScale = Vector3.one * maxDist * 2 / 10;
 
-
         switch (manipState)
         {
             case ManipState.HoverKnot:
-                knot.GetComponent<Renderer>().material.color = new Color(1, 1, 0, 1);
+                foreach (var rend in knotRenderers)
+                {
+                    rend.material.color = new Color(1, 1, 0, 1);
+                }
                 break;
 
             case ManipState.HoverUpKnot:
-                upKnot.GetComponent<Renderer>().material.color = new Color(1, 1, 0, 1);
+                upKnotRenderer.material.color = new Color(1, 1, 0, 1);
                 break;
 
 
             case ManipState.HoverPrevHandle:
-                prevHandle.GetComponent<Renderer>().material.color = new Color(1, 1, 0, 1);
+                prevRenderer.material.color = new Color(1, 1, 0, 1);
                 prevLine.material.color = new Color(1, 1, 0, 1);
                 break;
 
             case ManipState.HoverNextHandle:
-                nextHandle.GetComponent<Renderer>().material.color = new Color(1, 1, 0, 1);
+                nextRenderer.material.color = new Color(1, 1, 0, 1);
                 nextLine.material.color = new Color(1, 1, 0, 1);
-                break;
-
-            case ManipState.MovingKnot:
-                knot.GetComponent<Renderer>().material.color = new Color(1, 0, 1, 1);
-                break;
-
-            case ManipState.MovingUpKnot:
-                upKnot.GetComponent<Renderer>().material.color = new Color(1, 0, 1, 1);
-                break;
-
-            case ManipState.MovingNextHandle:
-                prevHandle.GetComponent<Renderer>().material.color = new Color(1, 0, 1, 1);
-
-                break;
-            case ManipState.MovingPrevHandle:
-                nextHandle.GetComponent<Renderer>().material.color = new Color(1, 0, 1, 1);
                 break;
 
             case ManipState.HoverSnap:
                 foreach (var rend in snapRenderers)
                 {
-                    rend.material.color = new Color(0, 1, 1, 1);
+                    rend.material.color = new Color(1, 1, 0, 1);
                 }
                 break;
 
+            case ManipState.MovingKnot:
+                foreach (var rend in knotRenderers)
+                {
+                    rend.material.color = new Color(1, 0, 1, 1);
+                }
+                break;
+
+            case ManipState.MovingUpKnot:
+                upKnotRenderer.material.color = new Color(1, 0, 1, 1);
+                break;
+
+            case ManipState.MovingNextHandle:
+                nextRenderer.material.color = new Color(1, 0, 1, 1);
+                nextLine.material.color = new Color(1, 0, 1, 1);
+                break;
+            case ManipState.MovingPrevHandle:
+                prevRenderer.material.color = new Color(1, 0, 1, 1);
+                prevLine.material.color = new Color(1, 0, 1, 1);
+                break;
+
+          
+
 
             case ManipState.RemoveKnot:
-                knot.GetComponent<Renderer>().material.color = Color.red;
-                upKnot.GetComponent<Renderer>().material.color = Color.red;
-                prevHandle.GetComponent<Renderer>().material.color = Color.red;
-                nextHandle.GetComponent<Renderer>().material.color = Color.red;
+                foreach (var rend in knotRenderers)
+                {
+                    rend.material.color = Color.red;
+                }
+                upKnotRenderer.material.color = Color.red;
+                prevRenderer.material.color = Color.red;
+                nextRenderer.material.color = Color.red;
                 prevLine.material.color = Color.red;
                 nextLine.material.color = Color.red;
                 foreach (var rend in snapRenderers)
@@ -193,19 +211,53 @@ public class KnotHandle : MonoBehaviour
 
             case ManipState.None:
             default:
-                knot.GetComponent<Renderer>().material.color = Color.white;
-                upKnot.GetComponent<Renderer>().material.color = Color.white;
-                prevHandle.GetComponent<Renderer>().material.color = Color.red;
-                nextHandle.GetComponent<Renderer>().material.color = Color.green;
+                foreach (var rend in knotRenderers)
+                {
+                    rend.material.color = Color.white;
+                }
+                upKnotRenderer.material.color = Color.white;
+                prevRenderer.material.color = Color.red;
+                nextRenderer.material.color = Color.green;
                 prevLine.material.color = Color.lightPink;
                 nextLine.material.color = Color.lightGreen;
                 foreach (var rend in snapRenderers)
                 {
-                    rend.material.color = Color.cyan;
+                    rend.material.color = new Color(.05f, .05f, .05f, 1);
                 }
+
+
 
                 break;
         }
+
+        if (manipState != ManipState.None)
+        {
+            showAnim = 1.0f;
+        }
+        else
+        {
+            showHandles = Camera.main != null && Vector3.Distance(Camera.main.transform.position, transform.position) < 10.0f;
+        }
+
+        if (showHandles)
+        {
+            showAnim += Time.deltaTime * 5;
+        }
+        else
+        {
+            showAnim -= Time.deltaTime * 5;
+        }
+
+        showAnim = Mathf.Clamp01(showAnim);
+
+
+        prevHandle.localScale = Vector3.one * showAnim;
+        nextHandle.localScale = Vector3.one * showAnim;
+        //knot.localScale = Vector3.one * showAnim;
+        upKnot.localScale = Vector3.one * showAnim;
+        snap.localScale = Vector3.one * showAnim;
+
+
 
         if (isMoving())
         {
@@ -234,7 +286,6 @@ public class KnotHandle : MonoBehaviour
 
         }
     }
-
 
 
     void updateKnotPosition()

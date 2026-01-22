@@ -1,18 +1,28 @@
 using Framework.Utils.Editor;
 using UnityEngine;
 
+[ExecuteAlways]
 public class Salle : MonoBehaviour
 {
     public Color color = Color.green;
 
     public Vector3 size = Vector3.one * 10;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
+    public Transform origin { get; private set; }
+
     void Awake()
     {
         if(Application.isPlaying)
         {
             UnityPlayModeSaver.SaveComponent(transform);
         }
+
+        origin = transform.Find("Origin");
+    }
+
+    private void OnEnable()
+    {
+        origin = transform.Find("Origin");
     }
 
     // Update is called once per frame
@@ -41,6 +51,5 @@ public class Salle : MonoBehaviour
 #endif
     }
 
-    public Transform origin { get { return transform.Find("Origin"); } }
     public Interview[] interviews { get { return GetComponentsInChildren<Interview>(); } }
 }
