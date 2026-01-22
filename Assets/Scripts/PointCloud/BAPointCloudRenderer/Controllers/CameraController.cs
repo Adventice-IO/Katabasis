@@ -2,9 +2,9 @@
 
 namespace BAPointCloudRenderer.Controllers {
     /*
-     * CameraController for flying-controls
+     * MainController for flying-controls
      */
-    public class CameraController : MonoBehaviour {
+    public class MainController : MonoBehaviour {
 
         //Current yaw
         //private float yaw = 0.0f;

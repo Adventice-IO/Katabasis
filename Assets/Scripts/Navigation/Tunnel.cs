@@ -73,7 +73,7 @@ public class Tunnel : MonoBehaviour
 
     LineRenderer lineRenderer;
 
-    CameraController cameraController;
+    MainController MainController;
 
 
     [System.Serializable]
@@ -99,7 +99,7 @@ public class Tunnel : MonoBehaviour
         UpdateLineRenderer();
         updateHandles();
 
-        cameraController = FindFirstObjectByType<CameraController>();
+        MainController = FindFirstObjectByType<MainController>();
 
         if (Application.isPlaying)
         {
@@ -178,7 +178,7 @@ public class Tunnel : MonoBehaviour
 
         gameObject.name = $"{salleDepart?.name} > {salleArrivee?.name}";
 
-        if (Application.isPlaying) lineRenderer.material.color = cameraController.salle == null && cameraController.tunnel == this ? Color.yellow : Color.white;
+        if (Application.isPlaying) lineRenderer.material.color = MainController.salle == null && MainController.tunnel == this ? Color.yellow : Color.white;
     }
 
 
@@ -381,7 +381,7 @@ public class Tunnel : MonoBehaviour
         }
 #endif
 
-        if (cameraController == null) return;
+        if (MainController == null) return;
 
         // If we have a pending heatmap requested during spline editing, only apply it after editing stops
         if (pendingHeatmapOnEditEnd)
@@ -418,15 +418,15 @@ public class Tunnel : MonoBehaviour
         static int QuantizeFloat(float v, float scale = 100f) { return Mathf.RoundToInt(v * scale); }
 
         // coarser quantization to avoid tiny FP jitter causing cache misses
-        hash = CombineHash(hash, QuantizeFloat(cameraController.minSpeed, 100));
-        hash = CombineHash(hash, QuantizeFloat(cameraController.maxSpeed, 100));
+        hash = CombineHash(hash, QuantizeFloat(MainController.minSpeed, 100));
+        hash = CombineHash(hash, QuantizeFloat(MainController.maxSpeed, 100));
         hash = CombineHash(hash, QuantizeFloat(cornerSlowdown, 100));
         hash = CombineHash(hash, QuantizeFloat(curvatureSensitivity, 10));
         hash = CombineHash(hash, QuantizeFloat(curvatureSampleRadius, 1000));
         hash = CombineHash(hash, curvatureSampleCount);
         hash = CombineHash(hash, QuantizeFloat(vizResolution, 10000));
-        hash = CombineHash(hash, QuantizeFloat(cameraController.acceleration, 100));
-        hash = CombineHash(hash, QuantizeFloat(cameraController.deceleration, 100));
+        hash = CombineHash(hash, QuantizeFloat(MainController.acceleration, 100));
+        hash = CombineHash(hash, QuantizeFloat(MainController.deceleration, 100));
 
         // include manual slowdown zones
         hash = CombineHash(hash, manualSlowdowns.Count);
@@ -475,10 +475,10 @@ public class Tunnel : MonoBehaviour
             for (float t = 0; t < 1.0f; t += resolution)
             {
                 Vector3 currentPos = splineContainer.EvaluatePosition(t);
-                float targetSpeed = GetTargetSpeedAt(t, cameraController.minSpeed, cameraController.maxSpeed, cameraController.acceleration, cameraController.deceleration);
+                float targetSpeed = GetTargetSpeedAt(t, MainController.minSpeed, MainController.maxSpeed, MainController.acceleration, MainController.deceleration);
 
                 // Color: Red = Slow, standard color when fast
-                float ratio = Mathf.Clamp01(targetSpeed / cameraController.maxSpeed);
+                float ratio = Mathf.Clamp01(targetSpeed / MainController.maxSpeed);
 
                 cachedHeatPositions.Add(prevPos);
                 cachedHeatPositions.Add(currentPos);
@@ -492,8 +492,8 @@ public class Tunnel : MonoBehaviour
                 float t = 1.0f;
                 Vector3 currentPos = splineContainer.EvaluatePosition(t);
                 // At exact end we want to arrive very slow (minSpeed)
-                float targetSpeed = GetTargetSpeedAt(t, cameraController.minSpeed, cameraController.maxSpeed, cameraController.acceleration, cameraController.deceleration);
-                float ratio = Mathf.Clamp01(targetSpeed / cameraController.maxSpeed);
+                float targetSpeed = GetTargetSpeedAt(t, MainController.minSpeed, MainController.maxSpeed, MainController.acceleration, MainController.deceleration);
+                float ratio = Mathf.Clamp01(targetSpeed / MainController.maxSpeed);
 
                 cachedHeatPositions.Add(prevPos);
                 cachedHeatPositions.Add(currentPos);
@@ -582,17 +582,24 @@ public class Tunnel : MonoBehaviour
         Undo.RecordObject(splineContainer, "Add Spline Knot");
 #endif
 
-        try
+        if (Application.isPlaying)
         {
-            spline.Insert(index, newKnot);
-            spline.SetTangentMode(index, TangentMode.Continuous);
-            Debug.Log("Inserted knot at index " + index);
+            RuntimeUndoManager.addKnot(spline, index, newKnot);
         }
-        catch
+        else
         {
-            // Fallback to appending if Insert is unavailable
-            spline.Add(newKnot);
-            spline.SetTangentMode(spline.Count - 1, TangentMode.Continuous);
+
+            try
+            {
+                spline.Insert(index, newKnot);
+                Debug.Log("Inserted knot at index " + index);
+            }
+            catch
+            {
+                // Fallback to appending if Insert is unavailable
+                spline.Add(newKnot);
+                spline.SetTangentMode(spline.Count - 1, TangentMode.Continuous);
+            }
         }
 
         updateHandles();
@@ -698,7 +705,7 @@ public class Tunnel : MonoBehaviour
 
     public float getClosestTrackPosition(Vector3 position)
     {
-        
+
         SplineUtility.GetNearestPoint(splineContainer.Spline, splineContainer.transform.InverseTransformPoint(position), out float3 nearestLocal, out float refinedT);
         return refinedT;
     }

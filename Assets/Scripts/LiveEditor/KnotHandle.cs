@@ -17,6 +17,8 @@ public class KnotHandle : MonoBehaviour
     Transform upKnot;
 
 
+    BezierKnot originalKnot;
+
     public int knotIndex = 0;
     public SplineContainer splineContainer;
 
@@ -80,7 +82,7 @@ public class KnotHandle : MonoBehaviour
         Vector3 localOutPos = transform.InverseTransformPoint(nextHandle.position);
         float maxDist = Mathf.Max(localInPos.magnitude, localOutPos.magnitude);
 
-        if(manipPlane != null) manipPlane.localScale = Vector3.one * maxDist * 2 / 10;
+        if (manipPlane != null) manipPlane.localScale = Vector3.one * maxDist * 2 / 10;
 
         switch (manipState)
         {
@@ -199,12 +201,15 @@ public class KnotHandle : MonoBehaviour
     public void hoverUpKnot() { if (!isMoving()) manipState = ManipState.HoverUpKnot; }
     public void hoverPrevHandle() { if (!isMoving()) manipState = ManipState.HoverPrevHandle; }
     public void hoverNextHandle() { if (!isMoving()) manipState = ManipState.HoverNextHandle; }
-    public void moveKnot() { manipState = ManipState.MovingKnot; }
+    public void moveKnot() { manipState = ManipState.MovingKnot; originalKnot = snapshotKnot(); }
 
-    public void moveUpKnot() { manipState = ManipState.MovingUpKnot; }
+    public void moveUpKnot() { manipState = ManipState.MovingUpKnot; originalKnot = snapshotKnot(); }
 
-    public void movePrevHandle() { manipState = ManipState.MovingPrevHandle; }
-    public void moveNextHandle() { manipState = ManipState.MovingNextHandle; }
+    public void movePrevHandle() { manipState = ManipState.MovingPrevHandle; originalKnot = snapshotKnot(); }
+    public void moveNextHandle() { manipState = ManipState.MovingNextHandle; originalKnot = snapshotKnot(); }
+
+
+
     public void clearHoverState()
     {
         if (!isMoving())
@@ -213,6 +218,8 @@ public class KnotHandle : MonoBehaviour
 
     public void clearManipState()
     {
+        BezierKnot workingKnot = snapshotKnot();
+        RuntimeUndoManager.changeKnot(splineContainer.Spline, knotIndex, workingKnot, originalKnot);
         manipState = ManipState.None;
     }
 
@@ -227,7 +234,14 @@ public class KnotHandle : MonoBehaviour
     {
         Vector3 groundPos = GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6);
         transform.position = groundPos;
+        originalKnot = splineContainer.Spline[knotIndex];
         updateKnotPosition();
+        RuntimeUndoManager.changeKnot(splineContainer.Spline, knotIndex, splineContainer.Spline[knotIndex], originalKnot);
         snapHover(false);
+    }
+
+    public BezierKnot snapshotKnot()
+    {
+        return splineContainer.Spline[knotIndex];
     }
 }

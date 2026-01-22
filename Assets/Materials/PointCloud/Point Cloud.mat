@@ -62,24 +62,26 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 1
+    - _Alpha: 0.058
     - _AlphaSuperposition: 0.5
     - _BumpScale: 1
     - _Circles: 0
     - _Cutoff: 0.5
-    - _DensityCropFeather: 5
-    - _DensityCropMax: 0.909
-    - _DensityCropRange: 2
+    - _DensityCropFeather: 13.87
+    - _DensityCropMax: 0.529
+    - _DensityCropRange: 12.98
     - _DetailNormalMapScale: 1
+    - _DistFade: 30
     - _DstBlend: 0
     - _Explode: 0
-    - _FadeDistanceFeather: 5
-    - _FadeDistanceRange: 8.17
+    - _FadeDistanceFeather: 6.88
+    - _FadeDistanceRange: 4.5
     - _FarFadeEnd: 100
     - _FarFadeStart: 50
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _MaxDistance: 60
     - _Metallic: 0
     - _MinAlpha: 0.1
     - _MinPointSize: 0.2
@@ -91,12 +93,13 @@ Material:
     - _Parallax: 0.02
     - _PointSize: 1
     - _Preview: 0
+    - _Reveal: 0
     - _ScreenHeight: 299
     - _ScreenWidth: 377
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TimeIn: 0.863
+    - _TimeIn: 1
     - _ToggleBuffer: 0
     - _UVSec: 0
     - _ZWrite: 1
@@ -107,7 +110,7 @@ Material:
     - distanceThreshold: 500
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorKey: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorKey: {r: 1, g: 0, b: 0.3155985, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

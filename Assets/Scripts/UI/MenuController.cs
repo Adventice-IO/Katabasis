@@ -13,7 +13,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] private InputActionProperty menuButtonAction;
 
 
-    CameraController cameraController;
+    MainController MainController;
 
     
     public bool enabledAtStart = false;
@@ -70,7 +70,7 @@ public class MenuController : MonoBehaviour
     private void SetupMenu()
     {
         uiDocument = GetComponent<UIDocument>();
-        cameraController = FindAnyObjectByType<CameraController>();
+        MainController = FindAnyObjectByType<MainController>();
 
         if (salles == null)
         {
@@ -90,7 +90,7 @@ public class MenuController : MonoBehaviour
             }
         }
 
-        if (uiDocument == null || cameraController == null || salles == null || tunnels == null) return;
+        if (uiDocument == null || MainController == null || salles == null || tunnels == null) return;
         var root = uiDocument.rootVisualElement;
         if (root == null) return;
 
@@ -140,14 +140,14 @@ public class MenuController : MonoBehaviour
         freeMotionButton = root.Q<Button>("freemotionbt");
         freeMotionButton.clicked -= FreeMotionButton_clicked;
         freeMotionButton.clicked += FreeMotionButton_clicked;
-        if (cameraController.freeMotion) freeMotionButton.AddToClassList("active");
+        if (MainController.freeMotion) freeMotionButton.AddToClassList("active");
         else freeMotionButton.RemoveFromClassList("active");
     }
 
     private void FreeMotionButton_clicked()
     {
-        cameraController.freeMotion = !cameraController.freeMotion;
-        if (cameraController.freeMotion) freeMotionButton.AddToClassList("active");
+        MainController.freeMotion = !MainController.freeMotion;
+        if (MainController.freeMotion) freeMotionButton.AddToClassList("active");
         else freeMotionButton.RemoveFromClassList("active");
     }
 
@@ -155,15 +155,15 @@ public class MenuController : MonoBehaviour
     {
 
         var salle = sallesList.itemsSource[index] as Salle;
-        cameraController.TeleportToSalle(salle);
+        MainController.TeleportToSalle(salle);
     }
 
     private void OnTunnelClicked(int index)
     {
         var tunnel = tunnelsList.itemsSource[index] as Tunnel;
-        cameraController.salle = null;
-        cameraController.tunnel = tunnel;
-        cameraController.ResetPosition();
+        MainController.salle = null;
+        MainController.tunnel = tunnel;
+        MainController.ResetPosition();
 
         tunnelsList.SetSelectionWithoutNotify(new List<int> { });
     }

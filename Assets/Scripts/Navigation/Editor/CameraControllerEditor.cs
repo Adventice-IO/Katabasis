@@ -1,12 +1,12 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(CameraController))]
-public class CameraControllerEditor : Editor
+[CustomEditor(typeof(MainController))]
+public class MainControllerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        CameraController script = (CameraController)target;
+        MainController script = (MainController)target;
 
         // Draw the standard default inspector (variables, sliders)
         DrawDefaultInspector();
@@ -85,13 +85,13 @@ public class CameraControllerEditor : Editor
                     }
 
                     // Persist selection per-editor-session
-                    int selectedIndex = EditorPrefs.GetInt("CameraControllerEditor.SelectedSalleIndex", 0);
+                    int selectedIndex = EditorPrefs.GetInt("MainControllerEditor.SelectedSalleIndex", 0);
                     selectedIndex = Mathf.Clamp(selectedIndex, 0, destinations.Count - 1);
                     int newIndex = EditorGUILayout.Popup(selectedIndex, names);
                     if (newIndex != selectedIndex)
                     {
                         selectedIndex = newIndex;
-                        EditorPrefs.SetInt("CameraControllerEditor.SelectedSalleIndex", selectedIndex);
+                        EditorPrefs.SetInt("MainControllerEditor.SelectedSalleIndex", selectedIndex);
                     }
 
                     var selectedSalle = destinations[selectedIndex];

@@ -20,7 +20,7 @@ using UnityEditor;
 #endif
 
 [ExecuteAlways] // This makes the script run even when NOT in Play mode
-public class CameraController : MonoBehaviour
+public class MainController : MonoBehaviour
 {
     [Header("Setup")]
     public Salle initialSalle;
@@ -63,6 +63,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private InputActionProperty joystickAction;
     [SerializeField] private InputActionProperty toggleFreeMoveAction;
     [SerializeField] private InputActionProperty spawnAction;
+    [SerializeField] private InputActionProperty cancelAction;
 
     bool spawningMode;
 
@@ -95,7 +96,7 @@ public class CameraController : MonoBehaviour
                 toggleFreeMoveAction.action.performed += ctx =>
                 {
                     bool newFreeMotion = !freeMotion;
-                    if(!newFreeMotion && salle == null && tunnel != null)
+                    if (!newFreeMotion && salle == null && tunnel != null)
                     {
                         trackPosition = tunnel.getClosestTrackPosition(transform.position);
                     }
@@ -107,6 +108,15 @@ public class CameraController : MonoBehaviour
             {
                 spawnAction.action.Enable();
 
+            }
+
+            if (cancelAction.action != null)
+            {
+                cancelAction.action.Enable();
+                cancelAction.action.performed += ctx =>
+                {
+                    RuntimeUndoManager.instance.Undo();
+                };
             }
         }
     }
