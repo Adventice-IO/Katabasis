@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
@@ -7,12 +8,15 @@ public class KataPortal : MonoBehaviour
 {
 
     Tunnel tunnel;
+    Salle fromSalle;
+    Salle toSalle;
+
     MainController mainController;
     XRSimpleInteractable interactable;
     VisualEffect vfx;
     Collider col;
 
-    [Range(0, 1)]
+    [Range(0f, 1f)]
     public float positionAlongTunnel = .01f;
     public float elevation = 0;
 
@@ -23,6 +27,9 @@ public class KataPortal : MonoBehaviour
     float progressiveFocusTime = 0f;
 
     bool showing = false;
+
+
+    public List<Salle> blacklist = new List<Salle>();
 
     void OnEnable()
     {
@@ -69,6 +76,25 @@ public class KataPortal : MonoBehaviour
         bool showInTunnel = isInTunnel && (isFirst() ? mainController.trackPosition < .5f : mainController.trackPosition > .5f);
         bool shouldShow = showInSalle || showInTunnel;
 
+        if (showInSalle)
+        {
+            if (mainController.comingFromTunnel == tunnel)
+            {
+                shouldShow = false;
+            }
+            else
+            {
+                foreach (Salle s in blacklist)
+                {
+                    if (mainController.hasVisitedSalle(s))
+                    {
+                        shouldShow = false;
+                        break;
+                    }
+                }
+            }
+
+        }
 
         if (showing != shouldShow)
         {
@@ -81,6 +107,7 @@ public class KataPortal : MonoBehaviour
 
         if (Application.isPlaying && showing && !isInTunnel)
         {
+
             float focusProg = Time.deltaTime * (isFocused ? 1 : -1);
 
             progressiveFocusTime = Mathf.Clamp(progressiveFocusTime + focusProg, 0, focusTime);

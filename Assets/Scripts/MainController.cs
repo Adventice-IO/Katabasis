@@ -75,10 +75,12 @@ public class MainController : MonoBehaviour
         }
     }
 
+    public Tunnel comingFromTunnel { get; private set; }
+    List<Salle> visitedSalles = new List<Salle>();
 
     private void Start()
     {
-        TeleportToSalle(initialSalle);
+        Reset();
     }
 
 #if UNITY_EDITOR
@@ -312,9 +314,14 @@ public class MainController : MonoBehaviour
     public void TeleportToSalle(Salle targetSalle)
     {
         freeMotion = true;
+        comingFromTunnel = tunnel;
         tunnel = null;
         salle = targetSalle;
         timeAtArrived = Time.time;
+        if (!visitedSalles.Contains(targetSalle))
+        {
+            visitedSalles.Add(targetSalle);
+        }
         ResetPosition();
     }
 
@@ -369,6 +376,7 @@ public class MainController : MonoBehaviour
 
     public void Reset()
     {
+        visitedSalles = new List<Salle>();
         TeleportToSalle(initialSalle);
         ResetPosition();
     }
@@ -398,6 +406,11 @@ public class MainController : MonoBehaviour
     public bool isInSalle(Salle checkSalle)
     {
         return salle == checkSalle;
+    }
+
+    public bool hasVisitedSalle(Salle checkSalle)
+    {
+        return visitedSalles.Contains(checkSalle);
     }
 
     public bool isInTunnel(Tunnel checkTunnel)
