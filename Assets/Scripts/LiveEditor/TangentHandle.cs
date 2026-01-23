@@ -11,13 +11,12 @@ public class TangentHandle : MonoBehaviour
     }
     void Update()
     {
-        if(transform.localScale == Vector3.zero)
+        if (transform.lossyScale == Vector3.zero && transform.localPosition.magnitude < .01f)
         {
-            r.positionCount = 0;
             return;
         }
 
-        transform.rotation = Quaternion.LookRotation(transform.localPosition.normalized);
+        transform.rotation = Quaternion.LookRotation(transform.localPosition);
         r.positionCount = 2;
         r.SetPosition(0, transform.parent.position);
         r.SetPosition(1, transform.parent.position + (transform.position - transform.parent.position) * transform.localScale.x);

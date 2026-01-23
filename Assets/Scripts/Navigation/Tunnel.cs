@@ -73,9 +73,13 @@ public class Tunnel : MonoBehaviour
 
     LineRenderer lineRenderer;
 
-    MainController MainController;
+    MainController mainController;
 
     int splineLastCount = 0;
+
+    KataPortal portal;
+    KataPortal portalReverse;
+    public bool canReverse { get { return portalReverse != null; } }
 
     [System.Serializable]
     public class ManualSlowdown
@@ -104,7 +108,21 @@ public class Tunnel : MonoBehaviour
         UpdateLineRenderer();
         updateHandles();
 
-        MainController = FindFirstObjectByType<MainController>();
+        mainController = MainController.instance;
+
+        KataPortal[] portals = GetComponentsInChildren<KataPortal>();
+        foreach (var p in portals)
+        {
+            if (p.isFirst())
+            {
+                portal = p;
+            }
+            else
+            {
+                portalReverse = p;
+            }
+        }
+
 
         if (Application.isPlaying)
         {
@@ -190,7 +208,7 @@ public class Tunnel : MonoBehaviour
 
         gameObject.name = $"{salleDepart?.name} > {salleArrivee?.name}";
 
-        if (Application.isPlaying) lineRenderer.material.color = MainController.salle == null && MainController.tunnel == this ? Color.yellow : Color.white;
+        if (Application.isPlaying) lineRenderer.material.color = mainController.isInTunnel(this) ? Color.yellow : Color.white;
 
     }
 
@@ -394,7 +412,15 @@ public class Tunnel : MonoBehaviour
         }
 #endif
 
-        if (MainController == null) return;
+        if (mainController == null)
+        {
+            mainController = MainController.instance;
+            if (mainController == null)
+            {
+                Debug.LogWarning("Tunnel: MainController instance not found, cannot compute heatmap.");
+                return;
+            }
+        }
 
         // If we have a pending heatmap requested during spline editing, only apply it after editing stops
         if (pendingHeatmapOnEditEnd)
@@ -402,7 +428,6 @@ public class Tunnel : MonoBehaviour
             // Only trigger rebuild once editing has definitely stopped.
             // Consider editing stopped when neither a SplineLiveModifier reports editing nor the selection contains the spline.
 #if UNITY_EDITOR
-
             var selGO = UnityEditor.Selection.activeGameObject;
             bool selectedSpline = false;
             if (selGO != null)
@@ -424,6 +449,7 @@ public class Tunnel : MonoBehaviour
 #endif
         }
 
+
         // Compute a stable hash of the inputs that influence the heatmap.
         // Quantize floats to avoid tiny per-frame floating point differences causing rebuilds.
         int hash = 17;
@@ -431,15 +457,15 @@ public class Tunnel : MonoBehaviour
         static int QuantizeFloat(float v, float scale = 100f) { return Mathf.RoundToInt(v * scale); }
 
         // coarser quantization to avoid tiny FP jitter causing cache misses
-        hash = CombineHash(hash, QuantizeFloat(MainController.minSpeed, 100));
-        hash = CombineHash(hash, QuantizeFloat(MainController.maxSpeed, 100));
+        hash = CombineHash(hash, QuantizeFloat(mainController.minSpeed, 100));
+        hash = CombineHash(hash, QuantizeFloat(mainController.maxSpeed, 100));
         hash = CombineHash(hash, QuantizeFloat(cornerSlowdown, 100));
         hash = CombineHash(hash, QuantizeFloat(curvatureSensitivity, 10));
         hash = CombineHash(hash, QuantizeFloat(curvatureSampleRadius, 1000));
         hash = CombineHash(hash, curvatureSampleCount);
         hash = CombineHash(hash, QuantizeFloat(vizResolution, 10000));
-        hash = CombineHash(hash, QuantizeFloat(MainController.acceleration, 100));
-        hash = CombineHash(hash, QuantizeFloat(MainController.deceleration, 100));
+        hash = CombineHash(hash, QuantizeFloat(mainController.acceleration, 100));
+        hash = CombineHash(hash, QuantizeFloat(mainController.deceleration, 100));
 
         // include manual slowdown zones
         hash = CombineHash(hash, manualSlowdowns.Count);
@@ -488,10 +514,10 @@ public class Tunnel : MonoBehaviour
             for (float t = 0; t < 1.0f; t += resolution)
             {
                 Vector3 currentPos = splineContainer.EvaluatePosition(t);
-                float targetSpeed = GetTargetSpeedAt(t, MainController.minSpeed, MainController.maxSpeed, MainController.acceleration, MainController.deceleration);
+                float targetSpeed = GetTargetSpeedAt(t, mainController.minSpeed, mainController.maxSpeed, mainController.acceleration, mainController.deceleration);
 
                 // Color: Red = Slow, standard color when fast
-                float ratio = Mathf.Clamp01(targetSpeed / MainController.maxSpeed);
+                float ratio = Mathf.Clamp01(targetSpeed / mainController.maxSpeed);
 
                 cachedHeatPositions.Add(prevPos);
                 cachedHeatPositions.Add(currentPos);
@@ -505,8 +531,8 @@ public class Tunnel : MonoBehaviour
                 float t = 1.0f;
                 Vector3 currentPos = splineContainer.EvaluatePosition(t);
                 // At exact end we want to arrive very slow (minSpeed)
-                float targetSpeed = GetTargetSpeedAt(t, MainController.minSpeed, MainController.maxSpeed, MainController.acceleration, MainController.deceleration);
-                float ratio = Mathf.Clamp01(targetSpeed / MainController.maxSpeed);
+                float targetSpeed = GetTargetSpeedAt(t, mainController.minSpeed, mainController.maxSpeed, mainController.acceleration, mainController.deceleration);
+                float ratio = Mathf.Clamp01(targetSpeed / mainController.maxSpeed);
 
                 cachedHeatPositions.Add(prevPos);
                 cachedHeatPositions.Add(currentPos);
@@ -743,5 +769,15 @@ public class Tunnel : MonoBehaviour
 
         SplineUtility.GetNearestPoint(splineContainer.Spline, splineContainer.transform.InverseTransformPoint(position), out float3 nearestLocal, out float refinedT);
         return refinedT;
+    }
+
+    public Vector3 getPositionOnTrack(float positionAlongTunnel)
+    {
+        return splineContainer.EvaluatePosition(positionAlongTunnel);
+    }
+
+    public Salle getOtherSalle(Salle salle)
+    {
+        return salle == salleDepart ? salleArrivee : salleDepart;
     }
 }

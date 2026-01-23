@@ -81,7 +81,7 @@ public class KnotHandle : MonoBehaviour
         snap = transform.Find("Snap");
         snapRenderers = snap.GetComponentsInChildren<Renderer>();
 
-        mainController = FindAnyObjectByType<MainController>();
+        mainController = MainController.instance;
 
         if (Application.isPlaying)
         {
@@ -379,7 +379,7 @@ public class KnotHandle : MonoBehaviour
 
     public void snapTouch()
     {
-        Vector3 groundPos = GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6);
+        Vector3 groundPos = GroundFinder.getGroundForPosition(transform.position, .3f, 1.5f, 6);
         transform.position = groundPos;
         originalKnot = splineContainer.Spline[knotIndex];
         updateKnotPosition();

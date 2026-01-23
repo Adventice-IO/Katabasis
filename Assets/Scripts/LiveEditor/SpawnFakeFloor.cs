@@ -41,7 +41,7 @@ public class SpawnFakeFloor : MonoBehaviour
 
         showingFloor = false;
 
-        mainController = FindAnyObjectByType<MainController>();
+        mainController = MainController.instance;
 
         spawnInteractor.SetActive(false);
     }
