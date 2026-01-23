@@ -199,7 +199,7 @@ public class MainController : MonoBehaviour
                             float duration = (float)(EditorApplication.timeSinceStartup - timeAtSpawnMode);
                             if (duration < .3f)
                             {
-                                tunnel.AddKnotAtPosition(GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6));
+                                if(tunnel != null) tunnel.AddKnotAtPosition(GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6));
                             }
                             timeAtSpawnMode = 0f;
                         }

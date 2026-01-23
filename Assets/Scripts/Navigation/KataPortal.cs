@@ -45,6 +45,12 @@ public class KataPortal : MonoBehaviour
 
     void Start()
     {
+        if (Application.isPlaying)
+        {
+            showing = false;
+            vfx.enabled = false;
+            col.enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -76,7 +82,8 @@ public class KataPortal : MonoBehaviour
         if (Application.isPlaying && showing && !isInTunnel)
         {
             float focusProg = Time.deltaTime * (isFocused ? 1 : -1);
-            progressiveFocusTime += focusProg;
+
+            progressiveFocusTime = Mathf.Clamp(progressiveFocusTime + focusProg, 0, focusTime);
             float relProgession = Mathf.Clamp01(progressiveFocusTime / focusTime);
             vfx.SetFloat("Progression", relProgession);
             if (relProgession >= 1f)

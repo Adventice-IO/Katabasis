@@ -53,7 +53,7 @@ public class KnotHandle : MonoBehaviour
 
     //make it usable in an event
     public ManipState manipState = ManipState.None;
-
+    private ManipState lastManipState = ManipState.None;
     bool removePressed = false;
 
     void OnEnable()
@@ -139,61 +139,12 @@ public class KnotHandle : MonoBehaviour
 
         if (manipPlane != null) manipPlane.localScale = Vector3.one * maxDist * 2 / 10;
 
-        switch (manipState)
+        if (manipState != lastManipState)
         {
-            case ManipState.HoverKnot:
-                foreach (var rend in knotRenderers)
-                {
-                    rend.material.color = new Color(1, 1, 0, 1);
-                }
-                break;
+            lastManipState = manipState;
 
-            case ManipState.HoverUpKnot:
-                upKnotRenderer.material.color = new Color(1, 1, 0, 1);
-                break;
-
-
-            case ManipState.HoverPrevHandle:
-                prevRenderer.material.color = new Color(1, 1, 0, 1);
-                prevLine.material.color = new Color(1, 1, 0, 1);
-                break;
-
-            case ManipState.HoverNextHandle:
-                nextRenderer.material.color = new Color(1, 1, 0, 1);
-                nextLine.material.color = new Color(1, 1, 0, 1);
-                break;
-
-            case ManipState.HoverSnap:
-                foreach (var rend in snapRenderers)
-                {
-                    rend.material.color = new Color(1, 1, 0, 1);
-                }
-                break;
-
-            case ManipState.MovingKnot:
-                foreach (var rend in knotRenderers)
-                {
-                    rend.material.color = new Color(1, 0, 1, 1);
-                }
-                break;
-
-            case ManipState.MovingUpKnot:
-                upKnotRenderer.material.color = new Color(1, 0, 1, 1);
-                break;
-
-            case ManipState.MovingNextHandle:
-                nextRenderer.material.color = new Color(1, 0, 1, 1);
-                nextLine.material.color = new Color(1, 0, 1, 1);
-                break;
-            case ManipState.MovingPrevHandle:
-                prevRenderer.material.color = new Color(1, 0, 1, 1);
-                prevLine.material.color = new Color(1, 0, 1, 1);
-                break;
-
-          
-
-
-            case ManipState.RemoveKnot:
+            if (manipState == ManipState.RemoveKnot)
+            {
                 foreach (var rend in knotRenderers)
                 {
                     rend.material.color = Color.red;
@@ -207,27 +158,30 @@ public class KnotHandle : MonoBehaviour
                 {
                     rend.material.color = Color.red;
                 }
-                break;
+            }
+            else
+            {
+                Color hoverColor = new Color(1, 1, 0, 1);
+                Color movingColor = new Color(1, 0, 1, 1);
+                Color baseColor = new Color(1, 1, 1, 1);
 
-            case ManipState.None:
-            default:
+                lastManipState = manipState;
                 foreach (var rend in knotRenderers)
                 {
-                    rend.material.color = Color.white;
+                    rend.material.color = manipState == ManipState.HoverKnot ? hoverColor : (manipState == ManipState.MovingKnot ? movingColor : baseColor);
                 }
-                upKnotRenderer.material.color = Color.white;
-                prevRenderer.material.color = Color.red;
-                nextRenderer.material.color = Color.green;
-                prevLine.material.color = Color.lightPink;
-                nextLine.material.color = Color.lightGreen;
+
+                upKnotRenderer.material.color = manipState == ManipState.HoverUpKnot ? hoverColor : (manipState == ManipState.MovingUpKnot ? movingColor : baseColor);
+
+                prevRenderer.material.color = manipState == ManipState.HoverPrevHandle ? hoverColor : (manipState == ManipState.MovingPrevHandle ? movingColor : Color.red);
+                prevLine.material.color = manipState == ManipState.HoverPrevHandle ? hoverColor : (manipState == ManipState.MovingPrevHandle ? movingColor : Color.lightPink);
+                nextRenderer.material.color = manipState == ManipState.HoverNextHandle ? hoverColor : (manipState == ManipState.MovingNextHandle ? movingColor : Color.green);
+                nextLine.material.color = manipState == ManipState.HoverNextHandle ? hoverColor : (manipState == ManipState.MovingNextHandle ? movingColor : Color.lightGreen);
                 foreach (var rend in snapRenderers)
                 {
-                    rend.material.color = new Color(.05f, .05f, .05f, 1);
+                    rend.material.color = manipState == ManipState.HoverSnap ? hoverColor : baseColor;
                 }
-
-
-
-                break;
+            }
         }
 
         if (manipState != ManipState.None)
