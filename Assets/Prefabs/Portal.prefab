@@ -167,9 +167,6 @@ MonoBehaviour:
   elevation: 1.8
   focusTime: 2
   timeBeforeReveal: 3
-  isFocused: 0
-  progressiveFocusTime: 0
-  showing: 0
 --- !u!114 &-4447553865168089850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,10 +196,34 @@ MonoBehaviour:
   m_AllowGazeAssistance: 0
   m_FirstHoverEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8104163711796569747}
+        m_TargetAssemblyTypeName: KataPortal, Assembly-CSharp
+        m_MethodName: set_isFocused
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   m_LastHoverExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8104163711796569747}
+        m_TargetAssemblyTypeName: KataPortal, Assembly-CSharp
+        m_MethodName: set_isFocused
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_HoverEntered:
     m_PersistentCalls:
       m_Calls: []
