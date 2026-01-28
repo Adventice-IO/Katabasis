@@ -23,7 +23,7 @@ public class KataPortal : MonoBehaviour
     public float focusTime = 2f;
     public float timeBeforeReveal = 3f;
 
-    public bool isFocused { get; set; }
+    public bool isFocused { get; set; } = false;
     float progressiveFocusTime = 0f;
 
     bool showing = false;
@@ -107,7 +107,6 @@ public class KataPortal : MonoBehaviour
 
         if (Application.isPlaying && showing && !isInTunnel)
         {
-
             float focusProg = Time.deltaTime * (isFocused ? 1 : -1);
 
             progressiveFocusTime = Mathf.Clamp(progressiveFocusTime + focusProg, 0, focusTime);

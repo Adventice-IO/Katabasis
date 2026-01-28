@@ -68,9 +68,12 @@ public class MenuController : MonoBehaviour
 
     private void SetupMenu()
     {
-        transform.position = Camera.main.transform.TransformPoint(Vector3.forward * 2);
-        transform.LookAt(Camera.main.transform);
-        transform.Rotate(0, 180, 0);
+        if (Application.isPlaying)
+        {
+            transform.position = Camera.main.transform.TransformPoint(Vector3.forward * 2);
+            transform.LookAt(Camera.main.transform);
+            transform.Rotate(0, 180, 0);
+        }
 
         uiDocument = GetComponent<UIDocument>();
         MainController = FindAnyObjectByType<MainController>();

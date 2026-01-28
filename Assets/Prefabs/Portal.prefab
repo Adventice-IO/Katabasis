@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7284211463160248734}
   - component: {fileID: 8104163711796569747}
   - component: {fileID: -4447553865168089850}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Portal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,15 +158,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6666648134924636383}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46e77e6cdc87eee4fa27f0b8dab6d6bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
   positionAlongTunnel: 0.01
   elevation: 1.8
-  focusTime: 2
+  focusTime: 5
   timeBeforeReveal: 3
+  isFocused: 0
   blacklist: []
 --- !u!114 &-4447553865168089850
 MonoBehaviour:
@@ -183,7 +184,7 @@ MonoBehaviour:
   m_InteractionManager: {fileID: 0}
   m_Colliders: []
   m_InteractionLayers:
-    m_Bits: 2147483648
+    m_Bits: 16
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_FocusMode: 1
