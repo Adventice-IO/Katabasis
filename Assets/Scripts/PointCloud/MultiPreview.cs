@@ -527,14 +527,14 @@ namespace BAPointCloudRenderer.CloudController
         {
             if(Application.isPlaying)
             {
-                return null;
+                return null; 
             }
 
             previewScene = EnsurePreviewSceneLoaded();
             GameObject[] previewRoots = previewScene.GetRootGameObjects();
-            if (previewRoots.Length > 0)
+            foreach(var go in previewRoots)
             {
-                return previewRoots[0].transform;
+                if(go.name == "Preview_Root") return go.transform;
             }
 
             return null;

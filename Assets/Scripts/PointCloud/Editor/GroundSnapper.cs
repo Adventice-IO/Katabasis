@@ -37,6 +37,7 @@ public static class GroundSnapper
                 Vector3 currentPos = t.position;
                 Vector3 snappedPos = GroundFinder.getGroundForPosition(currentPos, horizontalSearch, verticalSearch, maxSearchRenderers);
 
+                // Debug.Log("Transform changed, snapped Pos "+ snappedPos.y);
                 if (Vector3.Distance(currentPos, snappedPos) > 0.001f)
                 {
                     t.position = snappedPos;
@@ -88,7 +89,7 @@ public static class GroundSnapper
         Vector3 worldGroundPos = GroundFinder.getGroundForPosition(worldPos, horizontalSearch, verticalSearch, maxSearchRenderers);
         Vector3 localGroundPos = container.transform.InverseTransformPoint(worldGroundPos);
         float3 snappedPos = new float3(localGroundPos.x, localGroundPos.y, localGroundPos.z);
-
+        
         // Infinite Loop Guard
         if (math.distance(localPos, snappedPos) < 0.001f)
         {
