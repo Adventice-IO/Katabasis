@@ -54,6 +54,7 @@ public class MainController : MonoBehaviour
     [Header("Interaction")]
     public bool freeMotion;
     public ContinuousMoveProvider moveProvider;
+    [SerializeField] private InputActionProperty verticalMoveAction;
     [SerializeField] private InputActionProperty joystickAction;
     [SerializeField] private InputActionProperty toggleFreeMoveAction;
     [SerializeField] private InputActionProperty spawnAction;
@@ -61,6 +62,8 @@ public class MainController : MonoBehaviour
 
     bool spawningMode;
     public bool removedInSpawnMode;
+
+    bool verticalMove;
 
     float timeAtSpawnMode;
 
@@ -131,6 +134,21 @@ public class MainController : MonoBehaviour
                     RuntimeUndoManager.instance.Undo();
                 };
             }
+
+            if (verticalMoveAction.action != null)
+            {
+                verticalMoveAction.action.Enable();
+                verticalMoveAction.action.performed += ctx =>
+                {
+                    Debug.Log("Vertical move started");
+                    verticalMove = true;
+
+                };
+                verticalMoveAction.action.canceled += ctx =>
+                {
+                    verticalMove = false;
+                };
+            }
         }
     }
 
@@ -142,6 +160,8 @@ public class MainController : MonoBehaviour
             if (joystickAction.action != null) joystickAction.action.Disable();
             if (toggleFreeMoveAction.action != null) toggleFreeMoveAction.action.Disable();
             if (spawnAction.action != null) spawnAction.action.Disable();
+            if (cancelAction.action != null) cancelAction.action.Disable();
+            if (verticalMoveAction.action != null) verticalMoveAction.action.Disable();
         }
 
 
@@ -201,7 +221,7 @@ public class MainController : MonoBehaviour
                             float duration = (float)(EditorApplication.timeSinceStartup - timeAtSpawnMode);
                             if (duration < .3f)
                             {
-                                if(tunnel != null) tunnel.AddKnotAtPosition(GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6));
+                                if (tunnel != null) tunnel.AddKnotAtPosition(GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6));
                             }
                             timeAtSpawnMode = 0f;
                         }
@@ -214,7 +234,26 @@ public class MainController : MonoBehaviour
 
     private void Tick(float deltaTime)
     {
-        moveProvider.enabled = freeMotion;
+        moveProvider.enabled = freeMotion && !verticalMove;
+
+        if (Application.isPlaying)
+        {
+
+            Vector2 joystickInput = joystickAction.action?.ReadValue<Vector2>() ?? Vector2.zero;
+
+            if (verticalMove)
+            {
+                transform.position += Vector3.up * joystickInput.y * deltaTime;
+            }
+            else if (!freeMotion && isInATunnel())
+            {
+                trackPosition += joystickInput.y * maxSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f);
+            }
+        }
+
+        if (tunnel == null)
+            return;
+
         if (freeMotion) return;
 
         if (isInASalle())
@@ -223,15 +262,6 @@ public class MainController : MonoBehaviour
             return;
         }
 
-        if (tunnel == null)
-            return;
-
-        if (Application.isPlaying)
-        {
-
-            Vector2 joystickInput = joystickAction.action?.ReadValue<Vector2>() ?? Vector2.zero;
-            trackPosition += joystickInput.y * maxSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f);
-        }
         // Cache the container if we switched paths
         var tunnelContainer = tunnel.GetComponent<SplineContainer>();
         if (splineContainer != tunnelContainer)
@@ -387,9 +417,14 @@ public class MainController : MonoBehaviour
             transform.position = salle.origin.position;
             timeAtArrived = Time.time;
         }
+        else
+        {
+            trackPosition = 0f;
+            currentSpeed = 0f;
+            transform.position = tunnel.getPositionOnTrack(0);
+            transform.LookAt(tunnel.getPositionOnTrack(.01f), Vector3.up);
+        }
         isRunning = false;
-        trackPosition = 0f;
-        currentSpeed = 0f;
     }
 
 

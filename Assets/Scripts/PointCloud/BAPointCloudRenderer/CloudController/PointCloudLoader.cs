@@ -52,7 +52,16 @@ namespace BAPointCloudRenderer.CloudController {
                     cloudPath = cloudPath + "/";
                 }
 
-                PointCloudMetaData metaData = CloudLoader.LoadMetaData(cloudPath, false);
+                String cPath = cloudPath;
+
+                if (cPath.StartsWith(".."))
+                {
+                    cPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(Application.dataPath, cloudPath));
+                }
+
+                Debug.Log("Loading point cloud from: " + cPath);
+
+                PointCloudMetaData metaData = CloudLoader.LoadMetaData(cPath, false);
                 
                 setController.UpdateBoundingBox(this, metaData.boundingBox_transformed, metaData.tightBoundingBox_transformed);
 

@@ -6,7 +6,6 @@ using UnityEngine.UIElements;
 using static UnityEngine.Analytics.IAnalytic;
 
 
-[ExecuteAlways]
 public class MenuController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
@@ -15,16 +14,16 @@ public class MenuController : MonoBehaviour
 
     MainController MainController;
 
-    
+
     public bool enabledAtStart = false;
-    
+
     public Transform salles;
     public Transform tunnels;
 
     ListView sallesList;
     ListView tunnelsList;
 
-    Button freeMotionButton;
+    Button lockOnTrackButton;
 
     private void OnEnable()
     {
@@ -37,7 +36,7 @@ public class MenuController : MonoBehaviour
             menuButtonAction.action.performed += OnMenuButtonPressed;
         }
 
-        if(!enabledAtStart) uiDocument.enabled = false;
+        if (!enabledAtStart) uiDocument.enabled = false;
     }
 
     private void OnDisable()
@@ -69,6 +68,10 @@ public class MenuController : MonoBehaviour
 
     private void SetupMenu()
     {
+        transform.position = Camera.main.transform.TransformPoint(Vector3.forward * 2);
+        transform.LookAt(Camera.main.transform);
+        transform.Rotate(0, 180, 0);
+
         uiDocument = GetComponent<UIDocument>();
         MainController = FindAnyObjectByType<MainController>();
 
@@ -137,18 +140,27 @@ public class MenuController : MonoBehaviour
         tunnelsList.Rebuild();
 
 
-        freeMotionButton = root.Q<Button>("freemotionbt");
-        freeMotionButton.clicked -= FreeMotionButton_clicked;
-        freeMotionButton.clicked += FreeMotionButton_clicked;
-        if (MainController.freeMotion) freeMotionButton.AddToClassList("active");
-        else freeMotionButton.RemoveFromClassList("active");
+        lockOnTrackButton = root.Q<Button>("freemotionbt");
+        lockOnTrackButton.clicked -= FreeMotionButton_clicked;
+        lockOnTrackButton.clicked += FreeMotionButton_clicked;
+
+       
+    }
+
+    private void Update()
+    {
+        if (Application.isPlaying && lockOnTrackButton != null)
+        {
+            if (MainController.freeMotion) lockOnTrackButton.RemoveFromClassList("active");
+            else lockOnTrackButton.AddToClassList("active");
+        }
     }
 
     private void FreeMotionButton_clicked()
     {
         MainController.freeMotion = !MainController.freeMotion;
-        if (MainController.freeMotion) freeMotionButton.AddToClassList("active");
-        else freeMotionButton.RemoveFromClassList("active");
+        if (MainController.freeMotion) lockOnTrackButton.RemoveFromClassList("active");
+        else lockOnTrackButton.AddToClassList("active");
     }
 
     private void OnSalleClicked(int index)
