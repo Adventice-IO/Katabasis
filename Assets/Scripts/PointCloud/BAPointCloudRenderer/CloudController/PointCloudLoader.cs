@@ -48,15 +48,18 @@ namespace BAPointCloudRenderer.CloudController {
 
         private void LoadHierarchy() {
             try {
-                if (!cloudPath.EndsWith("/")) {
-                    cloudPath = cloudPath + "/";
-                }
+                
 
                 String cPath = cloudPath;
 
                 if (cPath.StartsWith(".."))
                 {
                     cPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(Application.dataPath, cloudPath));
+                }
+
+                if (!cPath.EndsWith("/"))
+                {
+                    cPath = cPath + "/";
                 }
 
                 Debug.Log("Loading point cloud from: " + cPath);
