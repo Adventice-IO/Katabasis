@@ -5,13 +5,16 @@ using System.Threading;
 using UnityEngine;
 using UnityEditor;
 
-namespace BAPointCloudRenderer.CloudController {
+namespace BAPointCloudRenderer.CloudController
+{
     /// <summary>
     /// Use this script to load a single PointCloud from a directory.
     ///
     /// Streaming Assets support provided by Pablo Vidaurre
     /// </summary>
-    public class PointCloudLoader : MonoBehaviour {
+    [ExecuteAlways]
+    public class PointCloudLoader : MonoBehaviour
+    {
 
         /// <summary>
         /// Path to the folder which contains the cloud.js file or URL to download the cloud from. In the latter case, it will be downloaded to a /temp folder
@@ -37,52 +40,47 @@ namespace BAPointCloudRenderer.CloudController {
 
         private void Awake()
         {
-            if (streamingAssetsAsRoot) cloudPath = Application.streamingAssetsPath + "/" + cloudPath;
+
         }
 
-        void Start() {
-            if (loadOnStart) {
-                LoadPointCloud();
+        void Start()
+        {
+            if (Application.isPlaying)
+            {
+                if (loadOnStart)
+                {
+                    LoadPointCloud();
+                }
             }
         }
 
-        private void LoadHierarchy() {
-            try {
-                
+        private void LoadHierarchy()
+        {
+            try
+            {
+                PointCloudMetaData metaData = CloudLoader.LoadMetaData(cloudPath, false, streamingAssetsAsRoot);
 
-                String cPath = cloudPath;
-
-                if (cPath.StartsWith(".."))
-                {
-                    cPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(Application.dataPath, cloudPath));
-                }
-
-                if (!cPath.EndsWith("/"))
-                {
-                    cPath = cPath + "/";
-                }
-
-                Debug.Log("Loading point cloud from: " + cPath);
-
-                PointCloudMetaData metaData = CloudLoader.LoadMetaData(cPath, false);
-                
                 setController.UpdateBoundingBox(this, metaData.boundingBox_transformed, metaData.tightBoundingBox_transformed);
 
                 rootNode = CloudLoader.LoadHierarchyOnly(metaData);
 
                 setController.AddRootNode(this, rootNode, metaData);
-                
-            } catch (System.IO.FileNotFoundException ex)
+
+            }
+            catch (System.IO.FileNotFoundException ex)
             {
                 Debug.LogError("Could not find file: " + ex.FileName);
-            } catch (System.IO.DirectoryNotFoundException ex)
+            }
+            catch (System.IO.DirectoryNotFoundException ex)
             {
                 Debug.LogError("Could not find directory: " + ex.Message);
-            } catch (System.Net.WebException ex)
+            }
+            catch (System.Net.WebException ex)
             {
                 Debug.LogError("Could not access web address. " + ex.Message);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Debug.LogError(ex + Thread.CurrentThread.Name);
             }
         }
@@ -90,7 +88,8 @@ namespace BAPointCloudRenderer.CloudController {
         /// <summary>
         /// Starts loading the point cloud. When the hierarchy is loaded it is registered at the corresponding point cloud set
         /// </summary>
-        public void LoadPointCloud() {
+        public void LoadPointCloud()
+        {
             if (rootNode == null && setController != null && cloudPath != null)
             {
                 setController.RegisterController(this);
@@ -104,8 +103,10 @@ namespace BAPointCloudRenderer.CloudController {
         /// Removes the point cloud from the scene. Should only be called from the main thread!
         /// </summary>
         /// <returns>True if the cloud was removed. False, when the cloud hasn't even been loaded yet.</returns>
-        public bool RemovePointCloud() {
-            if (rootNode == null) {
+        public bool RemovePointCloud()
+        {
+            if (rootNode == null)
+            {
                 return false;
             }
             setController.RemoveRootNode(this, rootNode);
