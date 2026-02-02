@@ -119,13 +119,13 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!84 &11798556
+--- !u!84 &3035528
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
+  m_Name: Depthkit VFX Positions Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -136,7 +136,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 8
+  m_ColorFormat: 52
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -156,44 +156,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &15184048
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &23740678
+--- !u!84 &18138318
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2338,7 +2301,44 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &45686278
+--- !u!84 &49004373
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &52736243
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2375,7 +2375,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &56392351
+--- !u!84 &57181286
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2412,7 +2412,44 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &86030986
+--- !u!84 &59567494
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &64498721
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2449,44 +2486,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &96182113
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &116243925
+--- !u!84 &66738362
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2504,6 +2504,191 @@ RenderTexture:
   m_MipCount: -1
   m_DepthStencilFormat: 0
   m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &89607095
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &90162418
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &116986368
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &124401737
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &145229521
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -4631,7 +4816,81 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &149677065
+--- !u!84 &150725841
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &156672368
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &172190545
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4734,44 +4993,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8135023674665499069, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
   m_PrefabInstance: {fileID: 187300736}
   m_PrefabAsset: {fileID: 0}
---- !u!84 &202210623
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &213808003
+--- !u!84 &190835128
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4808,13 +5030,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &225893471
+--- !u!84 &234186750
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
+  m_Name: Depthkit VFX Colors Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -4825,44 +5047,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &233776954
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
+  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -6990,13 +7175,13 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &236164090
+--- !u!84 &260122855
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
+  m_Name: Depthkit VFX Colors Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -7007,44 +7192,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &259342060
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
+  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -9172,44 +9320,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &277389793
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &282233048
+--- !u!84 &275751894
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9246,7 +9357,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &293228488
+--- !u!84 &281221423
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9283,13 +9394,87 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &294693258
+--- !u!84 &281823617
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &282398185
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &298863989
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -11428,7 +11613,44 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &311995672
+--- !u!84 &312519326
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &314574325
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11465,7 +11687,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &334766694
+--- !u!84 &320302761
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11502,13 +11724,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &344723326
+--- !u!84 &321068368
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
+  m_Name: Depthkit VFX Positions Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -11519,7 +11741,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 8
+  m_ColorFormat: 52
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -11539,7 +11761,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &345993443
+--- !u!84 &324163612
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11576,87 +11798,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &349928233
+--- !u!84 &330814969
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &357307233
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &373326762
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
+  m_Name: Depthkit VFX Positions Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -11687,13 +11835,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &381922472
+--- !u!84 &331633219
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
+  m_Name: Depthkit VFX Colors Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -11704,7 +11852,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 52
+  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -15940,13 +16088,50 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &396684917
+--- !u!84 &390301831
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &402170591
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -18085,7 +18270,81 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &411556059
+--- !u!84 &410354498
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &414815147
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &424504634
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -18122,7 +18381,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &419911341
+--- !u!84 &431829662
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -18140,117 +18399,6 @@ RenderTexture:
   m_MipCount: -1
   m_DepthStencilFormat: 0
   m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &421352852
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &427947367
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &431152755
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -20378,13 +20526,13 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &465300428
+--- !u!84 &473478991
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
+  m_Name: Depthkit VFX Normals Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -20395,7 +20543,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 8
+  m_ColorFormat: 52
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -20415,50 +20563,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &468885064
+--- !u!84 &473577593
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &479290558
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
+  m_Name: Depthkit VFX Normals Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -20555,7 +20666,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7531940741206054172, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
   m_PrefabInstance: {fileID: 484215151}
   m_PrefabAsset: {fileID: 0}
---- !u!84 &486918653
+--- !u!84 &492919315
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20592,7 +20703,44 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &487997509
+--- !u!84 &494645841
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &495596977
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20629,7 +20777,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &491742467
+--- !u!84 &499401844
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20666,7 +20814,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &492818119
+--- !u!84 &503959956
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20703,13 +20851,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &499286446
+--- !u!84 &510342448
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
+  m_Name: Depthkit VFX Positions Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -20720,7 +20868,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 8
+  m_ColorFormat: 52
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -22848,80 +22996,6 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &523789612
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &524727493
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!120 &536703961
 LineRenderer:
   serializedVersion: 3
@@ -25030,13 +25104,13 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &541242968
+--- !u!84 &551147673
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
+  m_Name: Depthkit VFX Colors Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -25047,7 +25121,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 52
+  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -25067,7 +25141,44 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &569628277
+--- !u!84 &558966556
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &559408487
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -25104,13 +25215,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &583544377
+--- !u!84 &585101576
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
+  m_Name: Depthkit VFX Colors Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -25121,44 +25232,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &597461037
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
+  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -27286,7 +27360,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &623587758
+--- !u!84 &627261346
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -27323,7 +27397,44 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &650339200
+--- !u!84 &636562849
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &644167106
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -27360,13 +27471,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &656210589
+--- !u!84 &650630244
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
+  m_Name: Depthkit VFX Colors Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -27377,7 +27488,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 52
+  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -29505,43 +29616,6 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &695912324
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1001 &697056178
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34885,7 +34959,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &721363045
+--- !u!84 &709431585
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -34922,13 +34996,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &723977470
+--- !u!84 &717302004
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
+  m_Name: Depthkit VFX Positions Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -34959,7 +35033,44 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &727731323
+--- !u!84 &730668508
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &736868187
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -34996,13 +35107,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &744015409
+--- !u!84 &760552168
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
+  m_Name: Depthkit VFX Normals Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -35033,50 +35144,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &752118601
+--- !u!84 &763513069
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &757556623
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
+  m_Name: Depthkit VFX Normals Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -39323,44 +39397,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &804016713
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &816118631
+--- !u!84 &802924294
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -39397,13 +39434,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &824957948
+--- !u!84 &817152083
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
+  m_Name: Depthkit VFX Positions Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -39434,7 +39471,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &825055505
+--- !u!84 &823911553
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -39490,15 +39527,15 @@ PrefabInstance:
     - target: {fileID: 121681129378693404, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1743792851}
+      objectReference: {fileID: 864855341}
     - target: {fileID: 121681129378693404, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 149677065}
+      objectReference: {fileID: 1501129239}
     - target: {fileID: 121681129378693404, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1774478303}
+      objectReference: {fileID: 49004373}
     - target: {fileID: 156772445166069523, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39518,15 +39555,15 @@ PrefabInstance:
     - target: {fileID: 350407414266583462, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 825055505}
+      objectReference: {fileID: 585101576}
     - target: {fileID: 350407414266583462, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1591353921}
+      objectReference: {fileID: 901532027}
     - target: {fileID: 350407414266583462, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 411556059}
+      objectReference: {fileID: 925607317}
     - target: {fileID: 435901086564584679, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39538,15 +39575,15 @@ PrefabInstance:
     - target: {fileID: 435901086564584679, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1523709098}
+      objectReference: {fileID: 1938967016}
     - target: {fileID: 435901086564584679, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1512436110}
+      objectReference: {fileID: 709431585}
     - target: {fileID: 435901086564584679, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 282233048}
+      objectReference: {fileID: 492919315}
     - target: {fileID: 608213175819195742, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39562,15 +39599,15 @@ PrefabInstance:
     - target: {fileID: 881585915721247671, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 293228488}
+      objectReference: {fileID: 942541320}
     - target: {fileID: 881585915721247671, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 419911341}
+      objectReference: {fileID: 1828424838}
     - target: {fileID: 881585915721247671, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 2000209209}
+      objectReference: {fileID: 275751894}
     - target: {fileID: 999248657584426256, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39582,15 +39619,15 @@ PrefabInstance:
     - target: {fileID: 999248657584426256, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 349928233}
+      objectReference: {fileID: 66738362}
     - target: {fileID: 999248657584426256, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 96182113}
+      objectReference: {fileID: 1751999103}
     - target: {fileID: 999248657584426256, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1950026719}
+      objectReference: {fileID: 1408853286}
     - target: {fileID: 1059123823097961283, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39606,15 +39643,15 @@ PrefabInstance:
     - target: {fileID: 1115567942584467922, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 11798556}
+      objectReference: {fileID: 281221423}
     - target: {fileID: 1115567942584467922, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1787900878}
+      objectReference: {fileID: 473577593}
     - target: {fileID: 1115567942584467922, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 491742467}
+      objectReference: {fileID: 330814969}
     - target: {fileID: 1419761561457503433, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39634,15 +39671,15 @@ PrefabInstance:
     - target: {fileID: 1570140640011196338, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 468885064}
+      objectReference: {fileID: 1762007383}
     - target: {fileID: 1570140640011196338, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 381922472}
+      objectReference: {fileID: 1169598565}
     - target: {fileID: 1570140640011196338, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 650339200}
+      objectReference: {fileID: 298863989}
     - target: {fileID: 1629454367544292177, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39654,15 +39691,15 @@ PrefabInstance:
     - target: {fileID: 1629454367544292177, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1849616533}
+      objectReference: {fileID: 990171327}
     - target: {fileID: 1629454367544292177, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 2021785647}
+      objectReference: {fileID: 1331880642}
     - target: {fileID: 1629454367544292177, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1861827011}
+      objectReference: {fileID: 1303249441}
     - target: {fileID: 1761753083381626696, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39674,15 +39711,15 @@ PrefabInstance:
     - target: {fileID: 1761753083381626696, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1105000135}
+      objectReference: {fileID: 1403827815}
     - target: {fileID: 1761753083381626696, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 373326762}
+      objectReference: {fileID: 1100436880}
     - target: {fileID: 1761753083381626696, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 656210589}
+      objectReference: {fileID: 90162418}
     - target: {fileID: 1800840946905340751, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39694,15 +39731,15 @@ PrefabInstance:
     - target: {fileID: 1800840946905340751, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 695912324}
+      objectReference: {fileID: 823911553}
     - target: {fileID: 1800840946905340751, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 421352852}
+      objectReference: {fileID: 2026021145}
     - target: {fileID: 1800840946905340751, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 202210623}
+      objectReference: {fileID: 1203555478}
     - target: {fileID: 1847607916423732158, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39714,15 +39751,15 @@ PrefabInstance:
     - target: {fileID: 1847607916423732158, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1578883994}
+      objectReference: {fileID: 1800647159}
     - target: {fileID: 1847607916423732158, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 427947367}
+      objectReference: {fileID: 190835128}
     - target: {fileID: 1847607916423732158, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 236164090}
+      objectReference: {fileID: 1739111096}
     - target: {fileID: 1930018119583108589, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39738,15 +39775,15 @@ PrefabInstance:
     - target: {fileID: 1945913352705693564, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1395020616}
+      objectReference: {fileID: 1152193696}
     - target: {fileID: 1945913352705693564, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1528267582}
+      objectReference: {fileID: 1886844543}
     - target: {fileID: 1945913352705693564, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1516271475}
+      objectReference: {fileID: 494645841}
     - target: {fileID: 1971970956603323524, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39758,15 +39795,15 @@ PrefabInstance:
     - target: {fileID: 1971970956603323524, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1765706514}
+      objectReference: {fileID: 1131942375}
     - target: {fileID: 1971970956603323524, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1262760313}
+      objectReference: {fileID: 1195992966}
     - target: {fileID: 1971970956603323524, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1286993642}
+      objectReference: {fileID: 321068368}
     - target: {fileID: 2223752970090406153, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39778,15 +39815,15 @@ PrefabInstance:
     - target: {fileID: 2223752970090406153, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1221757995}
+      objectReference: {fileID: 89607095}
     - target: {fileID: 2223752970090406153, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1248630609}
+      objectReference: {fileID: 172190545}
     - target: {fileID: 2223752970090406153, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1427655262}
+      objectReference: {fileID: 2143049757}
     - target: {fileID: 2251805687329092809, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39806,15 +39843,15 @@ PrefabInstance:
     - target: {fileID: 2401125974750187852, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1745089891}
+      objectReference: {fileID: 1903203150}
     - target: {fileID: 2401125974750187852, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 492818119}
+      objectReference: {fileID: 324163612}
     - target: {fileID: 2401125974750187852, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1025648749}
+      objectReference: {fileID: 281823617}
     - target: {fileID: 2415391710618240033, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39826,15 +39863,15 @@ PrefabInstance:
     - target: {fileID: 2415391710618240033, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1762053212}
+      objectReference: {fileID: 1882666373}
     - target: {fileID: 2415391710618240033, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 721363045}
+      objectReference: {fileID: 390301831}
     - target: {fileID: 2415391710618240033, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 486918653}
+      objectReference: {fileID: 730668508}
     - target: {fileID: 2420832349711618976, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39850,15 +39887,15 @@ PrefabInstance:
     - target: {fileID: 2547814714688593315, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 2006603393}
+      objectReference: {fileID: 2109061079}
     - target: {fileID: 2547814714688593315, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1057209208}
+      objectReference: {fileID: 2125415251}
     - target: {fileID: 2547814714688593315, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 259342060}
+      objectReference: {fileID: 1637732732}
     - target: {fileID: 2554354753173002689, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39870,15 +39907,15 @@ PrefabInstance:
     - target: {fileID: 2554354753173002689, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1918461231}
+      objectReference: {fileID: 650630244}
     - target: {fileID: 2554354753173002689, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 523789612}
+      objectReference: {fileID: 431829662}
     - target: {fileID: 2554354753173002689, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 334766694}
+      objectReference: {fileID: 969015529}
     - target: {fileID: 2643748982112111672, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39890,15 +39927,15 @@ PrefabInstance:
     - target: {fileID: 2643748982112111672, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1761195369}
+      objectReference: {fileID: 736868187}
     - target: {fileID: 2643748982112111672, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 396684917}
+      objectReference: {fileID: 2101775066}
     - target: {fileID: 2643748982112111672, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 744015409}
+      objectReference: {fileID: 1155532808}
     - target: {fileID: 2856004820710879225, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39914,15 +39951,15 @@ PrefabInstance:
     - target: {fileID: 2901584215622423608, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 277389793}
+      objectReference: {fileID: 495596977}
     - target: {fileID: 2901584215622423608, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 723977470}
+      objectReference: {fileID: 57181286}
     - target: {fileID: 2901584215622423608, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 524727493}
+      objectReference: {fileID: 499401844}
     - target: {fileID: 2931993531359285491, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39934,15 +39971,15 @@ PrefabInstance:
     - target: {fileID: 2931993531359285491, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 953458807}
+      objectReference: {fileID: 1979810322}
     - target: {fileID: 2931993531359285491, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1636595209}
+      objectReference: {fileID: 2001668740}
     - target: {fileID: 2931993531359285491, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1440888274}
+      objectReference: {fileID: 1212494380}
     - target: {fileID: 3015196939857625592, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39958,15 +39995,15 @@ PrefabInstance:
     - target: {fileID: 3140662419225692136, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1110019476}
+      objectReference: {fileID: 1288378796}
     - target: {fileID: 3140662419225692136, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 569628277}
+      objectReference: {fileID: 150725841}
     - target: {fileID: 3140662419225692136, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 2057319751}
+      objectReference: {fileID: 59567494}
     - target: {fileID: 3172011664363763597, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -39982,15 +40019,15 @@ PrefabInstance:
     - target: {fileID: 3300214310326496540, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 487997509}
+      objectReference: {fileID: 282398185}
     - target: {fileID: 3300214310326496540, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 2113816039}
+      objectReference: {fileID: 1961542098}
     - target: {fileID: 3300214310326496540, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1987990823}
+      objectReference: {fileID: 918114970}
     - target: {fileID: 3359825730888842063, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40014,15 +40051,15 @@ PrefabInstance:
     - target: {fileID: 3515751588669823638, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 878834799}
+      objectReference: {fileID: 414815147}
     - target: {fileID: 3515751588669823638, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1393066819}
+      objectReference: {fileID: 1597719357}
     - target: {fileID: 3515751588669823638, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1430019512}
+      objectReference: {fileID: 882744328}
     - target: {fileID: 3533315343212211222, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40042,15 +40079,15 @@ PrefabInstance:
     - target: {fileID: 3830467176897906658, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 804016713}
+      objectReference: {fileID: 1474956501}
     - target: {fileID: 3830467176897906658, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 23740678}
+      objectReference: {fileID: 18138318}
     - target: {fileID: 3830467176897906658, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 886390321}
+      objectReference: {fileID: 424504634}
     - target: {fileID: 3890898107787580047, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40062,15 +40099,15 @@ PrefabInstance:
     - target: {fileID: 3890898107787580047, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 15184048}
+      objectReference: {fileID: 1098952709}
     - target: {fileID: 3890898107787580047, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1447701138}
+      objectReference: {fileID: 156672368}
     - target: {fileID: 3890898107787580047, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 2047079615}
+      objectReference: {fileID: 1736782830}
     - target: {fileID: 3941835465933857261, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40126,15 +40163,15 @@ PrefabInstance:
     - target: {fileID: 4283966222327057693, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1908106500}
+      objectReference: {fileID: 1920740910}
     - target: {fileID: 4283966222327057693, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1386935234}
+      objectReference: {fileID: 1112741214}
     - target: {fileID: 4283966222327057693, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 855400692}
+      objectReference: {fileID: 977933347}
     - target: {fileID: 4298516957838859071, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Name
       value: Salles
@@ -40154,15 +40191,15 @@ PrefabInstance:
     - target: {fileID: 4572478010079327663, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1620235672}
+      objectReference: {fileID: 2105600935}
     - target: {fileID: 4572478010079327663, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1952120416}
+      objectReference: {fileID: 760552168}
     - target: {fileID: 4572478010079327663, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 479290558}
+      objectReference: {fileID: 2076193504}
     - target: {fileID: 4607130831585284422, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40174,15 +40211,15 @@ PrefabInstance:
     - target: {fileID: 4607130831585284422, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1912158487}
+      objectReference: {fileID: 2108048838}
     - target: {fileID: 4607130831585284422, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 583544377}
+      objectReference: {fileID: 1521735914}
     - target: {fileID: 4607130831585284422, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1011503995}
+      objectReference: {fileID: 2058187267}
     - target: {fileID: 4632872204818436335, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40206,15 +40243,15 @@ PrefabInstance:
     - target: {fileID: 4823505697620847178, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1990284583}
+      objectReference: {fileID: 1408927868}
     - target: {fileID: 4823505697620847178, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 2046817922}
+      objectReference: {fileID: 1908159432}
     - target: {fileID: 4823505697620847178, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1494890462}
+      objectReference: {fileID: 1811443119}
     - target: {fileID: 4843903163363012827, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40238,15 +40275,15 @@ PrefabInstance:
     - target: {fileID: 5149937601979257710, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 431152755}
+      objectReference: {fileID: 1672248392}
     - target: {fileID: 5149937601979257710, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 225893471}
+      objectReference: {fileID: 559408487}
     - target: {fileID: 5149937601979257710, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1812992319}
+      objectReference: {fileID: 1899510232}
     - target: {fileID: 5155697000947210149, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40258,15 +40295,15 @@ PrefabInstance:
     - target: {fileID: 5155697000947210149, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1779493222}
+      objectReference: {fileID: 1189020842}
     - target: {fileID: 5155697000947210149, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 912124804}
+      objectReference: {fileID: 906426678}
     - target: {fileID: 5155697000947210149, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1398380822}
+      objectReference: {fileID: 1579392225}
     - target: {fileID: 5443801087049943918, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40278,15 +40315,15 @@ PrefabInstance:
     - target: {fileID: 5443801087049943918, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 465300428}
+      objectReference: {fileID: 1897123552}
     - target: {fileID: 5443801087049943918, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 213808003}
+      objectReference: {fileID: 1949587952}
     - target: {fileID: 5443801087049943918, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 541242968}
+      objectReference: {fileID: 627261346}
     - target: {fileID: 5498573621122932375, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40298,15 +40335,15 @@ PrefabInstance:
     - target: {fileID: 5498573621122932375, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1621110167}
+      objectReference: {fileID: 1779344015}
     - target: {fileID: 5498573621122932375, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1932773371}
+      objectReference: {fileID: 763513069}
     - target: {fileID: 5498573621122932375, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 905056203}
+      objectReference: {fileID: 644167106}
     - target: {fileID: 5616559617591439381, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40326,15 +40363,15 @@ PrefabInstance:
     - target: {fileID: 5785026587858088697, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1682999839}
+      objectReference: {fileID: 1751582349}
     - target: {fileID: 5785026587858088697, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1197131114}
+      objectReference: {fileID: 1835058067}
     - target: {fileID: 5785026587858088697, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 311995672}
+      objectReference: {fileID: 314574325}
     - target: {fileID: 6054034275288714256, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40354,15 +40391,15 @@ PrefabInstance:
     - target: {fileID: 6235944107219008740, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 116243925}
+      objectReference: {fileID: 234186750}
     - target: {fileID: 6235944107219008740, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 56392351}
+      objectReference: {fileID: 1465282991}
     - target: {fileID: 6235944107219008740, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 752118601}
+      objectReference: {fileID: 510342448}
     - target: {fileID: 6287885461241030261, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40382,15 +40419,15 @@ PrefabInstance:
     - target: {fileID: 6491008763622031540, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1526213470}
+      objectReference: {fileID: 116986368}
     - target: {fileID: 6491008763622031540, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 968029017}
+      objectReference: {fileID: 124401737}
     - target: {fileID: 6491008763622031540, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 757556623}
+      objectReference: {fileID: 1944460146}
     - target: {fileID: 6540071878382556633, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40402,15 +40439,15 @@ PrefabInstance:
     - target: {fileID: 6540071878382556633, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 981992153}
+      objectReference: {fileID: 52736243}
     - target: {fileID: 6540071878382556633, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1764227984}
+      objectReference: {fileID: 145229521}
     - target: {fileID: 6540071878382556633, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1706249720}
+      objectReference: {fileID: 1257645583}
     - target: {fileID: 6693650932381990401, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40446,15 +40483,15 @@ PrefabInstance:
     - target: {fileID: 7579732121767054257, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 45686278}
+      objectReference: {fileID: 551147673}
     - target: {fileID: 7579732121767054257, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 86030986}
+      objectReference: {fileID: 473478991}
     - target: {fileID: 7579732121767054257, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1063673041}
+      objectReference: {fileID: 1688028191}
     - target: {fileID: 7773452795892293360, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40466,15 +40503,15 @@ PrefabInstance:
     - target: {fileID: 7773452795892293360, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1805304532}
+      objectReference: {fileID: 1917935605}
     - target: {fileID: 7773452795892293360, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1692220452}
+      objectReference: {fileID: 636562849}
     - target: {fileID: 7773452795892293360, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 816118631}
+      objectReference: {fileID: 802924294}
     - target: {fileID: 7859001507635126341, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40494,15 +40531,15 @@ PrefabInstance:
     - target: {fileID: 7965869218955839050, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 973506461}
+      objectReference: {fileID: 331633219}
     - target: {fileID: 7965869218955839050, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 824957948}
+      objectReference: {fileID: 1673608158}
     - target: {fileID: 7965869218955839050, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 889806411}
+      objectReference: {fileID: 1246838221}
     - target: {fileID: 8105418136248710047, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40522,15 +40559,15 @@ PrefabInstance:
     - target: {fileID: 8205668495671551583, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 1072198390}
+      objectReference: {fileID: 260122855}
     - target: {fileID: 8205668495671551583, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 294693258}
+      objectReference: {fileID: 503959956}
     - target: {fileID: 8205668495671551583, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1669796596}
+      objectReference: {fileID: 817152083}
     - target: {fileID: 8335488315391156303, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40546,15 +40583,15 @@ PrefabInstance:
     - target: {fileID: 8375985487476609066, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 499286446}
+      objectReference: {fileID: 1430358469}
     - target: {fileID: 8375985487476609066, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 2116993766}
+      objectReference: {fileID: 410354498}
     - target: {fileID: 8375985487476609066, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1024888546}
+      objectReference: {fileID: 1573124131}
     - target: {fileID: 8499685368243227323, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40570,15 +40607,15 @@ PrefabInstance:
     - target: {fileID: 8545644143157337320, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 2047167400}
+      objectReference: {fileID: 1123664324}
     - target: {fileID: 8545644143157337320, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 597461037}
+      objectReference: {fileID: 1090792705}
     - target: {fileID: 8545644143157337320, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 902329842}
+      objectReference: {fileID: 320302761}
     - target: {fileID: 8597159029577461790, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40590,15 +40627,15 @@ PrefabInstance:
     - target: {fileID: 8597159029577461790, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 2143497442}
+      objectReference: {fileID: 558966556}
     - target: {fileID: 8597159029577461790, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1829547834}
+      objectReference: {fileID: 1511117339}
     - target: {fileID: 8597159029577461790, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1502582547}
+      objectReference: {fileID: 402170591}
     - target: {fileID: 8629425488708623385, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40610,15 +40647,15 @@ PrefabInstance:
     - target: {fileID: 8629425488708623385, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 357307233}
+      objectReference: {fileID: 1853857578}
     - target: {fileID: 8629425488708623385, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1712212929}
+      objectReference: {fileID: 64498721}
     - target: {fileID: 8629425488708623385, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 1786097835}
+      objectReference: {fileID: 3035528}
     - target: {fileID: 8749024007541503723, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40634,15 +40671,15 @@ PrefabInstance:
     - target: {fileID: 8764219911465022471, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 344723326}
+      objectReference: {fileID: 928880520}
     - target: {fileID: 8764219911465022471, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 2087185317}
+      objectReference: {fileID: 1869679702}
     - target: {fileID: 8764219911465022471, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 233776954}
+      objectReference: {fileID: 717302004}
     - target: {fileID: 8772295568845185926, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -40674,15 +40711,15 @@ PrefabInstance:
     - target: {fileID: 9194895654652250206, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 727731323}
+      objectReference: {fileID: 1168771447}
     - target: {fileID: 9194895654652250206, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 345993443}
+      objectReference: {fileID: 312519326}
     - target: {fileID: 9194895654652250206, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 623587758}
+      objectReference: {fileID: 1371045399}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -42693,44 +42730,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4298516957838859071, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
   m_PrefabInstance: {fileID: 853598162}
   m_PrefabAsset: {fileID: 0}
---- !u!84 &855400692
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &878834799
+--- !u!84 &864855341
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42767,7 +42767,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &886390321
+--- !u!84 &882744328
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42804,118 +42804,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &889806411
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &902329842
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &905056203
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &912124804
+--- !u!84 &901532027
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42952,44 +42841,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &953458807
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &968029017
+--- !u!84 &906426678
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43026,7 +42878,81 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &973506461
+--- !u!84 &918114970
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &925607317
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &928880520
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43063,7 +42989,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &981992153
+--- !u!84 &942541320
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43081,6 +43007,80 @@ RenderTexture:
   m_MipCount: -1
   m_DepthStencilFormat: 0
   m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &969015529
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &977933347
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -47316,13 +47316,13 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &1011503995
+--- !u!84 &990171327
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
+  m_Name: Depthkit VFX Colors Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -47333,81 +47333,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1024888546
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1025648749
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
+  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -49535,7 +49461,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &1057209208
+--- !u!84 &1090792705
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -49572,13 +49498,50 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1063673041
+--- !u!84 &1098952709
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1100436880
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -49609,7 +49572,44 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1072198390
+--- !u!84 &1112741214
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1123664324
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -49646,7 +49646,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1105000135
+--- !u!84 &1131942375
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -49683,7 +49683,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1110019476
+--- !u!84 &1152193696
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -51828,155 +51828,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &1197131114
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1221757995
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1248630609
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1262760313
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1286993642
+--- !u!84 &1155532808
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -52013,81 +51865,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1386935234
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1393066819
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1395020616
+--- !u!84 &1168771447
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -52124,7 +51902,118 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1398380822
+--- !u!84 &1169598565
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1189020842
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1195992966
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1203555478
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -52142,6 +52031,376 @@ RenderTexture:
   m_MipCount: -1
   m_DepthStencilFormat: 0
   m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1212494380
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1246838221
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1257645583
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1288378796
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1303249441
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1331880642
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1371045399
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1403827815
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1408853286
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1408927868
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -54269,13 +54528,13 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &1427655262
+--- !u!84 &1430358469
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
+  m_Name: Depthkit VFX Colors Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -54286,44 +54545,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1430019512
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
+  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -54376,6 +54598,102 @@ MonoBehaviour:
   - _gameObject: {fileID: 187300737}
     _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/XR Interaction Simulator/XR
       Interaction Simulator.prefab
+  - _gameObject: {fileID: 2117942300}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/XR
+      Origin Hands (XR Rig).prefab
+  - _gameObject: {fileID: 2117942299}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Gaze
+      Interactor.prefab
+  - _gameObject: {fileID: 2117942295}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Poke
+      Interactor.prefab
+  - _gameObject: {fileID: 2117942296}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Models/Pinch_Pointer_LOD0.fbx
+  - _gameObject: {fileID: 2117942297}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Affordances/PokePointerAffordance.prefab
+  - _gameObject: {fileID: 2117942294}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Left_NearFarInteractor.prefab
+  - _gameObject: {fileID: 2117942293}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Teleport
+      Interactor.prefab
+  - _gameObject: {fileID: 2117942298}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Controllers/XR
+      Controller Left.prefab
+  - _gameObject: {fileID: 2117942269}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Poke
+      Interactor.prefab
+  - _gameObject: {fileID: 2117942267}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Models/Pinch_Pointer_LOD0.fbx
+  - _gameObject: {fileID: 2117942268}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Affordances/PokePointerAffordance.prefab
+  - _gameObject: {fileID: 2117942265}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Right_NearFarInteractor.prefab
+  - _gameObject: {fileID: 2117942270}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Teleport
+      Interactor.prefab
+  - _gameObject: {fileID: 2117942266}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Teleport
+      Interactor.prefab
+  - _gameObject: {fileID: 2117942292}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Controllers/XR
+      Controller Right.prefab
+  - _gameObject: {fileID: 2117942282}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Left_NearFarInteractor.prefab
+  - _gameObject: {fileID: 2117942300}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/XR
+      Origin Hands (XR Rig).prefab
+  - _gameObject: {fileID: 2117942300}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/XR
+      Origin Hands (XR Rig).prefab
+  - _gameObject: {fileID: 2117942283}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/PinchPointStabilized.prefab
+  - _gameObject: {fileID: 2117942289}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/LeftHandQuestVisual.prefab
+  - _gameObject: {fileID: 2117942291}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandPokeInteractorAffordances.prefab
+  - _gameObject: {fileID: 2117942290}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandInteractorAffordances.prefab
+  - _gameObject: {fileID: 2117942281}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/LeftHandAndroidXRVisual.prefab
+  - _gameObject: {fileID: 2117942285}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandPokeInteractorAffordances.prefab
+  - _gameObject: {fileID: 2117942284}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandInteractorAffordances.prefab
+  - _gameObject: {fileID: 2117942277}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Right_NearFarInteractor.prefab
+  - _gameObject: {fileID: 2117942300}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/XR
+      Origin Hands (XR Rig).prefab
+  - _gameObject: {fileID: 2117942300}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/XR
+      Origin Hands (XR Rig).prefab
+  - _gameObject: {fileID: 2117942278}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/PinchPointStabilized.prefab
+  - _gameObject: {fileID: 2117942286}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/RightHandQuestVisual.prefab
+  - _gameObject: {fileID: 2117942288}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandPokeInteractorAffordances.prefab
+  - _gameObject: {fileID: 2117942287}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandInteractorAffordances.prefab
+  - _gameObject: {fileID: 2117942276}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/RightHandAndroidXRVisual.prefab
+  - _gameObject: {fileID: 2117942280}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandPokeInteractorAffordances.prefab
+  - _gameObject: {fileID: 2117942279}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandInteractorAffordances.prefab
+  - _gameObject: {fileID: 2117942275}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/World Space UI/Prefabs/UI
+      Toolkit Scrollview.prefab
+  - _gameObject: {fileID: 2117942274}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/World Space UI/Prefabs/UI
+      Toolkit Grab UI.prefab
+  - _gameObject: {fileID: 2117942273}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/World Space UI/Prefabs/UI
+      Toolkit Button With Event.prefab
+  - _gameObject: {fileID: 2117942272}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/DemoSceneAssets/Prefabs/InteractionAffordance.prefab
+  - _gameObject: {fileID: 484215152}
+    _prefab: Assets/Prefabs/PointCloud Set.prefab
   - _gameObject: {fileID: 853598539}
     _prefab: Assets/Prefabs/Salles.prefab
   - _gameObject: {fileID: 853598168}
@@ -55372,102 +55690,6 @@ MonoBehaviour:
     _prefab: Assets/Prefabs/Transformer.prefab
   - _gameObject: {fileID: 853598534}
     _prefab: Assets/Models/Magnet.obj
-  - _gameObject: {fileID: 484215152}
-    _prefab: Assets/Prefabs/PointCloud Set.prefab
-  - _gameObject: {fileID: 2117942300}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/XR
-      Origin Hands (XR Rig).prefab
-  - _gameObject: {fileID: 2117942299}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Gaze
-      Interactor.prefab
-  - _gameObject: {fileID: 2117942295}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Poke
-      Interactor.prefab
-  - _gameObject: {fileID: 2117942296}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Models/Pinch_Pointer_LOD0.fbx
-  - _gameObject: {fileID: 2117942297}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Affordances/PokePointerAffordance.prefab
-  - _gameObject: {fileID: 2117942294}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Left_NearFarInteractor.prefab
-  - _gameObject: {fileID: 2117942293}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Teleport
-      Interactor.prefab
-  - _gameObject: {fileID: 2117942298}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Controllers/XR
-      Controller Left.prefab
-  - _gameObject: {fileID: 2117942269}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Poke
-      Interactor.prefab
-  - _gameObject: {fileID: 2117942267}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Models/Pinch_Pointer_LOD0.fbx
-  - _gameObject: {fileID: 2117942268}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Affordances/PokePointerAffordance.prefab
-  - _gameObject: {fileID: 2117942265}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Right_NearFarInteractor.prefab
-  - _gameObject: {fileID: 2117942270}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Teleport
-      Interactor.prefab
-  - _gameObject: {fileID: 2117942266}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Teleport
-      Interactor.prefab
-  - _gameObject: {fileID: 2117942292}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Controllers/XR
-      Controller Right.prefab
-  - _gameObject: {fileID: 2117942282}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Left_NearFarInteractor.prefab
-  - _gameObject: {fileID: 2117942300}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/XR
-      Origin Hands (XR Rig).prefab
-  - _gameObject: {fileID: 2117942300}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/XR
-      Origin Hands (XR Rig).prefab
-  - _gameObject: {fileID: 2117942283}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/PinchPointStabilized.prefab
-  - _gameObject: {fileID: 2117942289}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/LeftHandQuestVisual.prefab
-  - _gameObject: {fileID: 2117942291}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandPokeInteractorAffordances.prefab
-  - _gameObject: {fileID: 2117942290}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandInteractorAffordances.prefab
-  - _gameObject: {fileID: 2117942281}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/LeftHandAndroidXRVisual.prefab
-  - _gameObject: {fileID: 2117942285}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandPokeInteractorAffordances.prefab
-  - _gameObject: {fileID: 2117942284}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandInteractorAffordances.prefab
-  - _gameObject: {fileID: 2117942277}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/Prefabs/Interactors/Right_NearFarInteractor.prefab
-  - _gameObject: {fileID: 2117942300}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/XR
-      Origin Hands (XR Rig).prefab
-  - _gameObject: {fileID: 2117942300}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/XR
-      Origin Hands (XR Rig).prefab
-  - _gameObject: {fileID: 2117942278}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/PinchPointStabilized.prefab
-  - _gameObject: {fileID: 2117942286}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/RightHandQuestVisual.prefab
-  - _gameObject: {fileID: 2117942288}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandPokeInteractorAffordances.prefab
-  - _gameObject: {fileID: 2117942287}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandInteractorAffordances.prefab
-  - _gameObject: {fileID: 2117942276}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/RightHandAndroidXRVisual.prefab
-  - _gameObject: {fileID: 2117942280}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandPokeInteractorAffordances.prefab
-  - _gameObject: {fileID: 2117942279}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Hands Interaction Demo/Prefabs/HandInteractorAffordances.prefab
-  - _gameObject: {fileID: 2117942275}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/World Space UI/Prefabs/UI
-      Toolkit Scrollview.prefab
-  - _gameObject: {fileID: 2117942274}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/World Space UI/Prefabs/UI
-      Toolkit Grab UI.prefab
-  - _gameObject: {fileID: 2117942273}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/World Space UI/Prefabs/UI
-      Toolkit Button With Event.prefab
-  - _gameObject: {fileID: 2117942272}
-    _prefab: Assets/Samples/XR Interaction Toolkit/3.3.1/Starter Assets/DemoSceneAssets/Prefabs/InteractionAffordance.prefab
   - _gameObject: {fileID: 697056179}
     _prefab: Assets/Prefabs/Tunnels.prefab
   - _gameObject: {fileID: 697056264}
@@ -55653,44 +55875,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &1440888274
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1447701138
+--- !u!84 &1465282991
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55727,13 +55912,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1494890462
+--- !u!84 &1474956501
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
+  m_Name: Depthkit VFX Colors Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -55744,7 +55929,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 52
+  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -55764,44 +55949,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1502582547
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1512436110
+--- !u!84 &1501129239
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55838,13 +55986,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1516271475
+--- !u!84 &1511117339
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
+  m_Name: Depthkit VFX Normals Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -55875,81 +56023,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1523709098
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1526213470
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1528267582
+--- !u!84 &1521735914
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58265,50 +58339,13 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -82.732, z: 0}
---- !u!84 &1578883994
+--- !u!84 &1573124131
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1591353921
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
+  m_Name: Depthkit VFX Positions Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -58339,13 +58376,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1620235672
+--- !u!84 &1579392225
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
+  m_Name: Depthkit VFX Positions Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -58356,7 +58393,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 8
+  m_ColorFormat: 52
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -58376,13 +58413,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1621110167
+--- !u!84 &1597719357
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
+  m_Name: Depthkit VFX Normals Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -58393,7 +58430,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 8
+  m_ColorFormat: 52
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -60521,44 +60558,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &1636595209
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1669796596
+--- !u!84 &1637732732
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -60595,7 +60595,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1682999839
+--- !u!84 &1672248392
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -60632,13 +60632,50 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1692220452
+--- !u!84 &1673608158
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1688028191
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -62777,7 +62814,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &1706249720
+--- !u!84 &1736782830
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -62814,266 +62851,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1712212929
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1743792851
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1745089891
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1761195369
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1762053212
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1764227984
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1765706514
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1774478303
+--- !u!84 &1739111096
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -63110,7 +62888,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1779493222
+--- !u!84 &1751582349
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -63147,13 +62925,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1786097835
+--- !u!84 &1751999103
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
+  m_Name: Depthkit VFX Normals Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -63184,13 +62962,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1787900878
+--- !u!84 &1762007383
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
+  m_Name: Depthkit VFX Colors Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -63201,7 +62979,44 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 52
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1779344015
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -65329,7 +65144,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &1805304532
+--- !u!84 &1800647159
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65366,7 +65181,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1812992319
+--- !u!84 &1811443119
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65403,7 +65218,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1829547834
+--- !u!84 &1828424838
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65440,192 +65255,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1849616533
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1861827011
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1908106500
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1912158487
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1918461231
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 8
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1932773371
+--- !u!84 &1835058067
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65662,13 +65292,457 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1950026719
+--- !u!84 &1853857578
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1869679702
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1882666373
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1886844543
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1897123552
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1899510232
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1903203150
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1908159432
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1917935605
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1920740910
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1938967016
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1944460146
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1949587952
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -67807,7 +67881,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &1952120416
+--- !u!84 &1961542098
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67844,44 +67918,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1987990823
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &1990284583
+--- !u!84 &1979810322
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67918,7 +67955,81 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &2000209209
+--- !u!84 &2001668740
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &2026021145
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &2058187267
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67955,7 +68066,81 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &2006603393
+--- !u!84 &2076193504
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &2101775066
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &2105600935
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67992,118 +68177,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &2021785647
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &2046817922
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &2047079615
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &2047167400
+--- !u!84 &2108048838
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -68140,13 +68214,13 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &2057319751
+--- !u!84 &2109061079
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Positions Texture
+  m_Name: Depthkit VFX Colors Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -68157,118 +68231,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &2087185317
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &2113816039
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
---- !u!84 &2116993766
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Normals Texture
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 448
-  m_Height: 448
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 52
+  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -68702,6 +68665,43 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2218496723442559054, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
   m_PrefabInstance: {fileID: 2117942263}
   m_PrefabAsset: {fileID: 0}
+--- !u!84 &2125415251
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!120 &2137031544
 LineRenderer:
   serializedVersion: 3
@@ -70810,13 +70810,13 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!84 &2143497442
+--- !u!84 &2143049757
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Depthkit VFX Colors Texture
+  m_Name: Depthkit VFX Positions Texture
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -70827,7 +70827,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthStencilFormat: 0
-  m_ColorFormat: 8
+  m_ColorFormat: 52
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -70851,11 +70851,11 @@ RenderTexture:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1438913434}
   - {fileID: 1535389820}
   - {fileID: 1565099706}
   - {fileID: 187300736}
-  - {fileID: 853598162}
-  - {fileID: 484215151}
   - {fileID: 2117942263}
+  - {fileID: 484215151}
+  - {fileID: 1438913434}
+  - {fileID: 853598162}
   - {fileID: 697056178}
