@@ -61,7 +61,6 @@ public class Tunnel : MonoBehaviour
     [Range(0.0001f, 0.01f)]
     public float lineResolution = 0.0005f;
     private SplineContainer splineContainer;
-    private Spline spline;
 
     // --- Heatmap cache ---
     private int lastHeatmapHash = 0;
@@ -80,6 +79,12 @@ public class Tunnel : MonoBehaviour
     KataPortal portal;
     KataPortal portalReverse;
     public bool canReverse { get { return portalReverse != null; } }
+
+    Spline spline { get {
+            if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
+            return splineContainer.Spline;
+        }
+    }
 
     [System.Serializable]
     public class ManualSlowdown
@@ -100,7 +105,6 @@ public class Tunnel : MonoBehaviour
         }
 
 
-        spline = splineContainer.Spline;
 
         splineLastCount = spline.Count;
 

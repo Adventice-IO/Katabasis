@@ -20,7 +20,7 @@ public class MultiPreviewEditor : Editor
             if (GUILayout.Button("Delete Preview"))
             {
                 previewscript.KillPreview();
-            }
         }
     }
+}
 }

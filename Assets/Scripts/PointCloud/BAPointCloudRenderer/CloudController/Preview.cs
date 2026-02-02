@@ -182,6 +182,7 @@ namespace BAPointCloudRenderer.CloudController
                 Vector3[] vertexData = cloud.Item2;
                 Color[] colorData = cloud.Item3;
 
+                Debug.Log ("Preview: Creating mesh for cloud " + cloud.Item1.cloudPath + " with " + vertexData.Length + " points.");
                 GameObject go = new GameObject("Preview: " + cloud.Item1.cloudPath);
                 MeshFilter filter = go.GetComponent<MeshFilter>();
                 Mesh mesh;
