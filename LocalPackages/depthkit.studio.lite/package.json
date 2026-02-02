@@ -1,0 +1,22 @@
+{
+  "name": "nyc.scatter.depthkit.studio.lite",
+  "version": "0.2.2",
+  "displayName": "Depthkit Studio Lite",
+  "description": "Use the Depthkit Studio Lite Package to render Depthkit Studio captures in the Built-in Render Pipeline in a way that is more performant and compatible with mobile devices, as compared to the standard renderer in the Depthkit Studio Built-in Package. To achieve faster performance, this renderer bypasses sensor fusion mesh generation, and instead relies on stacking multiple mesh views with intelligent draw order and refined edge blending. The resulting performance increase is targeted at mobile XR platforms such as Android-based devices like Quest. This technique introduces some quality limitations as compared to the standard renderer.",
+  "unity": "2022.3",
+  "dependencies": {
+    "nyc.scatter.depthkit.core": "0.14.3"
+  },
+  "samples": [
+  ],
+  "keywords": [
+    "Depthkit",
+    "Volumetric",
+    "Scatter"
+  ],
+  "author": {
+    "name": "Scatter",
+    "email": "support@depthkit.tv",
+    "url": "https://www.depthkit.tv"
+  }
+}

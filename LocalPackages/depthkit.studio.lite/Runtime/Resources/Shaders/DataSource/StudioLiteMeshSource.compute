@@ -1,0 +1,101 @@
+/************************************************************************************
+
+Depthkit Unity SDK License v1
+Copyright 2016-2024 Simile Inc dba Scatter. All Rights reserved.  
+
+Licensed under the the Simile Inc dba Scatter ("Scatter")
+Software Development Kit License Agreement (the "License"); 
+you may not use this SDK except in compliance with the License, 
+which is provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic or hard copy form.  
+
+You may obtain a copy of the License at http://www.depthkit.tv/license-agreement-v1
+
+Unless required by applicable law or agreed to in writing, 
+the SDK distributed under the License is distributed on an "AS IS" BASIS, 
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+See the License for the specific language governing permissions and limitations under the License. 
+
+************************************************************************************/
+
+//vertices
+#pragma kernel KGenerateVertices_Horizontal TILE_BORDER=3
+#pragma kernel KGenerateVertices_HorizontalWEdgeMask DK_CORE_USE_EDGEMASK TILE_BORDER=3
+#pragma kernel KGenerateVertices_Vertical TILE_BORDER=3
+#pragma kernel KGenerateVertices_VerticalWEdgeMask DK_CORE_USE_EDGEMASK TILE_BORDER=3
+
+//normals
+#pragma kernel KGenerateNormals DK_CORE_SMOOTH_NORMALS TILE_BORDER=1
+#pragma kernel KGenerateNormalsAdjustable DK_CORE_ADJUSTABLE_NORMALS TILE_BORDER=1
+#pragma kernel KGenerateNormalsAdjustableSmoother DK_CORE_ADJUSTABLE_NORMALS DK_CORE_ADJUSTABLE_NORMALS_SMOOTHER TILE_BORDER=1
+#pragma kernel KGenerateNormalsNone DK_CORE_NO_NORMALS TILE_BORDER=0
+#pragma kernel KGenerateNormalsDepthCamera DK_CORE_DEPTHCAMERA_NORMALS TILE_BORDER=0
+
+//Main triangles
+#pragma kernel KGenerateTrianglesMainPerspective DK_VERTEX_BUFFER_READONLY DK_CORE_USE_EDGEMASK TILE_BORDER=1
+
+//Main Edge triangles
+#pragma kernel KGenerateTrianglesMainPerspectiveWEdgeBuffer DK_USE_EDGE_TRIANGLES_BUFFER DK_VERTEX_BUFFER_READONLY DK_CORE_USE_EDGEMASK TILE_BORDER=1
+
+//Fill triangles
+#pragma kernel KGenerateTrianglesFillPerspective DK_SHELL_FILL_PERSPECTIVES DK_VERTEX_BUFFER_READONLY DK_CORE_USE_EDGEMASK TILE_BORDER=1
+
+//Fill Edge triangles
+#pragma kernel KGenerateTrianglesFillPerspectiveWEdgeBuffer DK_SHELL_FILL_PERSPECTIVES DK_VERTEX_BUFFER_READONLY DK_USE_EDGE_TRIANGLES_BUFFER DK_CORE_USE_EDGEMASK TILE_BORDER=1
+
+#pragma multi_compile_local __ DK_USE_GROUPSHARED_MEMORY
+
+//todo eventually make this a keyword
+#define DK_MAX_FILL_PERSPECTIVES 5
+
+int _SliceCount;
+float4 _SliceToPerspective[DK_MAX_FILL_PERSPECTIVES];
+
+#define DK_CORE_CHECK_DISPATCH_VALID if(id.z >= (uint)_SliceCount) return;
+
+#ifdef DK_SHELL_FILL_PERSPECTIVES
+#define DK_SLICE_OFFSET(z) z + 1
+#else
+#define DK_SLICE_OFFSET(z) z
+#endif
+
+#define DK_CORE_DATA_SAMPLE_FN(dispatchUV, pixel) dkPerspectiveToPackedUV((uint)_SliceToPerspective[clamp(DK_SLICE_OFFSET(pixel.z), 0, _SliceCount - 1)].x, dispatchUV);
+
+#define DK_TO_VERTEX_BUFFER_INDEX(coord) toIndex3DClamp(int3(coord.xy, DK_SLICE_OFFSET(coord.z)), uint3(_LatticeSize, _SliceCount))
+
+#include "Packages/nyc.scatter.depthkit.core/Runtime/Resources/Shaders/DataSource/DepthkitCoreMeshSourceCommon.cginc"
+#include "Packages/nyc.scatter.depthkit.core/Runtime/Resources/Shaders/DataSource/GenerateVertices.cginc"
+#include "Packages/nyc.scatter.depthkit.core/Runtime/Resources/Shaders/DataSource/GenerateNormals.cginc"
+#include "Packages/nyc.scatter.depthkit.core/Runtime/Resources/Shaders/DataSource/GenerateTriangles.cginc"
+
+///MAIN
+
+[numthreads(BLOCK_SIZE, BLOCK_SIZE, 1)]
+void KGenerateTrianglesMainPerspective(uint3 id : SV_DispatchThreadID, uint3 GroupId : SV_GroupID, uint3 GroupThreadId : SV_GroupThreadID, uint GroupIndex : SV_GroupIndex)
+{
+    GenerateTriangles(id, GroupId, GroupThreadId, GroupIndex);
+}
+
+////////////////MAIN W EDGES
+
+[numthreads(BLOCK_SIZE, BLOCK_SIZE, 1)]
+void KGenerateTrianglesMainPerspectiveWEdgeBuffer(uint3 id : SV_DispatchThreadID, uint3 GroupId : SV_GroupID, uint3 GroupThreadId : SV_GroupThreadID, uint GroupIndex : SV_GroupIndex)
+{
+    GenerateTriangles(id, GroupId, GroupThreadId, GroupIndex);
+}
+
+////////////////FILL
+
+[numthreads(BLOCK_SIZE, BLOCK_SIZE, 1)]
+void KGenerateTrianglesFillPerspective(uint3 id : SV_DispatchThreadID, uint3 GroupId : SV_GroupID, uint3 GroupThreadId : SV_GroupThreadID, uint GroupIndex : SV_GroupIndex)
+{
+    GenerateTriangles(id, GroupId, GroupThreadId, GroupIndex);
+}
+
+////////////////FILL W Edges
+
+[numthreads(BLOCK_SIZE, BLOCK_SIZE, 1)]
+void KGenerateTrianglesFillPerspectiveWEdgeBuffer(uint3 id : SV_DispatchThreadID, uint3 GroupId : SV_GroupID, uint3 GroupThreadId : SV_GroupThreadID, uint GroupIndex : SV_GroupIndex)
+{
+    GenerateTriangles(id, GroupId, GroupThreadId, GroupIndex);
+}

@@ -49,6 +49,16 @@
         "com.unity.testtools.codecoverage": "1.2.7"
       }
     },
+    "com.unity.film-internal-utilities": {
+      "version": "0.12.2-preview",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.timeline": "1.2.14",
+        "com.unity.modules.uielements": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.ide.rider": {
       "version": "3.0.38",
       "depth": 0,
@@ -178,6 +188,23 @@
         "com.unity.mathematics": "1.2.1",
         "com.unity.modules.imgui": "1.0.0",
         "com.unity.settings-manager": "1.0.3"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.streaming-image-sequence": {
+      "version": "0.14.2-preview",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0",
+        "com.unity.timeline": "1.2.14",
+        "com.unity.ext.nunit": "1.0.0",
+        "com.unity.editorcoroutines": "1.0.0",
+        "com.unity.modules.director": "1.0.0",
+        "com.unity.modules.animation": "1.0.0",
+        "com.unity.modules.particlesystem": "1.0.0",
+        "com.unity.film-internal-utilities": "0.12.2-preview",
+        "com.unity.modules.imageconversion": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -367,6 +394,66 @@
         "com.unity.xr.legacyinputhelpers": "2.1.2"
       },
       "url": "https://packages.unity.com"
+    },
+    "nyc.scatter.depthkit.core": {
+      "version": "file:../LocalPackages/depthkit.core",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
+    "nyc.scatter.depthkit.core.shadergraph": {
+      "version": "file:../LocalPackages/depthkit.core.shadergraph",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "nyc.scatter.depthkit.core": "0.14.2",
+        "com.unity.shadergraph": "14.0.9"
+      }
+    },
+    "nyc.scatter.depthkit.core.visualeffectgraph": {
+      "version": "file:../LocalPackages/depthkit.core.visualeffectgraph",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "nyc.scatter.depthkit.core": "0.14.2",
+        "com.unity.visualeffectgraph": "14.0.9"
+      }
+    },
+    "nyc.scatter.depthkit.streamingimagesequenceplayer": {
+      "version": "file:../LocalPackages/depthkit.streamingimagesequenceplayer",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "nyc.scatter.depthkit.core": "0.14.2",
+        "com.unity.streaming-image-sequence": "0.14.2-preview"
+      }
+    },
+    "nyc.scatter.depthkit.studio": {
+      "version": "file:../LocalPackages/depthkit.studio",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "nyc.scatter.depthkit.core": "0.14.3"
+      }
+    },
+    "nyc.scatter.depthkit.studio.lite": {
+      "version": "file:../LocalPackages/depthkit.studio.lite",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "nyc.scatter.depthkit.core": "0.14.3"
+      }
+    },
+    "nyc.scatter.depthkit.studio.visualeffectgraph": {
+      "version": "file:../LocalPackages/depthkit.studio.visualeffectgraph",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "nyc.scatter.depthkit.core": "0.14.2",
+        "nyc.scatter.depthkit.studio": "0.10.1",
+        "nyc.scatter.depthkit.core.visualeffectgraph": "0.6.1",
+        "com.unity.visualeffectgraph": "14.0.9"
+      }
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",

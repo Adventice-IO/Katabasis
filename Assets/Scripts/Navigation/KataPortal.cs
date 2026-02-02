@@ -20,11 +20,13 @@ public class KataPortal : MonoBehaviour
     public float positionAlongTunnel = .01f;
     public float elevation = 0;
 
-    public float focusTime = 2f;
+    public float focusTime = 3f;
     public float timeBeforeReveal = 3f;
 
     public bool isFocused { get; set; } = false;
-    float progressiveFocusTime = 0f;
+
+    [Range(0, 1)]
+    public float progressiveFocusTime = 0f;
 
     bool showing = false;
 
@@ -107,12 +109,11 @@ public class KataPortal : MonoBehaviour
 
         if (Application.isPlaying && showing && !isInTunnel)
         {
-            float focusProg = Time.deltaTime * (isFocused ? 1 : -1);
+            float focusProg = Time.deltaTime * (isFocused ? 1 : -1) / focusTime;
 
-            progressiveFocusTime = Mathf.Clamp(progressiveFocusTime + focusProg, 0, focusTime);
-            float relProgession = Mathf.Clamp01(progressiveFocusTime / focusTime);
-            vfx.SetFloat("Progression", relProgession);
-            if (relProgession >= 1f)
+            progressiveFocusTime = Mathf.Clamp01(progressiveFocusTime + focusProg);
+            vfx.SetFloat("Progression", progressiveFocusTime);
+            if (progressiveFocusTime >= 1f)
             {
                 mainController.GoToSalle(tunnel.getOtherSalle(mainController.salle));
             }

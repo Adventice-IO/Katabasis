@@ -1,0 +1,30 @@
+{
+  "name": "nyc.scatter.depthkit.studio.visualeffectgraph",
+  "version": "0.5.1",
+  "displayName": "Depthkit Studio Visual Effect Graph",
+  "description": "Use the Depthkit Studio Visual Effect Graph Package to provide Depthkit captures from Depthkit Studio as the input to particle systems built with Unity’s Visual Effect Graph.\n\nNote the Unity Visual Effect graph is only officially compatible with Scriptable Render Pipelines such as HDRP and URP, and is not officially supported in the legacy Built-in RP.\n\nNote Depthkit Studio package suite is designed to render multi-perspective captures from Depthkit Studio. For single-perspective captures from Depthkit Core or Depthkit Cinema, use Depthkit Core package suite.",
+  "unity": "2022.3",
+  "dependencies": {
+    "nyc.scatter.depthkit.core": "0.14.2",
+    "nyc.scatter.depthkit.studio": "0.10.1",
+    "nyc.scatter.depthkit.core.visualeffectgraph": "0.6.1",
+    "com.unity.visualeffectgraph": "14.0.9"
+  },
+  "samples": [
+    {
+      "displayName": "Prefabs - Depthkit Studio Visual Effect Graph",
+      "description": "Prefabs for the Depthkit Studio Visual Effect Graph",
+      "path": "Samples~/Depthkit Studio VFX Prefabs"
+    }
+  ],
+  "keywords": [
+    "Depthkit",
+    "Volumetric",
+    "Scatter"
+  ],
+  "author": {
+    "name": "Scatter",
+    "email": "support@depthkit.tv",
+    "url": "https://www.depthkit.tv"
+  }
+}
