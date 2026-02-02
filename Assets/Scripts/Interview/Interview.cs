@@ -47,7 +47,6 @@ public class Interview : MonoBehaviour
     private void OnEnable()
     {
         init();
-        load(itwName, level);
         progression = 0;
         evaporate = 0;
         shouldEvaporate = false;
