@@ -14,10 +14,7 @@ public class Interview : MonoBehaviour
     public string itwName;
     [Range(1, 4)]
     public int level;
-
-    public bool tLoad;
-    public bool tPlay;
-    public bool tStop;
+    string basePath;
 
     public bool isFocused { get; set; } = false;
 
@@ -44,15 +41,16 @@ public class Interview : MonoBehaviour
     public State state;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void OnEnable()
+    void OnEnable()
     {
         init();
+        set(itwName, level);
         progression = 0;
         evaporate = 0;
         shouldEvaporate = false;
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
     }
 
@@ -72,7 +70,7 @@ public class Interview : MonoBehaviour
 
         if (clip == null || videoPlayer == null || vfx == null) init();
 
-
+        
         if (Application.isPlaying)
         {
             if (salle != null)
@@ -87,24 +85,6 @@ public class Interview : MonoBehaviour
             Camera sceneCam = UnityEditor.SceneView.lastActiveSceneView.camera;
             vfx.enabled = Vector3.Distance(sceneCam.transform.position, transform.position) < 20f;
 #endif
-        }
-
-
-        if (tLoad)
-        {
-            tLoad = false;
-            load(itwName, level);
-        }
-        if (tPlay)
-        {
-            tPlay = false;
-            play();
-        }
-
-        if (tStop)
-        {
-            tStop = false;
-            videoPlayer.Stop();
         }
 
         if (evaporate == 1) return; // finished evaporating
@@ -148,7 +128,7 @@ public class Interview : MonoBehaviour
         vfx.SetFloat("Evaporate", evaporate);
     }
 
-    public void load(string itwName, int level)
+    public void set(string itwName, int level)
     {
         this.itwName = itwName;
         this.level = level;
@@ -158,10 +138,12 @@ public class Interview : MonoBehaviour
             init();
         }
 
-        string basePath = System.IO.Path.Combine(Application.streamingAssetsPath, "depthkit", itwName, "level" + level).Replace("\\", "/") + "/" + itwName + level;
-
+        basePath = System.IO.Path.Combine(Application.streamingAssetsPath, "depthkit", itwName, "level" + level).Replace("\\", "/") + "/" + itwName + level;
         videoPlayer.url = "file:///" + basePath + ".mp4";
+    }
 
+    public void load()
+    {
         clip.metadataFile = null;
         string metaData = System.IO.File.ReadAllText(basePath + ".txt");
         clip.LoadMetadata(metaData);
@@ -183,4 +165,4 @@ public class Interview : MonoBehaviour
     {
 
     }
-}
+    }

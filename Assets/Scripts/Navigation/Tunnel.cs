@@ -80,7 +80,10 @@ public class Tunnel : MonoBehaviour
     KataPortal portalReverse;
     public bool canReverse { get { return portalReverse != null; } }
 
-    Spline spline { get {
+    Spline spline
+    {
+        get
+        {
             if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
             return splineContainer.Spline;
         }
@@ -630,6 +633,7 @@ public class Tunnel : MonoBehaviour
         if (Application.isPlaying)
         {
             RuntimeUndoManager.addKnot(spline, index, newKnot);
+            spline.SetTangentMode(index, TangentMode.Continuous);
         }
         else
         {
@@ -637,6 +641,7 @@ public class Tunnel : MonoBehaviour
             try
             {
                 spline.Insert(index, newKnot);
+                spline.SetTangentMode(index, TangentMode.Continuous);
                 Debug.Log("Inserted knot at index " + index);
             }
             catch

@@ -119,6 +119,43 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!84 &38895580
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Colors Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1 &203844586
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,6 +283,43 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!84 &391118480
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Positions Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1001 &513354433
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -255,17 +329,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1397304027937296841, guid: bea40b0fd953f3f4f8c6116d7edd2826, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1397304027937296841, guid: bea40b0fd953f3f4f8c6116d7edd2826, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
       value: 
-      objectReference: {fileID: 2135193432}
+      objectReference: {fileID: 38895580}
     - target: {fileID: 1397304027937296841, guid: bea40b0fd953f3f4f8c6116d7edd2826, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[1].m_Value
       value: 
-      objectReference: {fileID: 1963583383}
+      objectReference: {fileID: 1534952649}
     - target: {fileID: 1397304027937296841, guid: bea40b0fd953f3f4f8c6116d7edd2826, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
-      objectReference: {fileID: 2024303341}
+      objectReference: {fileID: 391118480}
     - target: {fileID: 1794949588403227100, guid: bea40b0fd953f3f4f8c6116d7edd2826, type: 3}
       propertyPath: volumeViewpoint
       value: 
@@ -310,6 +388,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5430352951673501294, guid: bea40b0fd953f3f4f8c6116d7edd2826, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5517030799550979210, guid: bea40b0fd953f3f4f8c6116d7edd2826, type: 3}
       propertyPath: colorDataTexture
       value: 
@@ -325,6 +407,18 @@ PrefabInstance:
     - target: {fileID: 6831333126047717105, guid: bea40b0fd953f3f4f8c6116d7edd2826, type: 3}
       propertyPath: m_Name
       value: DepthKitPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6958451836786046919, guid: bea40b0fd953f3f4f8c6116d7edd2826, type: 3}
+      propertyPath: m_Url
+      value: file:///D:/Documents/Projects/Katabasis/Assets/StreamingAssets/depthkit/test/level1/test1.mp4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6958451836786046919, guid: bea40b0fd953f3f4f8c6116d7edd2826, type: 3}
+      propertyPath: m_VideoClip
+      value: 
+      objectReference: {fileID: 32900000, guid: 641e8418c56ca344cbd604c0e70c4679, type: 3}
+    - target: {fileID: 6958451836786046919, guid: bea40b0fd953f3f4f8c6116d7edd2826, type: 3}
+      propertyPath: m_DataSource
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -520,6 +614,43 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!84 &1534952649
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Depthkit VFX Normals Texture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 448
+  m_Height: 448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!84 &1963583383
 RenderTexture:
   m_ObjectHideFlags: 0
