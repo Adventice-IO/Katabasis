@@ -70,11 +70,21 @@ namespace BAPointCloudRenderer.CloudController
             Debug.Log("MultiPreview.Start");
             gameObject.hideFlags = HideFlags.DontSaveInBuild;
             gameObject.SetActive(!Application.isPlaying);
+
+            // Never keep the preview scene around when entering play mode.
+            if (Application.isPlaying)
+            {
+                var existing = SceneManager.GetSceneByPath(PreviewScenePath);
+                if (existing.IsValid() && existing.isLoaded)
+                {
+                    EditorSceneManager.CloseScene(existing, true);
+                }
+                return;
+            }
+
             previewScene = EnsurePreviewSceneLoaded();
 
             material ??= new Material(Shader.Find("Custom/PointShader"));
-
-            if (Application.isPlaying) EditorSceneManager.UnloadSceneAsync(previewScene);
         }
 
         private void OnValidate()
@@ -580,6 +590,11 @@ namespace BAPointCloudRenderer.CloudController
 
         private Scene EnsurePreviewSceneLoaded()
         {
+            if (Application.isPlaying)
+            {
+                return default;
+            }
+
             Scene scene = SceneManager.GetSceneByPath(PreviewScenePath);
 
             // Case 1: Scene is already loaded in hierarchy

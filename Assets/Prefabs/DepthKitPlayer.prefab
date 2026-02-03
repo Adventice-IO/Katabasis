@@ -16,10 +16,10 @@ GameObject:
   - component: {fileID: 5517030799550979210}
   - component: {fileID: 4728383252777970306}
   - component: {fileID: 6958451836786046919}
+  - component: {fileID: 5614341783945844800}
   - component: {fileID: 5430352951673501294}
   - component: {fileID: 7682090560446297074}
   - component: {fileID: 7157708697285221729}
-  - component: {fileID: 5614341783945844800}
   m_Layer: 0
   m_Name: DepthKitPlayer
   m_TagString: Untagged
@@ -56,9 +56,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Interview
   itwName: test
   level: 1
-  tLoad: 0
-  tPlay: 0
-  tStop: 0
   focusTime: 3
   progression: 0
   evaporate: 0
@@ -240,7 +237,7 @@ VisualEffect:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6831333126047717105}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Asset: {fileID: 8926484042661614526, guid: 489286cf9fa920d4f98bdec9cfd2d25f, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
@@ -477,7 +474,7 @@ VideoPlayer:
   m_AudioOutputMode: 3
   m_TargetAudioSources: []
   m_DirectAudioVolumes: []
-  m_Url: file:///D:/Projects/Katabasis/Assets/Samples/DepthKit/template/template/mp4
+  m_Url: file:///D:/Projects/Katabasis/Assets/StreamingAssets/depthkit/test/level1/test1.mp4
   m_EnabledAudioTracks: 
   m_DirectAudioMutes: 
   m_ControlledAudioTrackCount: 0
@@ -487,6 +484,29 @@ VideoPlayer:
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
+--- !u!136 &5614341783945844800
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831333126047717105}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.39
+  m_Height: 2.07
+  m_Direction: 1
+  m_Center: {x: -0.26, y: 0.75, z: -0.02}
 --- !u!73398921 &5430352951673501294
 VFXRenderer:
   serializedVersion: 1
@@ -495,7 +515,7 @@ VFXRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6831333126047717105}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -572,26 +592,3 @@ MonoBehaviour:
   showCameraFrustums: 0
   meshSource: {fileID: 1794949588403227100}
   m_collider: {fileID: 7682090560446297074}
---- !u!136 &5614341783945844800
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6831333126047717105}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.39
-  m_Height: 2.07
-  m_Direction: 1
-  m_Center: {x: -0.26, y: 0.75, z: -0.02}
