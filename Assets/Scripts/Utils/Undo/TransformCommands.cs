@@ -22,6 +22,17 @@ public class TransformCommand : ICommand
         _prevRotation = target.rotation;
     }
 
+    public TransformCommand(Transform target, Vector3 oldPos, Quaternion oldRot, Vector3 newPos, Quaternion newRot)
+    {
+        _target = target;
+        _newPosition = newPos;
+        _newRotation = newRot;
+
+        // Capture current state immediately upon creation
+        _prevPosition = oldPos;
+        _prevRotation = oldRot;
+    }
+
     public void Execute()
     {
         // Update previous state in case this is a redo
@@ -34,4 +45,5 @@ public class TransformCommand : ICommand
         _target.position = _prevPosition;
         _target.rotation = _prevRotation;
     }
+
 }

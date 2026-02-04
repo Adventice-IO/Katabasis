@@ -80,4 +80,9 @@ public class RuntimeUndoManager : MonoBehaviour
         var command = new TransformCommand(target, newPosition, newRotation);
         instance.ExecuteCommand(command);
     }
+    public static void moveTransformFrom(Transform target, Vector3 oldPosition, Quaternion oldRotation, Vector3 newPosition, Quaternion newRotation)
+    {
+        var command = new TransformCommand(target, oldPosition, oldRotation, newPosition, newRotation);
+        instance.ExecuteCommand(command);
+    }
 }
