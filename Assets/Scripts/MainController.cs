@@ -59,6 +59,7 @@ public class MainController : MonoBehaviour
     [SerializeField] private InputActionProperty toggleFreeMoveAction;
     [SerializeField] private InputActionProperty spawnAction;
     [SerializeField] private InputActionProperty cancelAction;
+    [SerializeField] private InputActionProperty snapGroundAction;
 
     bool spawningMode;
     public bool removedInSpawnMode;
@@ -149,6 +150,19 @@ public class MainController : MonoBehaviour
                     verticalMove = false;
                 };
             }
+
+            if( snapGroundAction.action != null)
+            {
+                snapGroundAction.action.Enable();
+                snapGroundAction.action.performed += ctx =>
+                {
+                    if (freeMotion)
+                    {
+                        Vector3 groundPos = GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6);
+                        transform.position = groundPos;
+                    }
+                };
+            }
         }
     }
 
@@ -162,6 +176,7 @@ public class MainController : MonoBehaviour
             if (spawnAction.action != null) spawnAction.action.Disable();
             if (cancelAction.action != null) cancelAction.action.Disable();
             if (verticalMoveAction.action != null) verticalMoveAction.action.Disable();
+            if (snapGroundAction.action != null) snapGroundAction.action.Disable();
         }
 
 
@@ -422,7 +437,9 @@ public class MainController : MonoBehaviour
             trackPosition = 0f;
             currentSpeed = 0f;
             transform.position = tunnel.getPositionOnTrack(0);
-            transform.LookAt(tunnel.getPositionOnTrack(.01f), Vector3.up);
+            Vector3 lookAtPos = tunnel.getPositionOnTrack(0.01f);
+            lookAtPos.y = transform.position.y;
+            transform.LookAt(lookAtPos, Vector3.up);
         }
         isRunning = false;
     }

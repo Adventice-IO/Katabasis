@@ -52,6 +52,38 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kata XR Origin (XR Rig) Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: snapGroundAction.m_Action.m_Name
+      value: Snap Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: snapGroundAction.m_Action.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: snapGroundAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Id
+      value: e9c8627e-9b1d-49e1-b210-1c804e5f7fa3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: snapGroundAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <XRController>{LeftHand}/secondaryButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: snapGroundAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Snap Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831623572012434036, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831623572012434036, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: m_TurnSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7847385525345954920, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: m_TurnAmount
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -22,6 +22,7 @@ public class KnotHandle : MonoBehaviour
     BezierKnot originalKnot;
 
     public int knotIndex = 0;
+    public bool isFirstOrLast = false;
     public SplineContainer splineContainer;
 
     Renderer[] knotRenderers;
@@ -190,7 +191,7 @@ public class KnotHandle : MonoBehaviour
         }
         else
         {
-            showHandles = Camera.main != null && Vector3.Distance(Camera.main.transform.position, transform.position) < 10.0f;
+            showHandles = !isFirstOrLast && Camera.main != null && Vector3.Distance(Camera.main.transform.position, transform.position) < 10.0f;
         }
 
         if (showHandles)

@@ -41,7 +41,7 @@ public class Interview : MonoBehaviour
     public State state;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void OnEnable()
+        void OnEnable()
     {
         init();
         set(itwName, level);
@@ -58,7 +58,7 @@ public class Interview : MonoBehaviour
     {
         clip = GetComponent<Depthkit.Clip>();
         videoPlayer = GetComponent<VideoPlayer>();
-        vfx = GetComponent<VisualEffect>();
+        vfx = GetComponentInChildren<VisualEffect>();
         salle = GetComponentInParent<Salle>();
 
     }
@@ -66,7 +66,6 @@ public class Interview : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
 
         if (clip == null || videoPlayer == null || vfx == null) init();
 

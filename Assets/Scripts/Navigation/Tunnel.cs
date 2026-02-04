@@ -10,12 +10,6 @@ using Framework.Utils.Editor;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
-
-
-
-
-
-
 #if UNITY_EDITOR
 using UnityEditor.EditorTools; // Required for ToolManager
 using UnityEditor.Splines.Editor;    // Required for SplineTool
@@ -616,9 +610,15 @@ public class Tunnel : MonoBehaviour
 
         // Use local-space tangent at the refined insertion parameter and convert
         // the derivative to Bezier handle length (derivative is ~3 * handle vector).
-        float3 tangent = spline.EvaluateTangent(refinedT);
+        float3 tangent = spline.EvaluateTangent(refinedT) / 8f;
 
-        float3 tanOut = tangent / 8f;
+        // max 1m for handles
+        float maxHandleLength = 1.0f;
+        if (math.length(tangent) > maxHandleLength)
+        {
+            tangent = math.normalize(tangent) * maxHandleLength;
+        }
+        float3 tanOut = tangent;
         float3 tanIn = -tanOut;
         // Keep planar tangents if your tunnels are intended to stay level.
         tanIn.y = 0;
@@ -732,6 +732,7 @@ public class Tunnel : MonoBehaviour
             if (handle != null)
             {
                 handle.knotIndex = i;
+                handle.isFirstOrLast = (i == 0 || i == spline.Count - 1);
                 handle.gameObject.name = "Handle_" + i;
                 handle.updateActive();
             }

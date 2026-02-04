@@ -77,8 +77,16 @@ namespace BAPointCloudRenderer.CloudController
                 var existing = SceneManager.GetSceneByPath(PreviewScenePath);
                 if (existing.IsValid() && existing.isLoaded)
                 {
-                    EditorSceneManager.CloseScene(existing, true);
+                    // disable all root objects of the existing scene
+                    foreach (var rootObject in existing.GetRootGameObjects())
+                    {
+                        rootObject.SetActive(false);
+                    }
+                //     EditorSceneManager.CloseScene(existing, true);
                 }
+
+
+                
                 return;
             }
 
