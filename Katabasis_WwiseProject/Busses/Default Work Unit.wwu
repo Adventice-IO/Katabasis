@@ -9,6 +9,55 @@
 							<ObjectRef Name="System" ID="{5AC16FBE-5B71-4631-8EF8-A21EB3D82375}" WorkUnitID="{79D17E0E-54CC-4796-A954-1C81F2F4AEE2}"/>
 						</Reference>
 					</ReferenceList>
+					<ChildrenList>
+						<Bus Name="VOX" ID="{F084076F-FA0E-460B-A770-ED15E9E13214}"/>
+						<Bus Name="AMB" ID="{05683D88-4E37-44B7-B210-E36B7D9FD447}"/>
+						<Bus Name="SFX" ID="{232EC043-CFB9-4144-B0E4-D1BF03682891}">
+							<ChildrenList>
+								<Bus Name="SFX_Test" ID="{AA943238-36C0-4EB0-900A-2C520D789FA0}"/>
+							</ChildrenList>
+						</Bus>
+						<AuxBus Name="REV_Short" ID="{DD8363FB-1ADB-4318-80FB-870CFD5359EF}"/>
+						<AuxBus Name="REV_Mid" ID="{7B31E6A4-D56A-427A-B365-4FDB7B7F6DAD}"/>
+						<AuxBus Name="REV_Long" ID="{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}">
+							<ObjectLists>
+								<ObjectList Name="Effects">
+									<EffectSlot Name="" ID="{CA6B9668-AEE1-490C-B9CC-08355293B42D}" ShortID="216511674">
+										<ReferenceList>
+											<Reference Name="Effect" PluginName="Wwise RoomVerb" CompanyID="0" PluginID="118" PluginType="3">
+												<ObjectRef Name="Medium" ID="{AEB3F175-958B-45F2-A4C2-3FBD4F456568}" WorkUnitID="{E8613F7D-BAD3-45CD-A3ED-505576F31277}"/>
+											</Reference>
+										</ReferenceList>
+									</EffectSlot>
+								</ObjectList>
+							</ObjectLists>
+						</AuxBus>
+						<AuxBus Name="DEL_Long" ID="{BE94DD61-BCB9-4190-89EF-9A147B41DECE}"/>
+						<AuxBus Name="DEL_Mid" ID="{2C4BF258-5F1D-4FC6-A4AB-8C1857068236}"/>
+						<AuxBus Name="DEL_Short" ID="{7F8EC602-9857-483D-9BB0-179E8BF3F255}"/>
+						<Bus Name="AMBI_1ST" ID="{DD210BBB-DAB4-4C87-B592-2DC94FAF342F}">
+							<PropertyList>
+								<Property Name="BusChannelConfig" Type="int32">
+									<ValueList>
+										<Value>516</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ObjectLists>
+								<ObjectList Name="Effects">
+									<EffectSlot Name="" ID="{258D2034-8E66-4037-9E50-8656E2A14666}" ShortID="459575902">
+										<ReferenceList>
+											<Reference Name="Effect">
+												<Custom>
+													<Effect Name="Resonance Audio Renderer (Custom)" ID="{EB1F2F02-52FC-40CD-8077-6FC79D589BD6}" ShortID="206879750" PluginName="Resonance Audio Renderer" CompanyID="272" PluginID="100" PluginType="3"/>
+												</Custom>
+											</Reference>
+										</ReferenceList>
+									</EffectSlot>
+								</ObjectList>
+							</ObjectLists>
+						</Bus>
+					</ChildrenList>
 				</Bus>
 			</ChildrenList>
 		</WorkUnit>
