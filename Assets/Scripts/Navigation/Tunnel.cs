@@ -180,6 +180,7 @@ public class Tunnel : MonoBehaviour
 
         if (spline.Count != splineLastCount)
         {
+            Debug.Log("Update Handles");
             splineLastCount = spline.Count;
             updateHandles();
         }
@@ -194,8 +195,12 @@ public class Tunnel : MonoBehaviour
             Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleDepart.origin.position);
             var current = splineContainer.Spline[0];
             Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
-            if ((curPos - localPos).sqrMagnitude > 1e-6f)
+            if ((curPos - localPos).sqrMagnitude > .5f)
+            {
+                Debug.Log("Aligning start knot with salleDepart " + curPos + " / " + localPos);
                 splineContainer.Spline.SetKnot(0, new BezierKnot(localPos));
+            }
+
         }
         if (salleArrivee != null && splineContainer != null)
         {
@@ -203,13 +208,19 @@ public class Tunnel : MonoBehaviour
             Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleArrivee.origin.position);
             var current = splineContainer.Spline[last];
             Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
-            if ((curPos - localPos).sqrMagnitude > 1e-6f)
+            if ((curPos - localPos).sqrMagnitude > .5f)
+            {
+                Debug.Log("["+gameObject.name+"] Aligning end knot with salleArrivee " + curPos + " / " + localPos);
                 splineContainer.Spline.SetKnot(last, new BezierKnot(localPos));
+            }
         }
 
-        gameObject.name = $"{salleDepart?.name} > {salleArrivee?.name}";
+        string n = $"{salleDepart?.name} > {salleArrivee?.name}";
 
-        if (Application.isPlaying) lineRenderer.material.color = mainController.isInTunnel(this) ? Color.yellow : Color.white;
+        if (gameObject.name != n)
+            gameObject.name = n;
+
+        //if (Application.isPlaying) lineRenderer.material.color = mainController.isInTunnel(this) ? Color.yellow : Color.white;
 
     }
 
@@ -400,6 +411,8 @@ public class Tunnel : MonoBehaviour
     // --- VISUALIZATION ONLY ---
     private void OnDrawGizmos()
     {
+        if (Application.isPlaying) return;
+
         if (!showHeatmap) return;
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
         if (splineContainer == null || splineContainer.Spline == null) return;

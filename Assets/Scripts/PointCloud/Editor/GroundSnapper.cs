@@ -50,10 +50,11 @@ public static class GroundSnapper
 
     private static void OnSplineChanged(Spline spline, int knotIndex, SplineModification modification)
     {
-        if (!enabled) return;
+        if (!enabled || Application.isPlaying) return; // <- prevent runtime/programmatic snaps
 
-        // Only run if the Knot position was modified
         if (modification != SplineModification.KnotModified) return;
+
+        Debug.Log("Spline knot modified, checking for snapping...");
 
         BezierKnot knot = spline[knotIndex];
         float3 localPos = knot.Position;
