@@ -10,12 +10,72 @@
     "Type": "User",
     "GUID": "{7E734BBA-16C9-46F8-8CBD-B94EE4B45669}",
     "Language": "SFX",
-    "Hash": "{71F9CEB8-45DE-23D7-AC26-882EA609EB7A}",
+    "Hash": "{80B83477-8AD4-CC71-7C30-0DB598399382}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\MAIN",
     "ShortName": "MAIN",
-    "Path": "MAIN.bnk"
+    "Path": "MAIN.bnk",
+    "Media": [
+     {
+      "Id": "183963844",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Soundly Audio\\Wind, General, Mountain Wind, Constant With Strong Gusts, Winter, Snowy, Cabin Area 05 (AmbiX) SND89932.wav",
+      "CachePath": "C5/{C5F6B645-DCEC-005C-DD6F-27AA79C6E0F8}.wem"
+     }
+    ],
+    "Plugins": {
+     "Custom": [
+      {
+       "Id": "86776161",
+       "Name": "Tone Generator",
+       "ObjectPath": "\\Containers\\Default Work Unit\\SFX\\SFX_Test\\SFX_Tone_Test\\Tone Generator",
+       "GUID": "{1E9C7711-CB44-4703-8CCD-BCAA17AB596D}",
+       "LibName": "Wwise Tone Generator",
+       "LibId": "6684674"
+      }
+     ]
+    },
+    "Events": [
+     {
+      "Id": "1378078392",
+      "Name": "AMB_Ambi_Test_01",
+      "ObjectPath": "\\Events\\Default Work Unit\\TEST\\AMB_Ambi_Test_01",
+      "GUID": "{DA39880E-9BE6-4E74-A913-3720138A718A}",
+      "MaxAttenuation": "100",
+      "DurationType": "Infinite",
+      "MediaRefs": [
+       {
+        "Id": "183963844"
+       }
+      ]
+     },
+     {
+      "Id": "3501277368",
+      "Name": "SFX_Tone_Test",
+      "ObjectPath": "\\Events\\Default Work Unit\\TEST\\SFX_Tone_Test",
+      "GUID": "{71A9A207-F29A-44AB-9930-66DA3F3E1658}",
+      "MaxAttenuation": "50",
+      "DurationType": "Infinite",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "86776161"
+        }
+       ]
+      },
+      "AuxBusRefs": [
+       {
+        "Id": "266044713",
+        "Name": "REV_Long",
+        "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Long",
+        "GUID": "{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}"
+       }
+      ]
+     }
+    ]
    }
   ],
-  "FileHash": "{CD2D6435-F18F-F309-A248-9639C976DA77}"
+  "FileHash": "{4CFEF704-5B34-C38C-6204-C3EE689EA820}"
  }
 }

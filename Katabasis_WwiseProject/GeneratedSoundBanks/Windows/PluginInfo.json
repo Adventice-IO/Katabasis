@@ -4,6 +4,27 @@
   "BasePlatform": "Windows",
   "PluginLibs": [
    {
+    "LibName": "Resonance Audio Renderer",
+    "LibId": "6557955",
+    "Type": "Effect",
+    "DLL": "ResonanceAudio",
+    "StaticLib": "ResonanceAudioFX"
+   },
+   {
+    "LibName": "Wwise Tone Generator",
+    "LibId": "6684674",
+    "Type": "Source",
+    "DLL": "AkToneGen",
+    "StaticLib": "AkToneSource"
+   },
+   {
+    "LibName": "Wwise RoomVerb",
+    "LibId": "7733251",
+    "Type": "Effect",
+    "DLL": "AkRoomVerb",
+    "StaticLib": "AkRoomVerbFX"
+   },
+   {
     "LibName": "System",
     "LibId": "11403271",
     "Type": "AudioDevice"
@@ -14,6 +35,6 @@
     "Type": "AudioDevice"
    }
   ],
-  "FileHash": "{71F42CD2-2880-BF0B-D154-F41540A353AF}"
+  "FileHash": "{78A22AFF-E47E-29E7-9F7F-47B7A96916D0}"
  }
 }
