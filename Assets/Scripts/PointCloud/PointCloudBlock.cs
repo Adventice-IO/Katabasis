@@ -44,15 +44,11 @@ public class PointCloudBlock : MonoBehaviour
 
         render.GetPropertyBlock(block);
         block.SetFloat("_Reveal", reveal);
-        //block.SetFloat("_ModePoint", profile.modePoint ? 1f : 0f);
-        //block.SetFloat("_FadeDistanceRange", profile._FadeDistanceRange);
-        //block.SetFloat("_FadeDistanceFeather", profile._FadeDistanceFeather);
-        //block.SetFloat("_DensityCropRange", profile._DensityCropRange);
-        //block.SetFloat("_DensityCropFeather", profile._DensityCropFeather);
-        //block.SetFloat("_DensityCropMax", profile._DensityCropMax);
-        //block.SetFloat("_TimeIn", timeIn);
-        //block.SetFloat("_Explode", _Explode);
-        //block.SetVector("_Effector", effector != null ? effector.position : Vector3.zero);
+        block.SetFloat("_Alpha", profile._Alpha);
+
+        float maxDistance = profile.linkMaxDistanceToCamera ? Camera.main.farClipPlane : profile._MaxDistance;
+        block.SetFloat("_MaxDistance", maxDistance);
+        block.SetFloat("_DistFade", profile._DistanceFade  * maxDistance);
         render.SetPropertyBlock(block);
     }
 
