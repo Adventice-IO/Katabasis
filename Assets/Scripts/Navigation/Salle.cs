@@ -12,10 +12,7 @@ public class Salle : MonoBehaviour
 
     void Awake()
     {
-        if(Application.isPlaying)
-        {
-            UnityPlayModeSaver.SaveComponent(transform);
-        }
+
 
         origin = transform.Find("Origin");
     }

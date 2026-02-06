@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Splines;
+using Framework.Utils.Editor;
 
 public class KnotHandle : MonoBehaviour
 {
@@ -321,7 +322,11 @@ public class KnotHandle : MonoBehaviour
     public void clearManipState()
     {
         BezierKnot workingKnot = snapshotKnot();
-        RuntimeUndoManager.changeKnot(splineContainer.Spline, knotIndex, workingKnot, originalKnot);
+        if (isMoving())
+        {
+            RuntimeUndoManager.changeKnot(splineContainer.Spline, knotIndex, workingKnot, originalKnot);
+            saveAfterPlay();
+        }
         manipState = ManipState.None;
     }
 
@@ -340,10 +345,20 @@ public class KnotHandle : MonoBehaviour
         updateKnotPosition();
         RuntimeUndoManager.changeKnot(splineContainer.Spline, knotIndex, splineContainer.Spline[knotIndex], originalKnot);
         snapHover(false);
+        saveAfterPlay();
     }
 
     public BezierKnot snapshotKnot()
     {
         return splineContainer.Spline[knotIndex];
+    }
+
+    public void saveAfterPlay()
+    {
+        if (Application.isPlaying)
+        {
+            UnityPlayModeSaver.SaveComponent(splineContainer);
+        }
+
     }
 }

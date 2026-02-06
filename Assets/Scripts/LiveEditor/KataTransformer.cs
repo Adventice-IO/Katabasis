@@ -1,3 +1,4 @@
+using Framework.Utils.Editor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Splines;
@@ -189,7 +190,7 @@ public class KataTransformer : MonoBehaviour
         if (isMoving())
         {
             RuntimeUndoManager.moveTransformFrom(transform, originalPos, transform.rotation, transform.position, transform.rotation);
-
+            saveAfterPlay();
         }
         manipState = ManipState.None;
     }
@@ -206,6 +207,16 @@ public class KataTransformer : MonoBehaviour
         Vector3 groundPos = GroundFinder.getGroundForPosition(transform.position, .3f, 1.5f, 6);
         RuntimeUndoManager.moveTransform(transform, groundPos, transform.rotation);
         snapHover(false);
+    }
+
+    void saveAfterPlay()
+    {
+        // UnityPlayModeSaver.SaveComponent(transform);
+        VRBatchPersister batchPersister = GetComponentInParent<VRBatchPersister>();
+        if (batchPersister != null)
+        {
+            batchPersister.StageChange(transform);
+        }
     }
 
 }

@@ -6,7 +6,6 @@ using UnityEditor.Splines;
 using UnityEditor;
 using System.Linq;
 using System;
-using Framework.Utils.Editor;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
@@ -123,13 +122,6 @@ public class Tunnel : MonoBehaviour
                 portalReverse = p;
             }
         }
-
-
-        if (Application.isPlaying)
-        {
-            UnityPlayModeSaver.SaveComponent(splineContainer);
-            UnityPlayModeSaver.SaveComponent(this);
-        }
     }
 
     private void OnEnable()
@@ -195,7 +187,7 @@ public class Tunnel : MonoBehaviour
             Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleDepart.origin.position);
             var current = splineContainer.Spline[0];
             Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
-            if ((curPos - localPos).sqrMagnitude > .5f)
+            if ((curPos - localPos).sqrMagnitude > .01f)
             {
                 Debug.Log("Aligning start knot with salleDepart " + curPos + " / " + localPos);
                 splineContainer.Spline.SetKnot(0, new BezierKnot(localPos));
@@ -208,7 +200,7 @@ public class Tunnel : MonoBehaviour
             Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleArrivee.origin.position);
             var current = splineContainer.Spline[last];
             Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
-            if ((curPos - localPos).sqrMagnitude > .5f)
+            if ((curPos - localPos).sqrMagnitude > .01f)
             {
                 Debug.Log("["+gameObject.name+"] Aligning end knot with salleArrivee " + curPos + " / " + localPos);
                 splineContainer.Spline.SetKnot(last, new BezierKnot(localPos));
