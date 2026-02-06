@@ -271,7 +271,6 @@ public class KnotHandle : MonoBehaviour
 
         newKnot.TangentIn = localTanIn;
         newKnot.TangentOut = localTanOut;
-        Debug.Log("Updating knot: " + knotIndex + " Pos: " + newKnot.Position + " TanIn: " + newKnot.TangentIn + " TanOut: " + newKnot.TangentOut);
         splineContainer.Spline.SetKnot(knotIndex, newKnot);
     }
 
