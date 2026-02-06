@@ -151,7 +151,7 @@ public class MainController : MonoBehaviour
                 };
             }
 
-            if( snapGroundAction.action != null)
+            if (snapGroundAction.action != null)
             {
                 snapGroundAction.action.Enable();
                 snapGroundAction.action.performed += ctx =>
@@ -436,10 +436,13 @@ public class MainController : MonoBehaviour
         {
             trackPosition = 0f;
             currentSpeed = 0f;
-            transform.position = tunnel.getPositionOnTrack(0);
-            Vector3 lookAtPos = tunnel.getPositionOnTrack(0.01f);
-            lookAtPos.y = transform.position.y;
-            transform.LookAt(lookAtPos, Vector3.up);
+            if (tunnel != null)
+            {
+                transform.position = tunnel.getPositionOnTrack(0);
+                Vector3 lookAtPos = tunnel.getPositionOnTrack(0.01f);
+                lookAtPos.y = transform.position.y;
+                transform.LookAt(lookAtPos, Vector3.up);
+            }
         }
         isRunning = false;
     }
