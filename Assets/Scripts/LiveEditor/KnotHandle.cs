@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Splines;
 using Framework.Utils.Editor;
+using NUnit.Framework;
 
 public class KnotHandle : MonoBehaviour
 {
@@ -34,6 +35,8 @@ public class KnotHandle : MonoBehaviour
 
     [SerializeField] private InputActionProperty removeAction;
 
+
+    Tunnel parentTunnel;
 
     bool showHandles = true;
     float showAnim = 1.0f;
@@ -85,6 +88,8 @@ public class KnotHandle : MonoBehaviour
 
         mainController = MainController.instance;
 
+        parentTunnel = GetComponentInParent<Tunnel>();
+
         if (Application.isPlaying)
         {
             prevHandle.GetComponent<Renderer>().material.color = Color.red;
@@ -134,7 +139,7 @@ public class KnotHandle : MonoBehaviour
 
     void Update()
     {
-        
+
         Vector3 localInPos = transform.InverseTransformPoint(prevHandle.position);
         Vector3 localOutPos = transform.InverseTransformPoint(nextHandle.position);
         float maxDist = Mathf.Max(localInPos.magnitude, localOutPos.magnitude);
@@ -186,14 +191,31 @@ public class KnotHandle : MonoBehaviour
             }
         }
 
+        bool isEditable = true;
+        if (MainController.instance != null)
+        {
+            if (MainController.instance.isInATunnel() && !MainController.instance.isInTunnel(parentTunnel)) isEditable = false;
+            knot.gameObject.SetActive(isEditable);
+            upKnot.gameObject.SetActive(isEditable);
+            prevHandle.gameObject.SetActive(isEditable && knotIndex > 0);
+            prevLine.gameObject.SetActive(isEditable && knotIndex > 0);
+            nextHandle.gameObject.SetActive(isEditable && knotIndex < splineContainer.Spline.Count - 1);
+            nextLine.gameObject.SetActive(isEditable && knotIndex < splineContainer.Spline.Count - 1);
+            snap.gameObject.SetActive(isEditable);
+        }
+
         if (manipState != ManipState.None)
         {
             showAnim = 1.0f;
         }
         else
         {
-            showHandles = !isFirstOrLast && Camera.main != null && Vector3.Distance(Camera.main.transform.position, transform.position) < 10.0f;
+            showHandles = isEditable;
+            if (isFirstOrLast) showHandles = false;
+            if (Camera.main != null && Vector3.Distance(Camera.main.transform.position, transform.position) > 10.0f) showHandles = false;
+
         }
+
 
         if (showHandles)
         {
@@ -214,6 +236,10 @@ public class KnotHandle : MonoBehaviour
         snap.localScale = Vector3.one * showAnim;
 
 
+        if (!isEditable)
+        {
+            return;
+        }
 
         if (isMoving())
         {

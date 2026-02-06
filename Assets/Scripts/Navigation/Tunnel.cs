@@ -148,7 +148,7 @@ public class Tunnel : MonoBehaviour
         if (spline == splineContainer.Spline)
         {
             // Defer regeneration when spline changes; mark pending. Actual rebuild occurs when editing stops
-            if(!Application.isPlaying) pendingHeatmapOnEditEnd = true;
+            if (!Application.isPlaying) pendingHeatmapOnEditEnd = true;
 
             UpdateLineRenderer();
             updateHandles();
@@ -156,7 +156,7 @@ public class Tunnel : MonoBehaviour
 
         //recalculate lineRenderer
 
-       
+
     }
 
     private void OnValidate()
@@ -213,7 +213,7 @@ public class Tunnel : MonoBehaviour
         if (gameObject.name != n)
             gameObject.name = n;
 
-        //if (Application.isPlaying) lineRenderer.material.color = mainController.isInTunnel(this) ? Color.yellow : Color.white;
+        if (Application.isPlaying) lineRenderer.material.color = mainController.isInTunnel(this) ? Color.yellow : Color.white;
 
     }
 
@@ -742,30 +742,18 @@ public class Tunnel : MonoBehaviour
             Debug.Log("Removed handle for excess knot, new handle count: " + handles.Count);
         }
 
-
-
-
         while (handles.Count < spline.Count)
         {
             Debug.Log("Spawning handle for knot " + handles.Count);
             var knot = spline[handles.Count];
             Vector3 worldPos = splineContainer.transform.TransformPoint(knot.Position);
-            Transform handleTransform = handlesRoot.Find("Handle_" + handles.Count);
-            KnotHandle handle = null;
-            if (handleTransform == null)
-            {
-                GameObject handleObj = Instantiate(handlePrefab, worldPos, Quaternion.identity, handlesRoot);
-                handleObj.name = "Handle_" + handles.Count;
-                handleTransform = handleObj.transform;
-                handle = handleObj.GetComponent<KnotHandle>();
-                handles.Add(handle);
+            GameObject handleObj = Instantiate(handlePrefab, worldPos, Quaternion.identity, handlesRoot);
+            handleObj.name = "Handle_" + handles.Count;
+            KnotHandle handle = handleObj.GetComponent<KnotHandle>();
+            handles.Add(handle);
 
-                handle.knotIndex = handles.Count;
-                handle.splineContainer = splineContainer;
-            }
-            else
-            {
-            }
+            handle.knotIndex = handles.Count;
+            handle.splineContainer = splineContainer;
         }
 
         for (int i = 0; i < handles.Count; i++)
