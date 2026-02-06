@@ -7,7 +7,7 @@ public class VRBatchPersister : MonoBehaviour
 {
     // Static storage to survive through the Play Mode session
     private static readonly Dictionary<string, (Vector3 pos, Quaternion rot)> _stagedChanges = new();
-    private static GameObject _sallesAsset;
+    private static string _prefabName;
 
     static VRBatchPersister()
     {
@@ -16,11 +16,11 @@ public class VRBatchPersister : MonoBehaviour
     }
 
     [Header("Configuration")]
-    public GameObject sallesPrefabAsset;
+    public string prefabName;
 
     private void Awake()
     {
-        _sallesAsset = sallesPrefabAsset;
+        _prefabName = prefabName;
     }
 
     /// <summary>
@@ -29,16 +29,16 @@ public class VRBatchPersister : MonoBehaviour
     public void StageChange(Transform movedObject)
     {
         string path = GetRelativePath(movedObject, transform);
-        
+
         // Overwrite or add the latest transform state to the buffer
         _stagedChanges[path] = (movedObject.localPosition, movedObject.localRotation);
-        
+
         Debug.Log($"<color=yellow>Staged:</color> {path} (Buffer count: {_stagedChanges.Count})");
     }
 
     private static void OnStateChanged(PlayModeStateChange state)
     {
-        if (state == PlayModeStateChange.ExitingPlayMode && _stagedChanges.Count > 0)
+        if (state == PlayModeStateChange.EnteredEditMode && _stagedChanges.Count > 0)
         {
             CommitAllToDisk();
         }
@@ -46,9 +46,8 @@ public class VRBatchPersister : MonoBehaviour
 
     private static void CommitAllToDisk()
     {
-        if (_sallesAsset == null) return;
-
-        string assetPath = AssetDatabase.GetAssetPath(_sallesAsset);
+        // _sallesAsset is in Assets/Prefabs/Salles.pregab
+        string assetPath = "Assets/Prefabs/" + _prefabName + ".prefab";
         GameObject prefabRoot = PrefabUtility.LoadPrefabContents(assetPath);
 
         try

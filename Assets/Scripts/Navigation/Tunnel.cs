@@ -8,6 +8,8 @@ using System.Linq;
 using System;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using UnityEngine.UIElements;
+
 
 #if UNITY_EDITOR
 using UnityEditor.EditorTools; // Required for ToolManager
@@ -67,7 +69,7 @@ public class Tunnel : MonoBehaviour
 
     MainController mainController;
 
-    int splineLastCount = 0;
+    List<KnotHandle> handles = new List<KnotHandle>();
 
     KataPortal portal;
     KataPortal portalReverse;
@@ -94,6 +96,7 @@ public class Tunnel : MonoBehaviour
     {
         splineContainer = GetComponent<SplineContainer>();
 
+
         while (splineContainer.Spline.Count < 2)
         {
             //Add two knots if none exist
@@ -101,8 +104,6 @@ public class Tunnel : MonoBehaviour
         }
 
 
-
-        splineLastCount = spline.Count;
 
         lineRenderer = GetComponentInChildren<LineRenderer>();
         UpdateLineRenderer();
@@ -147,13 +148,15 @@ public class Tunnel : MonoBehaviour
         if (spline == splineContainer.Spline)
         {
             // Defer regeneration when spline changes; mark pending. Actual rebuild occurs when editing stops
-            pendingHeatmapOnEditEnd = true;
+            if(!Application.isPlaying) pendingHeatmapOnEditEnd = true;
+
+            UpdateLineRenderer();
+            updateHandles();
         }
 
         //recalculate lineRenderer
 
-        UpdateLineRenderer();
-        updateHandles();
+       
     }
 
     private void OnValidate()
@@ -167,13 +170,11 @@ public class Tunnel : MonoBehaviour
         heatmapDirty = true;
     }
 
-    private void Update()
+    void Update()
     {
 
-        if (spline.Count != splineLastCount)
+        if (spline.Count != handles.Count)
         {
-            Debug.Log("Update Handles");
-            splineLastCount = spline.Count;
             updateHandles();
         }
 
@@ -202,7 +203,7 @@ public class Tunnel : MonoBehaviour
             Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
             if ((curPos - localPos).sqrMagnitude > .01f)
             {
-                Debug.Log("["+gameObject.name+"] Aligning end knot with salleArrivee " + curPos + " / " + localPos);
+                Debug.Log("[" + gameObject.name + "] Aligning end knot with salleArrivee " + curPos + " / " + localPos);
                 splineContainer.Spline.SetKnot(last, new BezierKnot(localPos));
             }
         }
@@ -574,8 +575,16 @@ public class Tunnel : MonoBehaviour
         }
     }
 
+    public float getNearestDistance(Vector3 position)
+    {
+        float3 localProj = splineContainer.transform.InverseTransformPoint(position);
+        SplineUtility.GetNearestPoint(spline, localProj, out float3 nearestLocal, out float refinedT);
+
+        return math.distance(localProj, nearestLocal);
+    }
     public void AddKnotAtPosition(Vector3 position, bool forceOnCurve = false)
     {
+        Debug.Log("Adding knot at position " + position + " (forceOnCurve=" + forceOnCurve + ")");
         float3 localProj = splineContainer.transform.InverseTransformPoint(position);
         SplineUtility.GetNearestPoint(spline, localProj, out float3 nearestLocal, out float refinedT);
 
@@ -714,6 +723,7 @@ public class Tunnel : MonoBehaviour
     {
         if (!Application.isPlaying) return;
 
+        //Debug.Log($"{gameObject.name} Updating handles for spline with " + spline.Count + " knots");
         Transform handlesRoot = transform.Find("Handles");
         if (handlesRoot == null)
         {
@@ -724,16 +734,43 @@ public class Tunnel : MonoBehaviour
             handlesRoot.localScale = Vector3.one;
         }
 
-        while (handlesRoot.childCount > spline.Count)
+        while (handles.Count > spline.Count)
         {
-            Transform child = handlesRoot.GetChild(handlesRoot.childCount - 1);
+            Transform child = handlesRoot.GetChild(handles.Count - 1);
+            handles.RemoveAt(handles.Count - 1);
             DestroyImmediate(child.gameObject);
+            Debug.Log("Removed handle for excess knot, new handle count: " + handles.Count);
         }
 
-        for (int i = 0; i < handlesRoot.childCount; i++)
+
+
+
+        while (handles.Count < spline.Count)
         {
-            Transform child = handlesRoot.GetChild(i);
-            KnotHandle handle = child.GetComponent<KnotHandle>();
+            Debug.Log("Spawning handle for knot " + handles.Count);
+            var knot = spline[handles.Count];
+            Vector3 worldPos = splineContainer.transform.TransformPoint(knot.Position);
+            Transform handleTransform = handlesRoot.Find("Handle_" + handles.Count);
+            KnotHandle handle = null;
+            if (handleTransform == null)
+            {
+                GameObject handleObj = Instantiate(handlePrefab, worldPos, Quaternion.identity, handlesRoot);
+                handleObj.name = "Handle_" + handles.Count;
+                handleTransform = handleObj.transform;
+                handle = handleObj.GetComponent<KnotHandle>();
+                handles.Add(handle);
+
+                handle.knotIndex = handles.Count;
+                handle.splineContainer = splineContainer;
+            }
+            else
+            {
+            }
+        }
+
+        for (int i = 0; i < handles.Count; i++)
+        {
+            KnotHandle handle = handles[i];
             if (handle != null)
             {
                 handle.knotIndex = i;
@@ -742,41 +779,6 @@ public class Tunnel : MonoBehaviour
                 handle.updateActive();
             }
         }
-
-        int curChildCount = handlesRoot.childCount;
-
-
-        while (curChildCount < spline.Count)
-        {
-            var knot = spline[curChildCount];
-            Vector3 worldPos = splineContainer.transform.TransformPoint(knot.Position);
-            Transform handleTransform = handlesRoot.Find("Handle_" + curChildCount);
-            KnotHandle handle = null;
-            if (handleTransform == null)
-            {
-                GameObject handleObj = Instantiate(handlePrefab, worldPos, Quaternion.identity, handlesRoot);
-                handleObj.name = "Handle_" + curChildCount;
-                handleTransform = handleObj.transform;
-                handle = handleObj.GetComponent<KnotHandle>();
-
-                handle.knotIndex = curChildCount;
-                handle.splineContainer = splineContainer;
-
-            }
-            else
-            {
-            }
-
-
-            curChildCount++;
-        }
-
-        KnotHandle[] allHandles = handlesRoot.GetComponentsInChildren<KnotHandle>();
-        for (int i = 0; i < allHandles.Length; i++)
-        {
-            allHandles[i].updateActive();
-        }
-
     }
 
     public float getClosestTrackPosition(Vector3 position)

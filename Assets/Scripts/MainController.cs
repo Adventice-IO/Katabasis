@@ -8,6 +8,8 @@ using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
 using System.Runtime.CompilerServices;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using Unity.Mathematics;
+
 
 
 #if UNITY_EDITOR
@@ -236,7 +238,12 @@ public class MainController : MonoBehaviour
                             float duration = (float)(EditorApplication.timeSinceStartup - timeAtSpawnMode);
                             if (duration < .3f)
                             {
-                                if (tunnel != null) tunnel.AddKnotAtPosition(GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6));
+                                Tunnel tTunnel = tunnel;
+                                if (tTunnel == null)
+                                {
+                                    tTunnel = getClosestTunnel();
+                                }
+                                if(tTunnel != null) tTunnel.AddKnotAtPosition(GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6));
                             }
                             timeAtSpawnMode = 0f;
                         }
@@ -476,6 +483,24 @@ public class MainController : MonoBehaviour
     public bool isTunnelACurrentOut(Tunnel checkTunnel)
     {
         return getAllOutTunnels().Contains(checkTunnel);
+    }
+
+    Tunnel getClosestTunnel()
+    {
+        Tunnel[] allTunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
+        Tunnel closestTunnel = null;
+        float minDist = 1000;
+        foreach(var t in allTunnels)
+        {
+            float dist = t.getNearestDistance(transform.position);
+            if(dist < minDist)
+            {
+                closestTunnel = t;
+                minDist = dist;
+            }
+        }
+
+        return closestTunnel;
     }
 
     //Spawning
