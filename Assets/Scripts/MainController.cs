@@ -235,6 +235,7 @@ public class MainController : MonoBehaviour
                     {
                         if (!removedInSpawnMode)
                         {
+                            Debug.Log("Adding knot at end of spawn mode");
                             float duration = (float)(EditorApplication.timeSinceStartup - timeAtSpawnMode);
                             if (duration < .3f)
                             {

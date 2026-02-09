@@ -26,7 +26,7 @@ namespace BAPointCloudRenderer.CloudController
     {
         private List<PointCloudLoader> _loaders = null;
         private List<Node> _nodes = null;
-        private List<PointCloudLoader> _nodeLoaders = null; 
+        private List<PointCloudLoader> _nodeLoaders = null;
         private BoundingBox _currentBB = null;
         private Transform _setTransform;
         private AbstractPointCloudSet _setToPreview;
@@ -65,6 +65,29 @@ namespace BAPointCloudRenderer.CloudController
         private GameObject _previewRoot;
         private Scene previewScene;
 
+        public void OnEnable()
+        {
+            //Check when exiting edit mode to unload the preview scene, so we don't keep it around accidentally with all the preview objects when entering play mode
+            EditorApplication.playModeStateChanged += HandlePlayModeStateChange;
+        }
+
+        public void OnDisable()
+        {
+            EditorApplication.playModeStateChanged -= HandlePlayModeStateChange;
+        }
+
+        private void HandlePlayModeStateChange(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.ExitingEditMode)
+            {
+                Debug.Log("Exiting edit mode, unloading preview scene");
+                if (previewScene.IsValid() && previewScene.isLoaded)
+                {
+                    EditorSceneManager.CloseScene(previewScene, true);
+                }
+            }
+        }
+
         public void Start()
         {
             Debug.Log("MultiPreview.Start");
@@ -72,25 +95,30 @@ namespace BAPointCloudRenderer.CloudController
             gameObject.SetActive(!Application.isPlaying);
 
             // Never keep the preview scene around when entering play mode.
-            if (Application.isPlaying)
+            // if (Application.isPlaying)
+            // {
+            //     var existing = SceneManager.GetSceneByPath(PreviewScenePath);
+            //     if (existing.IsValid() && existing.isLoaded)
+            //     {
+            //         // disable all root objects of the existing scene
+            //         foreach (var rootObject in existing.GetRootGameObjects())
+            //         {
+            //             rootObject.SetActive(false);
+            //         }
+            //         //     EditorSceneManager.CloseScene(existing, true);
+            //     }
+
+
+
+            //     return;
+            // }
+            // else
+            // {
+
+            if(!Application.isPlaying)
             {
-                var existing = SceneManager.GetSceneByPath(PreviewScenePath);
-                if (existing.IsValid() && existing.isLoaded)
-                {
-                    // disable all root objects of the existing scene
-                    foreach (var rootObject in existing.GetRootGameObjects())
-                    {
-                        rootObject.SetActive(false);
-                    }
-                //     EditorSceneManager.CloseScene(existing, true);
-                }
-
-
-                
-                return;
+                previewScene = EnsurePreviewSceneLoaded();
             }
-
-            previewScene = EnsurePreviewSceneLoaded();
 
             material ??= new Material(Shader.Find("Custom/PointShader"));
         }
@@ -126,7 +154,7 @@ namespace BAPointCloudRenderer.CloudController
                 Debug.Log("No PointCloudSet given. Preview aborted.");
                 return;
             }
-          
+
             //Delete Preview of old set
             KillPreview();
 
@@ -342,7 +370,7 @@ namespace BAPointCloudRenderer.CloudController
             string cloudPath = cloud.Item1 != null ? cloud.Item1.cloudPath : "unknown";
             //Debug.Log("Preview: Creating mesh part from " + startIndex + " with " + count + " points for cloud " + cloudPath);
             GameObject go = new GameObject("Preview (part " + startIndex + ") " + cloudPath);
-            MeshFilter filter = go.GetComponent<MeshFilter>(); 
+            MeshFilter filter = go.GetComponent<MeshFilter>();
             Mesh mesh;
             if (filter == null)
             {
