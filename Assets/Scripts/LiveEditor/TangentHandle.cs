@@ -25,7 +25,7 @@ public class TangentHandle : MonoBehaviour
             return;
         }
 
-        transform.rotation = Quaternion.LookRotation(-transform.localPosition.normalized);
+        transform.localRotation = Quaternion.LookRotation(transform.localPosition.normalized);
         r.positionCount = 2;
         r.SetPosition(0, parent.position);
         r.SetPosition(1, parent.position + (transform.position - parent.position) * transform.localScale.x);
