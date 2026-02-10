@@ -731,27 +731,35 @@ public class Tunnel : MonoBehaviour
         Transform handlesRoot = transform.Find("Handles");
 
         //Cleaner approach; remove ALL handles
-        if (handlesRoot != null)
+        if (handlesRoot == null)
         {
-            while(handlesRoot.childCount > 0)
-            {
-                Transform child = handlesRoot.GetChild(0);
-                DestroyImmediate(child.gameObject);
-            }
-            handles.Clear();
+            Debug.LogWarning("Handles root not found, creating new one.");
+            handlesRoot = new GameObject("Handles").transform;
+            handlesRoot.parent = transform;
+            handlesRoot.localPosition = Vector3.zero;
+            handlesRoot.localRotation = Quaternion.identity;
         }
+
+        while(handlesRoot.childCount > 0)
+        {
+            Transform child = handlesRoot.GetChild(0);
+            DestroyImmediate(child.gameObject);
+        }
+        handles.Clear();
+
+        Debug.Log("Cleared existing handles, spawning new ones for each knot (except endpoints)");
 
         for (int i = 0; i < spline.Count; i++)
         {
             if (i == 0 || i == spline.Count - 1)
             {
-                Debug.Log("Skipping handle for knot " + i + " since it's an endpoint");
+                // Debug.Log("Skipping handle for knot " + i + " since it's an endpoint");
                 continue;
             }
 
             var knot = spline[i];
             Vector3 worldPos = splineContainer.transform.TransformPoint(knot.Position);
-            GameObject handleObj = Instantiate(handlePrefab, worldPos, Quaternion.identity, transform);
+            GameObject handleObj = Instantiate(handlePrefab, worldPos, Quaternion.identity, handlesRoot);
             handleObj.name = "Handle_" + i;
             KnotHandle handle = handleObj.GetComponent<KnotHandle>();
             handles.Add(handle);
