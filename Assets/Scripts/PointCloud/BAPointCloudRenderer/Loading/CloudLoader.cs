@@ -39,7 +39,7 @@ namespace BAPointCloudRenderer.Loading
             }
 
             cloudPath = cPath;
-            Debug.Log("Load Hierarchy : " + cPath);
+            //Debug.Log("Load Hierarchy : " + cPath);
 
             bool isCloudOnline = Uri.IsWellFormedUriString(cloudPath, UriKind.Absolute);
             if (isCloudOnline)

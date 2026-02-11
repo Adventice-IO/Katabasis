@@ -23,6 +23,10 @@ public class MainController : MonoBehaviour
     [Header("Setup")]
     public Salle initialSalle;
 
+    [Header("Audio Settings")]
+    public AudioStateRefSO noAudioSO;
+    public bool debugAudioStates = false;
+
     [Header("State")]
     public Salle salle;
     public Tunnel tunnel;
@@ -244,7 +248,7 @@ public class MainController : MonoBehaviour
                                 {
                                     tTunnel = getClosestTunnel();
                                 }
-                                if(tTunnel != null) tTunnel.AddKnotAtPosition(GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6));
+                                if (tTunnel != null) tTunnel.AddKnotAtPosition(GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6));
                             }
                             timeAtSpawnMode = 0f;
                         }
@@ -439,20 +443,40 @@ public class MainController : MonoBehaviour
         {
             transform.position = salle.origin.position;
             timeAtArrived = Time.time;
+
+            if (salle.audioSO != null && salle.audioSO.state != null)
+            {
+                if (debugAudioStates) Debug.Log("Setting salle audio state: " + salle.audioSO.state.Name);
+                salle.audioSO.state.SetValue();
+            }
+            else
+            {
+                noAudioSO.state.SetValue();
+            }
         }
         else
         {
             trackPosition = 0f;
             currentSpeed = 0f;
-            if (tunnel != null)
+            if (isInATunnel())
             {
                 transform.position = tunnel.getPositionOnTrack(0);
                 Vector3 lookAtPos = tunnel.getPositionOnTrack(0.01f);
                 lookAtPos.y = transform.position.y;
                 transform.LookAt(lookAtPos, Vector3.up);
+
+                if (tunnel.audioSO != null && tunnel.audioSO.state != null)
+                {
+                    if (debugAudioStates) Debug.Log("Setting tunnel audio state: " + tunnel.audioSO.state.Name);
+                    tunnel.audioSO.state.SetValue();
+                }
+                else
+                {
+                    noAudioSO.state.SetValue();
+                }
             }
+            isRunning = false;
         }
-        isRunning = false;
     }
 
 
@@ -491,10 +515,10 @@ public class MainController : MonoBehaviour
         Tunnel[] allTunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
         Tunnel closestTunnel = null;
         float minDist = 1000;
-        foreach(var t in allTunnels)
+        foreach (var t in allTunnels)
         {
             float dist = t.getNearestDistance(transform.position);
-            if(dist < minDist)
+            if (dist < minDist)
             {
                 closestTunnel = t;
                 minDist = dist;

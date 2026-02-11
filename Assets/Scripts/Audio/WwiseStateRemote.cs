@@ -18,7 +18,7 @@ public class WwiseStateRemote : MonoBehaviour
 
     private void Reset()
     {
-        manager = FindObjectOfType<AudioStateManager>();
+        manager = FindAnyObjectByType<AudioStateManager>();
     }
 
     private void Awake()

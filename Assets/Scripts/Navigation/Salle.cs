@@ -7,8 +7,11 @@ public class Salle : MonoBehaviour
     public Color color = Color.green;
 
     public Vector3 size = Vector3.one * 10;
-    
+
     public Transform origin { get; private set; }
+
+    [Header("Audio Settings")]
+    public AudioStateRefSO audioSO;
 
     void Awake()
     {
