@@ -26,9 +26,14 @@ public class KataPortal : MonoBehaviour
     public bool isFocused { get; set; } = false;
 
     [Range(0, 1)]
-    public float progressiveFocusTime = 0f;
+    public float progression = 0f;
 
     bool showing = false;
+
+    [Header("Audio Settings")]
+    public AudioEventRefSO loadingEvent;
+    public AudioEventRefSO validateEvent;
+    public AudioRTPCRefSO progRTPC;
 
 
     public List<Salle> blacklist = new List<Salle>();
@@ -100,7 +105,7 @@ public class KataPortal : MonoBehaviour
 
         if (showing != shouldShow)
         {
-            progressiveFocusTime = 0f;
+            progression = 0f;
             showing = shouldShow;
 
             GetComponent<VisualEffect>().enabled = showing;
@@ -111,11 +116,29 @@ public class KataPortal : MonoBehaviour
         {
             float focusProg = Time.deltaTime * (isFocused ? 1 : -1) / focusTime;
 
-            progressiveFocusTime = Mathf.Clamp01(progressiveFocusTime + focusProg);
-            vfx.SetFloat("Progression", progressiveFocusTime);
-            if (progressiveFocusTime >= 1f)
+            float newProg = Mathf.Clamp01(progression + focusProg);
+
+            if (newProg != progression)
             {
-                mainController.GoToSalle(tunnel.getOtherSalle(mainController.salle));
+                if (newProg > 0 && progression == 0)
+                {
+                    loadingEvent.evt.Post(gameObject);
+                }
+                else if (newProg == 0 && progression > 0)
+                {
+                    loadingEvent.evt.Stop(gameObject);
+                }
+
+                progression = newProg;
+                progRTPC.evt.SetValue(gameObject, progression);
+
+                vfx.SetFloat("Progression", progression);
+                if (progression >= 1f)
+                {
+                    mainController.GoToSalle(tunnel.getOtherSalle(mainController.salle));
+                    loadingEvent.evt.Stop(gameObject);
+                    validateEvent.evt.Post(gameObject);
+                }
             }
         }
 

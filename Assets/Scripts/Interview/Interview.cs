@@ -1,5 +1,6 @@
 using Depthkit;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.VFX;
 using UnityEngine.Video;
 
@@ -22,13 +23,20 @@ public class Interview : MonoBehaviour
     [Range(0, 1)]
     public float progression;
     [Range(0, 1)]
-    public float evaporate;
+    public float evaporateProg;
 
+    public float evaporatePreDelay = 0.5f;
     public float evaporateTime = 3f;
     public bool shouldEvaporate = false;
 
     Salle salle;
 
+    [Header("Audio Settings")]
+    public AudioEventRefSO loadingEvent;
+    public AudioEventRefSO validateEvent;
+    public AudioEventRefSO videoEvent;
+    public AudioEventRefSO evaporateEvent;
+    public AudioRTPCRefSO progRTPC;
     public enum State
     {
         Idle,
@@ -46,7 +54,7 @@ public class Interview : MonoBehaviour
         init();
         set(itwName, level);
         progression = 0;
-        evaporate = 0;
+        evaporateProg = 0;
         shouldEvaporate = false;
     }
 
@@ -58,6 +66,13 @@ public class Interview : MonoBehaviour
     {
         clip = GetComponent<Depthkit.Clip>();
         videoPlayer = GetComponent<VideoPlayer>();
+
+        //videoPlayer.loopPointReached += (VideoPlayer vp) =>
+        //{
+        //    stop();
+        //    shouldEvaporate = true;
+        //};
+
         vfx = GetComponentInChildren<VisualEffect>();
         salle = GetComponentInParent<Salle>();
 
@@ -86,7 +101,7 @@ public class Interview : MonoBehaviour
 #endif
         }
 
-        if (evaporate == 1) return; // finished evaporating
+        if (evaporateProg == 1) return; // finished evaporating
 
         if (progression < 1)
         {
@@ -94,10 +109,28 @@ public class Interview : MonoBehaviour
             {
                 float focusProg = Time.deltaTime * (isFocused ? 1 : -1) / focusTime;
 
-                progression = Mathf.Clamp01(progression + focusProg);
-                if (progression >= 1)
+                float newProg = Mathf.Clamp01(progression + focusProg);
+
+                if (newProg != progression)
                 {
-                    play();
+                    if (newProg > 0 && progression == 0)
+                    {
+                        loadingEvent.evt.Post(gameObject);
+                    }
+                    else if (newProg == 0 && progression > 0)
+                    {
+                        loadingEvent.evt.Stop(gameObject);
+                    }
+
+                    progression = newProg;
+                    progRTPC.evt.SetValue(gameObject, progression);
+
+                    if (progression >= 1)
+                    {
+                        play();
+                        loadingEvent.evt.Stop(gameObject);
+                        validateEvent.evt.Post(gameObject);
+                    }
                 }
             }
         }
@@ -108,23 +141,23 @@ public class Interview : MonoBehaviour
             {
                 if (!shouldEvaporate)
                 {
-                    if (videoPlayer.time > videoPlayer.length - 0.1f)
+                    if (videoPlayer.time > videoPlayer.length - evaporatePreDelay)
                     {
-                        shouldEvaporate = true;
+                        evaporate();
                     }
                 }
             }
 
-            if (shouldEvaporate && evaporate < 1)
+            if (shouldEvaporate && evaporateProg < 1)
             {
                 float evapProg = Time.deltaTime / evaporateTime;
-                evaporate = Mathf.Clamp(evaporate + evapProg, 0, 1);
+                evaporateProg = Mathf.Clamp(evaporateProg + evapProg, 0, 1);
             }
         }
 
 
         vfx.SetFloat("Progression", progression);
-        vfx.SetFloat("Evaporate", evaporate);
+        vfx.SetFloat("Evaporate", evaporateProg);
     }
 
     public void set(string itwName, int level)
@@ -158,7 +191,17 @@ public class Interview : MonoBehaviour
     public void play()
     {
         videoPlayer.Play();
+        videoEvent.evt.Post(gameObject);
     }
+
+    public void evaporate()
+    {
+        shouldEvaporate = true;
+        videoEvent.evt.Stop(gameObject);
+        evaporateEvent.evt.Post(gameObject);
+    }
+
+
 
     private void OnDrawGizmos()
     {
