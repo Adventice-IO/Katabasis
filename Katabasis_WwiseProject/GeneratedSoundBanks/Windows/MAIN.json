@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{7E734BBA-16C9-46F8-8CBD-B94EE4B45669}",
     "Language": "SFX",
-    "Hash": "{80B83477-8AD4-CC71-7C30-0DB598399382}",
+    "Hash": "{FDE0E926-870A-5178-27EC-1FA366190EEB}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\MAIN",
     "ShortName": "MAIN",
     "Path": "MAIN.bnk",
@@ -33,6 +33,22 @@
        "GUID": "{1E9C7711-CB44-4703-8CCD-BCAA17AB596D}",
        "LibName": "Wwise Tone Generator",
        "LibId": "6684674"
+      },
+      {
+       "Id": "187488359",
+       "Name": "Synth One",
+       "ObjectPath": "\\Containers\\Default Work Unit\\SFX\\SFX_Test\\SFX_Portal_Activate\\Synth One",
+       "GUID": "{B7C57EA1-60A4-472B-82AA-1D05630C1027}",
+       "LibName": "Wwise Synth One",
+       "LibId": "9699330"
+      },
+      {
+       "Id": "729039563",
+       "Name": "Tone Generator",
+       "ObjectPath": "\\Containers\\Default Work Unit\\SFX\\SFX_Test\\SFX_Portal_Validate\\Tone Generator",
+       "GUID": "{A3ECAD77-C6FF-424C-B543-8C4183116C5B}",
+       "LibName": "Wwise Tone Generator",
+       "LibId": "6684674"
       }
      ]
     },
@@ -47,6 +63,45 @@
       "MediaRefs": [
        {
         "Id": "183963844"
+       }
+      ]
+     },
+     {
+      "Id": "4131803333",
+      "Name": "SFX_Portal_Activate",
+      "ObjectPath": "\\Events\\Default Work Unit\\TEST\\SFX_Portal_Activate",
+      "GUID": "{7BB7BFAC-C831-4AFF-B2B5-4F249548937D}",
+      "DurationType": "Unknown",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "187488359"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "1155651648",
+      "Name": "SFX_Portal_Validate",
+      "ObjectPath": "\\Events\\Default Work Unit\\TEST\\SFX_Portal_Validate",
+      "GUID": "{DD94F51F-CF3D-4D20-852A-10D0270AE417}",
+      "MaxAttenuation": "50",
+      "DurationType": "OneShot",
+      "DurationMin": "2.0586045",
+      "DurationMax": "2.0586045",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "729039563"
+        }
+       ]
+      },
+      "AuxBusRefs": [
+       {
+        "Id": "266044713",
+        "Name": "REV_Long",
+        "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Long",
+        "GUID": "{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}"
        }
       ]
      },
@@ -73,9 +128,17 @@
        }
       ]
      }
+    ],
+    "GameParameters": [
+     {
+      "Id": "2942853976",
+      "Name": "RTPC_Progression",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\RTPC_Progression",
+      "GUID": "{5BD8080A-DA64-43F0-98B7-79BD20A6BAC9}"
+     }
     ]
    }
   ],
-  "FileHash": "{4CFEF704-5B34-C38C-6204-C3EE689EA820}"
+  "FileHash": "{1847D17A-BE32-D9C1-EDEE-FDD21C8DE660}"
  }
 }
