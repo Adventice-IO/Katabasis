@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.VFX;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-[ExecuteAlways]
+[ExecuteInEditMode]
 public class KataPortal : MonoBehaviour
 {
 
@@ -73,8 +73,10 @@ public class KataPortal : MonoBehaviour
         if (mainController == null || tunnel == null)
         {
             mainController = MainController.instance;
-            tunnel = transform.parent.GetComponent<Tunnel>();
+            if (transform.parent != null) tunnel = transform.parent.GetComponent<Tunnel>();
         }
+
+        if (tunnel == null) return;
 
         transform.position = tunnel.getPositionOnTrack(positionAlongTunnel) + Vector3.up * elevation;
 
@@ -105,11 +107,7 @@ public class KataPortal : MonoBehaviour
 
         if (showing != shouldShow)
         {
-            progression = 0f;
-            showing = shouldShow;
-
-            GetComponent<VisualEffect>().enabled = showing;
-            GetComponent<Collider>().enabled = showing;
+            show(shouldShow);
         }
 
         if (Application.isPlaying && showing && !isInTunnel)
@@ -142,6 +140,15 @@ public class KataPortal : MonoBehaviour
             }
         }
 
+    }
+
+    public void show(bool val)
+    {
+        progression = 0f;
+        showing = val;
+
+        GetComponent<VisualEffect>().enabled = showing;
+        GetComponent<Collider>().enabled = showing;
     }
 
     public bool isFirst()
