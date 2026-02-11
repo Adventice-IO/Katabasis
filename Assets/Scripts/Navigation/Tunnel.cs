@@ -24,6 +24,9 @@ public class Tunnel : MonoBehaviour
     public Salle salleDepart;
     public Salle salleArrivee;
 
+    [Header("Audio Settings")]
+    public AudioStateRefSO audioSO;
+
     [Header("Comfort Settings")]
     [Tooltip("0 = No slowdown at corners. 1 = Massive slowdown.")]
     [Range(0f, 1f)]
@@ -194,7 +197,7 @@ public class Tunnel : MonoBehaviour
             Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
             if ((curPos - localPos).sqrMagnitude > .01f)
             {
-                Debug.Log("Aligning start knot with salleDepart " + curPos + " / " + localPos);
+                //Debug.Log("Aligning start knot with salleDepart " + curPos + " / " + localPos);
                 splineContainer.Spline.SetKnot(0, new BezierKnot(localPos));
             }
 
@@ -207,7 +210,7 @@ public class Tunnel : MonoBehaviour
             Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
             if ((curPos - localPos).sqrMagnitude > .01f)
             {
-                Debug.Log("[" + gameObject.name + "] Aligning end knot with salleArrivee " + curPos + " / " + localPos);
+                //Debug.Log("[" + gameObject.name + "] Aligning end knot with salleArrivee " + curPos + " / " + localPos);
                 splineContainer.Spline.SetKnot(last, new BezierKnot(localPos));
             }
         }
@@ -727,13 +730,13 @@ public class Tunnel : MonoBehaviour
     {
         if (!Application.isPlaying) return;
 
-        Debug.Log($"{gameObject.name} Updating handles for spline with " + spline.Count + " knots");
+        //Debug.Log($"{gameObject.name} Updating handles for spline with " + spline.Count + " knots");
         Transform handlesRoot = transform.Find("Handles");
 
         //Cleaner approach; remove ALL handles
         if (handlesRoot == null)
         {
-            Debug.LogWarning("Handles root not found, creating new one.");
+            //Debug.LogWarning("Handles root not found, creating new one.");
             handlesRoot = new GameObject("Handles").transform;
             handlesRoot.parent = transform;
             handlesRoot.localPosition = Vector3.zero;
@@ -747,7 +750,7 @@ public class Tunnel : MonoBehaviour
         }
         handles.Clear();
 
-        Debug.Log("Cleared existing handles, spawning new ones for each knot (except endpoints)");
+        //Debug.Log("Cleared existing handles, spawning new ones for each knot (except endpoints)");
 
         for (int i = 0; i < spline.Count; i++)
         {

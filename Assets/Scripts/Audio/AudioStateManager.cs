@@ -20,6 +20,15 @@ public class AudioStateManager : MonoBehaviour
             Set(defaultState);
     }
 
+    public void Set(string label)
+    {
+        var stateRef = stateRefs.Find(s => s.label == label);
+        if (stateRef != null)
+            Set(stateRef);
+        else
+            Debug.LogWarning($"[AudioStateManager] No state found with label: {label}");
+    }
+
     public void Set(AudioStateRefSO stateRef)
     {
         if (stateRef == null) return;

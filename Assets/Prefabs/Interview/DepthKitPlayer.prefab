@@ -1,0 +1,594 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6831333126047717105
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4675427163242773613}
+  - component: {fileID: 1970723586360921555}
+  - component: {fileID: 8510473340861075205}
+  - component: {fileID: 1397304027937296841}
+  - component: {fileID: 1794949588403227100}
+  - component: {fileID: 5517030799550979210}
+  - component: {fileID: 4728383252777970306}
+  - component: {fileID: 6958451836786046919}
+  - component: {fileID: 5614341783945844800}
+  - component: {fileID: 5430352951673501294}
+  - component: {fileID: 7682090560446297074}
+  - component: {fileID: 7157708697285221729}
+  m_Layer: 0
+  m_Name: DepthKitPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4675427163242773613
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831333126047717105}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1970723586360921555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831333126047717105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 623386ffd6dc54946a7acc30f822ba06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interview
+  itwName: test
+  level: 1
+  focusTime: 3
+  progression: 0
+  evaporate: 0
+  evaporateTime: 3
+  shouldEvaporate: 0
+  state: 1
+--- !u!114 &8510473340861075205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831333126047717105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4fa781ea55830e408ba83c0f9d07c4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Depthkit.Core::Depthkit.Clip
+  m_metadataFilePath: 
+  m_metadataFile: {fileID: 4900000, guid: 30fcfa7bfa4af9a4cb17cf6fb401cbb9, type: 3}
+  m_metadataSourceType: 0
+  m_metadata:
+    _versionMajor: 0
+    _versionMinor: 5
+    format: perpixel
+    textureWidth: 4032
+    textureHeight: 4096
+    boundsCenter: {x: -0.19999999, y: 1.006, z: -0}
+    boundsSize: {x: 1.3, y: 2, z: 1.5}
+    perspectives:
+    - depthImageSize: {x: 1920, y: 1080}
+      depthPrincipalPoint: {x: 957.15234, y: 554.097}
+      depthFocalLength: {x: 919.7758, y: 919.63763}
+      farClip: 3.018648
+      nearClip: 0.7797254
+      extrinsics:
+        e00: -0.057420228
+        e01: -0.821682
+        e02: 0.56704646
+        e03: -1.4284273
+        e10: -0.9893769
+        e11: -0.029146606
+        e12: -0.14242129
+        e13: 1.2482367
+        e20: 0.13355249
+        e21: -0.5692005
+        e22: -0.81127954
+        e23: 1.4398385
+        e30: 0
+        e31: 0
+        e32: 0
+        e33: 1
+      extrinsicsInv:
+        e00: -0.05742023
+        e01: -0.9893769
+        e02: 0.13355249
+        e03: 0.9606619
+        e10: -0.8216819
+        e11: -0.029146614
+        e12: -0.5692006
+        e13: -0.31777427
+        e20: 0.56704646
+        e21: -0.1424213
+        e22: -0.8112796
+        e23: 2.1558716
+        e30: 0
+        e31: 0
+        e32: 0
+        e33: 1
+      crop: {x: 0, y: 0.19358662, z: 0.9951746, w: 0.80641335}
+      clipEpsilon: 0.002233217
+      cameraNormal: {x: 0.56704646, y: -0.14242129, z: -0.81127954}
+      cameraCenter: {x: -1.4284273, y: 1.2482367, z: 1.4398385}
+    - depthImageSize: {x: 1920, y: 1080}
+      depthPrincipalPoint: {x: 954.8303, y: 555.97974}
+      depthFocalLength: {x: 919.9851, y: 919.8683}
+      farClip: 3.0441616
+      nearClip: 0.88059455
+      extrinsics:
+        e00: -0.063522294
+        e01: 0.8117451
+        e02: 0.580547
+        e03: -1.3744333
+        e10: -0.9951358
+        e11: -0.0076301564
+        e12: -0.09821696
+        e13: 1.3091992
+        e20: -0.075297475
+        e21: -0.5839621
+        e22: 0.80828124
+        e23: -1.5474622
+        e30: 0
+        e31: 0
+        e32: 0
+        e33: 1
+      extrinsicsInv:
+        e00: -0.06352229
+        e01: -0.99513566
+        e02: -0.07529746
+        e03: 1.0990037
+        e10: 0.8117451
+        e11: -0.007630158
+        e12: -0.583962
+        e13: 0.22201975
+        e20: 0.58054703
+        e21: -0.098216966
+        e22: 0.80828124
+        e23: 2.1772935
+        e30: 0
+        e31: 0
+        e32: 0
+        e33: 1
+      crop: {x: 0.06920067, y: 0, z: 0.93079937, w: 0.889685}
+      clipEpsilon: 0.0023109983
+      cameraNormal: {x: 0.58054703, y: -0.098216966, z: 0.8082813}
+      cameraCenter: {x: -1.3744333, y: 1.3091992, z: -1.5474622}
+    - depthImageSize: {x: 1920, y: 1080}
+      depthPrincipalPoint: {x: 957.1056, y: 553.8904}
+      depthFocalLength: {x: 917.7757, y: 917.7444}
+      farClip: 2.35556
+      nearClip: 0.76790017
+      extrinsics:
+        e00: 0.14817752
+        e01: -0.0071516316
+        e02: 0.98893493
+        e03: -1.7038068
+        e10: 0.98866767
+        e11: -0.023273766
+        e12: -0.14830577
+        e13: 1.5091937
+        e20: 0.024076868
+        e21: 0.9997035
+        e22: 0.003621938
+        e23: 0.017517595
+        e30: 0
+        e31: 0
+        e32: 0
+        e33: 1
+      extrinsicsInv:
+        e00: 0.1481775
+        e01: 0.9886676
+        e02: 0.024076866
+        e03: -1.2400467
+        e10: -0.007151631
+        e11: -0.023273766
+        e12: 0.99970347
+        e13: 0.0054272185
+        e20: 0.98893493
+        e21: -0.14830579
+        e22: 0.003621938
+        e23: 1.9087127
+        e30: 0
+        e31: 0
+        e32: 0
+        e33: 1
+      crop: {x: 0, y: 0, z: 0.8911975, w: 1}
+      clipEpsilon: 0.0031492892
+      cameraNormal: {x: 0.98893493, y: -0.14830577, z: 0.003621938}
+      cameraCenter: {x: -1.7038068, y: 1.5091937, z: 0.017517595}
+    perspectivesCount: 3
+    numRows: 2
+    numColumns: 2
+    numAngles: 3
+    defaultReconstructionSettings:
+      depthBiasAdjustment: 0
+      edgeMaskBlurAmount: 0.0006972112
+      edgeMaskSobelMultiplier: 100.001
+      surfaceNormalColorBlendPower: 5.5587687
+      viewDependentColorBlendPower: 20.001
+  m_perspectiveDataBuffer:
+    m_name: Depthkit Perspective Data Buffer
+  m_player: {fileID: 4728383252777970306}
+  m_poster: {fileID: 2800000, guid: 62347087ce208f84dadbee62cc3114af, type: 3}
+  m_disablePoster: 0
+--- !u!2083052967 &1397304027937296841
+VisualEffect:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831333126047717105}
+  m_Enabled: 1
+  m_Asset: {fileID: 8926484042661614526, guid: 489286cf9fa920d4f98bdec9cfd2d25f, type: 3}
+  m_InitialEventName: OnPlay
+  m_InitialEventNameOverriden: 0
+  m_StartSeed: 0
+  m_ResetSeedOnPlay: 1
+  m_AllowInstancing: 1
+  m_ResourceVersion: 1
+  m_PropertySheet:
+    m_Float:
+      m_Array:
+      - m_Value: 0
+        m_Name: Progression
+        m_Overridden: 1
+      - m_Value: 0.15
+        m_Name: Idle Alpha
+        m_Overridden: 1
+      - m_Value: 0
+        m_Name: Evaporate
+        m_Overridden: 1
+    m_Vector2f:
+      m_Array: []
+    m_Vector3f:
+      m_Array:
+      - m_Value: {x: 0.36, y: 1.55, z: -0.69}
+        m_Name: Attract Position
+        m_Overridden: 1
+    m_Vector4f:
+      m_Array: []
+    m_Uint:
+      m_Array: []
+    m_Int:
+      m_Array:
+      - m_Value: 448
+        m_Name: DataHeight
+        m_Overridden: 1
+      - m_Value: 448
+        m_Name: DataWidth
+        m_Overridden: 1
+    m_Matrix4x4f:
+      m_Array: []
+    m_AnimationCurve:
+      m_Array: []
+    m_Gradient:
+      m_Array: []
+    m_NamedObject:
+      m_Array:
+      - m_Value: {fileID: 0}
+        m_Name: ColorDataTexture
+        m_Overridden: 1
+      - m_Value: {fileID: 0}
+        m_Name: NormalDataTexture
+        m_Overridden: 1
+      - m_Value: {fileID: 0}
+        m_Name: PositionDataTexture
+        m_Overridden: 1
+    m_Bool:
+      m_Array: []
+--- !u!114 &1794949588403227100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831333126047717105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c39bca641cdaf46a71dcfdeb31fe85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Depthkit.Studio::Depthkit.StudioMeshSource
+  m_bIsSetup: 1
+  m_parent: root
+  recalculateCurrentSurfaceTriangleCount: 0
+  m_subMeshMaxTriangles: 00000000
+  m_useTriangleMesh: 0
+  radialBias: 0
+  radialBiasPersp:
+  - 0
+  - 0
+  - 0
+  radialBiasPerspInMeters:
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  pauseDataGenerationWhenInvisible: 0
+  pausePlayerWhenInvisible: 0
+  generationMethod: 0
+  showVolumePreview: 0
+  volumePreviewAlpha: 0.02
+  volumePreviewPointSize: 1
+  automaticLevelOfDetail: 0
+  levelOfDetailDistance: 1
+  m_volumeBounds:
+    m_Center: {x: -0.4491185, y: 0.99628067, z: 0.12590837}
+    m_Extent: {x: 0.50562084, y: 1.0037193, z: 0.7360196}
+  m_volumeDensity: 100
+  m_voxelGridDimensions: {x: 101, y: 200, z: 147}
+  m_totalVoxelCount: 2969400
+  surfaceSmoothingRadius: 0.3
+  enableSurfaceSmoothing: 0
+  showLevelOfDetailGizmo: 0
+  surfaceSensitivity: 0.1
+  weightUnknown: 0.005
+  weightUnseenMax: 1
+  weightUnseenMin: 0.0025
+  weightUnseenFalloffPower: 10
+  weightInFrontMax: 1
+  weightInFrontMin: 0.1
+  volumeViewpoint: {fileID: 0}
+  surfaceNormalColorBlendingPower: 5.5587687
+  perViewDisparityThreshold: 0.0125
+  perViewDisparityBlendWidth: 0.025
+  disparityMin: 0
+  globalViewDependentColorBlendWeight: 20
+  globalViewDependentGeometryBlendWeight: 1
+  enableViewDependentGeometry: 0
+  untexturedFragmentSetting: 0
+  untexturedColor: {r: 0, g: 0, b: 0, a: 1}
+  perspectiveColorBlendingData:
+    m_data:
+    - enabled: 1
+      viewWeightPowerContribution: 1
+    - enabled: 1
+      viewWeightPowerContribution: 1
+    - enabled: 1
+      viewWeightPowerContribution: 1
+    m_name: Depthkit Per Perspective Color Blending Data
+  perspectiveGeometryData:
+    m_data:
+    - enabled: 1
+      overrideWeightUnknown: 0
+      weightUnknown: 0.005
+      viewDependentUnseenAmount: 1
+      viewDependentInFrontAmount: 1
+      viewDependentWeight: 1
+    - enabled: 1
+      overrideWeightUnknown: 0
+      weightUnknown: 0.005
+      viewDependentUnseenAmount: 1
+      viewDependentInFrontAmount: 1
+      viewDependentWeight: 1
+    - enabled: 1
+      overrideWeightUnknown: 0
+      weightUnknown: 0.005
+      viewDependentUnseenAmount: 1
+      viewDependentInFrontAmount: 1
+      viewDependentWeight: 1
+    m_name: Depthkit Per Perspective Geometry Data
+    m_geometryMatchesColorWeights: 000000
+    m_viewDependentContributions:
+    - 1
+    - 1
+    - 1
+  overrideRadialBias: 000000
+  perspectivesCount: 3
+  normalWeightResolutionReduction: 1
+  showPerspectiveGizmo: 000000
+  maskGenerator:
+    clip: {fileID: 8510473340861075205}
+    externalSourceTexture: {fileID: 0}
+    scale: 1
+    m_maskTextureFormat: 14
+    useStudioCoefficients: 1
+    enableMaskDebug: 0
+    m_blurFilter:
+      clip: {fileID: 8510473340861075205}
+      radius: 0.0006972112
+      slices: 3
+    sobelMultiplier: 100.001
+    m_downScale: 0
+  m_enableEdgeMask: 1
+--- !u!114 &5517030799550979210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831333126047717105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085b9102bf6421449d99402d2427459, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Depthkit.Studio.VFX::Depthkit.StudioVFXTextureSource
+  m_bIsSetup: 1
+  m_parent: Depthkit Studio Mesh Source
+  positionDataTexture: {fileID: 0}
+  colorDataTexture: {fileID: 0}
+  normalDataTexture: {fileID: 0}
+  textureSizeReductionFactor: 1
+  usePowerOf2Size: 0
+--- !u!114 &4728383252777970306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831333126047717105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78d45f7d508d0a14884bec1201260eff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Depthkit.Core::Depthkit.UnityVideoPlayer
+  m_mediaPlayer: {fileID: 6958451836786046919}
+  m_audioSource: {fileID: 0}
+--- !u!328 &6958451836786046919
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831333126047717105}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 32900000, guid: 02c0cafca3e6b64438253e75fe8f9f65, type: 3}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 0}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 4
+  m_AspectRatio: 2
+  m_DataSource: 1
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 3
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
+  m_Url: file:///D:/Projects/Katabasis/Assets/StreamingAssets/depthkit/test/level1/test1.mp4
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
+  m_PlayOnAwake: 0
+  m_SkipOnDrop: 1
+  m_Looping: 0
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
+--- !u!136 &5614341783945844800
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831333126047717105}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.39
+  m_Height: 2.07
+  m_Direction: 1
+  m_Center: {x: -0.26, y: 0.75, z: -0.02}
+--- !u!73398921 &5430352951673501294
+VFXRenderer:
+  serializedVersion: 1
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831333126047717105}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+--- !u!65 &7682090560446297074
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831333126047717105}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1.0112417, y: 2.0074387, z: 1.4720392}
+  m_Center: {x: -0.4491185, y: 0.99628067, z: 0.12590837}
+--- !u!114 &7157708697285221729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831333126047717105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b960e6290f596041bb7e3837ea18c18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Depthkit.Studio.VFX::Depthkit.StudioVFXLook
+  depthkitClip: {fileID: 8510473340861075205}
+  showPerViewColorDebug: 0
+  showCameraFrustums: 0
+  meshSource: {fileID: 1794949588403227100}
+  m_collider: {fileID: 7682090560446297074}

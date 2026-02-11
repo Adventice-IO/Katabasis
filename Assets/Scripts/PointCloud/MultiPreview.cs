@@ -90,7 +90,7 @@ namespace BAPointCloudRenderer.CloudController
 
         public void Start()
         {
-            Debug.Log("MultiPreview.Start");
+            //Debug.Log("MultiPreview.Start");
             gameObject.hideFlags = HideFlags.DontSaveInBuild;
             gameObject.SetActive(!Application.isPlaying);
 
@@ -136,8 +136,7 @@ namespace BAPointCloudRenderer.CloudController
 
         public void OnDestroy()
         {
-            Debug.Log("MultiPreview.OnDestroy");
-            Debug.Log("MultiPreview destroyed");
+            //Debug.Log("MultiPreview.OnDestroy");
             //unload preview scene
             if (previewScene.IsValid() && previewScene.isLoaded)
             {
