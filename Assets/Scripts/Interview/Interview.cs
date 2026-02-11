@@ -89,7 +89,11 @@ public class Interview : MonoBehaviour
         {
             if (salle != null)
             {
-                vfx.enabled = MainController.instance.isInSalle(salle);
+                bool shouldEnable = MainController.instance.isInSalle(salle);
+                if(shouldEnable != vfx.enabled)
+                {
+                    show(shouldEnable);
+                }
             }
         }
         else
@@ -160,6 +164,16 @@ public class Interview : MonoBehaviour
         vfx.SetFloat("Evaporate", evaporateProg);
     }
 
+    void show(bool shouldShow)
+    {
+        vfx.enabled = shouldShow;
+        if(shouldShow)
+        {
+            load();
+        }
+
+    }
+
     public void set(string itwName, int level)
     {
         this.itwName = itwName;
@@ -178,12 +192,17 @@ public class Interview : MonoBehaviour
     {
         clip.metadataFile = null;
         string metaData = System.IO.File.ReadAllText(basePath + ".txt");
-        clip.LoadMetadata(metaData);
+        bool result = clip.LoadMetadata(metaData);
 
         posterTex = new Texture2D(2, 2);
         byte[] pngData = System.IO.File.ReadAllBytes(basePath + ".png");
         posterTex.LoadImage(pngData);
         clip.poster = posterTex;
+
+        Debug.Log("Meta data load result " + result);
+
+        videoPlayer.Play();
+        videoPlayer.Pause();
 
         state = State.Loaded;
     }

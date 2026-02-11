@@ -303,19 +303,34 @@ public class KnotHandle : MonoBehaviour
     public void updateActive()
     {
         bool isMiddle = knotIndex > 0 && knotIndex < splineContainer.Spline.Count - 1;
+        bool editMode = MainController.instance != null && !MainController.instance.isInATunnel();
 
-        knot.gameObject.SetActive(isMiddle);
-        upKnot.gameObject.SetActive(isMiddle);
+        if (editMode)
+        {
+            knot.gameObject.SetActive(isMiddle);
+            upKnot.gameObject.SetActive(isMiddle);
 
-        prevHandle.gameObject.SetActive(knotIndex > 0);
-        prevLine.gameObject.SetActive(knotIndex > 0);
+            prevHandle.gameObject.SetActive(knotIndex > 0);
+            prevLine.gameObject.SetActive(knotIndex > 0);
 
-        nextHandle.gameObject.SetActive(knotIndex < splineContainer.Spline.Count - 1);
-        nextLine.gameObject.SetActive(knotIndex < splineContainer.Spline.Count - 1);
+            nextHandle.gameObject.SetActive(knotIndex < splineContainer.Spline.Count - 1);
+            nextLine.gameObject.SetActive(knotIndex < splineContainer.Spline.Count - 1);
 
-        snap.gameObject.SetActive(isMiddle);
+            snap.gameObject.SetActive(isMiddle);
 
-        GetComponent<Collider>().enabled = isMiddle;
+            GetComponent<Collider>().enabled = isMiddle;
+        }
+        else
+        {
+            knot.gameObject.SetActive(false);
+            upKnot.gameObject.SetActive(false);
+            prevHandle.gameObject.SetActive(false);
+            prevLine.gameObject.SetActive(false);
+            nextHandle.gameObject.SetActive(false);
+            nextLine.gameObject.SetActive(false);
+            snap.gameObject.SetActive(false);
+            GetComponent<Collider>().enabled = false;
+        }
     }
     public bool isMoving()
     {

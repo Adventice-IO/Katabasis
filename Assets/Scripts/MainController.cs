@@ -58,6 +58,9 @@ public class MainController : MonoBehaviour
 
 
     [Header("Interaction")]
+    public bool editMode = true;
+    bool _lastEditMode = true;
+
     public bool freeMotion;
     public ContinuousMoveProvider moveProvider;
     [SerializeField] private InputActionProperty verticalMoveAction;
@@ -226,8 +229,27 @@ public class MainController : MonoBehaviour
             lockInfoPlane.SetActive(!freeMotion);
         }
 
+
         if (Application.isPlaying)
         {
+            if (editMode != _lastEditMode)
+            {
+                _lastEditMode = editMode;
+                Tunnel[] tunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
+                foreach (var tunnel in tunnels)
+                {
+                    tunnel.UpdateLineRenderer();
+                    tunnel.updateHandles();
+                }
+
+                KataTransformer[] kataTransformers = FindObjectsByType<KataTransformer>(FindObjectsSortMode.None);
+                foreach (var kt in kataTransformers)
+                {
+                    kt.updateActive();
+                }
+
+            }
+
             if (spawnAction.action != null)
             {
                 bool pressed = spawnAction.action.IsPressed();

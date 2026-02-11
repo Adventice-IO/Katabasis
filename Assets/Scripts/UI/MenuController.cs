@@ -12,7 +12,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] private InputActionProperty menuButtonAction;
 
 
-    MainController MainController;
+    MainController mainController;
 
 
     public bool enabledAtStart = false;
@@ -24,6 +24,7 @@ public class MenuController : MonoBehaviour
     ListView tunnelsList;
 
     Button lockOnTrackButton;
+    Button editModeButton;
 
     private void OnEnable()
     {
@@ -76,7 +77,7 @@ public class MenuController : MonoBehaviour
         }
 
         uiDocument = GetComponent<UIDocument>();
-        MainController = FindAnyObjectByType<MainController>();
+        mainController = FindAnyObjectByType<MainController>();
 
         if (salles == null)
         {
@@ -96,7 +97,7 @@ public class MenuController : MonoBehaviour
             }
         }
 
-        if (uiDocument == null || MainController == null || salles == null || tunnels == null) return;
+        if (uiDocument == null || mainController == null || salles == null || tunnels == null) return;
         var root = uiDocument.rootVisualElement;
         if (root == null) return;
 
@@ -146,39 +147,57 @@ public class MenuController : MonoBehaviour
         lockOnTrackButton = root.Q<Button>("freemotionbt");
         lockOnTrackButton.clicked -= FreeMotionButton_clicked;
         lockOnTrackButton.clicked += FreeMotionButton_clicked;
+        editModeButton = root.Q<Button>("editmodebt");
+        editModeButton.clicked -= EditModeButton_clicked;
+        editModeButton.clicked += EditModeButton_clicked;
 
-       
+
     }
 
     private void Update()
     {
-        if (Application.isPlaying && lockOnTrackButton != null)
+        if (Application.isPlaying)
         {
-            if (MainController.freeMotion) lockOnTrackButton.RemoveFromClassList("active");
-            else lockOnTrackButton.AddToClassList("active");
+            if (lockOnTrackButton != null)
+            {
+                if (mainController.freeMotion) lockOnTrackButton.RemoveFromClassList("active");
+                else lockOnTrackButton.AddToClassList("active");
+            }
+            if( editModeButton != null)
+            {
+                if (mainController.editMode) editModeButton.AddToClassList("active");
+                else editModeButton.RemoveFromClassList("active");
+            }
         }
     }
 
     private void FreeMotionButton_clicked()
     {
-        MainController.freeMotion = !MainController.freeMotion;
-        if (MainController.freeMotion) lockOnTrackButton.RemoveFromClassList("active");
+        mainController.freeMotion = !mainController.freeMotion;
+        if (mainController.freeMotion) lockOnTrackButton.RemoveFromClassList("active");
         else lockOnTrackButton.AddToClassList("active");
+    }
+
+    private void EditModeButton_clicked()
+    {
+        mainController.editMode = !mainController.editMode;
+        if (mainController.editMode) editModeButton.AddToClassList("active");
+        else editModeButton.RemoveFromClassList("active");
     }
 
     private void OnSalleClicked(int index)
     {
 
         var salle = sallesList.itemsSource[index] as Salle;
-        MainController.TeleportToSalle(salle);
+        mainController.TeleportToSalle(salle);
     }
 
     private void OnTunnelClicked(int index)
     {
         var tunnel = tunnelsList.itemsSource[index] as Tunnel;
-        MainController.salle = null;
-        MainController.tunnel = tunnel;
-        MainController.ResetPosition();
+        mainController.salle = null;
+        mainController.tunnel = tunnel;
+        mainController.ResetPosition();
 
         tunnelsList.SetSelectionWithoutNotify(new List<int> { });
     }
