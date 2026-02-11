@@ -123,7 +123,7 @@ public class Interview : MonoBehaviour
                     }
 
                     progression = newProg;
-                    progRTPC.evt.SetValue(gameObject, progression);
+                    progRTPC.rtpc.SetValue(gameObject, progression);
 
                     if (progression >= 1)
                     {

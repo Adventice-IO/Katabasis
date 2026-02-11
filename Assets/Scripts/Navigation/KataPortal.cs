@@ -34,6 +34,7 @@ public class KataPortal : MonoBehaviour
     public AudioEventRefSO loadingEvent;
     public AudioEventRefSO validateEvent;
     public AudioRTPCRefSO progRTPC;
+    public bool debugAudio = false;
 
 
     public List<Salle> blacklist = new List<Salle>();
@@ -120,15 +121,17 @@ public class KataPortal : MonoBehaviour
             {
                 if (newProg > 0 && progression == 0)
                 {
+                    if(debugAudio) Debug.Log("Posting loading event");
                     loadingEvent.evt.Post(gameObject);
                 }
                 else if (newProg == 0 && progression > 0)
                 {
+                    if(debugAudio) Debug.Log("Stopping loading event");
                     loadingEvent.evt.Stop(gameObject);
                 }
 
                 progression = newProg;
-                progRTPC.evt.SetValue(gameObject, progression);
+                progRTPC.rtpc.SetValue(gameObject, progression);
 
                 vfx.SetFloat("Progression", progression);
                 if (progression >= 1f)
@@ -149,6 +152,7 @@ public class KataPortal : MonoBehaviour
 
         GetComponent<VisualEffect>().enabled = showing;
         GetComponent<Collider>().enabled = showing;
+        GetComponent<VisualEffect>().SetFloat("Progression", progression);
     }
 
     public bool isFirst()

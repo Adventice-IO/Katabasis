@@ -7,6 +7,6 @@ public class AudioRTPCRefSO : ScriptableObject
     public string label;
 
     [Tooltip("RTPC Wwise (picker).")]
-    public AK.Wwise.RTPC evt;
+    public AK.Wwise.RTPC rtpc;
 
 }
