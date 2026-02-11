@@ -14,6 +14,8 @@ namespace AK
     namespace EVENTS
     {
         static const AkUniqueID AMB_AMBI_TEST_01 = 1378078392U;
+        static const AkUniqueID SFX_PORTAL_ACTIVATE = 4131803333U;
+        static const AkUniqueID SFX_PORTAL_VALIDATE = 1155651648U;
         static const AkUniqueID SFX_TONE_TEST = 3501277368U;
     } // namespace EVENTS
 
@@ -32,6 +34,11 @@ namespace AK
         } // namespace STATE_MAP
 
     } // namespace STATES
+
+    namespace GAME_PARAMETERS
+    {
+        static const AkUniqueID RTPC_PROGRESSION = 2942853976U;
+    } // namespace GAME_PARAMETERS
 
     namespace BANKS
     {
