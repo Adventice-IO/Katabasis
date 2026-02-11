@@ -682,7 +682,7 @@ public class Tunnel : MonoBehaviour
     }
 
 
-    void UpdateLineRenderer()
+    public void UpdateLineRenderer()
     {
         if (lineRenderer == null)
         {
@@ -720,8 +720,16 @@ public class Tunnel : MonoBehaviour
 
         if (Application.isPlaying)
         {
-            lineRenderer.material.SetFloat("_Width", lineRenderer.startWidth * lineRenderer.widthMultiplier);
-            lineRenderer.material.SetFloat("_Length", length);
+            if (MainController.instance.editMode)
+            {
+                lineRenderer.enabled = true;
+                lineRenderer.material.SetFloat("_Width", lineRenderer.startWidth * lineRenderer.widthMultiplier);
+                lineRenderer.material.SetFloat("_Length", length);
+            }
+            else
+            {
+                lineRenderer.enabled = false;
+            }
         }
 
     }
@@ -749,6 +757,8 @@ public class Tunnel : MonoBehaviour
             DestroyImmediate(child.gameObject);
         }
         handles.Clear();
+
+        if (!MainController.instance.editMode) return;
 
         //Debug.Log("Cleared existing handles, spawning new ones for each knot (except endpoints)");
 

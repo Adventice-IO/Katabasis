@@ -14,10 +14,6 @@ public class KataTransformer : MonoBehaviour
 
     MainController mainController;
 
-    public int knotIndex = 0;
-    public bool isFirstOrLast = false;
-    public SplineContainer splineContainer;
-
     Renderer[] renderers;
     Renderer upRenderers;
     Renderer[] snapRenderers;
@@ -101,67 +97,23 @@ public class KataTransformer : MonoBehaviour
             }
         }
 
-        if (manipState != ManipState.None)
-        {
-            showAnim = 1.0f;
-        }
-        else
-        {
-            showHandles = !isFirstOrLast && Camera.main != null && Vector3.Distance(Camera.main.transform.position, transform.position) < 10.0f;
-        }
-
-        if (showHandles)
-        {
-            showAnim += Time.deltaTime * 5;
-        }
-        else
-        {
-            showAnim -= Time.deltaTime * 5;
-        }
-
         showAnim = Mathf.Clamp01(showAnim);
 
 
         up.localScale = Vector3.one * showAnim;
         snap.localScale = Vector3.one * showAnim;
-
-
-
-        if (isMoving())
-        {
-        }
-        else
-        {
-            if (splineContainer == null)
-            {
-                return;
-            }
-
-            var spline = splineContainer.Spline;
-            if (knotIndex < spline.Count)
-            {
-                var knot = spline[knotIndex];
-                transform.position = splineContainer.transform.TransformPoint(knot.Position);
-                transform.rotation = knot.Rotation;
-            }
-            else
-            {
-                Debug.LogWarning(" index out of range in Handle: " + knotIndex + " / " + spline.Count);
-            }
-
-        }
     }
 
 
     public void updateActive()
     {
-        bool isMiddle = knotIndex > 0 && knotIndex < splineContainer.Spline.Count - 1;
+        bool editMode = mainController.editMode;
+        baseT.gameObject.SetActive(editMode);
+        up.gameObject.SetActive(editMode);
+        snap.gameObject.SetActive(editMode);
 
-        baseT.gameObject.SetActive(isMiddle);
-        up.gameObject.SetActive(isMiddle);
-        snap.gameObject.SetActive(isMiddle);
-
-        GetComponent<Collider>().enabled = isMiddle;
+        Collider collider = GetComponent<Collider>();
+        if(collider != null) collider.enabled = editMode;
     }
     public bool isMoving()
     {
