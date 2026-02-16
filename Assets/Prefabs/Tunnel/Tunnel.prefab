@@ -231,6 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Tunnel
   salleDepart: {fileID: 0}
   salleArrivee: {fileID: 0}
+  audioSO: {fileID: 0}
   cornerSlowdown: 0.6
   curvatureSensitivity: 0.01
   curvatureSampleRadius: 0.01
@@ -2407,7 +2408,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2842043536283067890, guid: 77c5e884be2037f46a23fe4844dcc55b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -193.40929
+      value: -193.4093
       objectReference: {fileID: 0}
     - target: {fileID: 2842043536283067890, guid: 77c5e884be2037f46a23fe4844dcc55b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2443,11 +2444,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6666648134924636383, guid: 77c5e884be2037f46a23fe4844dcc55b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7284211463160248734, guid: 77c5e884be2037f46a23fe4844dcc55b, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8104163711796569747, guid: 77c5e884be2037f46a23fe4844dcc55b, type: 3}
       propertyPath: positionAlongTunnel
@@ -2481,7 +2482,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2842043536283067890, guid: 77c5e884be2037f46a23fe4844dcc55b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 51.847824
+      value: 51.84784
       objectReference: {fileID: 0}
     - target: {fileID: 2842043536283067890, guid: 77c5e884be2037f46a23fe4844dcc55b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2489,7 +2490,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2842043536283067890, guid: 77c5e884be2037f46a23fe4844dcc55b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -194.48674
+      value: -194.48676
       objectReference: {fileID: 0}
     - target: {fileID: 2842043536283067890, guid: 77c5e884be2037f46a23fe4844dcc55b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2529,7 +2530,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6666648134924636383, guid: 77c5e884be2037f46a23fe4844dcc55b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7284211463160248734, guid: 77c5e884be2037f46a23fe4844dcc55b, type: 3}
       propertyPath: m_Enabled
