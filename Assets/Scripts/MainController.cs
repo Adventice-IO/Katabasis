@@ -42,7 +42,6 @@ public class MainController : MonoBehaviour
     public float minSpeed = 0.05f; // Units per second
     public float maxSpeed = 10f; // Units per second
     public float acceleration = 5f; // Units per second squared
-    public float deceleration = 5f; // Units per second squared
 
 
     [Header("Read Only")]
@@ -327,9 +326,9 @@ public class MainController : MonoBehaviour
         if (isRunning)
         {
             float actualTrackPosition = isReversed ? (1f - trackPosition) : trackPosition;
-            float targetSpeedLimit = tunnel.GetTargetSpeedAt(actualTrackPosition, minSpeed, maxSpeed, acceleration, deceleration);
-            float accelRate = (currentSpeed < targetSpeedLimit) ? acceleration : deceleration;
-            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeedLimit, accelRate * deltaTime);
+            float targetSpeed = tunnel.getDesiredSpeedAtPosition(actualTrackPosition);
+            if(targetSpeed == 0) targetSpeed = maxSpeed;
+            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * deltaTime);
 
             if (pathLength > 0)
             {
