@@ -83,17 +83,19 @@ public class KataPortal : MonoBehaviour
 
         //transform.position = tunnel.getPositionOnTrack(positionAlongTunnel) + Vector3.up * elevation;
 
+
+        bool shouldShow = true;
         bool isInTunnel = mainController.isInTunnel(tunnel);
-        bool showInSalle = mainController.isTunnelACurrentOut(tunnel) && mainController.timeSinceArrived > timeBeforeReveal;
-        bool showInTunnel = isInTunnel && (isReverse ? mainController.trackPosition > .5f : mainController.trackPosition < .5f);
-        bool shouldShow = showInSalle || showInTunnel;
 
         if (MainController.instance.editMode)
         {
-            shouldShow = true;
+            shouldShow = isInTunnel || mainController.isTunnelACurrentOut(tunnel);
         }
         else
         {
+            bool showInSalle = mainController.isTunnelACurrentOut(tunnel) && mainController.timeSinceArrived > timeBeforeReveal;
+            bool showInTunnel = isInTunnel && (isReverse ? mainController.trackPosition > .5f : mainController.trackPosition < .5f);
+            shouldShow = showInTunnel || showInSalle;
             if (showInSalle)
             {
                 if (mainController.comingFromTunnel == tunnel)
@@ -174,6 +176,8 @@ public class KataPortal : MonoBehaviour
         GetComponent<VisualEffect>().enabled = showing;
         GetComponent<Collider>().enabled = showing;
         GetComponent<VisualEffect>().SetFloat("Progression", progression);
+
+        GetComponentInParent<KataTransformer>().forceDisabled = !showing;
     }
 
     //public bool isFirst()

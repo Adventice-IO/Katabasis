@@ -18,6 +18,8 @@ public class KataTransformer : MonoBehaviour
     Renderer upRenderers;
     Renderer[] snapRenderers;
 
+    public bool forceDisabled = false;
+
 
     public enum ManipState
     {
@@ -102,7 +104,7 @@ public class KataTransformer : MonoBehaviour
 
     public void updateActive()
     {
-        if(!Application.isPlaying)
+        if (!Application.isPlaying)
         {
             baseT.gameObject.SetActive(true);
             up.gameObject.SetActive(true);
@@ -110,13 +112,16 @@ public class KataTransformer : MonoBehaviour
             return;
         }
 
+
+
         bool editMode = MainController.instance.editMode;
-        baseT.gameObject.SetActive(editMode);
-        up.gameObject.SetActive(editMode);
-        snap.gameObject.SetActive(editMode);
+        bool finalActive = editMode && !forceDisabled;
+        baseT.gameObject.SetActive(finalActive);
+        up.gameObject.SetActive(finalActive);
+        snap.gameObject.SetActive(finalActive);
 
         Collider collider = GetComponent<Collider>();
-        if (collider != null) collider.enabled = editMode;
+        if (collider != null) collider.enabled = finalActive;
     }
     public bool isMoving()
     {
@@ -170,6 +175,7 @@ public class KataTransformer : MonoBehaviour
         VRBatchPersister batchPersister = GetComponentInParent<VRBatchPersister>();
         if (batchPersister != null)
         {
+            Debug.Log("Found batch persister on game object " + batchPersister.gameObject.name + ", staging change.");
             batchPersister.StageChange(transform);
         }
     }

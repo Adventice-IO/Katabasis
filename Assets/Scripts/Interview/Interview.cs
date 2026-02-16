@@ -119,21 +119,21 @@ public class Interview : MonoBehaviour
                 {
                     if (newProg > 0 && progression == 0)
                     {
-                        loadingEvent.evt.Post(gameObject);
+                        loadingEvent?.evt.Post(gameObject);
                     }
                     else if (newProg == 0 && progression > 0)
                     {
-                        loadingEvent.evt.Stop(gameObject);
+                        loadingEvent?.evt.Stop(gameObject);
                     }
 
                     progression = newProg;
-                    progRTPC.rtpc.SetValue(gameObject, progression);
+                    progRTPC?.rtpc.SetValue(gameObject, progression);
 
                     if (progression >= 1)
                     {
                         play();
-                        loadingEvent.evt.Stop(gameObject);
-                        validateEvent.evt.Post(gameObject);
+                        loadingEvent?.evt.Stop(gameObject);
+                        validateEvent?.evt.Post(gameObject);
                     }
                 }
             }
@@ -210,14 +210,14 @@ public class Interview : MonoBehaviour
     public void play()
     {
         videoPlayer.Play();
-        videoEvent.evt.Post(gameObject);
+        videoEvent?.evt.Post(gameObject);
     }
 
     public void evaporate()
     {
         shouldEvaporate = true;
-        videoEvent.evt.Stop(gameObject);
-        evaporateEvent.evt.Post(gameObject);
+        videoEvent?.evt.Stop(gameObject);
+        evaporateEvent?.evt.Post(gameObject);
     }
 
 

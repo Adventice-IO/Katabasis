@@ -5,40 +5,44 @@ using System.Collections.Generic;
 [InitializeOnLoad]
 public class VRBatchPersister : MonoBehaviour
 {
-    // Static storage to survive through the Play Mode session
-    private static readonly Dictionary<string, (Vector3 pos, Quaternion rot)> _stagedChanges = new();
-    private static string _prefabName;
+    // Staged changes grouped per prefab asset path
+    private static readonly Dictionary<string, Dictionary<string, (Vector3 pos, Quaternion rot)>> _stagedByPrefab = new();
 
     static VRBatchPersister()
     {
-        // Hook into the Editor state change
         EditorApplication.playModeStateChanged += OnStateChanged;
     }
 
     [Header("Configuration")]
     public string prefabName;
 
-    private void Awake()
-    {
-        _prefabName = prefabName;
-    }
-
     /// <summary>
     /// Call this from your VR script. It only saves to RAM.
     /// </summary>
     public void StageChange(Transform movedObject)
     {
+        string assetPath = GetPrefabAssetPath();
+        if (string.IsNullOrWhiteSpace(assetPath))
+        {
+            Debug.LogWarning($"[VRBatchPersister] prefabName is empty on {name}, cannot stage change.");
+            return;
+        }
+
         string path = GetRelativePath(movedObject, transform);
 
-        // Overwrite or add the latest transform state to the buffer
-        _stagedChanges[path] = (movedObject.localPosition, movedObject.localRotation);
+        if (!_stagedByPrefab.TryGetValue(assetPath, out var buffer))
+        {
+            buffer = new Dictionary<string, (Vector3 pos, Quaternion rot)>();
+            _stagedByPrefab[assetPath] = buffer;
+        }
 
-        Debug.Log($"<color=yellow>Staged:</color> {path} (Buffer count: {_stagedChanges.Count})");
+        buffer[path] = (movedObject.localPosition, movedObject.localRotation);
+        Debug.Log($"<color=yellow>[{assetPath}] Staged:</color> {path} (Buffer count: {buffer.Count})");
     }
 
     private static void OnStateChanged(PlayModeStateChange state)
     {
-        if (state == PlayModeStateChange.EnteredEditMode && _stagedChanges.Count > 0)
+        if (state == PlayModeStateChange.EnteredEditMode && _stagedByPrefab.Count > 0)
         {
             CommitAllToDisk();
         }
@@ -46,30 +50,54 @@ public class VRBatchPersister : MonoBehaviour
 
     private static void CommitAllToDisk()
     {
-        // _sallesAsset is in Assets/Prefabs/Salles.pregab
-        string assetPath = "Assets/Prefabs/" + _prefabName + ".prefab";
-        GameObject prefabRoot = PrefabUtility.LoadPrefabContents(assetPath);
-
-        try
+        foreach (var kvp in _stagedByPrefab)
         {
-            foreach (var change in _stagedChanges)
+            string assetPath = kvp.Key;
+            Dictionary<string, (Vector3 pos, Quaternion rot)> changes = kvp.Value;
+            if (changes.Count == 0) continue;
+
+            GameObject prefabRoot = PrefabUtility.LoadPrefabContents(assetPath);
+            if (prefabRoot == null)
             {
-                Transform target = prefabRoot.transform.Find(change.Key);
-                if (target != null)
-                {
-                    target.localPosition = change.Value.pos;
-                    target.localRotation = change.Value.rot;
-                }
+                Debug.LogError($"[{assetPath}] Could not load prefab contents.");
+                continue;
             }
 
-            PrefabUtility.SaveAsPrefabAsset(prefabRoot, assetPath);
-            Debug.Log($"<color=lime>Success:</color> Flushed {_stagedChanges.Count} changes to {assetPath}");
+            try
+            {
+                foreach (var change in changes)
+                {
+                    Transform target = prefabRoot.transform.Find(change.Key);
+                    if (target != null)
+                    {
+                        target.localPosition = change.Value.pos;
+                        target.localRotation = change.Value.rot;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[{assetPath}] Could not find transform '{change.Key}' to apply staged change.");
+                    }
+                }
+
+                PrefabUtility.SaveAsPrefabAsset(prefabRoot, assetPath);
+                Debug.Log($"<color=lime>Success:</color> Flushed {changes.Count} changes to {assetPath}");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[{assetPath}] Could not save prefab changes: {e.Message}");
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(prefabRoot);
+            }
         }
-        finally
-        {
-            PrefabUtility.UnloadPrefabContents(prefabRoot);
-            _stagedChanges.Clear();
-        }
+
+        _stagedByPrefab.Clear();
+    }
+
+    private string GetPrefabAssetPath()
+    {
+        return string.IsNullOrWhiteSpace(prefabName) ? null : $"Assets/Prefabs/{prefabName}.prefab";
     }
 
     private string GetRelativePath(Transform child, Transform root)

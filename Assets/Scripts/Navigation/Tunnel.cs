@@ -140,19 +140,19 @@ public class Tunnel : MonoBehaviour
         if (portal != null)
         {
             portal.isReverse = false;
-            //if (portal.transform.localPosition == Vector3.zero)
-            //{
-            //portal.transform.position = getPositionOnTrack(0.02f);
-            //}
+            if (portal.transform.parent.localPosition == Vector3.zero)
+            {
+                portal.transform.parent.position = getPositionOnTrack(0.02f);
+            }
         }
 
         if (portalReverse != null)
         {
             portalReverse.isReverse = true;
-            //if (portalReverse.transform.localPosition == Vector3.zero)
-            //{
-            //portalReverse.transform.position = getPositionOnTrack(0.98f);
-            //}
+            if (portalReverse.transform.parent.localPosition == Vector3.zero)
+            {
+                portalReverse.transform.parent.position = getPositionOnTrack(0.98f);
+            }
         }
 
     }
