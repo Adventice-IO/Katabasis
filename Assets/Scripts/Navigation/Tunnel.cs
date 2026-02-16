@@ -9,6 +9,8 @@ using System;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.UIElements;
+using Framework.Utils.Editor;
+
 
 
 #if UNITY_EDITOR
@@ -26,7 +28,8 @@ public class Tunnel : MonoBehaviour
     public Salle salleArrivee;
 
     [Header("Navigation Settings")]
-    public float baseSpeed = 0.0f; // base speed in m/s, 0 = MainController's max speed
+    public float defaultSpeed = 3f; // base speed in m/s
+    CheckpointContainer checkpointContainer;
 
     [Serializable]
     public struct PortalAudioData
@@ -40,15 +43,14 @@ public class Tunnel : MonoBehaviour
     public AudioStateRefSO startSO;
     public List<PortalAudioData> audioPortals = new List<PortalAudioData>();
 
-    [Header("Manual Triggers")]
-    public List<ManualSlowdown> manualSlowdowns = new List<ManualSlowdown>();
 
     [Header("Manipulation")]
     public bool autoGroundKnots = true;
     public GameObject handlePrefab;
+    public GameObject checkpointPrefab;
 
 
-    private SplineContainer splineContainer;
+    public SplineContainer splineContainer;
     private bool lastWasSelected = false;
 
     LineRenderer lineRenderer;
@@ -59,6 +61,10 @@ public class Tunnel : MonoBehaviour
 
     KataPortal portal;
     KataPortal portalReverse;
+
+
+    List<CheckpointHandle> checkpointHandles = new List<CheckpointHandle>();
+
     public bool canReverse { get { return portalReverse != null; } }
 
     Spline spline
@@ -73,14 +79,11 @@ public class Tunnel : MonoBehaviour
 
 
     [System.Serializable]
-    public class ManualSlowdown
+    public class SpeedCheckpoint
     {
-        [Range(0f, 1f)] public float startPos = 0.5f;
-        [Range(0f, 1f)] public float endPos = 0.6f;
-        [Tooltip("Desired speed multiplier within this zone in m/s")]
+        [Range(0f, 1f)] public float pos = 0.5f;
+        [Tooltip("Desired speed multiplier t this point in m/s")]
         public float speed = 0.5f;
-
-        public Mesh mesh; // Optional mesh to visualize the slowdown zone in the editor
     }
 
     private void Awake()
@@ -96,9 +99,11 @@ public class Tunnel : MonoBehaviour
 
 
 
+        checkpointContainer = GetComponent<CheckpointContainer>();
         lineRenderer = GetComponentInChildren<LineRenderer>();
         UpdateLineRenderer();
         updateHandles();
+        updateSpeedCheckpoints();
 
         mainController = MainController.instance;
     }
@@ -106,6 +111,7 @@ public class Tunnel : MonoBehaviour
     private void OnEnable()
     {
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
+        if (checkpointContainer == null) checkpointContainer = GetComponent<CheckpointContainer>();
         Spline.Changed += OnSplineChanged;
         UpdateLineRenderer();
         // updateHandles();
@@ -209,25 +215,60 @@ public class Tunnel : MonoBehaviour
     }
 
 
-    public float getDesiredSpeedAtPosition(float t)
+    public float getDesiredSpeedAtPosition(float t, bool reverse)
     {
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
-        if (splineContainer == null || splineContainer.Spline == null) return baseSpeed;
+        if (splineContainer == null || splineContainer.Spline == null) return defaultSpeed;
 
-        foreach (var slowdown in manualSlowdowns)
+
+        Tuple<SpeedCheckpoint, SpeedCheckpoint> checkpoints = getSpeedCheckpointsAtPosition(t, reverse);
+        float initSpeed = defaultSpeed;
+        float targetSpeed = defaultSpeed;
+
+        if (checkpoints != null)
         {
-            if (t >= slowdown.startPos && t <= slowdown.endPos)
+            if (checkpoints.Item1 != null)
             {
-                return slowdown.speed;
+                initSpeed = checkpoints.Item1.speed;
+            }
+            if (checkpoints.Item2 != null)
+            {
+                targetSpeed = checkpoints.Item2.speed;
             }
         }
 
-        return baseSpeed;
+        if (checkpoints.Item1 != null && checkpoints.Item2 != null)
+        {
+            float segmentLength = checkpoints.Item2.pos - checkpoints.Item1.pos;
+            if (segmentLength > 0.0001f)
+            {
+                float tSegment = (t - checkpoints.Item1.pos) / segmentLength;
+                return Mathf.Lerp(initSpeed, targetSpeed, tSegment);
+            }
+        }
+        return defaultSpeed;
     }
 
-
-
-
+    Tuple<SpeedCheckpoint, SpeedCheckpoint> getSpeedCheckpointsAtPosition(float trackPosition, bool reverse)
+    {
+        if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
+        if (splineContainer == null || splineContainer.Spline == null) return null;
+        SpeedCheckpoint before = null;
+        SpeedCheckpoint after = null;
+        foreach (var checkpoint in checkpointContainer.speedCheckpoints)
+        {
+            if (checkpoint.pos <= trackPosition)
+            {
+                before = checkpoint;
+            }
+            else if (checkpoint.pos > trackPosition && after == null)
+            {
+                after = checkpoint;
+            }
+        }
+        if (reverse) return Tuple.Create(after, before);
+        return Tuple.Create(before, after);
+    }
 
     public void SpawnKnot(SelectEnterEventArgs args)
     {
@@ -251,6 +292,15 @@ public class Tunnel : MonoBehaviour
 
         return math.distance(localProj, nearestLocal);
     }
+
+    public Vector3 getSplineForwardAtPosition(float trackPosition)
+    {
+        if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
+        if (splineContainer == null || splineContainer.Spline == null) return Vector3.forward;
+        Vector3 tangent = splineContainer.EvaluateTangent(trackPosition);
+        return tangent.normalized;
+    }
+
     public void AddKnotAtPosition(Vector3 position, bool forceOnCurve = false)
     {
         Debug.Log("Adding knot at position " + position + " (forceOnCurve=" + forceOnCurve + ")");
@@ -393,71 +443,8 @@ public class Tunnel : MonoBehaviour
                 lineRenderer.enabled = false;
             }
         }
-
-
-        generateSlowdownMeshes();
-
     }
 
-    void generateSlowdownMeshes()
-    {
-        if (manualSlowdowns == null || manualSlowdowns.Count == 0) return;
-        foreach (var slowdown in manualSlowdowns)
-        {
-            generateSlowdownMesh(slowdown);
-        }
-    }
-
-    void generateSlowdownMesh(ManualSlowdown slowdown)
-    {
-
-        if (slowdown.mesh == null)
-        {
-            slowdown.mesh = new Mesh();
-        }
-        float startT = slowdown.startPos;
-        float endT = slowdown.endPos;
-
-        float relLength = endT - startT;
-        float length = splineContainer.Spline.GetLength() * relLength;
-        int segmentCount = Mathf.CeilToInt(length/2); // 1 segment per 2 meter length, adjust as needed
-        Debug.Log("Generating slowdown mesh from t=" + startT + " to t=" + endT + " with length " + length + " and segment count " + segmentCount);
-        List<Vector3> vertices = new List<Vector3>();
-        List<int> triangles = new List<int>();
-        for (int i = 0; i <= segmentCount; i++)
-        {
-            float t = Mathf.Lerp(startT, endT, (float)i / segmentCount);
-            Vector3 center = splineContainer.EvaluatePosition(t);
-
-            Vector3 forward = splineContainer.EvaluateTangent(t);
-            if (forward.sqrMagnitude < 0.0001f) forward = Vector3.forward;
-            forward = forward.normalized;
-
-            Vector3 up = Vector3.up;
-            Vector3 right = Vector3.Cross(up, forward).normalized;
-
-            float width = 2f;
-
-            vertices.Add(center - right * width); // left
-            vertices.Add(center + right * width); // right
-
-            if (i < segmentCount)
-            {
-                int baseIndex = i * 2;
-                triangles.Add(baseIndex);
-                triangles.Add(baseIndex + 2);
-                triangles.Add(baseIndex + 1);
-
-                triangles.Add(baseIndex + 1);
-                triangles.Add(baseIndex + 2);
-                triangles.Add(baseIndex + 3);
-            }
-        }
-        slowdown.mesh.Clear();
-        slowdown.mesh.SetVertices(vertices);
-        slowdown.mesh.SetTriangles(triangles, 0);
-        slowdown.mesh.RecalculateNormals();
-    }
 
     public void updateHandles()
     {
@@ -506,6 +493,8 @@ public class Tunnel : MonoBehaviour
             handle.splineContainer = splineContainer;
         }
 
+
+
     }
 
     public float getClosestTrackPosition(Vector3 position)
@@ -539,6 +528,74 @@ public class Tunnel : MonoBehaviour
         }
 
         return so;
+    }
+
+
+    // CHECKPOINT
+
+    public SpeedCheckpoint AddSpeedCheckpoint(float positionAlongTunnel)
+    {
+        SpeedCheckpoint checkpoint = new SpeedCheckpoint { pos = positionAlongTunnel, speed = defaultSpeed };
+        checkpointContainer.speedCheckpoints.Add(checkpoint);
+        checkpointContainer.speedCheckpoints = checkpointContainer.speedCheckpoints.OrderBy(c => c.pos).ToList();
+
+        updateSpeedCheckpoints();
+        UnityPlayModeSaver.SaveComponent(checkpointContainer);
+
+        return checkpoint;
+    }
+
+    public void RemoveSpeedCheckpoint(SpeedCheckpoint checkpoint)
+    {
+        checkpointContainer.speedCheckpoints.Remove(checkpoint);
+        UnityPlayModeSaver.SaveComponent(checkpointContainer);
+        updateSpeedCheckpoints();
+    }
+
+    public void updateSpeedCheckpoints()
+    {
+
+
+        if (!Application.isPlaying) return;
+
+        //reorder checkpoints by position
+        checkpointContainer.speedCheckpoints = checkpointContainer.speedCheckpoints.OrderBy(c => c.pos).ToList();
+
+
+        Transform checkpointsRoot = transform.Find("Checkpoints");
+        if (checkpointsRoot == null)
+        {
+            checkpointsRoot = new GameObject("Checkpoints").transform;
+            checkpointsRoot.parent = transform;
+            checkpointsRoot.localPosition = Vector3.zero;
+            checkpointsRoot.localRotation = Quaternion.identity;
+        }
+
+        while (checkpointsRoot.childCount > 0)
+        {
+            Transform child = checkpointsRoot.GetChild(0);
+            DestroyImmediate(child.gameObject);
+        }
+
+        checkpointHandles.Clear();
+
+        if (!MainController.instance.editMode) return;
+
+
+        foreach (var checkpoint in checkpointContainer.speedCheckpoints)
+        {
+            Vector3 worldPos = splineContainer.EvaluatePosition(checkpoint.pos);
+            GameObject handleObj = Instantiate(checkpointPrefab, worldPos, Quaternion.identity);
+            handleObj.transform.position = worldPos;
+            handleObj.transform.localScale = Vector3.one * 0.5f;
+            handleObj.transform.parent = checkpointsRoot;
+            handleObj.name = "Checkpoint_" + checkpoint.pos;
+            CheckpointHandle handle = handleObj.GetComponentInChildren<CheckpointHandle>();
+            handle.checkpoint = checkpoint;
+            handle.tunnel = this;
+            handle.init();
+            checkpointHandles.Add(handle);
+        }
     }
 
 
@@ -597,12 +654,10 @@ public class Tunnel : MonoBehaviour
             }
         }
 
-        foreach (var slowdown in manualSlowdowns)
+        foreach (var checkpoint in checkpointContainer.speedCheckpoints)
         {
-            if (slowdown.mesh == null) continue;
             Gizmos.color = new Color(1f, 0f, 0f, 0.5f);
-            Gizmos.DrawSphere(getPositionOnTrack(slowdown.startPos), .5f);
-            // Gizmos.DrawMesh(slowdown.mesh);
+            Gizmos.DrawSphere(splineContainer.EvaluatePosition(checkpoint.pos), 1.2f);
         }
     }
 }

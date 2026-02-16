@@ -3464,14 +3464,12 @@ MonoBehaviour:
   tunnel: {fileID: 0}
   animateRotation: 0
   trackPosition: 0
-  minSpeed: 0.05
-  maxSpeed: 10
-  acceleration: 5
-  deceleration: 5
+  maxAcceleration: 5
   currentSpeed: 0
   isRunning: 0
   isReversed: 0
   editMode: 1
+  editMaxSpeed: 5
   freeMotion: 1
   moveProvider: {fileID: 7417599109105183109}
   verticalMoveAction:
@@ -3586,7 +3584,20 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 0}
+  spawnCheckPointAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: 
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: a4528204-4d69-4240-97bc-2d048d87b7d0
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
   removedInSpawnMode: 0
+  removedCheckpoint: 0
   lockInfoPlane: {fileID: 7325477772855753073}
 --- !u!114 &3732688429945291836 stripped
 MonoBehaviour:

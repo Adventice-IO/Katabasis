@@ -39,9 +39,7 @@ public class MainController : MonoBehaviour
 
 
     [Header("Physics Settings")]
-    public float minSpeed = 0.05f; // Units per second
-    public float maxSpeed = 10f; // Units per second
-    public float acceleration = 5f; // Units per second squared
+    public float maxAcceleration = 5f; // Units per second squared
 
 
     [Header("Read Only")]
@@ -60,6 +58,7 @@ public class MainController : MonoBehaviour
     public bool editMode = true;
     bool _lastEditMode = true;
 
+    public float editMaxSpeed = 5f;
     public bool freeMotion;
     public ContinuousMoveProvider moveProvider;
     [SerializeField] private InputActionProperty verticalMoveAction;
@@ -68,9 +67,11 @@ public class MainController : MonoBehaviour
     [SerializeField] private InputActionProperty spawnAction;
     [SerializeField] private InputActionProperty cancelAction;
     [SerializeField] private InputActionProperty snapGroundAction;
+    [SerializeField] private InputActionProperty spawnCheckPointAction;
 
     bool spawningMode;
     public bool removedInSpawnMode;
+    public bool removedCheckpoint;
 
     bool verticalMove;
 
@@ -175,6 +176,29 @@ public class MainController : MonoBehaviour
                     }
                 };
             }
+
+            if (spawnCheckPointAction.action != null)
+            {
+                spawnCheckPointAction.action.Enable();
+                spawnCheckPointAction.action.canceled += ctx =>
+                {
+                    if (removedCheckpoint) return;
+                    Tunnel tTunnel = tunnel;
+                    Debug.Log("Adding speed checkpoint at current position");
+                    if (tTunnel == null)
+                    {
+                        tTunnel = getClosestTunnel();
+                    }
+                    if (tTunnel != null)
+                    {
+                        float pos = tTunnel.getClosestTrackPosition(transform.position);
+                        RuntimeUndoManager.addCheckpoint(tTunnel, pos);
+                    }
+
+                    removedCheckpoint = false;
+
+                };
+            }
         }
     }
 
@@ -189,6 +213,7 @@ public class MainController : MonoBehaviour
             if (cancelAction.action != null) cancelAction.action.Disable();
             if (verticalMoveAction.action != null) verticalMoveAction.action.Disable();
             if (snapGroundAction.action != null) snapGroundAction.action.Disable();
+            if (spawnCheckPointAction.action != null) spawnCheckPointAction.action.Disable();
         }
 
 
@@ -243,6 +268,7 @@ public class MainController : MonoBehaviour
                 {
                     tunnel.UpdateLineRenderer();
                     tunnel.updateHandles();
+                    tunnel.updateSpeedCheckpoints();
                 }
 
                 KataTransformer[] kataTransformers = FindObjectsByType<KataTransformer>(FindObjectsSortMode.None);
@@ -299,7 +325,7 @@ public class MainController : MonoBehaviour
             }
             else if (!freeMotion && isInATunnel())
             {
-                trackPosition += joystickInput.y * maxSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f);
+                trackPosition += joystickInput.y * editMaxSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f);
             }
         }
 
@@ -326,9 +352,8 @@ public class MainController : MonoBehaviour
         if (isRunning)
         {
             float actualTrackPosition = isReversed ? (1f - trackPosition) : trackPosition;
-            float targetSpeed = tunnel.getDesiredSpeedAtPosition(actualTrackPosition);
-            if(targetSpeed == 0) targetSpeed = maxSpeed;
-            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * deltaTime);
+            float targetSpeed = tunnel.getDesiredSpeedAtPosition(actualTrackPosition, isReversed);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, maxAcceleration * deltaTime);
 
             if (pathLength > 0)
             {
