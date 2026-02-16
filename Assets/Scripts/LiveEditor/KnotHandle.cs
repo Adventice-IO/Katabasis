@@ -41,6 +41,8 @@ public class KnotHandle : MonoBehaviour
     bool showHandles = true;
     float showAnim = 1.0f;
 
+    Camera mainCam;
+
     public enum ManipState
     {
         None,
@@ -146,6 +148,11 @@ public class KnotHandle : MonoBehaviour
 
         if (manipPlane != null) manipPlane.localScale = Vector3.one * maxDist * 2 / 10;
 
+        if(mainCam == null)
+        {
+            mainCam = Camera.main;
+        }
+
         if (manipState != lastManipState)
         {
             lastManipState = manipState;
@@ -212,7 +219,7 @@ public class KnotHandle : MonoBehaviour
         {
             showHandles = isEditable;
             if (isFirstOrLast) showHandles = false;
-            if (Camera.main != null && Vector3.Distance(Camera.main.transform.position, transform.position) > 10.0f) showHandles = false;
+            if (mainCam != null && Vector3.Distance(mainCam.transform.position, transform.position) > 10.0f) showHandles = false;
 
         }
 

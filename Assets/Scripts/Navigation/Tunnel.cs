@@ -18,6 +18,7 @@ using UnityEditor.Splines.Editor;    // Required for SplineTool
 
 [RequireComponent(typeof(SplineContainer))]
 [ExecuteAlways]
+[CanEditMultipleObjects]
 public class Tunnel : MonoBehaviour
 {
     [Header("General Settings")]
@@ -38,6 +39,7 @@ public class Tunnel : MonoBehaviour
 
 
     [Header("Comfort Settings")]
+    public bool autoApplyComfortSettings = false;
     [Tooltip("0 = No slowdown at corners. 1 = Massive slowdown.")]
     [Range(0f, 1f)]
     public float cornerSlowdown = 0.6f;
@@ -123,19 +125,6 @@ public class Tunnel : MonoBehaviour
         updateHandles();
 
         mainController = MainController.instance;
-
-        KataPortal[] portals = GetComponentsInChildren<KataPortal>();
-        foreach (var p in portals)
-        {
-            if (p.isFirst())
-            {
-                portal = p;
-            }
-            else
-            {
-                portalReverse = p;
-            }
-        }
     }
 
     private void OnEnable()
@@ -145,9 +134,28 @@ public class Tunnel : MonoBehaviour
         UpdateLineRenderer();
         // updateHandles();
 
+        portal = transform.Find("Portal")?.GetComponentInChildren<KataPortal>();
+        portalReverse = transform.Find("Portal Retour")?.GetComponentInChildren<KataPortal>();
+
+        if (portal != null)
+        {
+            portal.isReverse = false;
+            //if (portal.transform.localPosition == Vector3.zero)
+            //{
+            //portal.transform.position = getPositionOnTrack(0.02f);
+            //}
+        }
+
+        if (portalReverse != null)
+        {
+            portalReverse.isReverse = true;
+            //if (portalReverse.transform.localPosition == Vector3.zero)
+            //{
+            //portalReverse.transform.position = getPositionOnTrack(0.98f);
+            //}
+        }
+
     }
-
-
 
     private void OnDisable()
     {
@@ -198,7 +206,6 @@ public class Tunnel : MonoBehaviour
         //Update audio portals
 
 
-
         if (salleDepart == null || salleArrivee == null)
         {
             return;
@@ -234,7 +241,7 @@ public class Tunnel : MonoBehaviour
         if (gameObject.name != n)
             gameObject.name = n;
 
-        if (Application.isPlaying) lineRenderer.material.color = mainController.isInTunnel(this) ? Color.yellow : Color.white;
+        if (Application.isPlaying) lineRenderer.material.color = MainController.instance.isInTunnel(this) ? Color.yellow : Color.white;
 
     }
 
@@ -291,13 +298,17 @@ public class Tunnel : MonoBehaviour
                 return (valid > 0) ? (sum / valid) : 0f;
             }
 
-            float curvature = ComputeSmoothedCurvature(tLocal);
-            if (float.IsNaN(curvature) || float.IsInfinity(curvature))
+            float curvatureMultiplier = 1f;
+            if (autoApplyComfortSettings)
             {
-                curvature = 0f;
+                float curvature = ComputeSmoothedCurvature(tLocal);
+                if (float.IsNaN(curvature) || float.IsInfinity(curvature))
+                {
+                    curvature = 0f;
+                }
+                float curveFactor = Mathf.Clamp01(curvature / curvatureSensitivity);
+                curvatureMultiplier = 1f - (curveFactor * cornerSlowdown);
             }
-            float curveFactor = Mathf.Clamp01(curvature / curvatureSensitivity);
-            float curvatureMultiplier = 1f - (curveFactor * cornerSlowdown);
 
             float manualMultiplier = 1f;
             Vector3 pointPosLocal = splineContainer.EvaluatePosition(tLocal);
@@ -444,6 +455,7 @@ public class Tunnel : MonoBehaviour
 
         foreach (var portal in audioPortals)
         {
+
             Vector3 pos = splineContainer.EvaluatePosition(portal.position);
             Gizmos.color = Color.orange;
 
@@ -458,7 +470,8 @@ public class Tunnel : MonoBehaviour
             Vector3 corner2 = center + (right * size) - (up * size);
             Vector3 corner3 = center - (right * size) - (up * size);
             Vector3 corner4 = center - (right * size) + (up * size);
-            
+
+            if (fNorm == Vector3.zero) fNorm = Vector3.forward; // fallback to avoid zero-length forward
             Gizmos.matrix = Matrix4x4.TRS(center, Quaternion.LookRotation(fNorm, up), new Vector3(.5f, 1.0f, .1f));
             Gizmos.DrawWireSphere(Vector3.zero, size);
             Gizmos.matrix = Matrix4x4.identity;
@@ -876,7 +889,7 @@ public class Tunnel : MonoBehaviour
     {
         AudioStateRefSO so = startSO;
 
-        foreach(var portal in audioPortals)
+        foreach (var portal in audioPortals)
         {
             if (positionAlongTunnel < portal.position)
             {

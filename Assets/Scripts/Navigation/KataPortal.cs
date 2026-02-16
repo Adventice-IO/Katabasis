@@ -15,9 +15,9 @@ public class KataPortal : MonoBehaviour
     VisualEffect vfx;
     Collider col;
 
-    [Range(0f, 1f)]
-    public float positionAlongTunnel = .01f;
-    public float elevation = 0;
+    //[Range(0f, 1f)]
+    //public float positionAlongTunnel = .01f;
+    //public float elevation = 0;
 
     public float focusTime = 3f;
     public float timeBeforeReveal = 3f;
@@ -27,13 +27,16 @@ public class KataPortal : MonoBehaviour
     [Range(0, 1)]
     public float progression = 0f;
 
-    bool showing = false;
+    bool showing = true;
+
+    public bool isReverse = false;
 
     [Header("Audio Settings")]
     public AudioEventRefSO loadingEvent;
     public AudioEventRefSO validateEvent;
     public AudioRTPCRefSO progRTPC;
     public bool debugAudio = false;
+
 
 
     public List<Salle> blacklist = new List<Salle>();
@@ -73,36 +76,49 @@ public class KataPortal : MonoBehaviour
         if (mainController == null || tunnel == null)
         {
             mainController = MainController.instance;
-            if (transform.parent != null) tunnel = transform.parent.GetComponent<Tunnel>();
+            if (transform.parent != null) tunnel = GetComponentInParent<Tunnel>();
         }
 
         if (tunnel == null) return;
 
-        transform.position = tunnel.getPositionOnTrack(positionAlongTunnel) + Vector3.up * elevation;
+        //transform.position = tunnel.getPositionOnTrack(positionAlongTunnel) + Vector3.up * elevation;
 
         bool isInTunnel = mainController.isInTunnel(tunnel);
         bool showInSalle = mainController.isTunnelACurrentOut(tunnel) && mainController.timeSinceArrived > timeBeforeReveal;
-        bool showInTunnel = isInTunnel && (isFirst() ? mainController.trackPosition < .5f : mainController.trackPosition > .5f);
+        bool showInTunnel = isInTunnel && (isReverse ? mainController.trackPosition > .5f : mainController.trackPosition < .5f);
         bool shouldShow = showInSalle || showInTunnel;
 
-        if (showInSalle)
+        if (MainController.instance.editMode)
         {
-            if (mainController.comingFromTunnel == tunnel)
+            shouldShow = true;
+        }
+        else
+        {
+            if (showInSalle)
             {
-                shouldShow = false;
-            }
-            else
-            {
-                foreach (Salle s in blacklist)
+                if (mainController.comingFromTunnel == tunnel)
                 {
-                    if (mainController.hasVisitedSalle(s))
+                    shouldShow = false;
+                }
+                else
+                {
+                    foreach (Salle s in blacklist)
+                    {
+                        if (mainController.hasVisitedSalle(s))
+                        {
+                            shouldShow = false;
+                            break;
+                        }
+                    }
+
+                    //Do not show if the destination salle has already been visited
+                    Salle destSalle = isReverse ? tunnel.salleDepart : tunnel.salleArrivee;
+                    if (mainController.hasVisitedSalle(destSalle))
                     {
                         shouldShow = false;
-                        break;
                     }
                 }
             }
-
         }
 
         if (showing != shouldShow)
@@ -116,16 +132,22 @@ public class KataPortal : MonoBehaviour
 
             float newProg = Mathf.Clamp01(progression + focusProg);
 
+            if (MainController.instance.editMode)
+            {
+                newProg = .2f; //force half progression in edit mode to see the portal effect without having to focus on it
+            }
+
+
             if (newProg != progression)
             {
                 if (newProg > 0 && progression == 0)
                 {
-                    if(debugAudio) Debug.Log("Posting loading event");
+                    if (debugAudio) Debug.Log("Posting loading event");
                     loadingEvent.evt.Post(gameObject);
                 }
                 else if (newProg == 0 && progression > 0)
                 {
-                    if(debugAudio) Debug.Log("Stopping loading event");
+                    if (debugAudio) Debug.Log("Stopping loading event");
                     loadingEvent.evt.Stop(gameObject);
                 }
 
@@ -154,9 +176,9 @@ public class KataPortal : MonoBehaviour
         GetComponent<VisualEffect>().SetFloat("Progression", progression);
     }
 
-    public bool isFirst()
-    {
-        return positionAlongTunnel < .5f;
-    }
+    //public bool isFirst()
+    //{
+    //    return positionAlongTunnel < .5f;
+    //}
 
 }

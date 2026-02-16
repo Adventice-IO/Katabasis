@@ -18,8 +18,6 @@ public class KataTransformer : MonoBehaviour
     Renderer upRenderers;
     Renderer[] snapRenderers;
 
-    bool showHandles = true;
-    float showAnim = 1.0f;
 
     public enum ManipState
     {
@@ -97,23 +95,28 @@ public class KataTransformer : MonoBehaviour
             }
         }
 
-        showAnim = Mathf.Clamp01(showAnim);
+        updateActive();
 
-
-        up.localScale = Vector3.one * showAnim;
-        snap.localScale = Vector3.one * showAnim;
     }
 
 
     public void updateActive()
     {
-        bool editMode = mainController.editMode;
+        if(!Application.isPlaying)
+        {
+            baseT.gameObject.SetActive(true);
+            up.gameObject.SetActive(true);
+            snap.gameObject.SetActive(true);
+            return;
+        }
+
+        bool editMode = MainController.instance.editMode;
         baseT.gameObject.SetActive(editMode);
         up.gameObject.SetActive(editMode);
         snap.gameObject.SetActive(editMode);
 
         Collider collider = GetComponent<Collider>();
-        if(collider != null) collider.enabled = editMode;
+        if (collider != null) collider.enabled = editMode;
     }
     public bool isMoving()
     {

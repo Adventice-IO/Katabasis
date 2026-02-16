@@ -91,6 +91,8 @@ public class MainController : MonoBehaviour
     public Tunnel comingFromTunnel { get; private set; }
     List<Salle> visitedSalles = new List<Salle>();
 
+    Tunnel[] allTunnels;
+
     private void Start()
     {
         Reset();
@@ -105,6 +107,8 @@ public class MainController : MonoBehaviour
             return;
         }
         instance = this;
+
+        allTunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
 
         if (!Application.isPlaying)
         {
@@ -420,7 +424,6 @@ public class MainController : MonoBehaviour
     public List<Tunnel> getAllOutTunnels()
     {
         if (!isInASalle()) return new List<Tunnel>();
-        Tunnel[] allTunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
         List<Tunnel> outTunnels = new List<Tunnel>();
         foreach (Tunnel tunnel in allTunnels)
         {
