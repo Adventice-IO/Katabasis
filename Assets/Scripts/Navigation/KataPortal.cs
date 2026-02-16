@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.VFX;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-[ExecuteInEditMode]
 public class KataPortal : MonoBehaviour
 {
 

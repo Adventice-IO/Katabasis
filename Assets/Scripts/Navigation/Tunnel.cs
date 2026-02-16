@@ -24,8 +24,18 @@ public class Tunnel : MonoBehaviour
     public Salle salleDepart;
     public Salle salleArrivee;
 
+    [Serializable]
+    public struct PortalAudioData
+    {
+        [Range(0f, 1f)]
+        public float position; // t along the spline (0..1)
+        public AudioStateRefSO state; // audio state to trigger when passing through this portal
+    }
+
     [Header("Audio Settings")]
-    public AudioStateRefSO audioSO;
+    public AudioStateRefSO startSO;
+    public List<PortalAudioData> audioPortals = new List<PortalAudioData>();
+
 
     [Header("Comfort Settings")]
     [Tooltip("0 = No slowdown at corners. 1 = Massive slowdown.")]
@@ -184,6 +194,10 @@ public class Tunnel : MonoBehaviour
         // {
         //     updateHandles();
         // }
+
+        //Update audio portals
+
+
 
         if (salleDepart == null || salleArrivee == null)
         {
@@ -425,6 +439,33 @@ public class Tunnel : MonoBehaviour
             heatmapDirty = true;
         }
 #endif
+
+        //Draw audio portals
+
+        foreach (var portal in audioPortals)
+        {
+            Vector3 pos = splineContainer.EvaluatePosition(portal.position);
+            Gizmos.color = Color.orange;
+
+            //draw a plane perpendicular to the tunnel at this position
+            Vector3 forward = splineContainer.EvaluateTangent(portal.position);
+            Vector3 fNorm = forward.normalized;
+            Vector3 up = Vector3.up; // could also use spline normal for more accuracy
+            Vector3 right = Vector3.Cross(up, fNorm).normalized;
+            float size = 5f;
+            Vector3 center = pos;
+            Vector3 corner1 = center + (right * size) + (up * size);
+            Vector3 corner2 = center + (right * size) - (up * size);
+            Vector3 corner3 = center - (right * size) - (up * size);
+            Vector3 corner4 = center - (right * size) + (up * size);
+            
+            Gizmos.matrix = Matrix4x4.TRS(center, Quaternion.LookRotation(fNorm, up), new Vector3(.5f, 1.0f, .1f));
+            Gizmos.DrawWireSphere(Vector3.zero, size);
+            Gizmos.matrix = Matrix4x4.identity;
+
+            //Draw audio icon
+            Gizmos.DrawIcon(pos + Vector3.up * (size + 1.0f), "portal", true);
+        }
 
         if (mainController == null)
         {
@@ -751,7 +792,7 @@ public class Tunnel : MonoBehaviour
             handlesRoot.localRotation = Quaternion.identity;
         }
 
-        while(handlesRoot.childCount > 0)
+        while (handlesRoot.childCount > 0)
         {
             Transform child = handlesRoot.GetChild(0);
             DestroyImmediate(child.gameObject);
@@ -829,5 +870,21 @@ public class Tunnel : MonoBehaviour
     public Salle getOtherSalle(Salle salle)
     {
         return salle == salleDepart ? salleArrivee : salleDepart;
+    }
+
+    public AudioStateRefSO getAudioSOForPosition(float positionAlongTunnel)
+    {
+        AudioStateRefSO so = startSO;
+
+        foreach(var portal in audioPortals)
+        {
+            if (positionAlongTunnel < portal.position)
+            {
+                break;
+            }
+            so = portal.state;
+        }
+
+        return so;
     }
 }

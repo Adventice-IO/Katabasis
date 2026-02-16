@@ -339,6 +339,19 @@ public class MainController : MonoBehaviour
                     isRunning = false;
                     TeleportToSalle(tunnel.salleArrivee);
                 }
+                else
+                {
+                    AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
+                    if (audioSO != null && audioSO.state != null)
+                    {
+                        Debug.Log("Setting tunnel audio state: " + audioSO.state.Name + " at track position: " + trackPosition);
+                        audioSO.state.SetValue();
+                    }
+                    else
+                    {
+                        noAudioSO.state.SetValue();
+                    }
+                }
             }
         }
 
@@ -487,10 +500,11 @@ public class MainController : MonoBehaviour
                 lookAtPos.y = transform.position.y;
                 transform.LookAt(lookAtPos, Vector3.up);
 
-                if (tunnel.audioSO != null && tunnel.audioSO.state != null)
+                AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
+                if (audioSO != null && audioSO.state != null)
                 {
-                    if (debugAudioStates) Debug.Log("Setting tunnel audio state: " + tunnel.audioSO.state.Name);
-                    tunnel.audioSO.state.SetValue();
+                    if (debugAudioStates) Debug.Log("Setting tunnel audio state: " + audioSO.state.Name);
+                    audioSO.state.SetValue();
                 }
                 else
                 {
