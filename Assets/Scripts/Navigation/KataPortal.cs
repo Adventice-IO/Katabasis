@@ -112,11 +112,11 @@ public class KataPortal : MonoBehaviour
                     }
 
                     //Do not show if the destination salle has already been visited
-                    Salle destSalle = isReverse ? tunnel.salleDepart : tunnel.salleArrivee;
-                    if (mainController.hasVisitedSalle(destSalle))
-                    {
-                        shouldShow = false;
-                    }
+                    //Salle destSalle = isReverse ? tunnel.salleDepart : tunnel.salleArrivee;
+                    //if (mainController.hasVisitedSalle(destSalle))
+                    //{
+                    //    shouldShow = false;
+                    //}
                 }
             }
         }
