@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class VRBatchPersister : MonoBehaviour
 {
     // Staged changes grouped per prefab asset path
-    private static readonly Dictionary<string, Dictionary<string, (Vector3 pos, Quaternion rot)>> _stagedByPrefab = new();
+    private static readonly Dictionary<string, Dictionary<string, (Vector3 pos, Quaternion rot, Vector3 scale)>> _stagedByPrefab = new();
 
     static VRBatchPersister()
     {
@@ -32,11 +32,11 @@ public class VRBatchPersister : MonoBehaviour
 
         if (!_stagedByPrefab.TryGetValue(assetPath, out var buffer))
         {
-            buffer = new Dictionary<string, (Vector3 pos, Quaternion rot)>();
+            buffer = new Dictionary<string, (Vector3 pos, Quaternion rot, Vector3 scale)>();
             _stagedByPrefab[assetPath] = buffer;
         }
 
-        buffer[path] = (movedObject.localPosition, movedObject.localRotation);
+        buffer[path] = (movedObject.localPosition, movedObject.localRotation, movedObject.localScale);
         Debug.Log($"<color=yellow>[{assetPath}] Staged:</color> {path} (Buffer count: {buffer.Count})");
     }
 
@@ -53,7 +53,7 @@ public class VRBatchPersister : MonoBehaviour
         foreach (var kvp in _stagedByPrefab)
         {
             string assetPath = kvp.Key;
-            Dictionary<string, (Vector3 pos, Quaternion rot)> changes = kvp.Value;
+            Dictionary<string, (Vector3 pos, Quaternion rot, Vector3 scale)> changes = kvp.Value;
             if (changes.Count == 0) continue;
 
             GameObject prefabRoot = PrefabUtility.LoadPrefabContents(assetPath);
@@ -72,6 +72,7 @@ public class VRBatchPersister : MonoBehaviour
                     {
                         target.localPosition = change.Value.pos;
                         target.localRotation = change.Value.rot;
+                        target.localScale = change.Value.scale;
                     }
                     else
                     {

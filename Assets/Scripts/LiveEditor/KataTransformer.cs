@@ -18,6 +18,8 @@ public class KataTransformer : MonoBehaviour
     Renderer upRenderers;
     Renderer[] snapRenderers;
 
+    public Transform extraSaveTransform;
+
     public bool forceDisabled = false;
 
 
@@ -177,6 +179,11 @@ public class KataTransformer : MonoBehaviour
         {
             Debug.Log("Found batch persister on game object " + batchPersister.gameObject.name + ", staging change.");
             batchPersister.StageChange(transform);
+
+            if(extraSaveTransform != null)
+            {
+                batchPersister.StageChange(extraSaveTransform);
+            }
         }
     }
 
