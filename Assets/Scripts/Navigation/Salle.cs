@@ -1,4 +1,5 @@
 using Framework.Utils.Editor;
+using System.Linq;
 using UnityEngine;
 
 [ExecuteAlways]
@@ -12,6 +13,8 @@ public class Salle : MonoBehaviour
 
     [Header("Audio Settings")]
     public AudioStateRefSO audioSO;
+
+
 
     void Awake()
     {
@@ -28,7 +31,15 @@ public class Salle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        GetComponentsInChildren<Interview>().ToList().ForEach(itw =>
+        {
+            Vector3 lookAt = origin.position;
+            lookAt.y = itw.transform.position.y;
+            itw.transform.localRotation = Quaternion.Euler(0, 90, 0);
+            itw.transform.parent.LookAt(lookAt, Vector3.up);
+        });
     }
+
 
     private void OnDrawGizmos()
     {

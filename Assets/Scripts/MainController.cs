@@ -42,7 +42,6 @@ public class MainController : MonoBehaviour
     public float minSpeed = 0.05f; // Units per second
     public float maxSpeed = 10f; // Units per second
     public float acceleration = 5f; // Units per second squared
-    public float deceleration = 5f; // Units per second squared
 
 
     [Header("Read Only")]
@@ -91,6 +90,8 @@ public class MainController : MonoBehaviour
     public Tunnel comingFromTunnel { get; private set; }
     List<Salle> visitedSalles = new List<Salle>();
 
+    Tunnel[] allTunnels;
+
     private void Start()
     {
         Reset();
@@ -105,6 +106,8 @@ public class MainController : MonoBehaviour
             return;
         }
         instance = this;
+
+        allTunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
 
         if (!Application.isPlaying)
         {
@@ -323,9 +326,9 @@ public class MainController : MonoBehaviour
         if (isRunning)
         {
             float actualTrackPosition = isReversed ? (1f - trackPosition) : trackPosition;
-            float targetSpeedLimit = tunnel.GetTargetSpeedAt(actualTrackPosition, minSpeed, maxSpeed, acceleration, deceleration);
-            float accelRate = (currentSpeed < targetSpeedLimit) ? acceleration : deceleration;
-            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeedLimit, accelRate * deltaTime);
+            float targetSpeed = tunnel.getDesiredSpeedAtPosition(actualTrackPosition);
+            if(targetSpeed == 0) targetSpeed = maxSpeed;
+            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * deltaTime);
 
             if (pathLength > 0)
             {
@@ -338,6 +341,19 @@ public class MainController : MonoBehaviour
                     currentSpeed = 0f;
                     isRunning = false;
                     TeleportToSalle(tunnel.salleArrivee);
+                }
+                else
+                {
+                    AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
+                    if (audioSO != null && audioSO.state != null)
+                    {
+                        Debug.Log("Setting tunnel audio state: " + audioSO.state.Name + " at track position: " + trackPosition);
+                        audioSO.state.SetValue();
+                    }
+                    else
+                    {
+                        noAudioSO.state.SetValue();
+                    }
                 }
             }
         }
@@ -407,7 +423,6 @@ public class MainController : MonoBehaviour
     public List<Tunnel> getAllOutTunnels()
     {
         if (!isInASalle()) return new List<Tunnel>();
-        Tunnel[] allTunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
         List<Tunnel> outTunnels = new List<Tunnel>();
         foreach (Tunnel tunnel in allTunnels)
         {
@@ -487,10 +502,11 @@ public class MainController : MonoBehaviour
                 lookAtPos.y = transform.position.y;
                 transform.LookAt(lookAtPos, Vector3.up);
 
-                if (tunnel.audioSO != null && tunnel.audioSO.state != null)
+                AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
+                if (audioSO != null && audioSO.state != null)
                 {
-                    if (debugAudioStates) Debug.Log("Setting tunnel audio state: " + tunnel.audioSO.state.Name);
-                    tunnel.audioSO.state.SetValue();
+                    if (debugAudioStates) Debug.Log("Setting tunnel audio state: " + audioSO.state.Name);
+                    audioSO.state.SetValue();
                 }
                 else
                 {

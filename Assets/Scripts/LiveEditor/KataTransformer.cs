@@ -18,8 +18,8 @@ public class KataTransformer : MonoBehaviour
     Renderer upRenderers;
     Renderer[] snapRenderers;
 
-    bool showHandles = true;
-    float showAnim = 1.0f;
+    public bool forceDisabled = false;
+
 
     public enum ManipState
     {
@@ -97,23 +97,31 @@ public class KataTransformer : MonoBehaviour
             }
         }
 
-        showAnim = Mathf.Clamp01(showAnim);
+        updateActive();
 
-
-        up.localScale = Vector3.one * showAnim;
-        snap.localScale = Vector3.one * showAnim;
     }
 
 
     public void updateActive()
     {
-        bool editMode = mainController.editMode;
-        baseT.gameObject.SetActive(editMode);
-        up.gameObject.SetActive(editMode);
-        snap.gameObject.SetActive(editMode);
+        if (!Application.isPlaying)
+        {
+            baseT.gameObject.SetActive(true);
+            up.gameObject.SetActive(true);
+            snap.gameObject.SetActive(true);
+            return;
+        }
+
+
+
+        bool editMode = MainController.instance.editMode;
+        bool finalActive = editMode && !forceDisabled;
+        baseT.gameObject.SetActive(finalActive);
+        up.gameObject.SetActive(finalActive);
+        snap.gameObject.SetActive(finalActive);
 
         Collider collider = GetComponent<Collider>();
-        if(collider != null) collider.enabled = editMode;
+        if (collider != null) collider.enabled = finalActive;
     }
     public bool isMoving()
     {
@@ -167,6 +175,7 @@ public class KataTransformer : MonoBehaviour
         VRBatchPersister batchPersister = GetComponentInParent<VRBatchPersister>();
         if (batchPersister != null)
         {
+            Debug.Log("Found batch persister on game object " + batchPersister.gameObject.name + ", staging change.");
             batchPersister.StageChange(transform);
         }
     }
