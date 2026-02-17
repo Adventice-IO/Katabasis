@@ -197,7 +197,7 @@ public class MenuController : MonoBehaviour
         var tunnel = tunnelsList.itemsSource[index] as Tunnel;
         mainController.salle = null;
         mainController.tunnel = tunnel;
-        mainController.ResetPosition();
+        mainController.ResetPosition(true);
 
         tunnelsList.SetSelectionWithoutNotify(new List<int> { });
     }

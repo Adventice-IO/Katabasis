@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
-using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
-using System.Runtime.CompilerServices;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
-using Unity.Mathematics;
+using TMPro;
+
 
 
 
@@ -39,11 +37,13 @@ public class MainController : MonoBehaviour
 
 
     [Header("Physics Settings")]
-    public float maxAcceleration = 5f; // Units per second squared
+    public float maxSpeed = 50f; // km/h, for editing
+    public float maxAcceleration = 5f; // km/h/s
 
 
     [Header("Read Only")]
     [SerializeField] private float currentSpeed = 0f;
+    [SerializeField] private float targetSpeed = 0f;
     [SerializeField] private bool isRunning = false;
     [SerializeField] private bool isReversed = false;
     private SplineContainer splineContainer;
@@ -78,6 +78,7 @@ public class MainController : MonoBehaviour
     float timeAtSpawnMode;
 
     public GameObject lockInfoPlane;
+    public GameObject speedInfo;
 
     float timeAtArrived; //in a salle or tunnel
     public float timeSinceArrived
@@ -257,6 +258,19 @@ public class MainController : MonoBehaviour
             lockInfoPlane.SetActive(!freeMotion);
         }
 
+        if (speedInfo != null)
+        {
+            speedInfo.SetActive(isInATunnel() && !freeMotion);
+            if (isInATunnel() && !freeMotion)
+            {
+                TextMeshPro textMesh = speedInfo.GetComponent<TextMeshPro>();
+                if (textMesh != null)
+                {
+                    textMesh.text = Mathf.RoundToInt(currentSpeed) + " km/h - Target : " + Mathf.RoundToInt(targetSpeed) + " km/h";
+                }
+            }
+        }
+
 
         if (Application.isPlaying)
         {
@@ -352,12 +366,13 @@ public class MainController : MonoBehaviour
         if (isRunning)
         {
             float actualTrackPosition = isReversed ? (1f - trackPosition) : trackPosition;
-            float targetSpeed = tunnel.getDesiredSpeedAtPosition(actualTrackPosition, isReversed);
+            targetSpeed = Mathf.Min(tunnel.getDesiredSpeedAtPosition(actualTrackPosition, isReversed), maxSpeed);
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, maxAcceleration * deltaTime);
 
             if (pathLength > 0)
             {
-                float step = (currentSpeed * deltaTime) / pathLength;
+                //currentSpeed in km/h
+                float step = (currentSpeed * 1000f / 3600f) * deltaTime / pathLength; // Convert speed to m/s and then to track position
                 trackPosition += step;
 
                 if (trackPosition >= 1f)
@@ -381,6 +396,10 @@ public class MainController : MonoBehaviour
                     }
                 }
             }
+        }
+        else
+        {
+            targetSpeed = 0f;
         }
 
         if (splineContainer != null)
@@ -499,7 +518,7 @@ public class MainController : MonoBehaviour
         TeleportToSalle(initialSalle);
         ResetPosition();
     }
-    public void ResetPosition()
+    public void ResetPosition(bool resetRotation = false)
     {
         if (isInASalle())
         {
@@ -525,7 +544,7 @@ public class MainController : MonoBehaviour
                 transform.position = tunnel.getPositionOnTrack(0);
                 Vector3 lookAtPos = tunnel.getPositionOnTrack(0.01f);
                 lookAtPos.y = transform.position.y;
-                transform.LookAt(lookAtPos, Vector3.up);
+                if(resetRotation) transform.LookAt(lookAtPos, Vector3.up);
 
                 AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
                 if (audioSO != null && audioSO.state != null)

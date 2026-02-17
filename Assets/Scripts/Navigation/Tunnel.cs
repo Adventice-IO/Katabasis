@@ -28,7 +28,6 @@ public class Tunnel : MonoBehaviour
     public Salle salleArrivee;
 
     [Header("Navigation Settings")]
-    public float defaultSpeed = 3f; // base speed in m/s
     CheckpointContainer checkpointContainer;
 
     [Serializable]
@@ -75,6 +74,8 @@ public class Tunnel : MonoBehaviour
             return splineContainer.Spline;
         }
     }
+
+    AnimationCurve speedCurve = AnimationCurve.EaseInOut(0, 0.01f, 1, 1);
 
 
 
@@ -218,35 +219,47 @@ public class Tunnel : MonoBehaviour
     public float getDesiredSpeedAtPosition(float t, bool reverse)
     {
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
-        if (splineContainer == null || splineContainer.Spline == null) return defaultSpeed;
+        if (splineContainer == null || splineContainer.Spline == null) return MainController.instance.maxSpeed;
 
 
         Tuple<SpeedCheckpoint, SpeedCheckpoint> checkpoints = getSpeedCheckpointsAtPosition(t, reverse);
-        float initSpeed = defaultSpeed;
-        float targetSpeed = defaultSpeed;
+
+        if (checkpoints.Item1 == null && checkpoints.Item2 == null)
+        {
+            bool isNearEnd = reverse ? t < 0.2f : t > 0.8f;
+
+            return isNearEnd ? 0.001f : MainController.instance.maxSpeed;
+        }
+
+
+        float initSpeed = 0;
+        float initPos = 0;
+        float targetSpeed = 0;
+        float targetPos = 1;
 
         if (checkpoints != null)
         {
             if (checkpoints.Item1 != null)
             {
                 initSpeed = checkpoints.Item1.speed;
+                initPos = checkpoints.Item1.pos;
             }
             if (checkpoints.Item2 != null)
             {
                 targetSpeed = checkpoints.Item2.speed;
+                targetPos = checkpoints.Item2.pos;
             }
         }
 
-        if (checkpoints.Item1 != null && checkpoints.Item2 != null)
+        float segmentLength = targetPos - initPos;
+        if (segmentLength > 0.0001f)
         {
-            float segmentLength = checkpoints.Item2.pos - checkpoints.Item1.pos;
-            if (segmentLength > 0.0001f)
-            {
-                float tSegment = (t - checkpoints.Item1.pos) / segmentLength;
-                return Mathf.Lerp(initSpeed, targetSpeed, tSegment);
-            }
+            float tSegment = (t - initPos) / segmentLength;
+            float tSpeed = initSpeed + speedCurve.Evaluate(tSegment) * (targetSpeed - initSpeed);
+            return tSpeed;
         }
-        return defaultSpeed;
+
+        return MainController.instance.maxSpeed;
     }
 
     Tuple<SpeedCheckpoint, SpeedCheckpoint> getSpeedCheckpointsAtPosition(float trackPosition, bool reverse)
@@ -255,6 +268,7 @@ public class Tunnel : MonoBehaviour
         if (splineContainer == null || splineContainer.Spline == null) return null;
         SpeedCheckpoint before = null;
         SpeedCheckpoint after = null;
+
         foreach (var checkpoint in checkpointContainer.speedCheckpoints)
         {
             if (checkpoint.pos <= trackPosition)
@@ -266,6 +280,7 @@ public class Tunnel : MonoBehaviour
                 after = checkpoint;
             }
         }
+
         if (reverse) return Tuple.Create(after, before);
         return Tuple.Create(before, after);
     }
@@ -535,7 +550,7 @@ public class Tunnel : MonoBehaviour
 
     public SpeedCheckpoint AddSpeedCheckpoint(float positionAlongTunnel)
     {
-        SpeedCheckpoint checkpoint = new SpeedCheckpoint { pos = positionAlongTunnel, speed = defaultSpeed };
+        SpeedCheckpoint checkpoint = new SpeedCheckpoint { pos = positionAlongTunnel, speed = 10 };
         checkpointContainer.speedCheckpoints.Add(checkpoint);
         checkpointContainer.speedCheckpoints = checkpointContainer.speedCheckpoints.OrderBy(c => c.pos).ToList();
 

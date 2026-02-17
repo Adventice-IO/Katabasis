@@ -26,6 +26,9 @@ public class CheckpointHandle : MonoBehaviour
 
     float initSpeed;
 
+    Gradient gradient = new Gradient();
+    Color color;
+
     public void init()
     {
 
@@ -33,10 +36,17 @@ public class CheckpointHandle : MonoBehaviour
         if (grab != null) grab.splineContainer = tunnel.splineContainer;
 
         initSpeed = checkpoint.speed;
+
     }
 
     public void Start()
     {
+        gradient.colorKeys = new GradientColorKey[] {
+            new GradientColorKey(Color.cyan, 0f),
+            new GradientColorKey(Color.green, .3f),
+            new GradientColorKey(Color.orange, .6f),
+            new GradientColorKey(Color.red, 1f)
+        };
 
         renderers = GetComponentsInChildren<Renderer>();
 
@@ -56,6 +66,7 @@ public class CheckpointHandle : MonoBehaviour
             label.text = $"Speed : {checkpoint.speed}";
 
             checkpoint.speed = speed;
+            setColorFromSpeed();
         });
 
         slider.RegisterCallback<BlurEvent>(evt =>
@@ -69,7 +80,9 @@ public class CheckpointHandle : MonoBehaviour
         if (checkpoint != null)
         {
             slider.value = checkpoint.pos;
-            label.text = $"Speed : {checkpoint.speed}";
+            label.text = $"Speed : {checkpoint.speed} km/h";
+
+            setColorFromSpeed();
         }
     }
 
@@ -130,6 +143,12 @@ public class CheckpointHandle : MonoBehaviour
         }
     }
 
+    void setColorFromSpeed()
+    {
+        color = gradient.Evaluate(checkpoint.speed / MainController.instance.maxSpeed);
+        setColor(color);
+    }
+
     public void setHover()
     {
         Debug.Log("CheckpointHandle setHover");
@@ -141,7 +160,7 @@ public class CheckpointHandle : MonoBehaviour
     {
         Debug.Log("CheckpointHandle setNone");
         isHover = false;
-        if (!isGrabbing) setColor(Color.white);
+        if (!isGrabbing) setColorFromSpeed();
     }
 
     public void setGrabbing()
@@ -155,7 +174,7 @@ public class CheckpointHandle : MonoBehaviour
     {
         Debug.Log("CheckpointHandle clearGrabbing");
         isGrabbing = false;
-        if (!isHover) setColor(Color.white);
+        if (!isHover) setColorFromSpeed();
 
 
         if (tunnel != null)

@@ -42,6 +42,8 @@ public class PointCloudBlock : MonoBehaviour
 
         float reveal = Mathf.Min(fadeInVal, fadeOutVal);
 
+        if (render == null || block == null) return;
+
         render.GetPropertyBlock(block);
         block.SetFloat("_Reveal", reveal);
         block.SetFloat("_Alpha", profile._Alpha);

@@ -3464,8 +3464,10 @@ MonoBehaviour:
   tunnel: {fileID: 0}
   animateRotation: 0
   trackPosition: 0
+  maxSpeed: 50
   maxAcceleration: 5
   currentSpeed: 0
+  targetSpeed: 0
   isRunning: 0
   isReversed: 0
   editMode: 1
@@ -3599,6 +3601,7 @@ MonoBehaviour:
   removedInSpawnMode: 0
   removedCheckpoint: 0
   lockInfoPlane: {fileID: 7325477772855753073}
+  speedInfo: {fileID: 0}
 --- !u!114 &3732688429945291836 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4238984354899526239, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
