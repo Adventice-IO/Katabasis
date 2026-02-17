@@ -1,4 +1,4 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Label text="Label" name="label" style="-unity-text-align: upper-center; color: rgb(255, 255, 255);"/>
-    <ui:Slider label="" value="42" high-value="100" name="slider" style="color: rgb(255, 255, 255); flex-direction: row;"/>
+    <ui:Label text="Speed : X km/h" name="label" style="-unity-text-align: upper-center; color: rgb(255, 255, 255);"/>
+    <ui:Slider label="" value="42" high-value="50" name="slider" low-value="1" style="color: rgb(255, 255, 255); flex-direction: row;"/>
 </ui:UXML>

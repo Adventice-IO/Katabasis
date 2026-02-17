@@ -67,7 +67,6 @@ public class CheckpointHandle : MonoBehaviour
             if (tunnel == null) return;
             float speed = evt.newValue;
             checkpoint.speed = speed;
-            label.text = $"Speed : {Mathf.RoundToInt(checkpoint.speed)} km/h";
 
             setColorFromSpeed();
         });
@@ -83,7 +82,6 @@ public class CheckpointHandle : MonoBehaviour
         if (checkpoint != null)
         {
             slider.value = checkpoint.speed;
-            label.text = $"Speed : {Mathf.RoundToInt(checkpoint.speed)} km/h";
 
             setColorFromSpeed();
         }
@@ -133,7 +131,7 @@ public class CheckpointHandle : MonoBehaviour
             transform.position = tunnel.getPositionOnTrack(checkpoint.pos);
         }
 
-        label.text = $"Speed : {checkpoint.speed}";
+        label.text = $"Speed : {Mathf.RoundToInt(checkpoint.speed)} km/h";
     }
 
 
