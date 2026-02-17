@@ -183,19 +183,20 @@ public class MainController : MonoBehaviour
                 spawnCheckPointAction.action.Enable();
                 spawnCheckPointAction.action.canceled += ctx =>
                 {
-                    if (removedCheckpoint) return;
-                    Tunnel tTunnel = tunnel;
-                    Debug.Log("Adding speed checkpoint at current position");
-                    if (tTunnel == null)
+                    if (!removedCheckpoint)
                     {
-                        tTunnel = getClosestTunnel();
+                        Tunnel tTunnel = tunnel;
+                        Debug.Log("Adding speed checkpoint at current position");
+                        if (tTunnel == null)
+                        {
+                            tTunnel = getClosestTunnel();
+                        }
+                        if (tTunnel != null)
+                        {
+                            float pos = tTunnel.getClosestTrackPosition(transform.position);
+                            RuntimeUndoManager.addCheckpoint(tTunnel, pos);
+                        }
                     }
-                    if (tTunnel != null)
-                    {
-                        float pos = tTunnel.getClosestTrackPosition(transform.position);
-                        RuntimeUndoManager.addCheckpoint(tTunnel, pos);
-                    }
-
                     removedCheckpoint = false;
 
                 };
@@ -544,7 +545,7 @@ public class MainController : MonoBehaviour
                 transform.position = tunnel.getPositionOnTrack(0);
                 Vector3 lookAtPos = tunnel.getPositionOnTrack(0.01f);
                 lookAtPos.y = transform.position.y;
-                if(resetRotation) transform.LookAt(lookAtPos, Vector3.up);
+                if (resetRotation) transform.LookAt(lookAtPos, Vector3.up);
 
                 AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
                 if (audioSO != null && audioSO.state != null)
