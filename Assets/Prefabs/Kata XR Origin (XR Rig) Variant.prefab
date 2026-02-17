@@ -259,7 +259,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: maxSpeed
-      value: 30
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: noAudioSO
@@ -286,6 +286,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: spawnCheckPointAction.m_Action.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: snapGroundAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Id
       value: e9c8627e-9b1d-49e1-b210-1c804e5f7fa3
       objectReference: {fileID: 0}
@@ -296,6 +300,18 @@ PrefabInstance:
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: snapGroundAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Action
       value: Snap Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: spawnCheckPointAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Id
+      value: 50c03d39-6520-4a5f-8806-1b4881760ee1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: spawnCheckPointAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <XRController>{RightHand}/gripButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: spawnCheckPointAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Spawn Check Point
       objectReference: {fileID: 0}
     - target: {fileID: 5831623572012434036, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_Enabled
