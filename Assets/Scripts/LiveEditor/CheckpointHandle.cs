@@ -59,13 +59,16 @@ public class CheckpointHandle : MonoBehaviour
         slider = doc.rootVisualElement.Q<Slider>("slider");
         label = doc.rootVisualElement.Q<Label>("label");
 
+        slider.highValue = MainController.instance.maxSpeed;
+        slider.lowValue = 1;
+
         slider.RegisterValueChangedCallback(evt =>
         {
             if (tunnel == null) return;
             float speed = evt.newValue;
-            label.text = $"Speed : {checkpoint.speed}";
-
             checkpoint.speed = speed;
+            label.text = $"Speed : {Mathf.RoundToInt(checkpoint.speed)} km/h";
+
             setColorFromSpeed();
         });
 
@@ -79,8 +82,8 @@ public class CheckpointHandle : MonoBehaviour
 
         if (checkpoint != null)
         {
-            slider.value = checkpoint.pos;
-            label.text = $"Speed : {checkpoint.speed} km/h";
+            slider.value = checkpoint.speed;
+            label.text = $"Speed : {Mathf.RoundToInt(checkpoint.speed)} km/h";
 
             setColorFromSpeed();
         }
