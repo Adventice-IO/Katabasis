@@ -213,6 +213,22 @@ public class Tunnel : MonoBehaviour
 
         if (Application.isPlaying) lineRenderer.material.color = MainController.instance.isInTunnel(this) ? Color.yellow : Color.white;
 
+
+        if (portal != null && salleDepart != null)
+        {
+            Vector3 departLookAt = salleDepart.origin.position;
+            departLookAt.y = portal.transform.parent.position.y;
+            portal.transform.rotation = Quaternion.identity;
+            portal.transform.parent.LookAt(departLookAt, Vector3.up);
+        }
+
+        if (portalReverse != null && salleArrivee != null)
+        {
+            Vector3 arriveeLookAt = salleArrivee.origin.position;
+            arriveeLookAt.y = portalReverse.transform.parent.position.y;
+            portalReverse.transform.rotation = Quaternion.identity;
+            portalReverse.transform.parent.LookAt(arriveeLookAt, Vector3.up);
+        }
     }
 
 

@@ -38,6 +38,8 @@ public class Salle : MonoBehaviour
             itw.transform.localRotation = Quaternion.Euler(0, 90, 0);
             itw.transform.parent.LookAt(lookAt, Vector3.up);
         });
+
+       
     }
 
 

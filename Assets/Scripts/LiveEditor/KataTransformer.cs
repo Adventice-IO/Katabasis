@@ -20,6 +20,8 @@ public class KataTransformer : MonoBehaviour
 
     public Transform extraSaveTransform;
 
+    public GameObject extraEditObject; 
+
     public bool forceDisabled = false;
 
 
@@ -111,6 +113,10 @@ public class KataTransformer : MonoBehaviour
             baseT.gameObject.SetActive(true);
             up.gameObject.SetActive(true);
             snap.gameObject.SetActive(true);
+            if(extraEditObject != null)
+            {
+                extraEditObject.SetActive(true);
+            }
             return;
         }
 
@@ -121,6 +127,10 @@ public class KataTransformer : MonoBehaviour
         baseT.gameObject.SetActive(finalActive);
         up.gameObject.SetActive(finalActive);
         snap.gameObject.SetActive(finalActive);
+        if(extraEditObject != null)
+        {
+            extraEditObject.SetActive(finalActive);
+        }
 
         Collider collider = GetComponent<Collider>();
         if (collider != null) collider.enabled = finalActive;
