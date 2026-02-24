@@ -37,6 +37,7 @@ public class MainController : MonoBehaviour
 
 
     [Header("Physics Settings")]
+    public float baseSpeed = 10f; // km/h, for reference
     public float maxSpeed = 50f; // km/h, for editing
     public float maxAcceleration = 5f; // km/h/s
 
@@ -44,7 +45,7 @@ public class MainController : MonoBehaviour
     [Header("Read Only")]
     [SerializeField] private float currentSpeed = 0f;
     [SerializeField] private float targetSpeed = 0f;
-    [SerializeField] private bool isRunning = false;
+    [SerializeField] public bool isRunning = false;
     [SerializeField] private bool isReversed = false;
     private SplineContainer splineContainer;
     private float pathLength;
@@ -59,6 +60,8 @@ public class MainController : MonoBehaviour
     bool _lastEditMode = true;
 
     public float editMaxSpeed = 5f;
+    float editSmoothSpeed = 0f;
+
     public bool freeMotion;
     public ContinuousMoveProvider moveProvider;
     [SerializeField] private InputActionProperty verticalMoveAction;
@@ -73,9 +76,13 @@ public class MainController : MonoBehaviour
     public bool removedInSpawnMode;
     public bool removedCheckpoint;
 
+
     bool verticalMove;
 
     float timeAtSpawnMode;
+
+    float timeAtToggleFreeMotion;
+    bool freeMotionSwitched;
 
     public GameObject lockInfoPlane;
     public GameObject speedInfo;
@@ -126,12 +133,17 @@ public class MainController : MonoBehaviour
                 toggleFreeMoveAction.action.Enable();
                 toggleFreeMoveAction.action.performed += ctx =>
                 {
-                    bool newFreeMotion = !freeMotion;
-                    if (!newFreeMotion && isInATunnel())
+                    freeMotionSwitched = false;
+                    timeAtToggleFreeMotion = Time.time;
+                };
+
+                toggleFreeMoveAction.action.canceled += ctx =>
+                {
+                    if (!freeMotionSwitched)
                     {
-                        trackPosition = tunnel.getClosestTrackPosition(transform.position);
+                        if (isRunning) Pause();
+                        else Play();
                     }
-                    freeMotion = newFreeMotion;
                 };
             }
 
@@ -321,6 +333,16 @@ public class MainController : MonoBehaviour
                         removedInSpawnMode = false;
                     }
                 }
+
+                bool freeMotionPressed = toggleFreeMoveAction.action.IsPressed();
+                if (freeMotionPressed && !freeMotionSwitched)
+                {
+                    if (Time.time - timeAtToggleFreeMotion > 0.6f)
+                    {
+                        freeMotion = !freeMotion;
+                        freeMotionSwitched = true;
+                    }
+                }
             }
         }
     }
@@ -340,7 +362,11 @@ public class MainController : MonoBehaviour
             }
             else if (!freeMotion && isInATunnel())
             {
-                trackPosition += joystickInput.y * editMaxSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f);
+                editSmoothSpeed = Mathf.MoveTowards(editSmoothSpeed, joystickInput.y * editMaxSpeed, maxAcceleration * deltaTime);
+                if (editSmoothSpeed != 0f)
+                {
+                    trackPosition += editSmoothSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f);
+                }
             }
         }
 

@@ -235,7 +235,7 @@ public class Tunnel : MonoBehaviour
     public float getDesiredSpeedAtPosition(float t, bool reverse)
     {
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
-        if (splineContainer == null || splineContainer.Spline == null) return MainController.instance.maxSpeed;
+        if (splineContainer == null || splineContainer.Spline == null) return MainController.instance.baseSpeed;
 
 
         Tuple<SpeedCheckpoint, SpeedCheckpoint> checkpoints = getSpeedCheckpointsAtPosition(t, reverse);
@@ -244,13 +244,13 @@ public class Tunnel : MonoBehaviour
         {
             bool isNearEnd = reverse ? t < 0.2f : t > 0.8f;
 
-            return isNearEnd ? 0.001f : MainController.instance.maxSpeed;
+            return isNearEnd ? 0.001f : MainController.instance.baseSpeed;
         }
 
 
         float initSpeed = 0;
         float initPos = 0;
-        float targetSpeed = 0;
+        float targetSpeed = 0.001f;
         float targetPos = 1;
 
         if (checkpoints != null)
@@ -260,6 +260,11 @@ public class Tunnel : MonoBehaviour
                 initSpeed = checkpoints.Item1.speed;
                 initPos = checkpoints.Item1.pos;
             }
+            else if(checkpoints.Item2 != null)
+            {
+                initSpeed = checkpoints.Item2.speed;
+            }
+
             if (checkpoints.Item2 != null)
             {
                 targetSpeed = checkpoints.Item2.speed;
