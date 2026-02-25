@@ -148,7 +148,7 @@ public class KnotHandle : MonoBehaviour
 
         if (manipPlane != null) manipPlane.localScale = Vector3.one * maxDist * 2 / 10;
 
-        if(mainCam == null)
+        if (mainCam == null)
         {
             mainCam = Camera.main;
         }
@@ -202,6 +202,7 @@ public class KnotHandle : MonoBehaviour
         if (MainController.instance != null)
         {
             if (MainController.instance.isInATunnel() && !MainController.instance.isInTunnel(parentTunnel)) isEditable = false;
+            if (MainController.instance.isRunning)  isEditable = false;
             knot.gameObject.SetActive(isEditable);
             upKnot.gameObject.SetActive(isEditable);
             prevHandle.gameObject.SetActive(isEditable && knotIndex > 0);

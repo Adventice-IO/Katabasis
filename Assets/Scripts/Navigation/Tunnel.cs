@@ -75,7 +75,6 @@ public class Tunnel : MonoBehaviour
         }
     }
 
-    AnimationCurve speedCurve = AnimationCurve.EaseInOut(0, 0.01f, 1, 1);
 
 
 
@@ -260,7 +259,7 @@ public class Tunnel : MonoBehaviour
                 initSpeed = checkpoints.Item1.speed;
                 initPos = checkpoints.Item1.pos;
             }
-            else if(checkpoints.Item2 != null)
+            else if (checkpoints.Item2 != null)
             {
                 initSpeed = checkpoints.Item2.speed;
             }
@@ -276,11 +275,11 @@ public class Tunnel : MonoBehaviour
         if (segmentLength > 0.0001f)
         {
             float tSegment = (t - initPos) / segmentLength;
-            float tSpeed = initSpeed + speedCurve.Evaluate(tSegment) * (targetSpeed - initSpeed);
-            return tSpeed;
+            float tSpeed = initSpeed + Mathf.Lerp(initSpeed, targetSpeed, tSegment);//MainController.instance.speedCurve.Evaluate(tSegment));
+            return Math.Max(tSpeed, 0.01f);
         }
 
-        return MainController.instance.maxSpeed;
+        return initSpeed;
     }
 
     Tuple<SpeedCheckpoint, SpeedCheckpoint> getSpeedCheckpointsAtPosition(float trackPosition, bool reverse)

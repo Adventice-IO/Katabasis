@@ -40,7 +40,10 @@ public class MainController : MonoBehaviour
     public float baseSpeed = 10f; // km/h, for reference
     public float maxSpeed = 50f; // km/h, for editing
     public float maxAcceleration = 5f; // km/h/s
+    public float playFullSpeedTime = 2f; // seconds after which we ignore acceleration and just set the speed to the target speed
+    float timeAtPlay;
 
+    public AnimationCurve speedCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
     [Header("Read Only")]
     [SerializeField] private float currentSpeed = 0f;
@@ -362,10 +365,14 @@ public class MainController : MonoBehaviour
             }
             else if (!freeMotion && isInATunnel())
             {
-                editSmoothSpeed = Mathf.MoveTowards(editSmoothSpeed, joystickInput.y * editMaxSpeed, maxAcceleration * deltaTime);
-                if (editSmoothSpeed != 0f)
+                if(joystickInput.y != 0f)
                 {
-                    trackPosition += editSmoothSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f);
+                    Pause();
+                }
+                editSmoothSpeed = Mathf.MoveTowards(editSmoothSpeed, joystickInput.y * editMaxSpeed, maxAcceleration * deltaTime);
+                if (editSmoothSpeed != 0f && !isRunning)
+                {
+                    setPosition(trackPosition + editSmoothSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f)) ;
                 }
             }
         }
@@ -396,11 +403,18 @@ public class MainController : MonoBehaviour
             targetSpeed = Mathf.Min(tunnel.getDesiredSpeedAtPosition(actualTrackPosition, isReversed), maxSpeed);
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, maxAcceleration * deltaTime);
 
+            float multipliedSpeed = currentSpeed;
+            if (Time.time - timeAtPlay < playFullSpeedTime)
+            {
+                float speedFactor = speedCurve.Evaluate((Time.time - timeAtPlay) / playFullSpeedTime);
+                multipliedSpeed *= speedFactor;
+            }
+
             if (pathLength > 0)
             {
                 //currentSpeed in km/h
-                float step = (currentSpeed * 1000f / 3600f) * deltaTime / pathLength; // Convert speed to m/s and then to track position
-                trackPosition += step;
+                float step = (multipliedSpeed * 1000f / 3600f) * deltaTime / pathLength; // Convert speed to m/s and then to track position
+                setPosition(trackPosition + step);
 
                 if (trackPosition >= 1f)
                 {
@@ -519,8 +533,10 @@ public class MainController : MonoBehaviour
 
     public void Play()
     {
+        timeAtPlay = Time.time;
         freeMotion = false;
         isRunning = true;
+        currentSpeed = 0;
         // Optional: If we are at the end, restart
         if (trackPosition >= 0.99f)
         {
@@ -532,6 +548,7 @@ public class MainController : MonoBehaviour
     public void Pause()
     {
         isRunning = false;
+        currentSpeed = 0f;
     }
 
     public void setPosition(float position)
