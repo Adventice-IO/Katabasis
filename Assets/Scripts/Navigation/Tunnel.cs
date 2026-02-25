@@ -695,4 +695,50 @@ public class Tunnel : MonoBehaviour
             Gizmos.DrawSphere(splineContainer.EvaluatePosition(checkpoint.pos), 1.2f);
         }
     }
+
+    public float getPreviousSpeedCheckpointPosition(float trackPosition, bool isReversed)
+    {
+        float closest = -1f;
+        foreach (var checkpoint in checkpointContainer.speedCheckpoints)
+        {
+            if (isReversed)
+            {
+                if (checkpoint.pos < trackPosition && checkpoint.pos > closest)
+                {
+                    closest = checkpoint.pos;
+                }
+            }
+            else
+            {
+                if (checkpoint.pos > trackPosition && checkpoint.pos < closest || closest < 0)
+                {
+                    closest = checkpoint.pos;
+                }
+            }
+        }
+        return closest;
+    }
+
+    public float getNextSpeedCheckpointPosition(float trackPosition, bool isReversed)
+    {
+        float closest = float.MaxValue;
+        foreach (var checkpoint in checkpointContainer.speedCheckpoints)
+        {
+            if (isReversed)
+            {
+                if (checkpoint.pos > trackPosition && checkpoint.pos < closest)
+                {
+                    closest = checkpoint.pos;
+                }
+            }
+            else
+            {
+                if (checkpoint.pos < trackPosition && checkpoint.pos > closest || closest == float.MaxValue)
+                {
+                    closest = checkpoint.pos;
+                }
+            }
+        }
+        return closest == float.MaxValue ? -1f : closest;
+    }
 }

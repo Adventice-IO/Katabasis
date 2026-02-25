@@ -6,6 +6,8 @@ using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using TMPro;
+using Unity.XR.CompositionLayers.UIInteraction;
+
 
 
 
@@ -37,7 +39,7 @@ public class MainController : MonoBehaviour
 
 
     [Header("Physics Settings")]
-    public float baseSpeed = 10f; // km/h, for reference
+    public float baseSpeed = 4f; // km/h, for reference
     public float maxSpeed = 50f; // km/h, for editing
     public float maxAcceleration = 5f; // km/h/s
     public float playFullSpeedTime = 2f; // seconds after which we ignore acceleration and just set the speed to the target speed
@@ -74,6 +76,8 @@ public class MainController : MonoBehaviour
     [SerializeField] private InputActionProperty cancelAction;
     [SerializeField] private InputActionProperty snapGroundAction;
     [SerializeField] private InputActionProperty spawnCheckPointAction;
+    [SerializeField] private InputActionProperty teleportForwardAction;
+    [SerializeField] private InputActionProperty teleportBackwardAction; //XRI SnapTurn
 
     bool spawningMode;
     public bool removedInSpawnMode;
@@ -89,6 +93,7 @@ public class MainController : MonoBehaviour
 
     public GameObject lockInfoPlane;
     public GameObject speedInfo;
+    public GameObject teleportationLoco;
 
     float timeAtArrived; //in a salle or tunnel
     public float timeSinceArrived
@@ -214,6 +219,39 @@ public class MainController : MonoBehaviour
                     }
                     removedCheckpoint = false;
 
+                };
+            }
+
+            if(teleportForwardAction.action != null)
+            {
+                teleportForwardAction.action.Enable();
+                teleportForwardAction.action.performed += ctx =>
+                {
+                    if (!freeMotion && isInATunnel())
+                    {
+                        float nextSpeedPos = tunnel.getNextSpeedCheckpointPosition(trackPosition, isReversed);
+                        if (nextSpeedPos >= 0)                        
+                        {
+                            setPosition(nextSpeedPos);
+                        }
+                    }
+                };
+            }
+
+            if (teleportBackwardAction.action != null)
+            {
+                teleportBackwardAction.action.Enable();
+                //XRI Snap Turn, check that it's joystick down
+                teleportBackwardAction.action.performed += ctx =>
+                {
+                    if (!freeMotion && isInATunnel())
+                    {
+                        float prevSpeedPos = tunnel.getPreviousSpeedCheckpointPosition(trackPosition, isReversed);
+                        if (prevSpeedPos >= 0)
+                        {
+                            setPosition(prevSpeedPos);
+                        }
+                    }
                 };
             }
         }
@@ -353,6 +391,7 @@ public class MainController : MonoBehaviour
     private void Tick(float deltaTime)
     {
         moveProvider.enabled = freeMotion && !verticalMove;
+        teleportationLoco.SetActive(freeMotion);
 
         if (Application.isPlaying)
         {

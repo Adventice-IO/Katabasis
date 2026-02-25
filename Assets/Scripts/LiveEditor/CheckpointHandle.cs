@@ -61,6 +61,7 @@ public class CheckpointHandle : MonoBehaviour
 
         slider.highValue = MainController.instance.maxSpeed;
         slider.lowValue = 1;
+        slider.value = checkpoint.speed;
 
         slider.RegisterValueChangedCallback(evt =>
         {
