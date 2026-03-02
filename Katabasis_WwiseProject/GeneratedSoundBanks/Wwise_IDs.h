@@ -17,6 +17,7 @@ namespace AK
         static const AkUniqueID SFX_PORTAL_ACTIVATE = 4131803333U;
         static const AkUniqueID SFX_PORTAL_VALIDATE = 1155651648U;
         static const AkUniqueID SFX_TONE_TEST = 3501277368U;
+        static const AkUniqueID VOX_TEST_STEVE = 2108038015U;
     } // namespace EVENTS
 
     namespace STATES
@@ -37,6 +38,7 @@ namespace AK
 
     namespace GAME_PARAMETERS
     {
+        static const AkUniqueID RTCP_DISTANCE = 1540479560U;
         static const AkUniqueID RTPC_PROGRESSION = 2942853976U;
     } // namespace GAME_PARAMETERS
 

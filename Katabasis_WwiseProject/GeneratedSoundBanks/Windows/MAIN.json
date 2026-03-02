@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{7E734BBA-16C9-46F8-8CBD-B94EE4B45669}",
     "Language": "SFX",
-    "Hash": "{C7A7FDEE-84B0-C52D-08D8-6D3371EA84A1}",
+    "Hash": "{1E9B9D96-F140-45FA-2CCD-F21752D3D19C}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\MAIN",
     "ShortName": "MAIN",
     "Path": "MAIN.bnk",
@@ -22,6 +22,14 @@
       "Location": "Memory",
       "ShortName": "Soundly Audio\\Wind, General, Mountain Wind, Constant With Strong Gusts, Winter, Snowy, Cabin Area 05 (AmbiX) SND89932.wav",
       "CachePath": "C5/{C5F6B645-DCEC-005C-DD6F-27AA79C6E0F8}.wem"
+     },
+     {
+      "Id": "198843051",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "VOX\\VOX_Test\\SteveMona.wav",
+      "CachePath": "0E/{0ED403BD-51B2-5071-7AB1-3AA2114BDBA8}.wem"
      }
     ],
     "Plugins": {
@@ -128,9 +136,29 @@
         "GUID": "{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}"
        }
       ]
+     },
+     {
+      "Id": "2108038015",
+      "Name": "VOX_Test_Steve",
+      "ObjectPath": "\\Events\\Default Work Unit\\TEST\\VOX_Test_Steve",
+      "GUID": "{F5760C28-CF24-44CB-9CA0-65A50B66536A}",
+      "DurationType": "OneShot",
+      "DurationMin": "59.033333",
+      "DurationMax": "59.033333",
+      "MediaRefs": [
+       {
+        "Id": "198843051"
+       }
+      ]
      }
     ],
     "GameParameters": [
+     {
+      "Id": "1540479560",
+      "Name": "RTCP_Distance",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\RTCP_Distance",
+      "GUID": "{EF377E40-8E9B-4D70-8BE2-BC7BB1F8B571}"
+     },
      {
       "Id": "2942853976",
       "Name": "RTPC_Progression",
@@ -140,6 +168,6 @@
     ]
    }
   ],
-  "FileHash": "{0E0C4EAB-AE2C-9E6C-1196-E2CFE4C863F6}"
+  "FileHash": "{D7DB03D2-4710-4AC2-518B-0A3BFE85938D}"
  }
 }

@@ -839,6 +839,10 @@
 					</ChildrenList>
 				</PropertyContainer>
 				<PropertyContainer Name="VOX" ID="{BDF9F806-7363-4FFE-BDA1-CE23ADE10696}" ShortID="486382039">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+						<Property Name="EnableAttenuation" Type="bool" Value="False"/>
+					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
@@ -847,6 +851,86 @@
 							<ObjectRef Name="VOX" ID="{F084076F-FA0E-460B-A770-ED15E9E13214}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 						</Reference>
 					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="SteveMona" ID="{5E63C21F-AA4D-49F2-A6D8-23585014327C}" ShortID="105655988">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="SteveMona" ID="{D6CCD924-EA68-4B95-83E2-5ADB9DD5FC95}">
+									<Language>SFX</Language>
+									<AudioFile>VOX\VOX_Test\SteveMona.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="198843051"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="SteveMona" ID="{D6CCD924-EA68-4B95-83E2-5ADB9DD5FC95}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+					<PositioningInfo>
+						<Position Name="" ID="{6656D62C-9608-470B-8BEA-F091BF63B97B}">
+							<ChildrenList>
+								<Path2D Name="VOX_Path" ID="{AE6F075C-4218-4A7A-BB0B-0EA4D0EE20DA}">
+									<PointList>
+										<Point>
+											<XPos>-49.23858</XPos>
+											<YPos>0.28249</YPos>
+											<Flags>12</Flags>
+											<Time>0</Time>
+										</Point>
+									</PointList>
+								</Path2D>
+							</ChildrenList>
+						</Position>
+					</PositioningInfo>
+					<ObjectLists>
+						<ObjectList Name="RTPC">
+							<RTPC Name="" ID="{14706DB4-9D29-429A-A085-FF27B4F5172B}" ShortID="7476229">
+								<PropertyList>
+									<Property Name="PropertyName" Type="string" Value="SpeakerPanning3DSpatializationMix"/>
+								</PropertyList>
+								<ReferenceList>
+									<Reference Name="ControlInput">
+										<ObjectRef Name="RTCP_Distance" ID="{EF377E40-8E9B-4D70-8BE2-BC7BB1F8B571}" WorkUnitID="{CD87D003-6EB8-45E4-BEC9-3829C2568A1E}"/>
+									</Reference>
+									<Reference Name="Curve">
+										<Custom>
+											<Curve Name="" ID="{4B36051C-B3E5-438F-8C42-BF7DD82DE720}">
+												<PropertyList>
+													<Property Name="Flags" Type="int32" Value="65537"/>
+												</PropertyList>
+												<PointList>
+													<Point>
+														<XPos>0</XPos>
+														<YPos>100</YPos>
+														<Flags>5</Flags>
+													</Point>
+													<Point>
+														<XPos>30.17751</XPos>
+														<YPos>0</YPos>
+														<Flags>0</Flags>
+													</Point>
+													<Point>
+														<XPos>100</XPos>
+														<YPos>0</YPos>
+														<Flags>37</Flags>
+													</Point>
+												</PointList>
+											</Curve>
+										</Custom>
+									</Reference>
+								</ReferenceList>
+							</RTPC>
+						</ObjectList>
+					</ObjectLists>
 				</PropertyContainer>
 			</ChildrenList>
 		</WorkUnit>
