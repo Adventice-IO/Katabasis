@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
-using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
-using System.Runtime.CompilerServices;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
-using Unity.Mathematics;
+using TMPro;
+using Unity.XR.CompositionLayers.UIInteraction;
+
+
 
 
 
@@ -39,14 +39,18 @@ public class MainController : MonoBehaviour
 
 
     [Header("Physics Settings")]
-    public float minSpeed = 0.05f; // Units per second
-    public float maxSpeed = 10f; // Units per second
-    public float acceleration = 5f; // Units per second squared
+    public float baseSpeed = 4f; // km/h, for reference
+    public float maxSpeed = 50f; // km/h, for editing
+    public float maxAcceleration = 5f; // km/h/s
+    public float playFullSpeedTime = 2f; // seconds after which we ignore acceleration and just set the speed to the target speed
+    float timeAtPlay;
 
+    public AnimationCurve speedCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
     [Header("Read Only")]
     [SerializeField] private float currentSpeed = 0f;
-    [SerializeField] private bool isRunning = false;
+    [SerializeField] private float targetSpeed = 0f;
+    [SerializeField] public bool isRunning = false;
     [SerializeField] private bool isReversed = false;
     private SplineContainer splineContainer;
     private float pathLength;
@@ -60,6 +64,9 @@ public class MainController : MonoBehaviour
     public bool editMode = true;
     bool _lastEditMode = true;
 
+    public float editMaxSpeed = 5f;
+    float editSmoothSpeed = 0f;
+
     public bool freeMotion;
     public ContinuousMoveProvider moveProvider;
     [SerializeField] private InputActionProperty verticalMoveAction;
@@ -68,15 +75,25 @@ public class MainController : MonoBehaviour
     [SerializeField] private InputActionProperty spawnAction;
     [SerializeField] private InputActionProperty cancelAction;
     [SerializeField] private InputActionProperty snapGroundAction;
+    [SerializeField] private InputActionProperty spawnCheckPointAction;
+    [SerializeField] private InputActionProperty teleportForwardAction;
+    [SerializeField] private InputActionProperty teleportBackwardAction; //XRI SnapTurn
 
     bool spawningMode;
     public bool removedInSpawnMode;
+    public bool removedCheckpoint;
+
 
     bool verticalMove;
 
     float timeAtSpawnMode;
 
+    float timeAtToggleFreeMotion;
+    bool freeMotionSwitched;
+
     public GameObject lockInfoPlane;
+    public GameObject speedInfo;
+    public GameObject teleportationLoco;
 
     float timeAtArrived; //in a salle or tunnel
     public float timeSinceArrived
@@ -124,12 +141,17 @@ public class MainController : MonoBehaviour
                 toggleFreeMoveAction.action.Enable();
                 toggleFreeMoveAction.action.performed += ctx =>
                 {
-                    bool newFreeMotion = !freeMotion;
-                    if (!newFreeMotion && isInATunnel())
+                    freeMotionSwitched = false;
+                    timeAtToggleFreeMotion = Time.time;
+                };
+
+                toggleFreeMoveAction.action.canceled += ctx =>
+                {
+                    if (!freeMotionSwitched)
                     {
-                        trackPosition = tunnel.getClosestTrackPosition(transform.position);
+                        if (isRunning) Pause();
+                        else Play();
                     }
-                    freeMotion = newFreeMotion;
                 };
             }
 
@@ -175,6 +197,63 @@ public class MainController : MonoBehaviour
                     }
                 };
             }
+
+            if (spawnCheckPointAction.action != null)
+            {
+                spawnCheckPointAction.action.Enable();
+                spawnCheckPointAction.action.canceled += ctx =>
+                {
+                    if (!removedCheckpoint)
+                    {
+                        Tunnel tTunnel = tunnel;
+                        Debug.Log("Adding speed checkpoint at current position");
+                        if (tTunnel == null)
+                        {
+                            tTunnel = getClosestTunnel();
+                        }
+                        if (tTunnel != null)
+                        {
+                            float pos = tTunnel.getClosestTrackPosition(transform.position);
+                            RuntimeUndoManager.addCheckpoint(tTunnel, pos);
+                        }
+                    }
+                    removedCheckpoint = false;
+
+                };
+            }
+
+            if(teleportForwardAction.action != null)
+            {
+                teleportForwardAction.action.Enable();
+                teleportForwardAction.action.performed += ctx =>
+                {
+                    if (!freeMotion && isInATunnel())
+                    {
+                        float nextSpeedPos = tunnel.getNextSpeedCheckpointPosition(trackPosition, isReversed);
+                        if (nextSpeedPos >= 0)                        
+                        {
+                            setPosition(nextSpeedPos);
+                        }
+                    }
+                };
+            }
+
+            if (teleportBackwardAction.action != null)
+            {
+                teleportBackwardAction.action.Enable();
+                //XRI Snap Turn, check that it's joystick down
+                teleportBackwardAction.action.performed += ctx =>
+                {
+                    if (!freeMotion && isInATunnel())
+                    {
+                        float prevSpeedPos = tunnel.getPreviousSpeedCheckpointPosition(trackPosition, isReversed);
+                        if (prevSpeedPos >= 0)
+                        {
+                            setPosition(prevSpeedPos);
+                        }
+                    }
+                };
+            }
         }
     }
 
@@ -189,6 +268,7 @@ public class MainController : MonoBehaviour
             if (cancelAction.action != null) cancelAction.action.Disable();
             if (verticalMoveAction.action != null) verticalMoveAction.action.Disable();
             if (snapGroundAction.action != null) snapGroundAction.action.Disable();
+            if (spawnCheckPointAction.action != null) spawnCheckPointAction.action.Disable();
         }
 
 
@@ -232,6 +312,19 @@ public class MainController : MonoBehaviour
             lockInfoPlane.SetActive(!freeMotion);
         }
 
+        if (speedInfo != null)
+        {
+            speedInfo.SetActive(isInATunnel() && !freeMotion);
+            if (isInATunnel() && !freeMotion)
+            {
+                TextMeshPro textMesh = speedInfo.GetComponent<TextMeshPro>();
+                if (textMesh != null)
+                {
+                    textMesh.text = Mathf.RoundToInt(currentSpeed) + " km/h - Target : " + Mathf.RoundToInt(targetSpeed) + " km/h";
+                }
+            }
+        }
+
 
         if (Application.isPlaying)
         {
@@ -243,6 +336,7 @@ public class MainController : MonoBehaviour
                 {
                     tunnel.UpdateLineRenderer();
                     tunnel.updateHandles();
+                    tunnel.updateSpeedCheckpoints();
                 }
 
                 KataTransformer[] kataTransformers = FindObjectsByType<KataTransformer>(FindObjectsSortMode.None);
@@ -280,6 +374,16 @@ public class MainController : MonoBehaviour
                         removedInSpawnMode = false;
                     }
                 }
+
+                bool freeMotionPressed = toggleFreeMoveAction.action.IsPressed();
+                if (freeMotionPressed && !freeMotionSwitched)
+                {
+                    if (Time.time - timeAtToggleFreeMotion > 0.6f)
+                    {
+                        freeMotion = !freeMotion;
+                        freeMotionSwitched = true;
+                    }
+                }
             }
         }
     }
@@ -287,6 +391,7 @@ public class MainController : MonoBehaviour
     private void Tick(float deltaTime)
     {
         moveProvider.enabled = freeMotion && !verticalMove;
+        teleportationLoco.SetActive(freeMotion);
 
         if (Application.isPlaying)
         {
@@ -299,7 +404,15 @@ public class MainController : MonoBehaviour
             }
             else if (!freeMotion && isInATunnel())
             {
-                trackPosition += joystickInput.y * maxSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f);
+                if(joystickInput.y != 0f)
+                {
+                    Pause();
+                }
+                editSmoothSpeed = Mathf.MoveTowards(editSmoothSpeed, joystickInput.y * editMaxSpeed, maxAcceleration * deltaTime);
+                if (editSmoothSpeed != 0f && !isRunning)
+                {
+                    setPosition(trackPosition + editSmoothSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f)) ;
+                }
             }
         }
 
@@ -326,14 +439,21 @@ public class MainController : MonoBehaviour
         if (isRunning)
         {
             float actualTrackPosition = isReversed ? (1f - trackPosition) : trackPosition;
-            float targetSpeed = tunnel.getDesiredSpeedAtPosition(actualTrackPosition);
-            if(targetSpeed == 0) targetSpeed = maxSpeed;
-            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * deltaTime);
+            targetSpeed = Mathf.Min(tunnel.getDesiredSpeedAtPosition(actualTrackPosition, isReversed), maxSpeed);
+            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, maxAcceleration * deltaTime);
+
+            float multipliedSpeed = currentSpeed;
+            if (Time.time - timeAtPlay < playFullSpeedTime)
+            {
+                float speedFactor = speedCurve.Evaluate((Time.time - timeAtPlay) / playFullSpeedTime);
+                multipliedSpeed *= speedFactor;
+            }
 
             if (pathLength > 0)
             {
-                float step = (currentSpeed * deltaTime) / pathLength;
-                trackPosition += step;
+                //currentSpeed in km/h
+                float step = (multipliedSpeed * 1000f / 3600f) * deltaTime / pathLength; // Convert speed to m/s and then to track position
+                setPosition(trackPosition + step);
 
                 if (trackPosition >= 1f)
                 {
@@ -356,6 +476,10 @@ public class MainController : MonoBehaviour
                     }
                 }
             }
+        }
+        else
+        {
+            targetSpeed = 0f;
         }
 
         if (splineContainer != null)
@@ -448,8 +572,10 @@ public class MainController : MonoBehaviour
 
     public void Play()
     {
+        timeAtPlay = Time.time;
         freeMotion = false;
         isRunning = true;
+        currentSpeed = 0;
         // Optional: If we are at the end, restart
         if (trackPosition >= 0.99f)
         {
@@ -461,6 +587,7 @@ public class MainController : MonoBehaviour
     public void Pause()
     {
         isRunning = false;
+        currentSpeed = 0f;
     }
 
     public void setPosition(float position)
@@ -474,7 +601,7 @@ public class MainController : MonoBehaviour
         TeleportToSalle(initialSalle);
         ResetPosition();
     }
-    public void ResetPosition()
+    public void ResetPosition(bool resetRotation = false)
     {
         if (isInASalle())
         {
@@ -500,7 +627,7 @@ public class MainController : MonoBehaviour
                 transform.position = tunnel.getPositionOnTrack(0);
                 Vector3 lookAtPos = tunnel.getPositionOnTrack(0.01f);
                 lookAtPos.y = transform.position.y;
-                transform.LookAt(lookAtPos, Vector3.up);
+                if (resetRotation) transform.LookAt(lookAtPos, Vector3.up);
 
                 AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
                 if (audioSO != null && audioSO.state != null)

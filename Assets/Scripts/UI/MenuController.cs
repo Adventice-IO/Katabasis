@@ -25,6 +25,7 @@ public class MenuController : MonoBehaviour
 
     Button lockOnTrackButton;
     Button editModeButton;
+    Button playpauseButton;
 
     private void OnEnable()
     {
@@ -151,6 +152,10 @@ public class MenuController : MonoBehaviour
         editModeButton.clicked -= EditModeButton_clicked;
         editModeButton.clicked += EditModeButton_clicked;
 
+        playpauseButton = root.Q<Button>("playpause");
+        playpauseButton.clicked -= onPlayPauseClicked;
+        playpauseButton.clicked += onPlayPauseClicked;
+
 
     }
 
@@ -163,7 +168,7 @@ public class MenuController : MonoBehaviour
                 if (mainController.freeMotion) lockOnTrackButton.RemoveFromClassList("active");
                 else lockOnTrackButton.AddToClassList("active");
             }
-            if( editModeButton != null)
+            if (editModeButton != null)
             {
                 if (mainController.editMode) editModeButton.AddToClassList("active");
                 else editModeButton.RemoveFromClassList("active");
@@ -197,9 +202,22 @@ public class MenuController : MonoBehaviour
         var tunnel = tunnelsList.itemsSource[index] as Tunnel;
         mainController.salle = null;
         mainController.tunnel = tunnel;
-        mainController.ResetPosition();
+        mainController.ResetPosition(true);
 
         tunnelsList.SetSelectionWithoutNotify(new List<int> { });
+    }
+
+    private void onPlayPauseClicked()
+    {
+        if (mainController.isRunning)
+        {
+            mainController.Pause();
+        }
+        else
+        {
+            mainController.Play();
+        }
+
     }
 
 }

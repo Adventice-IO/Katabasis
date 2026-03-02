@@ -18,6 +18,10 @@ public class KataTransformer : MonoBehaviour
     Renderer upRenderers;
     Renderer[] snapRenderers;
 
+    public Transform extraSaveTransform;
+
+    public GameObject extraEditObject; 
+
     public bool forceDisabled = false;
 
 
@@ -109,6 +113,10 @@ public class KataTransformer : MonoBehaviour
             baseT.gameObject.SetActive(true);
             up.gameObject.SetActive(true);
             snap.gameObject.SetActive(true);
+            if(extraEditObject != null)
+            {
+                extraEditObject.SetActive(true);
+            }
             return;
         }
 
@@ -119,6 +127,10 @@ public class KataTransformer : MonoBehaviour
         baseT.gameObject.SetActive(finalActive);
         up.gameObject.SetActive(finalActive);
         snap.gameObject.SetActive(finalActive);
+        if(extraEditObject != null)
+        {
+            extraEditObject.SetActive(finalActive);
+        }
 
         Collider collider = GetComponent<Collider>();
         if (collider != null) collider.enabled = finalActive;
@@ -177,6 +189,11 @@ public class KataTransformer : MonoBehaviour
         {
             Debug.Log("Found batch persister on game object " + batchPersister.gameObject.name + ", staging change.");
             batchPersister.StageChange(transform);
+
+            if(extraSaveTransform != null)
+            {
+                batchPersister.StageChange(extraSaveTransform);
+            }
         }
     }
 

@@ -5,8 +5,16 @@ using System.Collections.Generic;
 [InitializeOnLoad]
 public class VRBatchPersister : MonoBehaviour
 {
+    struct StagedChange
+    {
+        public string Path;
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public Vector3 Scale;
+        public float colliderScale;
+    }
     // Staged changes grouped per prefab asset path
-    private static readonly Dictionary<string, Dictionary<string, (Vector3 pos, Quaternion rot)>> _stagedByPrefab = new();
+    private static readonly Dictionary<string, Dictionary<string, StagedChange>> _stagedByPrefab = new();
 
     static VRBatchPersister()
     {
@@ -19,7 +27,7 @@ public class VRBatchPersister : MonoBehaviour
     /// <summary>
     /// Call this from your VR script. It only saves to RAM.
     /// </summary>
-    public void StageChange(Transform movedObject)
+    public void StageChange(Transform movedObject, float colliderScale = 0)
     {
         string assetPath = GetPrefabAssetPath();
         if (string.IsNullOrWhiteSpace(assetPath))
@@ -32,11 +40,18 @@ public class VRBatchPersister : MonoBehaviour
 
         if (!_stagedByPrefab.TryGetValue(assetPath, out var buffer))
         {
-            buffer = new Dictionary<string, (Vector3 pos, Quaternion rot)>();
+            buffer = new Dictionary<string, StagedChange>();
             _stagedByPrefab[assetPath] = buffer;
         }
 
-        buffer[path] = (movedObject.localPosition, movedObject.localRotation);
+        buffer[path] = new StagedChange
+        {
+            Path = path,
+            Position = movedObject.localPosition,
+            Rotation = movedObject.localRotation,
+            Scale = movedObject.localScale,
+            colliderScale = colliderScale
+        };
         Debug.Log($"<color=yellow>[{assetPath}] Staged:</color> {path} (Buffer count: {buffer.Count})");
     }
 
@@ -53,7 +68,7 @@ public class VRBatchPersister : MonoBehaviour
         foreach (var kvp in _stagedByPrefab)
         {
             string assetPath = kvp.Key;
-            Dictionary<string, (Vector3 pos, Quaternion rot)> changes = kvp.Value;
+            Dictionary<string, StagedChange> changes = kvp.Value;
             if (changes.Count == 0) continue;
 
             GameObject prefabRoot = PrefabUtility.LoadPrefabContents(assetPath);
@@ -70,8 +85,21 @@ public class VRBatchPersister : MonoBehaviour
                     Transform target = prefabRoot.transform.Find(change.Key);
                     if (target != null)
                     {
-                        target.localPosition = change.Value.pos;
-                        target.localRotation = change.Value.rot;
+                        target.localPosition = change.Value.Position;
+                        target.localRotation = change.Value.Rotation;
+                        target.localScale = change.Value.Scale;
+
+                        if (change.Value.colliderScale > 0)
+                        {
+                            if (target.TryGetComponent(out BoxCollider collider))
+                            {
+                                collider.size = change.Value.colliderScale * Vector3.one;
+                            }
+                            else if (target.TryGetComponent(out SphereCollider sphereCollider))
+                            {
+                                sphereCollider.radius = change.Value.colliderScale;
+                            }
+                        }
                     }
                     else
                     {

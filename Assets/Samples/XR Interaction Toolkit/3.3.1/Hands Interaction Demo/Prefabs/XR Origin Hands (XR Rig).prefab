@@ -3464,14 +3464,40 @@ MonoBehaviour:
   tunnel: {fileID: 0}
   animateRotation: 0
   trackPosition: 0
-  minSpeed: 0.05
-  maxSpeed: 10
-  acceleration: 5
-  deceleration: 5
+  baseSpeed: 10
+  maxSpeed: 50
+  maxAcceleration: 5
+  playFullSpeedTime: 2
+  speedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.01
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   currentSpeed: 0
+  targetSpeed: 0
   isRunning: 0
   isReversed: 0
   editMode: 1
+  editMaxSpeed: 5
   freeMotion: 1
   moveProvider: {fileID: 7417599109105183109}
   verticalMoveAction:
@@ -3586,8 +3612,22 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 0}
+  spawnCheckPointAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: 
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: a4528204-4d69-4240-97bc-2d048d87b7d0
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
   removedInSpawnMode: 0
+  removedCheckpoint: 0
   lockInfoPlane: {fileID: 7325477772855753073}
+  speedInfo: {fileID: 0}
 --- !u!114 &3732688429945291836 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4238984354899526239, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}

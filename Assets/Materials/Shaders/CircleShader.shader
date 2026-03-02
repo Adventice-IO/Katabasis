@@ -9,6 +9,8 @@ Shader "Custom/CircleShader"
     SubShader
     {
         Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
+         // Double-sided rendering
+         Cull Off
 
         Pass
         {
@@ -18,6 +20,8 @@ Shader "Custom/CircleShader"
             #pragma fragment frag
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+
 
             struct Attributes
             {

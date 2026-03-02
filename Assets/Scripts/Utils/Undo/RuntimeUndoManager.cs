@@ -85,4 +85,40 @@ public class RuntimeUndoManager : MonoBehaviour
         var command = new TransformCommand(target, oldPosition, oldRotation, newPosition, newRotation);
         instance.ExecuteCommand(command);
     }
+
+    public static void scaleTransformFrom(Transform target, Vector3 oldScale, Vector3 newScale)
+    {
+        var command = new ScaleCommand(target, oldScale, newScale);
+        instance.ExecuteCommand(command);
+    }
+
+    public static void resizeColliderFrom(SphereCollider collider, float oldRadius, float newRadius)
+    {
+        var command = new ResizeColliderCommand(collider, oldRadius, newRadius);
+        instance.ExecuteCommand(command);
+    }
+
+    public static void addCheckpoint(Tunnel tunnel, float pos)
+    {
+        var command = new AddCheckpointCommand(tunnel, pos);
+        instance.ExecuteCommand(command);
+    }
+
+    public static void removeCheckpoint(Tunnel tunnel, Tunnel.SpeedCheckpoint checkpoint)
+    {
+        var command = new RemoveCheckpointCommand(tunnel, checkpoint);
+        instance.ExecuteCommand(command);
+    }
+
+    public static void moveCheckpoint(Tunnel.SpeedCheckpoint checkpoint, float newPos)
+    {
+        var command = new MoveCheckpointCommand(checkpoint, newPos);
+        instance.ExecuteCommand(command);
+    }
+
+    public static void changeCheckpointSpeed(Tunnel.SpeedCheckpoint checkpoint, float oldSpeed, float newSpeed)
+    {
+        var command = new ChangeCheckpointSpeedCommand(checkpoint, oldSpeed, newSpeed);
+        instance.ExecuteCommand(command);
+    }
 }

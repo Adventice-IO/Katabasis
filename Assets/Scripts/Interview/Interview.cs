@@ -191,6 +191,12 @@ public class Interview : MonoBehaviour
     public void load()
     {
         clip.metadataFile = null;
+        if(!System.IO.File.Exists(basePath +".txt"))
+        {
+            Debug.LogWarning("Metadata doesn't exist for "+ basePath+".txt");
+            return;
+        };
+        
         string metaData = System.IO.File.ReadAllText(basePath + ".txt");
         bool result = clip.LoadMetadata(metaData);
 
