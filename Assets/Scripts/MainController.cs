@@ -7,6 +7,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using TMPro;
 using Unity.XR.CompositionLayers.UIInteraction;
+using UnityEngine.XR.Interaction.Toolkit.Inputs;
+
 
 
 
@@ -76,8 +78,8 @@ public class MainController : MonoBehaviour
     [SerializeField] private InputActionProperty cancelAction;
     [SerializeField] private InputActionProperty snapGroundAction;
     [SerializeField] private InputActionProperty spawnCheckPointAction;
-    [SerializeField] private InputActionProperty teleportForwardAction;
-    [SerializeField] private InputActionProperty teleportBackwardAction; //XRI SnapTurn
+    [SerializeField] private InputActionReference nativeTeleportAction;
+    [SerializeField] private InputActionProperty prevNextSpeedTopAction;
 
     bool spawningMode;
     public bool removedInSpawnMode;
@@ -94,6 +96,7 @@ public class MainController : MonoBehaviour
     public GameObject lockInfoPlane;
     public GameObject speedInfo;
     public GameObject teleportationLoco;
+    public GameObject turnLoco;
 
     float timeAtArrived; //in a salle or tunnel
     public float timeSinceArrived
@@ -222,34 +225,38 @@ public class MainController : MonoBehaviour
                 };
             }
 
-            if(teleportForwardAction.action != null)
+            if (prevNextSpeedTopAction.action != null)
             {
-                teleportForwardAction.action.Enable();
-                teleportForwardAction.action.performed += ctx =>
+                prevNextSpeedTopAction.action.Enable();
+                prevNextSpeedTopAction.action.performed += ctx =>
                 {
                     if (!freeMotion && isInATunnel())
                     {
-                        float nextSpeedPos = tunnel.getNextSpeedCheckpointPosition(trackPosition, isReversed);
-                        if (nextSpeedPos >= 0)                        
-                        {
-                            setPosition(nextSpeedPos);
-                        }
-                    }
-                };
-            }
+                        Debug.Log("Teleporting to nearest speed checkpoint");
+                        Cardinal cardinal = CardinalUtility.GetNearestCardinal(prevNextSpeedTopAction.action.ReadValue<Vector2>());
 
-            if (teleportBackwardAction.action != null)
-            {
-                teleportBackwardAction.action.Enable();
-                //XRI Snap Turn, check that it's joystick down
-                teleportBackwardAction.action.performed += ctx =>
-                {
-                    if (!freeMotion && isInATunnel())
-                    {
-                        float prevSpeedPos = tunnel.getPreviousSpeedCheckpointPosition(trackPosition, isReversed);
-                        if (prevSpeedPos >= 0)
+                        switch (cardinal)
                         {
-                            setPosition(prevSpeedPos);
+                            case Cardinal.North:
+                                {
+                                    Debug.Log("Teleporting forward to next speed checkpoint");
+                                    float nextSpeedPos = tunnel.getNextSpeedCheckpointPosition(trackPosition+.01f, isReversed);
+                                    if (nextSpeedPos >= 0)
+                                    {
+                                        setPosition(nextSpeedPos);
+                                    }
+                                }
+                                break;
+                            case Cardinal.South:
+                                {
+                                    Debug.Log("Teleporting backward to previous speed checkpoint");
+                                    float prevSpeedPos = tunnel.getPreviousSpeedCheckpointPosition(trackPosition-.01f, isReversed);
+                                    if (prevSpeedPos >= 0)
+                                    {
+                                        setPosition(prevSpeedPos);
+                                    }
+                                }
+                                break;
                         }
                     }
                 };
@@ -385,6 +392,17 @@ public class MainController : MonoBehaviour
                     }
                 }
             }
+
+            if (nativeTeleportAction.action != null)
+            {
+                if (nativeTeleportAction.action.enabled != freeMotion)
+                {
+                    if (freeMotion) nativeTeleportAction.action.Enable();
+                    else nativeTeleportAction.action.Disable();
+                }
+            }
+            teleportationLoco.SetActive(freeMotion);
+            turnLoco.SetActive(freeMotion);
         }
     }
 
@@ -404,14 +422,14 @@ public class MainController : MonoBehaviour
             }
             else if (!freeMotion && isInATunnel())
             {
-                if(joystickInput.y != 0f)
+                if (joystickInput.y != 0f)
                 {
                     Pause();
                 }
                 editSmoothSpeed = Mathf.MoveTowards(editSmoothSpeed, joystickInput.y * editMaxSpeed, maxAcceleration * deltaTime);
                 if (editSmoothSpeed != 0f && !isRunning)
                 {
-                    setPosition(trackPosition + editSmoothSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f)) ;
+                    setPosition(trackPosition + editSmoothSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f));
                 }
             }
         }

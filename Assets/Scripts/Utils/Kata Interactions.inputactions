@@ -14,6 +14,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "PrevNextSpeedStop",
+                    "type": "Value",
+                    "id": "4b5a33a9-9e82-4ae7-b72c-9ffaa23be7f0",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -25,6 +34,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Spawn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2839479b-5382-49fa-b229-07acfc696a79",
+                    "path": "<XRController>{RightHand}/{Primary2DAxis}",
+                    "interactions": "Sector(directions=1),Sector(directions=2)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PrevNextSpeedStop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
