@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PointCloudBlock : MonoBehaviour
@@ -13,6 +14,9 @@ public class PointCloudBlock : MonoBehaviour
     //delegate onKill
     public delegate void onKillEvent();
     public event onKillEvent onKill;
+
+    GraphicsBuffer masksBuffer;
+    int masksCount = 0;
 
     public void init(PointCloudProfile profile)
     {
@@ -50,12 +54,27 @@ public class PointCloudBlock : MonoBehaviour
 
         float maxDistance = profile.linkMaxDistanceToCamera ? Camera.main.farClipPlane : profile._MaxDistance;
         block.SetFloat("_MaxDistance", maxDistance);
-        block.SetFloat("_DistFade", profile._DistanceFade  * maxDistance);
+        block.SetFloat("_DistFade", profile._DistanceFade * maxDistance);
+        block.SetFloat("_MaskFeather", profile._MaskFeather);
+
+        if (masksBuffer != null)
+        {
+            block.SetBuffer("_MaskBoxes", masksBuffer);
+            block.SetInt("_MaskCount", masksCount);
+        }
+
         render.SetPropertyBlock(block);
     }
 
     public void kill()
     {
         timeAtKill = Time.time;
+    }
+
+    public void updateMasks(GraphicsBuffer maskBuffer, int count)
+    {
+        masksBuffer = maskBuffer;
+        masksCount = count;
+
     }
 }
