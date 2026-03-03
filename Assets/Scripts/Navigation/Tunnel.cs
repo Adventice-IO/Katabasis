@@ -698,47 +698,23 @@ public class Tunnel : MonoBehaviour
 
     public float getPreviousSpeedCheckpointPosition(float trackPosition, bool isReversed)
     {
-        float closest = -1f;
-        foreach (var checkpoint in checkpointContainer.speedCheckpoints)
+        SpeedCheckpoint checkpoint = checkpointContainer.speedCheckpoints.OrderByDescending(c => c.pos).FirstOrDefault(c => isReversed ? c.pos > trackPosition : c.pos < trackPosition);
+        if (checkpoint != null)
         {
-            if (isReversed)
-            {
-                if (checkpoint.pos < trackPosition && checkpoint.pos > closest)
-                {
-                    closest = checkpoint.pos;
-                }
-            }
-            else
-            {
-                if (checkpoint.pos > trackPosition && checkpoint.pos < closest || closest < 0)
-                {
-                    closest = checkpoint.pos;
-                }
-            }
+            return checkpoint.pos;
         }
-        return closest;
+        return isReversed ? 1f : 0f;
+
     }
 
     public float getNextSpeedCheckpointPosition(float trackPosition, bool isReversed)
     {
-        float closest = float.MaxValue;
-        foreach (var checkpoint in checkpointContainer.speedCheckpoints)
+        SpeedCheckpoint checkpoint = checkpointContainer.speedCheckpoints.OrderBy(c => c.pos).FirstOrDefault(c => isReversed ? c.pos < trackPosition : c.pos > trackPosition);
+        if(checkpoint != null)
         {
-            if (isReversed)
-            {
-                if (checkpoint.pos > trackPosition && checkpoint.pos < closest)
-                {
-                    closest = checkpoint.pos;
-                }
-            }
-            else
-            {
-                if (checkpoint.pos < trackPosition && checkpoint.pos > closest || closest == float.MaxValue)
-                {
-                    closest = checkpoint.pos;
-                }
-            }
+            return checkpoint.pos;
         }
-        return closest == float.MaxValue ? -1f : closest;
+
+        return isReversed ? 0f : 1f;
     }
 }

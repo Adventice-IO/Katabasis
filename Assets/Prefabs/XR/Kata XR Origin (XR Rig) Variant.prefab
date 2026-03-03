@@ -336,6 +336,10 @@ PrefabInstance:
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: turnLoco
+      value: 
+      objectReference: {fileID: 517590615602817253}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: noAudioSO
       value: 
       objectReference: {fileID: 11400000, guid: dc27565659fa27e45be8f55d03fc51df, type: 2}
@@ -360,6 +364,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 949907981531535563}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: nativeTeleportAction
+      value: 
+      objectReference: {fileID: -8061240218431744966, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: speedCurve.m_Curve.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -372,6 +380,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -8061240218431744966, guid: c348712bda248c246b8c49b3db54643f, type: 3}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: prevNextSpeedTopAction.m_Reference
+      value: 
+      objectReference: {fileID: -6203267290529905460, guid: c4c8b8f75e61157408e82356960abb80, type: 3}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: teleportBackwardAction.m_Reference
       value: 
       objectReference: {fileID: -8525429354371678379, guid: c348712bda248c246b8c49b3db54643f, type: 3}
@@ -381,6 +393,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: teleportForwardAction.m_UseReference
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: prevNextSpeedTopAction.m_UseReference
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
@@ -402,6 +418,10 @@ PrefabInstance:
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: teleportForwardAction.m_Action.m_Name
       value: Teleport Backward
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: prevNextSpeedTopAction.m_Action.m_Name
+      value: Prev Next Speed Top
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: speedCurve.m_Curve.Array.data[0].value
@@ -436,6 +456,10 @@ PrefabInstance:
       value: 0.33333334
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: prevNextSpeedTopAction.m_Action.m_ExpectedControlType
+      value: Vector2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: snapGroundAction.m_Action.m_SingletonActionBindings.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -445,6 +469,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: teleportForwardAction.m_Action.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: prevNextSpeedTopAction.m_Action.m_SingletonActionBindings.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
@@ -472,6 +500,10 @@ PrefabInstance:
       value: bd578731-f1e8-4486-9d7f-7524832897b2
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: prevNextSpeedTopAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Id
+      value: c7ad85cb-5fc6-4b97-9d7a-2533a212f2ad
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: teleportBackwardAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Id
       value: bd578731-f1e8-4486-9d7f-7524832897b2
       objectReference: {fileID: 0}
@@ -484,6 +516,10 @@ PrefabInstance:
       value: '*/{Back}'
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: prevNextSpeedTopAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <XRController>{RightHand}/{Primary2DAxis}
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: teleportBackwardAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Path
       value: '*/{Back}'
       objectReference: {fileID: 0}
@@ -494,6 +530,10 @@ PrefabInstance:
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: teleportForwardAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Action
       value: Teleport Backward
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: prevNextSpeedTopAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Prev Next Speed Top
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: teleportBackwardAction.m_Action.m_SingletonActionBindings.Array.data[0].m_Action
@@ -545,6 +585,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7891323831280848723}
   m_SourcePrefab: {fileID: 100100000, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+--- !u!1 &517590615602817253 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2123925076275643907, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+  m_PrefabInstance: {fileID: 1898103925645553382}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &949907981531535563 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1691571359758317101, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
