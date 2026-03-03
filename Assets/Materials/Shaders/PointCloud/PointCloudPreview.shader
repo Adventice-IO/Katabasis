@@ -50,6 +50,8 @@ Shader "Custom/PointCloudDistanceFade"
             sampler2D _MainTex;
             float4 _MainTex_ST;
             
+            
+
             UNITY_INSTANCING_BUFFER_START(Props)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _Color)
                 UNITY_DEFINE_INSTANCED_PROP(float, _MinAlpha) // <--- Added to Instancing
@@ -58,6 +60,8 @@ Shader "Custom/PointCloudDistanceFade"
                 UNITY_DEFINE_INSTANCED_PROP(float, _FarFadeStart)
                 UNITY_DEFINE_INSTANCED_PROP(float, _FarFadeEnd)
             UNITY_INSTANCING_BUFFER_END(Props)
+
+
 
             v2f vert (appdata v)
             {

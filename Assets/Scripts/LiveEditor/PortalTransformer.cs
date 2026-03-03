@@ -14,7 +14,7 @@ public class PortalTransformer : MonoBehaviour
     Transform sizePlane;
     Transform colliderPlane;
     bool isGrabbing = false;
-    bool _lastGrabbing = false;
+    //bool _lastGrabbing = false;
 
     XRGrabInteractable sizeXR;
     XRGrabInteractable colliderXR;

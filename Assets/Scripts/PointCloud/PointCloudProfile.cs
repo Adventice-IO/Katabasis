@@ -10,4 +10,7 @@ public class PointCloudProfile : ScriptableObject
     public float _MaxDistance = 20f;
     [Range(0f, 1f)]
     public float _DistanceFade = .3f;
+
+    [Range(0, 1)]
+    public float _MaskFeather = .1f;
 }

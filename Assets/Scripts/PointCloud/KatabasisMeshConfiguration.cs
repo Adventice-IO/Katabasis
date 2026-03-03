@@ -4,6 +4,21 @@ using BAPointCloudRenderer.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+public struct MaskBox
+{
+    public MaskBox(Matrix4x4 worldToLocal, Vector3 extents, float alpha)
+    {
+        this.worldToLocal = worldToLocal;
+        this.extents = extents;
+        this.alpha = alpha;
+    }
+
+    public Matrix4x4 worldToLocal; // 64 bytes
+    public Vector3 extents;        // 12 bytes
+    public float alpha;           // 4 bytes (Total: 80 bytes, 16-byte aligned)
+}
+
 public class KatabasisMeshConfiguration : MeshConfiguration
 {
     public PointCloudProfile profile = null;
@@ -12,40 +27,46 @@ public class KatabasisMeshConfiguration : MeshConfiguration
     public bool displayLOD = false;
     public Transform root;
 
-    private HashSet<GameObject> gameObjectCollection = null;
-
-    private void LoadShaders()
-    {
-        material.enableInstancing = true;
-
-        if (renderCamera == null)
-        {
-            renderCamera = Camera.main;
-        }
-    }
+    private HashSet<PointCloudBlock> gameObjectCollection = null;
+    private GraphicsBuffer _maskBuffer;
+    private PointCloudMask[] masks;
+    private MaskBox[] _boxes;
 
     public void Start()
     {
-        LoadShaders();
+        gameObjectCollection = new HashSet<PointCloudBlock>();
+        renderCamera = Camera.main;
+        material.enableInstancing = true;
+
+        masks = GetComponentsInChildren<PointCloudMask>();
+        _boxes = new MaskBox[masks.Length];
+        const int maskBoxSize = 80; // Size of MaskBox struct in bytes (16-byte aligned)
+        _maskBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, _boxes.Length, maskBoxSize);
     }
 
     public void Update()
     {
-        if (gameObjectCollection != null)
-        {
-            LoadShaders();
-            foreach (GameObject go in gameObjectCollection)
-            {
-                go.GetComponent<MeshRenderer>().material = material;
-            }
-        }
+       
         if (displayLOD)
         {
-            foreach (GameObject go in gameObjectCollection)
+            foreach (PointCloudBlock go in gameObjectCollection)
             {
                 BoundingBoxComponent bbc = go.GetComponent<BoundingBoxComponent>();
                 BBDraw.DrawBoundingBox(bbc.boundingBox, bbc.parent, Color.red, false);
             }
+        }
+
+        for (int i = 0; i < masks.Length; i++)
+        {
+            PointCloudMask mask = masks[i];
+            _boxes[i] = mask.maskBox;
+        }
+        
+        _maskBuffer.SetData(_boxes);
+
+        foreach (PointCloudBlock go in gameObjectCollection)
+        {
+            go.updateMasks(_maskBuffer, _boxes.Length);
         }
     }
 
@@ -91,17 +112,21 @@ public class KatabasisMeshConfiguration : MeshConfiguration
         bbc.boundingBox = boundingBox; ;
         bbc.parent = parent;
 
-        if (gameObjectCollection != null)
-        {
-            gameObjectCollection.Add(gameObject);
-        }
 
-        gameObject.AddComponent<PointCloudBlock>().init(profile);
-        gameObject.GetComponent<PointCloudBlock>().onKill += () =>
+
+        PointCloudBlock pointCloudBlock = gameObject.AddComponent<PointCloudBlock>();
+        pointCloudBlock.init(profile);
+        pointCloudBlock.GetComponent<MeshRenderer>().material = material;
+        pointCloudBlock.onKill += () =>
         {
-            gameObjectCollection?.Remove(gameObject);
+            gameObjectCollection?.Remove(pointCloudBlock);
             Destroy(gameObject);
         };
+
+        if (gameObjectCollection != null)
+        {
+            gameObjectCollection.Add(pointCloudBlock);
+        }
 
         gameObject.transform.SetParent(root);
         return gameObject;
