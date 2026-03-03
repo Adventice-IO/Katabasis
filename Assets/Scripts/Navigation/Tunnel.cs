@@ -692,7 +692,7 @@ public class Tunnel : MonoBehaviour
         foreach (var checkpoint in checkpointContainer.speedCheckpoints)
         {
             Gizmos.color = new Color(1f, 0f, 0f, 0.5f);
-            Gizmos.DrawSphere(splineContainer.EvaluatePosition(checkpoint.pos), 1.2f);
+            Gizmos.DrawSphere(splineContainer.EvaluatePosition(checkpoint.pos), .4f);
         }
     }
 
