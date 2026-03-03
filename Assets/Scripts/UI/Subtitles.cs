@@ -30,7 +30,17 @@ public class Subtitles : MonoBehaviour
             return;
         }
         //uiDocument.enabled = true;
-        Debug.Log("UIDocument found: " + uiDocument.name + " > " + uiDocument.rootVisualElement);
+        initDocument();
+    }
+
+    void initDocument()
+    {
+        if(uiDocument == null || uiDocument.rootVisualElement == null)
+        {
+            //Debug.LogError("Cannot initialize subtitle document: UIDocument is null or rootVisualElement is null");
+            return;
+        }
+
         subtitleLabel = uiDocument.rootVisualElement.Q<Label>("subtitle");
         subtitleLabel.AddToClassList("hidden");
         Debug.Log("Subtitle label: " + (subtitleLabel != null ? subtitleLabel.name : "null"));
@@ -39,6 +49,11 @@ public class Subtitles : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(subtitleLabel == null)
+        {
+            initDocument();
+        }
+
         if (isPlaying != lastPlaying)
         {
             Debug.Log("Subtitle playback started at " + Time.time);
