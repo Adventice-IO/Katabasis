@@ -102,14 +102,18 @@
                 }
                 float distFade = saturate((_MaxDistance - d) / _DistFade);
 
-
-                float revealFactor = saturate((d - (_MaxDistance - _NoiseThickness)) / _NoiseThickness);
-                if(revealFactor > 0)
+                
+                // 4. Noise Reveal Logic
+                if(_NoiseAmplitude > 0)
                 {
-                    float weight = saturate((d - (_MaxDistance - _NoiseThickness)) / _NoiseThickness);
-                    float3 noise = snoise_grad(worldPos * _NoiseScale + weight) * _NoiseAmplitude * weight;
-                    o.position += float4(noise.xyz, 0);
-                    globalAlpha *= 1.0 + (revealFactor * (_NoiseAlphaMultiplier - 1.0));
+                    float revealFactor = saturate((d - (_MaxDistance - _NoiseThickness)) / _NoiseThickness);
+                    if(revealFactor > 0)
+                    {
+                        float weight = saturate((d - (_MaxDistance - _NoiseThickness)) / _NoiseThickness);
+                        float3 noise = snoise_grad(worldPos * _NoiseScale + weight) * _NoiseAmplitude * weight;
+                        o.position += float4(noise.xyz, 0);
+                        globalAlpha *= 1.0 + (revealFactor * (_NoiseAlphaMultiplier - 1.0));
+                    }
                 }
 
 
