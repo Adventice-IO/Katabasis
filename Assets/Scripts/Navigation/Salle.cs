@@ -8,6 +8,7 @@ public class Salle : MonoBehaviour
     public Color color = Color.green;
 
     public Vector3 size = Vector3.one * 10;
+    public bool isExit = false;
 
     public Transform origin { get; private set; }
 

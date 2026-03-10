@@ -10,15 +10,11 @@ using Unity.XR.CompositionLayers.UIInteraction;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
 
-
-
-
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-[ExecuteAlways] // This makes the script run even when NOT in Play mode
+//[ExecuteAlways] // This makes the script run even when NOT in Play mode
 public class MainController : MonoBehaviour
 {
     public static MainController instance;
@@ -29,7 +25,17 @@ public class MainController : MonoBehaviour
     public AudioStateRefSO noAudioSO;
     public bool debugAudioStates = false;
 
+    public enum GameState
+    {
+        Menu,
+        Intro,
+        Playing,
+        Outro,
+        End
+    }
     [Header("State")]
+    public GameState gameState = GameState.Menu;
+    GameState lastGameState;
     public Salle salle;
     public Tunnel tunnel;
 
@@ -93,11 +99,21 @@ public class MainController : MonoBehaviour
     float timeAtToggleFreeMotion;
     bool freeMotionSwitched;
 
+    [Header("Links")]
+    public GameMenu menu;
+    public GameIntro intro;
+    public GameOutro outro;
     public GameObject lockInfoPlane;
     public GameObject speedInfo;
     public GameObject teleportationLoco;
     public GameObject turnLoco;
 
+    [Header("Point Cloud")]
+    [Range(0.01f, 1f)]
+    public float viewDistanceAnimSpeed = 0.2f;
+
+    [Range(0f, 1f)]
+    public float pointCloudViewDistanceMultiplier = 1.0f;
     float timeAtArrived; //in a salle or tunnel
     public float timeSinceArrived
     {
@@ -112,8 +128,17 @@ public class MainController : MonoBehaviour
 
     Tunnel[] allTunnels;
 
+    GameObject sallesGO;
+    GameObject tunnelsGO;
+
+
+
     private void Start()
     {
+        sallesGO = new GameObject("Salles");
+        tunnelsGO = new GameObject("Tunnels");
+
+        gameStateUpdate();
         Reset();
     }
 
@@ -240,7 +265,7 @@ public class MainController : MonoBehaviour
                             case Cardinal.North:
                                 {
                                     Debug.Log("Teleporting forward to next speed checkpoint");
-                                    float nextSpeedPos = tunnel.getNextSpeedCheckpointPosition(trackPosition+.01f, isReversed);
+                                    float nextSpeedPos = tunnel.getNextSpeedCheckpointPosition(trackPosition + .01f, isReversed);
                                     if (nextSpeedPos >= 0)
                                     {
                                         setPosition(nextSpeedPos);
@@ -250,7 +275,7 @@ public class MainController : MonoBehaviour
                             case Cardinal.South:
                                 {
                                     Debug.Log("Teleporting backward to previous speed checkpoint");
-                                    float prevSpeedPos = tunnel.getPreviousSpeedCheckpointPosition(trackPosition-.01f, isReversed);
+                                    float prevSpeedPos = tunnel.getPreviousSpeedCheckpointPosition(trackPosition - .01f, isReversed);
                                     if (prevSpeedPos >= 0)
                                     {
                                         setPosition(prevSpeedPos);
@@ -314,6 +339,7 @@ public class MainController : MonoBehaviour
 
     private void Update()
     {
+
         if (lockInfoPlane != null)
         {
             lockInfoPlane.SetActive(!freeMotion);
@@ -335,6 +361,20 @@ public class MainController : MonoBehaviour
 
         if (Application.isPlaying)
         {
+            if (gameState != lastGameState)
+            {
+                gameStateUpdate();
+                lastGameState = gameState;
+            }
+
+            bool shouldSee = gameState == GameState.Playing || gameState == GameState.Outro;
+            float viewOffset = Time.deltaTime * (shouldSee ? 1f : -1f) * viewDistanceAnimSpeed;
+            pointCloudViewDistanceMultiplier = Mathf.Clamp01(pointCloudViewDistanceMultiplier + viewOffset);
+            if(pointCloudViewDistanceMultiplier <= 0f && gameState == GameState.End)
+            {
+                ResetGame();
+            }
+
             if (editMode != _lastEditMode)
             {
                 _lastEditMode = editMode;
@@ -516,7 +556,51 @@ public class MainController : MonoBehaviour
         }
     }
 
+
+
+    // --- Game State Management ---
+    void gameStateUpdate()
+    {
+        menu.setActive(gameState == GameState.Menu);
+        intro.setActive(gameState == GameState.Intro);
+        outro.setActive(gameState == GameState.Outro);
+
+
+        sallesGO.SetActive(gameState != GameState.Menu);
+        tunnelsGO.SetActive(gameState != GameState.Menu);
+
+        switch (gameState)
+        {
+            case GameState.Menu:
+                ResetGame();
+                break;
+
+            case GameState.Intro:
+                Reset();
+
+                break;
+            case GameState.Playing:
+                break;
+
+            case GameState.Outro:
+                break;
+
+            case GameState.End:
+                break;
+        }
+    }
+
+
+
     // --- Public API for Buttons ---
+
+    public void ResetGame()
+    {
+        visitedSalles.Clear();
+        TeleportToSalle(initialSalle);
+        gameState = GameState.Menu;
+        pointCloudViewDistanceMultiplier = 0f;
+    }
 
     public void GoToSalle(Salle targetSalle)
     {
@@ -560,6 +644,10 @@ public class MainController : MonoBehaviour
             visitedSalles.Add(targetSalle);
         }
         ResetPosition();
+        if (salle.isExit)
+        {
+            gameState = GameState.Outro;
+        }
     }
 
     public List<Tunnel> getAllOutTunnels()

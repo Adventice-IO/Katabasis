@@ -8,9 +8,17 @@ public class PointCloudProfile : ScriptableObject
     [Range(0f, 1f)] public float _Alpha = 1f;
     public bool linkMaxDistanceToCamera = true;
     public float _MaxDistance = 20f;
+    public float _DistanceMultiplier = 1f;
     [Range(0f, 1f)]
     public float _DistanceFade = .3f;
 
     [Range(0, 1)]
     public float _MaskFeather = .1f;
+
+
+    [Header("Noise")]
+    public float _NoiseAmplitude = .5f;
+    public float _NoiseThickness = .5f;
+    public float _NoiseScale = 1f;
+    public float _NoiseAlphaMultiplier = 1f;
 }

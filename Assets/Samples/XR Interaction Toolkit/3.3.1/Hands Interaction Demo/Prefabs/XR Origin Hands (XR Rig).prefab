@@ -3460,6 +3460,7 @@ MonoBehaviour:
   initialSalle: {fileID: 0}
   noAudioSO: {fileID: 0}
   debugAudioStates: 0
+  gameState: 0
   salle: {fileID: 0}
   tunnel: {fileID: 0}
   animateRotation: 0
@@ -3639,10 +3640,15 @@ MonoBehaviour:
     m_Reference: {fileID: 0}
   removedInSpawnMode: 0
   removedCheckpoint: 0
+  menu: {fileID: 0}
+  intro: {fileID: 0}
+  outro: {fileID: 0}
   lockInfoPlane: {fileID: 7325477772855753073}
   speedInfo: {fileID: 0}
   teleportationLoco: {fileID: 0}
   turnLoco: {fileID: 0}
+  viewDistanceAnimSpeed: 0.2
+  pointCloudViewDistanceMultiplier: 1
 --- !u!114 &3732688429945291836 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4238984354899526239, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}

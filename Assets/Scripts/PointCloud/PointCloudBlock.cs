@@ -52,10 +52,14 @@ public class PointCloudBlock : MonoBehaviour
         block.SetFloat("_Reveal", reveal);
         block.SetFloat("_Alpha", profile._Alpha);
 
-        float maxDistance = profile.linkMaxDistanceToCamera ? Camera.main.farClipPlane : profile._MaxDistance;
+        float maxDistance = (profile.linkMaxDistanceToCamera ? Camera.main.farClipPlane : profile._MaxDistance) * MainController.instance.pointCloudViewDistanceMultiplier;
         block.SetFloat("_MaxDistance", maxDistance);
         block.SetFloat("_DistFade", profile._DistanceFade * maxDistance);
         block.SetFloat("_MaskFeather", profile._MaskFeather);
+        block.SetFloat("_NoiseAmplitude", profile._NoiseAmplitude);
+        block.SetFloat("_NoiseThickness", profile._NoiseThickness);
+        block.SetFloat("_NoiseScale", profile._NoiseScale);
+        block.SetFloat("_NoiseAlphaMultiplier", profile._NoiseAlphaMultiplier);
 
         if (masksBuffer != null)
         {
