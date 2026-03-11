@@ -26,7 +26,7 @@ public class Subtitles : MonoBehaviour
         uiDocument = GetComponent<UIDocument>();
         if (uiDocument == null)
         {
-            Debug.LogError("No UIDocument found on Subtitles component");
+            //Debug.LogError("No UIDocument found on Subtitles component");
             return;
         }
         //uiDocument.enabled = true;
@@ -43,7 +43,7 @@ public class Subtitles : MonoBehaviour
 
         subtitleLabel = uiDocument.rootVisualElement.Q<Label>("subtitle");
         subtitleLabel.AddToClassList("hidden");
-        Debug.Log("Subtitle label: " + (subtitleLabel != null ? subtitleLabel.name : "null"));
+        //Debug.Log("Subtitle label: " + (subtitleLabel != null ? subtitleLabel.name : "null"));
     }
 
     // Update is called once per frame
@@ -56,7 +56,7 @@ public class Subtitles : MonoBehaviour
 
         if (isPlaying != lastPlaying)
         {
-            Debug.Log("Subtitle playback started at " + Time.time);
+            //Debug.Log("Subtitle playback started at " + Time.time);
             subtitleLabel.AddToClassList("hidden");
             if (isPlaying)
             {
@@ -78,12 +78,12 @@ public class Subtitles : MonoBehaviour
             SubtitleLine subtitle = getSubtitleAt(timeSincePlay, out bool isFinished);
             if (curLine != subtitle)
             {
-                Debug.Log($"Subtitle changed at {timeSincePlay:F2}s: {(subtitle != null ? subtitle.text : "null")}");
+                //Debug.Log($"Subtitle changed at {timeSincePlay:F2}s: {(subtitle != null ? subtitle.text : "null")}");
                 curLine = subtitle;
 
                 if (curLine != null)
                 {
-                    Debug.Log($"Current subtitle: {curLine.text}");
+                    //Debug.Log($"Current subtitle: {curLine.text}");
                     subtitleLabel.RemoveFromClassList("hidden");
                     subtitleLabel.text = subtitle.text;
                 }

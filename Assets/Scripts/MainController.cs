@@ -124,14 +124,16 @@ public class MainController : MonoBehaviour
     }
 
     public Tunnel comingFromTunnel { get; private set; }
+
+    //Game memory
     List<Salle> visitedSalles = new List<Salle>();
+
+    
 
     Tunnel[] allTunnels;
 
     GameObject sallesGO;
     GameObject tunnelsGO;
-
-
 
     private void Start()
     {
