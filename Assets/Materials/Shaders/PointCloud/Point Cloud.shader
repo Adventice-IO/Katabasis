@@ -7,12 +7,6 @@
         _DistFade("Distance Fade", float) = 10
         _Reveal("Reveal", Range(0,1)) = 0
         _MaskFeather("Mask Feather", Range(0, 1)) = 0.1
-        
-        _NoiseThickness("Noise Thickness", float) = 1
-        _NoiseScale("Noise Scale", float) = 1
-        _NoiseAmplitude("Noise Amplitude", float) = 0.5
-        _NoiseAlphaMultiplier("Noise Alpha Multiplier", float) = 1
-
     }
 
     SubShader
@@ -31,7 +25,6 @@
             #pragma target 4.5 
 
             #include "UnityCG.cginc"
-            #include "SimplexNoiseGrad3D.cginc"
 
             struct attribute
             {
@@ -49,7 +42,11 @@
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
-           
+            struct OrientedMaskBox {
+                float4x4 worldToLocal;
+                float3 extents;
+                float alpha;
+            };
 
             // Uniforms
             float _Alpha;
@@ -57,22 +54,10 @@
             float _DistFade;
             float _Reveal;
             float _MaskFeather;
-
-
-            float _NoiseThickness;
-            float _NoiseAmplitude;
-            float _NoiseScale;
-            float _NoiseAlphaMultiplier;
             
             // Buffers
-             struct OrientedMaskBox {
-                float4x4 worldToLocal;
-                float3 extents;
-                float alpha;
-            };
             StructuredBuffer<OrientedMaskBox> _MaskBoxes;
             int _MaskCount;
-
 
             varying vert(attribute v)
             {
@@ -88,7 +73,6 @@
                 float globalAlpha = _Alpha * _Reveal;
                 if (globalAlpha <= 0.0) {
                     o.position = float4(0,0,0,0);
-                    o.color = float4(0,0,0,0);
                     return o;
                 }
 
@@ -99,26 +83,10 @@
                 // 3. Distance Cull/Fade
                 // If point is further than MaxDistance, we collapse it immediately
                 if (d > _MaxDistance) {
-                    o.color = float4(0,0,0,0);
                     o.position = float4(0,0,0,0);
                     return o;
                 }
                 float distFade = saturate((_MaxDistance - d) / _DistFade);
-
-                
-                // 4. Noise Reveal Logic
-                if(_NoiseAmplitude > 0)
-                {
-                    float revealFactor = saturate((d - (_MaxDistance - _NoiseThickness)) / _NoiseThickness);
-                    if(revealFactor > 0)
-                    {
-                        float weight = saturate((d - (_MaxDistance - _NoiseThickness)) / _NoiseThickness);
-                        float3 noise = snoise_grad(worldPos * _NoiseScale + weight) * _NoiseAmplitude * weight;
-                        o.position += float4(noise.xyz, 0);
-                        globalAlpha *= 1.0 + (revealFactor * (_NoiseAlphaMultiplier - 1.0));
-                    }
-                }
-
 
                 // 4. Masking Logic
                 float maskAlpha = 1.0;
@@ -153,7 +121,6 @@
                 float visibility = globalAlpha * distFade * maskAlpha;
                 if (visibility <= 0.001) {
                     o.position = float4(0,0,0,0);
-                    o.color = float4(0,0,0,0);
                     return o;
                 }
 

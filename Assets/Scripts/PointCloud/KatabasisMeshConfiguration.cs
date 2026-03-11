@@ -1,6 +1,4 @@
-using BAPointCloudRenderer.CloudController;
 using BAPointCloudRenderer.CloudData;
-using BAPointCloudRenderer.Controllers;
 using BAPointCloudRenderer.ObjectCreation;
 using BAPointCloudRenderer.Utility;
 using System.Collections.Generic;
@@ -21,7 +19,6 @@ public struct MaskBox
     public float alpha;           // 4 bytes (Total: 80 bytes, 16-byte aligned)
 }
 
-[ExecuteInEditMode]
 public class KatabasisMeshConfiguration : MeshConfiguration
 {
     public PointCloudProfile profile = null;
@@ -35,7 +32,6 @@ public class KatabasisMeshConfiguration : MeshConfiguration
     private PointCloudMask[] masks;
     private MaskBox[] _boxes;
 
-
     public void Start()
     {
         gameObjectCollection = new HashSet<PointCloudBlock>();
@@ -48,14 +44,9 @@ public class KatabasisMeshConfiguration : MeshConfiguration
         _maskBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, _boxes.Length, maskBoxSize);
     }
 
-    public void Onable()
-    {
-        masks = GetComponentsInChildren<PointCloudMask>();
-        _boxes = new MaskBox[masks.Length];
-    }
-
     public void Update()
     {
+       
         if (displayLOD)
         {
             foreach (PointCloudBlock go in gameObjectCollection)
@@ -65,48 +56,17 @@ public class KatabasisMeshConfiguration : MeshConfiguration
             }
         }
 
-        if (masks == null || masks.Length == 0)
-        {
-            masks = GetComponentsInChildren<PointCloudMask>();
-        }
-
-        if (_boxes == null || _boxes.Length != masks.Length)
-        {
-            _boxes = new MaskBox[masks.Length];
-        }
-
         for (int i = 0; i < masks.Length; i++)
         {
             PointCloudMask mask = masks[i];
             _boxes[i] = mask.maskBox;
         }
-
-        if (_maskBuffer == null || _maskBuffer.count != _boxes.Length)
-        {
-            const int maskBoxSize = 80; // Size of MaskBox struct in bytes (16-byte aligned)
-            _maskBuffer?.Release();
-            _maskBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, _boxes.Length, maskBoxSize);
-        }
+        
         _maskBuffer.SetData(_boxes);
 
-        if (Application.isPlaying)
+        foreach (PointCloudBlock go in gameObjectCollection)
         {
-            foreach (PointCloudBlock go in gameObjectCollection)
-            {
-                go.updateMasks(_maskBuffer, _boxes.Length);
-            }
-        }
-        else
-        {
-            MultiPreview multiPreview = GetComponentInChildren<MultiPreview>();
-
-            foreach (PreviewObject go in multiPreview.previewObjects)
-            {
-                if (go != null)
-                {
-                    go.updateMasks(_maskBuffer, _boxes.Length);
-                }
-            }
+            go.updateMasks(_maskBuffer, _boxes.Length);
         }
     }
 
