@@ -14,7 +14,7 @@ using UnityEngine.XR.Interaction.Toolkit.Inputs;
 using UnityEditor;
 #endif
 
-//[ExecuteAlways] // This makes the script run even when NOT in Play mode
+[ExecuteAlways] // This makes the script run even when NOT in Play mode
 public class MainController : MonoBehaviour
 {
     public static MainController instance;
