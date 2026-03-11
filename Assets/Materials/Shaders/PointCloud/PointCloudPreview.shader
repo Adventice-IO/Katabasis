@@ -11,6 +11,8 @@ Shader "Custom/PointCloudDistanceFade"
         
         _FarFadeStart ("Far Fade Start (Fully Visible)", Float) = 50.0
         _FarFadeEnd ("Far Fade End (Faded)", Float) = 100.0
+
+        _MaskFeather("Mask Feather", Range(0, 1)) = 0.1
     }
 
     SubShader
@@ -44,12 +46,22 @@ Shader "Custom/PointCloudDistanceFade"
                 float4 vertex : SV_POSITION;
                 float camDist : TEXCOORD1;
 				float4 color : COLOR;
+                float3 worldPos : TEXCOORD2;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-            
+
+            // Buffers
+             struct OrientedMaskBox {
+                float4x4 worldToLocal;
+                float3 extents;
+                float alpha;
+            };
+            StructuredBuffer<OrientedMaskBox> _MaskBoxes;
+            int _MaskCount;
+            float _MaskFeather;
             
 
             UNITY_INSTANCING_BUFFER_START(Props)
@@ -69,10 +81,10 @@ Shader "Custom/PointCloudDistanceFade"
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_TRANSFER_INSTANCE_ID(v, o);
 
-                float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
                 
                 // Calculate distance in vertex shader for performance
-                o.camDist = distance(worldPos, _WorldSpaceCameraPos);
+                o.camDist = distance(o.worldPos, _WorldSpaceCameraPos);
 
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.color = v.color;
@@ -86,7 +98,7 @@ Shader "Custom/PointCloudDistanceFade"
                 fixed4 col =  i.color;
 
                 float dist = i.camDist;
-                
+
                 float minAlpha = UNITY_ACCESS_INSTANCED_PROP(Props, _MinAlpha);
                 float nearStart = UNITY_ACCESS_INSTANCED_PROP(Props, _NearFadeStart);
                 float nearEnd = UNITY_ACCESS_INSTANCED_PROP(Props, _NearFadeEnd);
@@ -100,10 +112,56 @@ Shader "Custom/PointCloudDistanceFade"
                 // Combine fades to get the "Distance Opacity"
                 float distanceOpacity = nearAlpha * farAlpha;
 
+                //Masking
+                 float maskAlpha = 1.0;
+                 if(_MaskCount == 0) {
+                    discard;
+                 }
+
+                 int maskHit = -1;
+                [loop] // Keep register count low for Unity 6.3 
+                for (int j = 0; j < _MaskCount; j++) {
+                    // Transform world position to the box's local space [cite: 19]
+                    float3 localPos = mul(_MaskBoxes[j].worldToLocal, float4(i.worldPos, 1.0)).xyz;
+                    float3 d = abs(localPos);
+
+                     if(j ==2) {
+                        col.rgb = float3(localPos.x, localPos.y, localPos.z);
+                        break;
+                    }
+                    // Calculate distance to the box edge (extents) [cite: 8, 19]
+                    // Positive result = inside the box
+                    float3 distToEdge = _MaskBoxes[j].extents - d;
+                    float boxSDF = min(distToEdge.x, min(distToEdge.y, distToEdge.z));
+
+                    // If boxSDF > 0, we are inside. 
+                    // We calculate a 0-1 gradient based on the feather distance.
+                    float featherFactor = saturate(boxSDF / max(0.001, _MaskFeather));
+    
+                    // If the box is intended to hide points (alpha < 1):
+                    // We blend the point's current visibility with the box's alpha.
+                    // If featherFactor is 1 (deep inside), we use the box's alpha.
+                    // If featherFactor is 0 (outside), we keep current visibility.
+                    float boxEffect = lerp(1.0, _MaskBoxes[j].alpha, featherFactor);
+    
+                    maskAlpha *= boxEffect;
+
+                    // If we're inside a mask, mark it
+                    if(maskAlpha < 0.999 && maskHit == -1)
+                    {
+                        maskHit = j;
+                    }
+
+                    // Optimization: if we're already invisible, stop [cite: 20]
+                    if (maskAlpha <= 0.001) break; 
+                }
+
+
+
+
                 // Ensure opacity never drops below MinAlpha
                 // We use max() to clamp the lower bound
-                col.a *= max(distanceOpacity, minAlpha);
-
+                col.a *= max(distanceOpacity, minAlpha) *maskAlpha;
                 return col;
             }
             ENDCG

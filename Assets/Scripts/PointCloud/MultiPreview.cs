@@ -64,11 +64,26 @@ namespace BAPointCloudRenderer.CloudController
         private const string PreviewScenePath = "Assets/Scenes/Local/PreviewData.unity";
         private GameObject _previewRoot;
         private Scene previewScene;
+        public List<PreviewObject> previewObjects;
+
 
         public void OnEnable()
         {
+            previewObjects = new List<PreviewObject>();
             //Check when exiting edit mode to unload the preview scene, so we don't keep it around accidentally with all the preview objects when entering play mode
             EditorApplication.playModeStateChanged += HandlePlayModeStateChange;
+
+            if(!Application.isPlaying)
+            {
+                previewScene = EnsurePreviewSceneLoaded();
+
+                previewObjects = new List<PreviewObject>();
+                foreach(var rootObject in previewScene.GetRootGameObjects())
+                {
+                    PreviewObject[] foundPreviews = rootObject.GetComponentsInChildren<PreviewObject>();
+                    previewObjects.AddRange(foundPreviews);
+                }
+            }
         }
 
         public void OnDisable()
@@ -115,10 +130,7 @@ namespace BAPointCloudRenderer.CloudController
             // else
             // {
 
-            if(!Application.isPlaying)
-            {
-                previewScene = EnsurePreviewSceneLoaded();
-            }
+            
 
             material ??= new Material(Shader.Find("Custom/PointShader"));
         }
@@ -417,7 +429,7 @@ namespace BAPointCloudRenderer.CloudController
                 mesh.colors = colorsSlice;
                 mesh.SetIndices(indecies, MeshTopology.Points, 0);
             }
-            go.AddComponent<PreviewObject>();
+            previewObjects.Add(go.AddComponent<PreviewObject>());
 
             go.transform.localPosition = new Vector3(0, 0, 0);
             go.transform.localRotation = Quaternion.identity;
@@ -574,6 +586,8 @@ namespace BAPointCloudRenderer.CloudController
         public void KillPreview()
         {
             Debug.Log("Kil Preview");
+
+            previewObjects.Clear();
             if (_loaders != null && _loaders.Count != 0)
             {
                 //Stop the process

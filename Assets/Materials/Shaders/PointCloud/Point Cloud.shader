@@ -49,11 +49,7 @@
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
-            struct OrientedMaskBox {
-                float4x4 worldToLocal;
-                float3 extents;
-                float alpha;
-            };
+           
 
             // Uniforms
             float _Alpha;
@@ -69,6 +65,11 @@
             float _NoiseAlphaMultiplier;
             
             // Buffers
+             struct OrientedMaskBox {
+                float4x4 worldToLocal;
+                float3 extents;
+                float alpha;
+            };
             StructuredBuffer<OrientedMaskBox> _MaskBoxes;
             int _MaskCount;
 
@@ -87,6 +88,7 @@
                 float globalAlpha = _Alpha * _Reveal;
                 if (globalAlpha <= 0.0) {
                     o.position = float4(0,0,0,0);
+                    o.color = float4(0,0,0,0);
                     return o;
                 }
 
@@ -97,6 +99,7 @@
                 // 3. Distance Cull/Fade
                 // If point is further than MaxDistance, we collapse it immediately
                 if (d > _MaxDistance) {
+                    o.color = float4(0,0,0,0);
                     o.position = float4(0,0,0,0);
                     return o;
                 }
@@ -150,6 +153,7 @@
                 float visibility = globalAlpha * distFade * maskAlpha;
                 if (visibility <= 0.001) {
                     o.position = float4(0,0,0,0);
+                    o.color = float4(0,0,0,0);
                     return o;
                 }
 
