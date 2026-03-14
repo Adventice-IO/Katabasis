@@ -355,7 +355,7 @@ namespace Depthkit
         {
             get
             {
-                return (Application.isPlaying || player.IsPlaying()) && isSetup;
+                return player != null && player.IsPlaying() && isSetup;
             }
         }
 

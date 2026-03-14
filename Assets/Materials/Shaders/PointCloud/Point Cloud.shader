@@ -73,6 +73,7 @@
                 float globalAlpha = _Alpha * _Reveal;
                 if (globalAlpha <= 0.0) {
                     o.position = float4(0,0,0,0);
+                    o.color = float4(0,0,0,0);
                     return o;
                 }
 
@@ -84,6 +85,7 @@
                 // If point is further than MaxDistance, we collapse it immediately
                 if (d > _MaxDistance) {
                     o.position = float4(0,0,0,0);
+                    o.color = float4(0,0,0,0);
                     return o;
                 }
                 float distFade = saturate((_MaxDistance - d) / _DistFade);
@@ -121,6 +123,7 @@
                 float visibility = globalAlpha * distFade * maskAlpha;
                 if (visibility <= 0.001) {
                     o.position = float4(0,0,0,0);
+                    o.color = float4(0,0,0,0);
                     return o;
                 }
 

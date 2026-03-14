@@ -141,7 +141,6 @@ public class MainController : MonoBehaviour
         tunnelsGO = new GameObject("Tunnels");
 
         gameStateUpdate();
-        Reset();
     }
 
 #if UNITY_EDITOR
@@ -520,7 +519,7 @@ public class MainController : MonoBehaviour
                     trackPosition = 1f;
                     currentSpeed = 0f;
                     isRunning = false;
-                    TeleportToSalle(tunnel.salleArrivee);
+                    TeleportToSalle(tunnel.salleArrivee, false);
                 }
                 else
                 {
@@ -578,10 +577,9 @@ public class MainController : MonoBehaviour
                 break;
 
             case GameState.Intro:
-                Reset();
-
                 break;
             case GameState.Playing:
+                Reset();
                 break;
 
             case GameState.Outro:
@@ -599,13 +597,22 @@ public class MainController : MonoBehaviour
     public void ResetGame()
     {
         visitedSalles.Clear();
-        TeleportToSalle(initialSalle);
         gameState = GameState.Menu;
+        salle = null;
         pointCloudViewDistanceMultiplier = 0f;
     }
 
     public void GoToSalle(Salle targetSalle)
     {
+        if (Application.isPlaying)
+        {
+            InterviewManager manager = InterviewManager.instance != null ? InterviewManager.instance : FindAnyObjectByType<InterviewManager>();
+            if (manager != null)
+            {
+                manager.RefreshAssignmentsForSalle(targetSalle);
+            }
+        }
+
         //find tunnel from current salle to target salle
         List<Tunnel> outTunnels = getAllOutTunnels();
         foreach (Tunnel tunnel in outTunnels)
@@ -629,12 +636,13 @@ public class MainController : MonoBehaviour
                 isReversed = true;
                 ResetPosition();
                 Play();
+
                 return;
             }
         }
     }
 
-    public void TeleportToSalle(Salle targetSalle)
+    public void TeleportToSalle(Salle targetSalle, bool assignInterviews = true)
     {
         freeMotion = true;
         comingFromTunnel = tunnel;
@@ -649,6 +657,15 @@ public class MainController : MonoBehaviour
         if (salle.isExit)
         {
             gameState = GameState.Outro;
+        }
+
+        if (Application.isPlaying && assignInterviews)
+        {
+            InterviewManager manager = InterviewManager.instance != null ? InterviewManager.instance : FindAnyObjectByType<InterviewManager>();
+            if (manager != null)
+            {
+                manager.RefreshAssignmentsForSalle(salle);
+            }
         }
     }
 

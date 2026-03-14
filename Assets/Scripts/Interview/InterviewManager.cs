@@ -7,6 +7,8 @@ using UnityEngine;
 [ExecuteAlways]
 public class InterviewManager : MonoBehaviour
 {
+    public static InterviewManager instance;
+
     [Serializable]
     public struct RoomPersonAssignment
     {
@@ -15,15 +17,24 @@ public class InterviewManager : MonoBehaviour
         public string person;
     }
 
+    public struct ResolvedInterviewPlayback
+    {
+        public InterviewData[] sequence;
+        public InterviewData playedInterview;
+    }
+
     public struct InterviewData
     {
         public string person;
         public string filename;
+        public string mediaPath;
         public List<string> themes;
+        public List<int> levels;
         public bool isIntro;
         public bool visited;
         public bool proposed;
         public string depthkitId;
+        public string depthkitPath;
         public int level;
         public int note;
     }
@@ -38,8 +49,13 @@ public class InterviewManager : MonoBehaviour
     readonly List<InterviewData> interviewDataList = new List<InterviewData>();
     readonly List<PersonInterviewStats> personStatsList = new List<PersonInterviewStats>();
     readonly List<RoomPersonAssignment> roomAssignments = new List<RoomPersonAssignment>();
-    readonly Dictionary<string, HashSet<int>> playedLevelsByPerson = new Dictionary<string, HashSet<int>>(StringComparer.OrdinalIgnoreCase);
     readonly HashSet<string> playedPersonsSinceAssignment = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    readonly List<string> playedThemesHistory = new List<string>();
+    readonly Dictionary<Interview, RoomPersonAssignment> activeAssignmentsBySlot = new Dictionary<Interview, RoomPersonAssignment>();
+    readonly Dictionary<Interview, InterviewData[]> resolvedPlaybackBySlot = new Dictionary<Interview, InterviewData[]>();
+    readonly HashSet<Interview> consumedSlots = new HashSet<Interview>();
+    Interview activePlayingSlot;
+    Salle lastAssignedSalle;
 
     System.Random assignmentRandom;
 
@@ -54,20 +70,34 @@ public class InterviewManager : MonoBehaviour
 
     void OnEnable()
     {
+        instance = this;
         LoadInterviewData();
-        AssignPersonsToRooms();
-        ApplyAssignmentsToScene();
-        logAssignments();
+        RefreshAssignmentsForCurrentSalle();
+    }
+
+    void OnDisable()
+    {
+        if (instance == this)
+        {
+            instance = null;
+        }
     }
 
     void Update()
     {
+        MainController controller = MainController.instance;
+        Salle currentSalle = controller != null ? controller.salle : null;
+        if (currentSalle != lastAssignedSalle)
+        {
+            consumedSlots.Clear();
+            roomAssignments.Clear();
+            RefreshAssignmentsForCurrentSalle();
+        }
+
         if (generateAssignment)
         {
             generateAssignment = false;
-            AssignPersonsToRooms();
-            ApplyAssignmentsToScene();
-            logAssignments();
+            RefreshAssignmentsForCurrentSalle();
         }
 
         if (simulateGameplay)
@@ -87,11 +117,11 @@ public class InterviewManager : MonoBehaviour
             interviewDataList[i] = data;
         }
 
-        playedLevelsByPerson.Clear();
         playedPersonsSinceAssignment.Clear();
+        playedThemesHistory.Clear();
+        consumedSlots.Clear();
         RebuildPersonStats();
-        AssignPersonsToRooms();
-        ApplyAssignmentsToScene();
+        RefreshAssignmentsForCurrentSalle();
     }
 
     public void ClearVisits()
@@ -101,38 +131,101 @@ public class InterviewManager : MonoBehaviour
 
     public bool MarkInterviewVisited(string interviewId)
     {
-        bool found = false;
-        InterviewData? matchedInterview = null;
+        return MarkInterviewVisited(interviewId, null);
+    }
 
-        for (int i = 0; i < interviewDataList.Count; i++)
+    public bool MarkInterviewSequenceVisited(InterviewData[] sequence)
+    {
+        if (sequence == null || sequence.Length == 0)
         {
-            bool isMatch =
-                string.Equals(interviewDataList[i].filename, interviewId, StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(interviewDataList[i].depthkitId, interviewId, StringComparison.OrdinalIgnoreCase);
+            return false;
+        }
 
-            if (!isMatch)
+        InterviewData? playedInterview = null;
+
+        for (int i = 0; i < sequence.Length; i++)
+        {
+            InterviewData current = sequence[i];
+            if (!MarkInterviewVisitedInternal(current.filename, current.depthkitId, current.levels))
             {
                 continue;
             }
 
-            var data = interviewDataList[i];
-            data.visited = true;
-            data.proposed = true;
-            interviewDataList[i] = data;
-            matchedInterview = data;
-            found = true;
-            break;
+            if (!current.isIntro)
+            {
+                playedInterview = GetInterviewDataByFilename(current.filename);
+            }
         }
 
-        if (!found || !matchedInterview.HasValue)
+        if (!playedInterview.HasValue)
+        {
+            return false;
+        }
+
+        RegisterPlayedInterview(playedInterview.Value);
+        ClearProposedFlags();
+        RebuildPersonStats();
+        return true;
+    }
+
+    public bool MarkInterviewVisitedByClip(string depthkitId, int level)
+    {
+        return MarkInterviewVisited(depthkitId, level);
+    }
+
+    bool MarkInterviewVisited(string interviewId, int? level)
+    {
+        InterviewData? matchedInterview = MarkInterviewVisitedInternal(interviewId, interviewId, level.HasValue ? new List<int> { level.Value } : null)
+            ? GetInterviewData(interviewId, level)
+            : null;
+
+        if (!matchedInterview.HasValue)
         {
             return false;
         }
 
         RegisterPlayedInterview(matchedInterview.Value);
+        ClearProposedFlags();
         RebuildPersonStats();
-        ApplyAssignmentsToScene();
         return true;
+    }
+
+    public void MarkSlotConsumed(Interview slot)
+    {
+        if (slot == null)
+        {
+            return;
+        }
+
+        consumedSlots.Add(slot);
+    }
+
+    public bool IsSlotConsumed(Interview slot)
+    {
+        return slot != null && consumedSlots.Contains(slot);
+    }
+
+    public void NotifyInterviewStarted(Interview slot)
+    {
+        if (slot == null)
+        {
+            return;
+        }
+
+        if (activePlayingSlot != null && activePlayingSlot != slot)
+        {
+            activePlayingSlot.StopPlaybackForAnotherInterview();
+        }
+
+        activePlayingSlot = slot;
+    }
+
+    public void NotifyInterviewStopped(Interview slot)
+    {
+        if (activePlayingSlot == slot)
+        {
+            activePlayingSlot = null;
+        }
     }
 
     public void AssignPersonsToRooms(int? seed = null)
@@ -146,97 +239,162 @@ public class InterviewManager : MonoBehaviour
             assignmentRandom = new System.Random(Environment.TickCount);
         }
 
-        roomAssignments.Clear();
-        playedLevelsByPerson.Clear();
-        playedPersonsSinceAssignment.Clear();
-
-        Salle[] salles = FindObjectsByType<Salle>(FindObjectsSortMode.None)
-            .Where(salle => salle != null && !salle.isExit)
-            .ToArray();
-
-        Tunnel[] tunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
-        Dictionary<Salle, int> connectivity = BuildConnectivityMap(salles, tunnels);
-        Dictionary<Salle, int> depthMap = BuildForwardDepthMap(salles, tunnels);
-
-        List<Salle> orderedSalles = salles
-            .OrderBy(salle => depthMap.ContainsKey(salle) ? depthMap[salle] : int.MaxValue)
-            .ThenByDescending(salle => connectivity.ContainsKey(salle) ? connectivity[salle] : 0)
-            .ThenBy(_ => assignmentRandom.Next())
-            .ToList();
-
-        List<string> allPersons = personStatsList
-            .Select(stats => stats.person)
-            .OrderBy(_ => assignmentRandom.Next())
-            .ToList();
-
-        int maxSlotsInOneRoom = orderedSalles
-            .Select(salle => salle != null ? salle.interviews.Length : 0)
-            .DefaultIfEmpty(0)
-            .Max();
-
-        int targetUniquePeople = Mathf.Clamp(
-            Mathf.RoundToInt(Mathf.Lerp(maxSlotsInOneRoom, allPersons.Count, diversity)),
-            Mathf.Min(maxSlotsInOneRoom, allPersons.Count),
-            allPersons.Count);
-
-        List<string> availablePersons = allPersons.Take(targetUniquePeople).ToList();
-
-        for (int i = 0; i < orderedSalles.Count; i++)
-        {
-            Salle salle = orderedSalles[i];
-            Interview[] slots = salle.interviews;
-            List<string> roomAvailablePersons = availablePersons.OrderBy(_ => assignmentRandom.Next()).ToList();
-
-            for (int j = 0; j < slots.Length; j++)
-            {
-                if (roomAvailablePersons.Count == 0)
-                {
-                    break;
-                }
-
-                string person = roomAvailablePersons[0];
-                roomAvailablePersons.RemoveAt(0);
-
-                roomAssignments.Add(new RoomPersonAssignment
-                {
-                    salle = salle,
-                    interviewSlot = slots[j],
-                    person = person
-                });
-            }
-        }
+        RefreshAssignmentsForCurrentSalle();
     }
 
     public void ApplyAssignmentsToScene()
     {
-        for (int i = 0; i < roomAssignments.Count; i++)
+        ApplyAssignmentsToScene(roomAssignments);
+    }
+
+    public void RefreshAssignmentsForSalle(Salle salle)
+    {
+        consumedSlots.Clear();
+        resolvedPlaybackBySlot.Clear();
+        ClearProposedFlags();
+
+        if (salle == null || salle.isExit)
         {
-            RoomPersonAssignment assignment = roomAssignments[i];
-            if (assignment.interviewSlot == null || string.IsNullOrWhiteSpace(assignment.person))
+            roomAssignments.Clear();
+            activeAssignmentsBySlot.Clear();
+            lastAssignedSalle = salle;
+            return;
+        }
+
+        if (roomAssignments.Count == 0 || roomAssignments.Any(assignment => assignment.salle != salle))
+        {
+            roomAssignments.Clear();
+            roomAssignments.AddRange(BuildAssignmentsForSalle(salle, consumedSlots));
+        }
+
+        ApplyAssignmentsToScene(roomAssignments);
+        lastAssignedSalle = salle;
+        logAssignments();
+    }
+
+    void ApplyAssignmentsToScene(List<RoomPersonAssignment> assignments)
+    {
+        activeAssignmentsBySlot.Clear();
+        resolvedPlaybackBySlot.Clear();
+
+        if (assignments == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < assignments.Count; i++)
+        {
+            RoomPersonAssignment assignment = assignments[i];
+            if (assignment.interviewSlot == null || consumedSlots.Contains(assignment.interviewSlot) || string.IsNullOrWhiteSpace(assignment.person))
             {
                 continue;
             }
 
-            InterviewData[] interviewsToShow = GetInterviewsToPlayForPerson(assignment.person);
-            InterviewData selectedInterview = interviewsToShow.FirstOrDefault(data => !data.isIntro);
-            if (string.IsNullOrWhiteSpace(selectedInterview.depthkitId) && interviewsToShow.Length > 0)
+            InterviewData? selectedInterview = GetPreviewInterviewForAssignment(assignment);
+            if (selectedInterview.HasValue && !string.IsNullOrWhiteSpace(selectedInterview.Value.depthkitPath))
             {
-                selectedInterview = interviewsToShow[interviewsToShow.Length - 1];
-            }
-
-            if (!string.IsNullOrWhiteSpace(selectedInterview.depthkitId))
-            {
-                assignment.interviewSlot.set(selectedInterview.depthkitId, selectedInterview.level);
+                assignment.interviewSlot.ResetForPreviewAssignment();
+                assignment.interviewSlot.set(selectedInterview.Value.depthkitPath, selectedInterview.Value.level, selectedInterview.Value.mediaPath);
+                assignment.interviewSlot.load();
+                activeAssignmentsBySlot[assignment.interviewSlot] = assignment;
             }
         }
     }
 
-    public InterviewData[] GetInterviewsToPlayForPerson(string person)
+    public bool TryResolvePlaybackForSlot(Interview slot, out ResolvedInterviewPlayback playback)
     {
-        return GetInterviewsToPlayForPerson(person, playedPersonsSinceAssignment, playedLevelsByPerson);
+        playback = default;
+
+        if (slot == null)
+        {
+            return false;
+        }
+
+        if (consumedSlots.Contains(slot))
+        {
+            return false;
+        }
+
+        if (resolvedPlaybackBySlot.TryGetValue(slot, out InterviewData[] cachedSequence) && cachedSequence != null && cachedSequence.Length > 0)
+        {
+            InterviewData? cachedPlayedInterview = GetPlayedInterviewFromSequence(cachedSequence);
+            if (cachedPlayedInterview.HasValue)
+            {
+                playback = new ResolvedInterviewPlayback
+                {
+                    sequence = cachedSequence,
+                    playedInterview = cachedPlayedInterview.Value
+                };
+                return true;
+            }
+        }
+
+        if (!activeAssignmentsBySlot.TryGetValue(slot, out RoomPersonAssignment assignment) || string.IsNullOrWhiteSpace(assignment.person))
+        {
+            return false;
+        }
+
+        InterviewData[] sequence = GetInterviewsToPlayForAssignment(assignment);
+        InterviewData? playedInterview = GetPlayedInterviewFromSequence(sequence);
+        if (!playedInterview.HasValue)
+        {
+            return false;
+        }
+
+        MarkInterviewsAsProposed(sequence.ToList());
+        resolvedPlaybackBySlot[slot] = sequence;
+        playback = new ResolvedInterviewPlayback
+        {
+            sequence = sequence,
+            playedInterview = playedInterview.Value
+        };
+        return true;
     }
 
-    InterviewData[] GetInterviewsToPlayForPerson(string person, HashSet<string> playedPersons, Dictionary<string, HashSet<int>> playedLevels)
+    public InterviewData[] GetInterviewsToPlayForPerson(string person)
+    {
+        MainController controller = MainController.instance;
+        int? salleLevel = controller != null && controller.salle != null ? controller.salle.niveau : null;
+        return GetInterviewsToPlayForPerson(person, salleLevel, playedPersonsSinceAssignment, playedThemesHistory);
+    }
+
+    InterviewData[] GetInterviewsToPlayForAssignment(RoomPersonAssignment assignment)
+    {
+        int salleLevel = assignment.salle != null ? assignment.salle.niveau : 0;
+        return GetInterviewsToPlayForPerson(assignment.person, salleLevel, playedPersonsSinceAssignment, playedThemesHistory);
+    }
+
+    InterviewData? GetPreviewInterviewForAssignment(RoomPersonAssignment assignment)
+    {
+        PersonInterviewStats? stats = GetPersonStats(assignment.person);
+        if (!stats.HasValue)
+        {
+            return null;
+        }
+
+        int salleLevel = assignment.salle != null ? assignment.salle.niveau : 0;
+        bool hasPlayedBefore = playedPersonsSinceAssignment.Contains(assignment.person) || HasVisitedAnyInterview(stats.Value);
+
+        if (!hasPlayedBefore && !string.IsNullOrWhiteSpace(stats.Value.introInterview.depthkitId))
+        {
+            return stats.Value.introInterview;
+        }
+
+        InterviewData? bestInterview = GetBestInterviewForPerson(stats.Value.person, salleLevel, playedThemesHistory);
+        if (bestInterview.HasValue)
+        {
+            return bestInterview.Value;
+        }
+
+        if (!string.IsNullOrWhiteSpace(stats.Value.introInterview.depthkitId))
+        {
+            return stats.Value.introInterview;
+        }
+
+        return null;
+    }
+
+    InterviewData[] GetInterviewsToPlayForPerson(string person, int? salleLevel, HashSet<string> playedPersons, List<string> themeHistory)
     {
         if (string.IsNullOrWhiteSpace(person))
         {
@@ -250,14 +408,14 @@ public class InterviewManager : MonoBehaviour
         }
 
         List<InterviewData> result = new List<InterviewData>();
-        bool hasPlayedBefore = playedPersons.Contains(person);
+        bool hasPlayedBefore = playedPersons.Contains(person) || HasVisitedAnyInterview(stats.Value);
 
         if (!hasPlayedBefore && !string.IsNullOrEmpty(stats.Value.introInterview.filename))
         {
             result.Add(stats.Value.introInterview);
         }
 
-        InterviewData? bestInterview = GetBestInterviewForPerson(stats.Value.person, playedLevels);
+        InterviewData? bestInterview = GetBestInterviewForPerson(stats.Value.person, salleLevel, themeHistory);
         if (bestInterview.HasValue)
         {
             result.Add(bestInterview.Value);
@@ -268,10 +426,10 @@ public class InterviewManager : MonoBehaviour
 
     public InterviewData? GetBestInterviewForPerson(string person)
     {
-        return GetBestInterviewForPerson(person, playedLevelsByPerson);
+        return GetBestInterviewForPerson(person, null, playedThemesHistory);
     }
 
-    InterviewData? GetBestInterviewForPerson(string person, Dictionary<string, HashSet<int>> playedLevels)
+    InterviewData? GetBestInterviewForPerson(string person, int? salleLevel, List<string> themeHistory)
     {
         PersonInterviewStats? stats = GetPersonStats(person);
         if (!stats.HasValue)
@@ -279,21 +437,14 @@ public class InterviewManager : MonoBehaviour
             return null;
         }
 
-        List<InterviewData> candidates = GetPlayableCandidates(stats.Value.person, stats.Value.interviews, playedLevels);
+        List<InterviewData> candidates = GetPlayableCandidates(stats.Value.person, stats.Value.interviews, salleLevel);
         if (candidates.Count == 0)
         {
             return null;
         }
 
-        List<InterviewData> leveledCandidates = ApplyLevelBias(candidates);
-
-        int bestNote = leveledCandidates.Max(data => data.note);
-        List<InterviewData> bestNoteCandidates = leveledCandidates
-            .Where(data => data.note == bestNote)
-            .ToList();
-
-        int randomIndex = assignmentRandom != null ? assignmentRandom.Next(bestNoteCandidates.Count) : UnityEngine.Random.Range(0, bestNoteCandidates.Count);
-        return bestNoteCandidates[randomIndex];
+        List<InterviewData> themedCandidates = FilterCandidatesByThemeHistory(candidates, themeHistory);
+        return PickBestByNote(themedCandidates);
     }
 
     public InterviewData[] GetNextInterviewsForPerson(string person)
@@ -316,7 +467,7 @@ public class InterviewManager : MonoBehaviour
         List<InterviewData> playable = new List<InterviewData>();
         for (int i = 0; i < candidates.Count; i++)
         {
-            if (IsInterviewAllowedForPlayback(candidates[i], playedLevelsByPerson))
+            if (IsInterviewAllowedForPlayback(candidates[i], null))
             {
                 playable.Add(candidates[i]);
             }
@@ -327,18 +478,17 @@ public class InterviewManager : MonoBehaviour
             return Array.Empty<InterviewData>();
         }
 
-        List<InterviewData> leveledCandidates = ApplyLevelBias(playable);
+        InterviewData? pickedInterview = PickBestByNote(FilterCandidatesByThemeHistory(playable, playedThemesHistory));
+        if (!pickedInterview.HasValue)
+        {
+            return Array.Empty<InterviewData>();
+        }
 
-        int bestNote = leveledCandidates.Max(data => data.note);
-        List<InterviewData> bestNoteCandidates = leveledCandidates
-            .Where(data => data.note == bestNote)
-            .ToList();
-
-        int randomIndex = assignmentRandom != null ? assignmentRandom.Next(bestNoteCandidates.Count) : UnityEngine.Random.Range(0, bestNoteCandidates.Count);
-        InterviewData picked = bestNoteCandidates[randomIndex];
+        InterviewData picked = pickedInterview.Value;
 
         List<InterviewData> result = new List<InterviewData>();
-        if (!playedPersonsSinceAssignment.Contains(picked.person))
+        PersonInterviewStats? pickedStats = GetPersonStats(picked.person);
+        if (pickedStats.HasValue && !HasVisitedAnyInterview(pickedStats.Value))
         {
             InterviewData? intro = GetIntroForPerson(picked.person);
             if (intro.HasValue)
@@ -422,16 +572,24 @@ public class InterviewManager : MonoBehaviour
                 level = ParseInt(GetField(fields, 2), 1),
                 note = ParseInt(GetField(fields, 3), 1),
                 person = GetField(fields, 4),
-                themes = GetField(fields, 5).Split(',').Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).ToList(),
+                themes = SplitMultiValueField(GetField(fields, 5)),
+                levels = ParseLevels(GetField(fields, 2)),
                 visited = false,
                 proposed = false
             };
 
+            data.mediaPath = CombineInterviewFolder(data.person, data.filename);
+            data.depthkitPath = CombineInterviewFolder(data.person, data.depthkitId);
+
+            string personFolder = CombineInterviewFolder(data.person, data.person);
+            data.depthkitPath = personFolder;
+
             data.isIntro = data.themes.Any(t => string.Equals(t, "Intro", StringComparison.OrdinalIgnoreCase));
-            if (data.level <= 0)
+            if (data.levels.Count == 0)
             {
-                data.level = 1;
+                data.levels.AddRange(new[] { 0, 1, 2, 3, 4 });
             }
+            data.level = data.levels[0];
             interviewDataList.Add(data);
         }
 
@@ -450,7 +608,7 @@ public class InterviewManager : MonoBehaviour
                 introInterview = default,
                 interviews = group
                     .Where(data => !data.isIntro)
-                    .OrderBy(data => data.level)
+                    .OrderBy(data => data.levels.Count > 0 ? data.levels.Min() : data.level)
                     .ThenByDescending(data => data.note)
                     .ThenBy(data => data.filename)
                     .ToList()
@@ -471,96 +629,167 @@ public class InterviewManager : MonoBehaviour
 
     List<InterviewData> GetPlayableCandidates(string person, List<InterviewData> interviews)
     {
-        return GetPlayableCandidates(person, interviews, playedLevelsByPerson);
+        return GetPlayableCandidates(person, interviews, null);
     }
 
-    List<InterviewData> GetPlayableCandidates(string person, List<InterviewData> interviews, Dictionary<string, HashSet<int>> playedLevels)
+    List<InterviewData> GetPlayableCandidates(string person, List<InterviewData> interviews, int? salleLevel)
     {
-        int highestPlayedLevel = GetHighestPlayedLevel(person, playedLevels);
-        int maxAllowedLevel = Mathf.Max(1, highestPlayedLevel + 1);
-        int minAllowedLevel = highestPlayedLevel <= 0 ? 1 : highestPlayedLevel;
-
         return interviews
             .Where(data => !data.visited)
-            .Where(data => data.level >= minAllowedLevel && data.level <= maxAllowedLevel)
+            .Where(data => !data.proposed)
+            .Where(data => !salleLevel.HasValue || data.levels.Contains(salleLevel.Value))
             .ToList();
     }
 
-    List<InterviewData> ApplyLevelBias(List<InterviewData> candidates)
+    bool IsInterviewAllowedForPlayback(InterviewData candidate, int? salleLevel)
     {
-        if (candidates == null || candidates.Count <= 1)
-        {
-            return candidates ?? new List<InterviewData>();
-        }
-
-        List<int> availableLevels = candidates
-            .Select(data => data.level)
-            .Distinct()
-            .OrderBy(level => level)
-            .ToList();
-
-        if (availableLevels.Count <= 1)
-        {
-            return candidates;
-        }
-
-        int chosenLevel;
-        double roll = assignmentRandom != null ? assignmentRandom.NextDouble() : UnityEngine.Random.value;
-        if (roll < levelUpBias)
-        {
-            chosenLevel = availableLevels[availableLevels.Count - 1];
-        }
-        else
-        {
-            int levelIndex = assignmentRandom != null ? assignmentRandom.Next(availableLevels.Count) : UnityEngine.Random.Range(0, availableLevels.Count);
-            chosenLevel = availableLevels[levelIndex];
-        }
-
-        return candidates.Where(data => data.level == chosenLevel).ToList();
-    }
-
-    int GetHighestPlayedLevel(string person)
-    {
-        return GetHighestPlayedLevel(person, playedLevelsByPerson);
-    }
-
-    int GetHighestPlayedLevel(string person, Dictionary<string, HashSet<int>> playedLevels)
-    {
-        if (!playedLevels.TryGetValue(person, out HashSet<int> levels) || levels.Count == 0)
-        {
-            return 0;
-        }
-
-        return levels.Max();
-    }
-
-    bool IsInterviewAllowedForPlayback(InterviewData candidate)
-    {
-        return IsInterviewAllowedForPlayback(candidate, playedLevelsByPerson);
-    }
-
-    bool IsInterviewAllowedForPlayback(InterviewData candidate, Dictionary<string, HashSet<int>> playedLevels)
-    {
-        int highestPlayedLevel = GetHighestPlayedLevel(candidate.person, playedLevels);
-        int maxAllowedLevel = Mathf.Max(1, highestPlayedLevel + 1);
-        int minAllowedLevel = highestPlayedLevel <= 0 ? 1 : highestPlayedLevel;
-        return !candidate.visited && candidate.level >= minAllowedLevel && candidate.level <= maxAllowedLevel;
+        return !candidate.visited && !candidate.proposed && (!salleLevel.HasValue || candidate.levels.Contains(salleLevel.Value));
     }
 
     void RegisterPlayedInterview(InterviewData interview)
     {
         playedPersonsSinceAssignment.Add(interview.person);
 
-        if (!playedLevelsByPerson.TryGetValue(interview.person, out HashSet<int> levels))
+        if (interview.isIntro)
         {
-            levels = new HashSet<int>();
-            playedLevelsByPerson[interview.person] = levels;
+            return;
         }
 
-        if (!interview.isIntro)
+        playedThemesHistory.Clear();
+
+        if (interview.themes != null)
         {
-            levels.Add(interview.level);
+            for (int i = 0; i < interview.themes.Count; i++)
+            {
+                string theme = interview.themes[i];
+                if (!string.IsNullOrWhiteSpace(theme) && !string.Equals(theme, "Intro", StringComparison.OrdinalIgnoreCase))
+                {
+                    playedThemesHistory.Add(theme);
+                }
+            }
         }
+    }
+
+    void MarkInterviewsAsProposed(List<InterviewData> sequence)
+    {
+        if (sequence == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < sequence.Count; i++)
+        {
+            MarkInterviewAsProposed(sequence[i]);
+        }
+    }
+
+    void MarkInterviewAsProposed(InterviewData interview)
+    {
+        for (int i = 0; i < interviewDataList.Count; i++)
+        {
+            if (!MatchesInterview(interviewDataList[i], interview.filename, interview.depthkitId, interview.levels))
+            {
+                continue;
+            }
+
+            var data = interviewDataList[i];
+            data.proposed = true;
+            interviewDataList[i] = data;
+            return;
+        }
+    }
+
+    void ClearProposedFlags()
+    {
+        for (int i = 0; i < interviewDataList.Count; i++)
+        {
+            var data = interviewDataList[i];
+            data.proposed = false;
+            interviewDataList[i] = data;
+        }
+    }
+
+    bool MarkInterviewVisitedInternal(string interviewId, string depthkitId, List<int> levels)
+    {
+        for (int i = 0; i < interviewDataList.Count; i++)
+        {
+            if (!MatchesInterview(interviewDataList[i], interviewId, depthkitId, levels))
+            {
+                continue;
+            }
+
+            var data = interviewDataList[i];
+            data.visited = true;
+            data.proposed = false;
+            interviewDataList[i] = data;
+            return true;
+        }
+
+        return false;
+    }
+
+    InterviewData? GetInterviewData(string interviewId, int? level)
+    {
+        List<int> levels = level.HasValue ? new List<int> { level.Value } : null;
+        for (int i = 0; i < interviewDataList.Count; i++)
+        {
+            if (MatchesInterview(interviewDataList[i], interviewId, interviewId, levels))
+            {
+                return interviewDataList[i];
+            }
+        }
+
+        return null;
+    }
+
+    InterviewData? GetInterviewDataByFilename(string filename)
+    {
+        for (int i = 0; i < interviewDataList.Count; i++)
+        {
+            if (string.Equals(interviewDataList[i].filename, filename, StringComparison.OrdinalIgnoreCase))
+            {
+                return interviewDataList[i];
+            }
+        }
+
+        return null;
+    }
+
+    InterviewData? GetPlayedInterviewFromSequence(InterviewData[] sequence)
+    {
+        if (sequence == null || sequence.Length == 0)
+        {
+            return null;
+        }
+
+        for (int i = sequence.Length - 1; i >= 0; i--)
+        {
+            if (!sequence[i].isIntro)
+            {
+                return sequence[i];
+            }
+        }
+
+        return sequence[sequence.Length - 1];
+    }
+
+    bool MatchesInterview(InterviewData data, string filename, string depthkitId, List<int> levels)
+    {
+        bool matchesId =
+            string.Equals(data.filename, filename, StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(data.depthkitId, depthkitId, StringComparison.OrdinalIgnoreCase);
+
+        if (!matchesId)
+        {
+            return false;
+        }
+
+        if (levels == null || levels.Count == 0)
+        {
+            return true;
+        }
+
+        return levels.Any(level => data.levels.Contains(level));
     }
 
     public void SimulateGameplay()
@@ -580,10 +809,12 @@ public class InterviewManager : MonoBehaviour
         }
 
         HashSet<string> simulatedPlayedPersons = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        Dictionary<string, HashSet<int>> simulatedPlayedLevels = new Dictionary<string, HashSet<int>>(StringComparer.OrdinalIgnoreCase);
+        List<string> simulatedThemeHistory = new List<string>();
         HashSet<Salle> visitedSalles = new HashSet<Salle>();
+        HashSet<Interview> simulatedConsumedSlots = new HashSet<Interview>();
 
         Salle currentSalle = startSalle;
+        Salle previousSalle = null;
         int stepIndex = 1;
         int safety = 0;
         int maxSteps = Mathf.Max(10, roomAssignments.Count * 3);
@@ -593,8 +824,14 @@ public class InterviewManager : MonoBehaviour
 
         while (currentSalle != null && safety < maxSteps)
         {
+            if (currentSalle != previousSalle)
+            {
+                simulatedConsumedSlots.Clear();
+            }
+
+            List<RoomPersonAssignment> simulatedAssignments = BuildAssignmentsForSalle(currentSalle, simulatedConsumedSlots);
             visitedSalles.Add(currentSalle);
-            List<RoomPersonAssignment> roomPeople = roomAssignments
+            List<RoomPersonAssignment> roomPeople = simulatedAssignments
                 .Where(assignment => assignment.salle == currentSalle && !string.IsNullOrWhiteSpace(assignment.person))
                 .ToList();
 
@@ -614,7 +851,13 @@ public class InterviewManager : MonoBehaviour
                 for (int i = 0; i < playCount; i++)
                 {
                     RoomPersonAssignment assignment = shuffledPeople[i];
-                    InterviewData[] toPlay = GetInterviewsToPlayForPerson(assignment.person, simulatedPlayedPersons, simulatedPlayedLevels);
+                    if (assignment.interviewSlot != null)
+                    {
+                        simulatedConsumedSlots.Add(assignment.interviewSlot);
+                    }
+
+                    int salleLevel = assignment.salle != null ? assignment.salle.niveau : 0;
+                    InterviewData[] toPlay = GetInterviewsToPlayForPerson(assignment.person, salleLevel, simulatedPlayedPersons, simulatedThemeHistory);
 
                     if (toPlay.Length == 0)
                     {
@@ -629,6 +872,11 @@ public class InterviewManager : MonoBehaviour
                     Debug.Log($"    • Person <b><color=#00ffff>{assignment.person}</color></b> -> {sequence}");
 
                     simulatedPlayedPersons.Add(assignment.person);
+                    InterviewData lastPlayedInterview = toPlay[toPlay.Length - 1];
+                    if (!lastPlayedInterview.isIntro)
+                    {
+                        simulatedThemeHistory.Clear();
+                    }
                     for (int j = 0; j < toPlay.Length; j++)
                     {
                         if (toPlay[j].isIntro)
@@ -636,13 +884,19 @@ public class InterviewManager : MonoBehaviour
                             continue;
                         }
 
-                        if (!simulatedPlayedLevels.TryGetValue(toPlay[j].person, out HashSet<int> levels))
+                        if (toPlay[j].themes == null)
                         {
-                            levels = new HashSet<int>();
-                            simulatedPlayedLevels[toPlay[j].person] = levels;
+                            continue;
                         }
 
-                        levels.Add(toPlay[j].level);
+                        for (int k = 0; k < toPlay[j].themes.Count; k++)
+                        {
+                            string theme = toPlay[j].themes[k];
+                            if (!string.IsNullOrWhiteSpace(theme) && !string.Equals(theme, "Intro", StringComparison.OrdinalIgnoreCase))
+                            {
+                                simulatedThemeHistory.Add(theme);
+                            }
+                        }
                     }
                 }
             }
@@ -661,6 +915,7 @@ public class InterviewManager : MonoBehaviour
 
             Debug.Log($"  <color=#55ff55>Go through</color> <b><color=#ffaa55>{chosenTunnel.name}</color></b> <color=#55ff55>to</color> <b><color=#ffff55>{nextSalle?.name ?? "None"}</color></b>");
 
+            previousSalle = currentSalle;
             currentSalle = nextSalle;
             stepIndex++;
             safety++;
@@ -725,100 +980,6 @@ public class InterviewManager : MonoBehaviour
         return $"<b><color={color}>[{kind}]</color></b> <color=#ffff55>{interview.filename}</color> <color=#aaaaaa>(P:</color><color=#00ffff>{interview.person}</color><color=#aaaaaa>, L:</color><color=#ff5500>{interview.level}</color><color=#aaaaaa>, N:</color><color=#cc55ee>{interview.note}</color><color=#aaaaaa>)</color>";
     }
 
-    Dictionary<Salle, int> BuildForwardDepthMap(Salle[] salles, Tunnel[] tunnels)
-    {
-        Dictionary<Salle, int> depthMap = new Dictionary<Salle, int>();
-        if (salles == null || salles.Length == 0)
-        {
-            return depthMap;
-        }
-
-        MainController controller = MainController.instance;
-        Salle startSalle = controller != null ? controller.initialSalle : salles.FirstOrDefault();
-        if (startSalle == null)
-        {
-            return depthMap;
-        }
-
-        Queue<Salle> queue = new Queue<Salle>();
-        depthMap[startSalle] = 0;
-        queue.Enqueue(startSalle);
-
-        while (queue.Count > 0)
-        {
-            Salle current = queue.Dequeue();
-            int currentDepth = depthMap[current];
-
-            for (int i = 0; i < tunnels.Length; i++)
-            {
-                Tunnel tunnel = tunnels[i];
-                if (tunnel == null || !HasForwardPortal(tunnel))
-                {
-                    continue;
-                }
-
-                if (tunnel.salleDepart != current || tunnel.salleArrivee == null)
-                {
-                    continue;
-                }
-
-                if (depthMap.ContainsKey(tunnel.salleArrivee))
-                {
-                    continue;
-                }
-
-                depthMap[tunnel.salleArrivee] = currentDepth + 1;
-                queue.Enqueue(tunnel.salleArrivee);
-            }
-        }
-
-        for (int i = 0; i < salles.Length; i++)
-        {
-            if (!depthMap.ContainsKey(salles[i]))
-            {
-                depthMap[salles[i]] = int.MaxValue;
-            }
-        }
-
-        return depthMap;
-    }
-
-    Dictionary<Salle, int> BuildConnectivityMap(Salle[] salles, Tunnel[] tunnels)
-    {
-        Dictionary<Salle, int> connectivity = new Dictionary<Salle, int>();
-
-        for (int i = 0; i < salles.Length; i++)
-        {
-            connectivity[salles[i]] = 0;
-        }
-
-        for (int i = 0; i < tunnels.Length; i++)
-        {
-            Tunnel tunnel = tunnels[i];
-            if (tunnel == null || tunnel.salleDepart == null || tunnel.salleArrivee == null)
-            {
-                continue;
-            }
-
-            if (!HasForwardPortal(tunnel))
-            {
-                continue;
-            }
-
-            if (connectivity.ContainsKey(tunnel.salleDepart))
-            {
-                connectivity[tunnel.salleDepart]++;
-            }
-
-            if (connectivity.ContainsKey(tunnel.salleArrivee))
-            {
-                connectivity[tunnel.salleArrivee]++;
-            }
-        }
-
-        return connectivity;
-    }
-
     bool HasForwardPortal(Tunnel tunnel)
     {
         Transform portal = tunnel.transform.Find("Portal");
@@ -845,6 +1006,11 @@ public class InterviewManager : MonoBehaviour
             return true;
         }
 
+        if (stats.interviews == null)
+        {
+            return false;
+        }
+
         for (int i = 0; i < stats.interviews.Count; i++)
         {
             if (stats.interviews[i].visited)
@@ -856,39 +1022,92 @@ public class InterviewManager : MonoBehaviour
         return false;
     }
 
-    InterviewData? GetBestAvailableInterview(List<InterviewData> candidates)
+    static string[] SplitCsvLine(string line)
     {
-        List<InterviewData> available = new List<InterviewData>();
-
-        for (int i = 0; i < candidates.Count; i++)
+        if (string.IsNullOrEmpty(line))
         {
-            InterviewData interview = candidates[i];
-            if (interview.visited)
+            return Array.Empty<string>();
+        }
+
+        List<string> fields = new List<string>();
+        System.Text.StringBuilder current = new System.Text.StringBuilder();
+        bool inQuotes = false;
+
+        for (int i = 0; i < line.Length; i++)
+        {
+            char c = line[i];
+
+            if (c == '"')
             {
+                if (inQuotes && i + 1 < line.Length && line[i + 1] == '"')
+                {
+                    current.Append('"');
+                    i++;
+                }
+                else
+                {
+                    inQuotes = !inQuotes;
+                }
+
                 continue;
             }
 
-            if (IsInterviewAllowedForPlayback(interview))
+            if (c == ',' && !inQuotes)
             {
-                available.Add(interview);
+                fields.Add(current.ToString());
+                current.Length = 0;
+                continue;
+            }
+
+            current.Append(c);
+        }
+
+        fields.Add(current.ToString());
+        return fields.ToArray();
+    }
+
+    static List<string> SplitMultiValueField(string value)
+    {
+        return value
+            .Split(',')
+            .Select(t => t.Trim())
+            .Where(t => !string.IsNullOrEmpty(t))
+            .ToList();
+    }
+
+    static List<int> ParseLevels(string value)
+    {
+        List<int> levels = new List<int>();
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return levels;
+        }
+
+        string[] parts = value.Split(new[] { ',', ';', '|', '/' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < parts.Length; i++)
+        {
+            string part = parts[i].Trim();
+            string[] rangeParts = part.Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+            if (rangeParts.Length == 2 && int.TryParse(rangeParts[0].Trim(), out int startLevel) && int.TryParse(rangeParts[1].Trim(), out int endLevel))
+            {
+                int minLevel = Mathf.Min(startLevel, endLevel);
+                int maxLevel = Mathf.Max(startLevel, endLevel);
+                for (int level = minLevel; level <= maxLevel; level++)
+                {
+                    levels.Add(level);
+                }
+            }
+            else if (int.TryParse(part, out int parsedLevel))
+            {
+                levels.Add(parsedLevel);
             }
         }
 
-        if (available.Count == 0)
-        {
-            return null;
-        }
-
-        List<InterviewData> leveledCandidates = ApplyLevelBias(available);
-        int bestNote = leveledCandidates.Max(data => data.note);
-        List<InterviewData> bestNoteCandidates = leveledCandidates.Where(data => data.note == bestNote).ToList();
-        int randomIndex = assignmentRandom != null ? assignmentRandom.Next(bestNoteCandidates.Count) : UnityEngine.Random.Range(0, bestNoteCandidates.Count);
-        return bestNoteCandidates[randomIndex];
-    }
-
-    static string[] SplitCsvLine(string line)
-    {
-        return line.Split(',');
+        return levels
+            .Where(level => level >= 0 && level <= 4)
+            .Distinct()
+            .OrderBy(level => level)
+            .ToList();
     }
 
     static bool IsEmptyRow(string[] fields)
@@ -929,6 +1148,28 @@ public class InterviewManager : MonoBehaviour
         return defaultValue;
     }
 
+    static string CombineInterviewFolder(string person, string relativePath)
+    {
+        if (string.IsNullOrWhiteSpace(relativePath))
+        {
+            return string.Empty;
+        }
+
+        string normalizedRelativePath = relativePath.Replace("\\", "/").TrimStart('/');
+        if (string.IsNullOrWhiteSpace(person))
+        {
+            return normalizedRelativePath;
+        }
+
+        string normalizedPerson = person.Replace("\\", "/").Trim('/');
+        if (normalizedRelativePath.StartsWith(normalizedPerson + "/", StringComparison.OrdinalIgnoreCase))
+        {
+            return normalizedRelativePath;
+        }
+
+        return normalizedPerson + "/" + normalizedRelativePath;
+    }
+
     void logAssignments()
     {
         Debug.Log("Current Room Person Assignments:");
@@ -939,5 +1180,111 @@ public class InterviewManager : MonoBehaviour
             string slotName = assignment.interviewSlot != null ? assignment.interviewSlot.name : "None";
             Debug.Log($"- {salleName} / {slotName}: {assignment.person}");
         }
+    }
+
+    void RefreshAssignmentsForCurrentSalle()
+    {
+        if (assignmentRandom == null)
+        {
+            assignmentRandom = new System.Random(Environment.TickCount);
+        }
+
+        MainController controller = MainController.instance;
+        Salle currentSalle = controller != null ? controller.salle : null;
+        RefreshAssignmentsForSalle(currentSalle);
+    }
+
+    void BuildAssignmentsForSalle(Salle currentSalle)
+    {
+        roomAssignments.Clear();
+        roomAssignments.AddRange(BuildAssignmentsForSalle(currentSalle, consumedSlots));
+    }
+
+    List<RoomPersonAssignment> BuildAssignmentsForSalle(Salle currentSalle, HashSet<Interview> consumedInterviewSlots)
+    {
+        List<RoomPersonAssignment> assignments = new List<RoomPersonAssignment>();
+        Interview[] slots = currentSalle != null ? currentSalle.interviews : null;
+        if (slots == null || slots.Length == 0)
+        {
+            return assignments;
+        }
+
+        int salleLevel = currentSalle.niveau;
+        List<string> candidatePersons = personStatsList
+            .Where(stats => stats.interviews.Any(interview => !interview.visited && interview.levels.Contains(salleLevel)))
+            .Select(stats => stats.person)
+            .OrderBy(_ => assignmentRandom.Next())
+            .ToList();
+
+        if (candidatePersons.Count == 0)
+        {
+            candidatePersons = personStatsList
+                .Select(stats => stats.person)
+                .OrderBy(_ => assignmentRandom.Next())
+                .ToList();
+        }
+
+        List<Interview> availableSlots = slots
+            .Where(slot => slot != null)
+            .Where(slot => consumedInterviewSlots == null || !consumedInterviewSlots.Contains(slot))
+            .ToList();
+
+        while (candidatePersons.Count > 0 && candidatePersons.Count < availableSlots.Count)
+        {
+            candidatePersons.Add(candidatePersons[assignmentRandom.Next(candidatePersons.Count)]);
+        }
+
+        for (int i = 0; i < availableSlots.Count && i < candidatePersons.Count; i++)
+        {
+            assignments.Add(new RoomPersonAssignment
+            {
+                salle = currentSalle,
+                interviewSlot = availableSlots[i],
+                person = candidatePersons[i]
+            });
+        }
+
+        return assignments;
+    }
+
+    List<InterviewData> FilterCandidatesByThemeHistory(List<InterviewData> candidates, List<string> themeHistory)
+    {
+        if (candidates == null || candidates.Count == 0)
+        {
+            return new List<InterviewData>();
+        }
+
+        if (themeHistory == null || themeHistory.Count == 0)
+        {
+            return candidates;
+        }
+
+        HashSet<string> historySet = new HashSet<string>(themeHistory, StringComparer.OrdinalIgnoreCase);
+        List<InterviewData> themedCandidates = candidates
+            .Where(candidate => candidate.themes != null && candidate.themes.Any(theme => historySet.Contains(theme)))
+            .ToList();
+
+        return themedCandidates.Count > 0 ? themedCandidates : candidates;
+    }
+
+    InterviewData? PickBestByNote(List<InterviewData> candidates)
+    {
+        if (candidates == null || candidates.Count == 0)
+        {
+            return null;
+        }
+
+        int bestNote = candidates.Max(data => data.note);
+        List<InterviewData> bestNoteCandidates = candidates
+            .Where(data => data.note == bestNote)
+            .ToList();
+
+        if (bestNoteCandidates.Count == 1)
+        {
+            return bestNoteCandidates[0];
+        }
+
+        int randomIndex = assignmentRandom != null ? assignmentRandom.Next(bestNoteCandidates.Count) : UnityEngine.Random.Range(0, bestNoteCandidates.Count);
+        return bestNoteCandidates[randomIndex];
     }
 }
