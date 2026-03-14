@@ -141,7 +141,6 @@ public class MainController : MonoBehaviour
         tunnelsGO = new GameObject("Tunnels");
 
         gameStateUpdate();
-        Reset();
     }
 
 #if UNITY_EDITOR
@@ -578,10 +577,9 @@ public class MainController : MonoBehaviour
                 break;
 
             case GameState.Intro:
-                Reset();
-
                 break;
             case GameState.Playing:
+                Reset();
                 break;
 
             case GameState.Outro:
@@ -599,8 +597,8 @@ public class MainController : MonoBehaviour
     public void ResetGame()
     {
         visitedSalles.Clear();
-        TeleportToSalle(initialSalle);
         gameState = GameState.Menu;
+        salle = null;
         pointCloudViewDistanceMultiplier = 0f;
     }
 
