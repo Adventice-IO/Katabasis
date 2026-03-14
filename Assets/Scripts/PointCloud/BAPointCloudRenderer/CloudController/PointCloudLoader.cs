@@ -1,6 +1,7 @@
 ﻿using BAPointCloudRenderer.CloudData;
 using BAPointCloudRenderer.Loading;
 using System;
+using System.IO;
 using System.Threading;
 using UnityEngine;
 using UnityEditor;
@@ -37,6 +38,8 @@ namespace BAPointCloudRenderer.CloudController
         public bool loadOnStart = true;
 
         private Node rootNode;
+        bool waitingForPotreeData;
+        string resolvedCloudPath;
 
         private void Awake()
         {
@@ -58,7 +61,7 @@ namespace BAPointCloudRenderer.CloudController
         {
             try
             {
-                PointCloudMetaData metaData = CloudLoader.LoadMetaData(cloudPath, false, streamingAssetsAsRoot);
+                PointCloudMetaData metaData = CloudLoader.LoadMetaData(resolvedCloudPath, false, false);
 
                 setController.UpdateBoundingBox(this, metaData.boundingBox_transformed, metaData.tightBoundingBox_transformed);
 
@@ -92,11 +95,60 @@ namespace BAPointCloudRenderer.CloudController
         {
             if (rootNode == null && setController != null && cloudPath != null)
             {
+                if (streamingAssetsAsRoot && !DataManager.IsFolderReady(DataManager.DataFolder.Potree))
+                {
+                    if (!waitingForPotreeData)
+                    {
+                        waitingForPotreeData = true;
+                        DataManager.PreloadFolder(DataManager.DataFolder.Potree, (success, path) =>
+                        {
+                            waitingForPotreeData = false;
+                            if (success)
+                            {
+                                LoadPointCloud();
+                            }
+                        });
+                    }
+                    return;
+                }
+
+                resolvedCloudPath = GetResolvedCloudPath();
                 setController.RegisterController(this);
                 Thread thread = new Thread(LoadHierarchy);
-                thread.Name = "Loader for " + cloudPath;
+                thread.Name = "Loader for " + resolvedCloudPath;
                 thread.Start();
             }
+        }
+
+        public string GetResolvedCloudPath()
+        {
+            if (!streamingAssetsAsRoot)
+            {
+                return cloudPath;
+            }
+
+            string normalizedPath = (cloudPath ?? string.Empty).Replace("\\", "/").Trim('/');
+            if (string.IsNullOrWhiteSpace(normalizedPath))
+            {
+                return DataManager.GetBasePath(DataManager.DataFolder.Potree);
+            }
+
+            if (Uri.IsWellFormedUriString(normalizedPath, UriKind.Absolute) || Path.IsPathRooted(normalizedPath))
+            {
+                return normalizedPath;
+            }
+
+            if (string.Equals(normalizedPath, "potree", StringComparison.OrdinalIgnoreCase))
+            {
+                return DataManager.GetBasePath(DataManager.DataFolder.Potree);
+            }
+
+            if (normalizedPath.StartsWith("potree/", StringComparison.OrdinalIgnoreCase))
+            {
+                normalizedPath = normalizedPath.Substring("potree/".Length);
+            }
+
+            return DataManager.GetFolderPath(DataManager.DataFolder.Potree, normalizedPath);
         }
 
         /// <summary>

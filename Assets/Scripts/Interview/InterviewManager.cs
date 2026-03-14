@@ -100,10 +100,13 @@ public class InterviewManager : MonoBehaviour
             RefreshAssignmentsForCurrentSalle();
         }
 
-        if (simulateGameplay)
+        if (!Application.isPlaying)
         {
-            simulateGameplay = false;
-            SimulateGameplay();
+            if (simulateGameplay)
+            {
+                simulateGameplay = false;
+                SimulateGameplay();
+            }
         }
     }
 
@@ -538,7 +541,20 @@ public class InterviewManager : MonoBehaviour
         interviewDataList.Clear();
         personStatsList.Clear();
 
-        string csvPath = Path.Combine(Application.streamingAssetsPath, "interviews.csv");
+        if (!DataManager.IsFolderReady(DataManager.DataFolder.Interviews))
+        {
+            DataManager.PreloadFolder(DataManager.DataFolder.Interviews, (success, path) =>
+            {
+                if (success)
+                {
+                    LoadInterviewData();
+                    RefreshAssignmentsForCurrentSalle();
+                }
+            });
+            return;
+        }
+
+        string csvPath = DataManager.GetRootFilePath("interviews.csv");
         if (!File.Exists(csvPath))
         {
             Debug.LogWarning("Interview CSV not found at " + csvPath);

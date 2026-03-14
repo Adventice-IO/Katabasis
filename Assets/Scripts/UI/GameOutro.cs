@@ -20,6 +20,7 @@ public class GameOutro : MonoBehaviour
     Material currentCartonMaterial;
     int currentCartonIndex = -1;
     bool outroFinished = false;
+    bool waitingForCartons;
 
     void Start()
     {
@@ -81,6 +82,23 @@ public class GameOutro : MonoBehaviour
 
     void LoadCartons()
     {
+        if (!DataManager.IsFolderReady(DataManager.DataFolder.Outro))
+        {
+            if (!waitingForCartons)
+            {
+                waitingForCartons = true;
+                DataManager.PreloadFolder(DataManager.DataFolder.Outro, (success, path) =>
+                {
+                    waitingForCartons = false;
+                    if (success)
+                    {
+                        LoadCartons();
+                    }
+                });
+            }
+            return;
+        }
+
         if (cartons != null)
         {
             foreach (Texture2D texture in cartons)
@@ -94,7 +112,7 @@ public class GameOutro : MonoBehaviour
 
         cartons.Clear();
 
-        string outroPath = Path.Combine(Application.streamingAssetsPath, "outro");
+        string outroPath = DataManager.GetBasePath(DataManager.DataFolder.Outro);
         if (!Directory.Exists(outroPath))
         {
             return;

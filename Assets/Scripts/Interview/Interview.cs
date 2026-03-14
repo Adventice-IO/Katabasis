@@ -1,7 +1,6 @@
 using Depthkit;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.VFX;
 using UnityEngine.Video;
 
@@ -45,7 +44,7 @@ public class Interview : MonoBehaviour
     public AudioEventRefSO videoEvent;
     public AudioEventRefSO evaporateEvent;
     public AudioRTPCRefSO progRTPC;
-    public bool debugWorkflow = true;
+    bool debugWorkflow = false;
     public enum State
     {
         Idle,
@@ -258,12 +257,12 @@ public class Interview : MonoBehaviour
 
     string BuildMediaBasePath(string mediaPath)
     {
-        return Path.Combine(Application.streamingAssetsPath, "interviews", mediaPath).Replace("\\", "/");
+        return DataManager.GetFolderPath(DataManager.DataFolder.Interviews, mediaPath);
     }
 
     string BuildVideoUrl(string mediaPath)
     {
-        return "file:///" + BuildMediaBasePath(mediaPath) + ".mov";
+        return DataManager.GetFileUrl(DataManager.DataFolder.Interviews, mediaPath + ".mov");
     }
 
     string BuildPreviewBasePath(string depthkitPath)

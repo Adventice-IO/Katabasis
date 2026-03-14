@@ -1,7 +1,6 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -112,6 +111,29 @@ public class Subtitles : MonoBehaviour
         //uiDocument.enabled = true;
     }
 
+    public void play(string relativeSubtitlePath)
+    {
+        if (!DataManager.IsFolderReady(DataManager.DataFolder.Interviews))
+        {
+            DataManager.PreloadFolder(DataManager.DataFolder.Interviews, (success, path) =>
+            {
+                if (!success)
+                {
+                    subs = null;
+                    isPlaying = false;
+                    return;
+                }
+
+                subs = LoadSubtitleAsset(relativeSubtitlePath);
+                isPlaying = subs != null;
+            });
+            return;
+        }
+
+        subs = LoadSubtitleAsset(relativeSubtitlePath);
+        isPlaying = subs != null;
+    }
+
     public void stop()
     {
         isPlaying = false;
@@ -139,5 +161,62 @@ public class Subtitles : MonoBehaviour
         }
 
         return null;
+    }
+
+    SubtitleAsset LoadSubtitleAsset(string relativeSubtitlePath)
+    {
+        if (string.IsNullOrWhiteSpace(relativeSubtitlePath))
+        {
+            return null;
+        }
+
+        string subtitlePath = DataManager.GetFilePath(DataManager.DataFolder.Interviews, relativeSubtitlePath);
+        if (!File.Exists(subtitlePath))
+        {
+            return null;
+        }
+
+        SubtitleAsset asset = ScriptableObject.CreateInstance<SubtitleAsset>();
+        ParseSrt(File.ReadAllText(subtitlePath), asset);
+        return asset;
+    }
+
+    void ParseSrt(string text, SubtitleAsset asset)
+    {
+        if (asset == null)
+        {
+            return;
+        }
+
+        string[] blocks = text.Split(new[] { "\r\n\r\n", "\n\n" }, StringSplitOptions.RemoveEmptyEntries);
+        foreach (string block in blocks)
+        {
+            string[] lines = block.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            if (lines.Length < 3)
+            {
+                continue;
+            }
+
+            int.TryParse(lines[0].Trim(), out int index);
+            string[] times = lines[1].Split(new[] { " --> " }, StringSplitOptions.None);
+            if (times.Length != 2)
+            {
+                continue;
+            }
+
+            asset.lines.Add(new SubtitleLine
+            {
+                index = index,
+                startTime = ParseSrtTime(times[0]),
+                endTime = ParseSrtTime(times[1]),
+                text = string.Join("\n", lines, 2, lines.Length - 2).Trim()
+            });
+        }
+    }
+
+    float ParseSrtTime(string timeStr)
+    {
+        timeStr = timeStr.Trim().Replace(',', '.');
+        return TimeSpan.TryParse(timeStr, out TimeSpan timeSpan) ? (float)timeSpan.TotalSeconds : 0f;
     }
 }
