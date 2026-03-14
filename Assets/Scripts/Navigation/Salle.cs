@@ -9,6 +9,8 @@ public class Salle : MonoBehaviour
 
     public Vector3 size = Vector3.one * 10;
     public bool isExit = false;
+    [Range(0, 4)]
+    public int niveau = 0;
 
     public Transform origin { get; private set; }
 
