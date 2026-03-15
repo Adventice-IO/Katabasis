@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.VFX;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
@@ -31,6 +32,8 @@ public class GameMenu : MonoBehaviour
     public float hoverSelectTime = 1f;
     public float buttonScaling = 0.2f;
     public float buttonSpacing = 1.2f;
+    public bool lookAtCamera = true;
+    public bool liveUpdateLayout = true;
 
     void OnEnable()
     {
@@ -38,29 +41,61 @@ public class GameMenu : MonoBehaviour
         CacheReferences();
     }
 
+    void OnValidate()
+    {
+        CacheReferences();
+        ApplyLayout();
+    }
+
     void Update()
     {
+        if (liveUpdateLayout)
+        {
+            ApplyLayout();
+        }
+
         if (!isActive || !Application.isPlaying)
         {
             return;
         }
 
+        UpdateHoveredObjectAnimation();
+    }
+
+    void ApplyLayout()
+    {
+        Camera mainCamera = Camera.main;
+
+        int visibleCount = 0;
+        for (int i = 0; i < langObjects.Count; i++)
+        {
+            if (langObjects[i] != null && langObjects[i].activeSelf)
+            {
+                visibleCount++;
+            }
+        }
+
+        int visibleIndex = 0;
         for (int i = 0; i < langObjects.Count; i++)
         {
             GameObject langObject = langObjects[i];
-            if (langObject == null)
+            if (langObject == null || !langObject.activeSelf)
             {
                 continue;
             }
 
-            langObject.transform.localPosition = new Vector3((i - (langObjects.Count / 2f) + 0.5f) * buttonSpacing, 0f, 0f);
-            langObject.transform.LookAt(Camera.main.transform);
+            float centeredX = (visibleIndex - ((visibleCount - 1) * 0.5f)) * buttonSpacing;
+            langObject.transform.localPosition = new Vector3(centeredX, 0f, 0f);
             langObject.transform.localScale = Vector3.one * buttonScaling;
+
+            if (lookAtCamera && mainCamera != null)
+            {
+                Vector3 lookAt = new Vector3(mainCamera.transform.position.x, langObject.transform.position.y, mainCamera.transform.position.z);
+                langObject.transform.LookAt(lookAt);
+            }
+
+            visibleIndex++;
         }
-
-        UpdateHoveredObjectAnimation();
-
-
     }
 
     void OnDestroy()
@@ -156,6 +191,7 @@ public class GameMenu : MonoBehaviour
         selectedLanguage = "";
         UpdateLanguageVisualState();
         UpdateStartButton();
+        ApplyLayout();
     }
 
     void SetMenuObjectsActive(bool active)
@@ -284,35 +320,23 @@ public class GameMenu : MonoBehaviour
 
             string language = languages[i];
             langObject.name = "Language_" + language;
-            langObject.transform.localPosition = new Vector3(i * buttonSpacing, 0f, 0f);
             langObject.transform.localRotation = Quaternion.identity;
 
             RegisterLanguageButton(langObject, language);
             UpdateLanguageButtonContent(langObject, language);
             ResetObjectAnimation(langObject);
         }
+
+        ApplyLayout();
     }
 
     List<string> GetAvailableLanguages()
     {
         HashSet<string> languages = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        foreach (string language in languageIcons.Keys)
+        if (localeEntries.TryGetValue("menu", out Dictionary<string, string> menuEntry) && menuEntry != null)
         {
-            if (!string.IsNullOrWhiteSpace(language))
-            {
-                languages.Add(language);
-            }
-        }
-
-        foreach (Dictionary<string, string> entry in localeEntries.Values)
-        {
-            if (entry == null)
-            {
-                continue;
-            }
-
-            foreach (string language in entry.Keys)
+            foreach (string language in menuEntry.Keys)
             {
                 if (!string.IsNullOrWhiteSpace(language))
                 {
@@ -336,7 +360,6 @@ public class GameMenu : MonoBehaviour
 
     void RegisterLanguageButton(GameObject langObject, string language)
     {
-        Debug.Log("Registering language button for '" + language + "' on object: " + langObject.name, this);
         RemoveLanguageRegistration(langObject);
 
         XRSimpleInteractable interactable = langObject.GetComponentInChildren<XRSimpleInteractable>();
@@ -382,21 +405,18 @@ public class GameMenu : MonoBehaviour
 
     void UpdateLanguageButtonContent(GameObject langObject, string language)
     {
-        Texture2D icon = null;
-        languageIcons.TryGetValue(language, out icon);
-
-        MeshRenderer renderer = langObject.GetComponentInChildren<MeshRenderer>(true);
-        if (renderer != null && renderer.material != null)
-        {
-            renderer.material.mainTexture = icon;
-            renderer.material.color = Color.white;
-        }
-
         TextMeshPro text = langObject.GetComponentInChildren<TextMeshPro>(true);
         if (text != null)
         {
-            text.text = string.IsNullOrWhiteSpace(language) ? string.Empty : language.ToUpperInvariant();
-            text.gameObject.SetActive(icon == null);
+            string label = GetLocalizedText("menu", language);
+            text.text = string.Equals(label, "menu", StringComparison.OrdinalIgnoreCase) ? language.ToUpperInvariant() : label;
+            text.gameObject.SetActive(true);
+        }
+
+        VisualEffect vfx = langObject.GetComponentInChildren<VisualEffect>(true);
+        if (vfx != null)
+        {
+            vfx.SetFloat("Progression", string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase) ? 1f : 0f);
         }
     }
 
@@ -409,9 +429,16 @@ public class GameMenu : MonoBehaviour
 
         float hoverDuration = Time.time - hoveredSince;
         float normalizedHover = hoverSelectTime > 0f ? Mathf.Clamp01(hoverDuration / hoverSelectTime) : 1f;
-        float pulse = 1f + Mathf.Sin(Time.time * 3f) * 0.03f;
-        float scaleMultiplier = Mathf.Lerp(1f, 1.12f, normalizedHover) * pulse;
-        hoveredObject.transform.localScale = hoveredOriginalScale * scaleMultiplier;
+        hoveredObject.transform.localScale = hoveredOriginalScale;
+
+        VisualEffect vfx = hoveredObject.GetComponentInChildren<VisualEffect>(true);
+        if (vfx != null)
+        {
+            float baseProgression = languageByObject.TryGetValue(hoveredObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase)
+                ? 1f
+                : 0f;
+            vfx.SetFloat("Progression", Mathf.Max(baseProgression, normalizedHover));
+        }
 
         if (!hoveredSelected && normalizedHover >= 1f)
         {
@@ -478,7 +505,16 @@ public class GameMenu : MonoBehaviour
             return;
         }
 
-        targetObject.transform.localScale = Vector3.one;
+        targetObject.transform.localScale = Vector3.one * buttonScaling;
+
+        VisualEffect vfx = targetObject.GetComponentInChildren<VisualEffect>(true);
+        if (vfx != null)
+        {
+            float progression = languageByObject.TryGetValue(targetObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase)
+                ? 1f
+                : 0f;
+            vfx.SetFloat("Progression", progression);
+        }
     }
 
     void OnLanguageClicked(string language)
@@ -518,10 +554,15 @@ public class GameMenu : MonoBehaviour
 
     void SetObjectSelectedVisual(GameObject targetObject, bool selected)
     {
-        MeshRenderer renderer = targetObject != null ? targetObject.GetComponentInChildren<MeshRenderer>(true) : null;
-        if (renderer != null && renderer.material != null)
+        if (targetObject == null)
         {
-            renderer.material.color = selected ? Color.green : Color.white;
+            return;
+        }
+
+        VisualEffect vfx = targetObject.GetComponentInChildren<VisualEffect>(true);
+        if (vfx != null)
+        {
+            vfx.SetFloat("Progression", selected ? 1f : 0f);
         }
     }
 
@@ -580,7 +621,9 @@ public class GameMenu : MonoBehaviour
         }
 
         transform.position = mainCamera.transform.TransformPoint(Vector3.forward * 5f);
-        transform.LookAt(mainCamera.transform);
+        transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+        Vector3 lookAt = new Vector3(mainCamera.transform.position.x, transform.position.y, mainCamera.transform.position.z);
+        transform.LookAt(lookAt);
         transform.Rotate(0f, 180f, 0f);
     }
 
@@ -665,41 +708,6 @@ public class GameMenu : MonoBehaviour
     void LoadLanguageIcons()
     {
         languageIcons.Clear();
-
-        string menuPath = DataManager.GetBasePath(DataManager.DataFolder.Menu);
-        if (string.IsNullOrWhiteSpace(menuPath) || !Directory.Exists(menuPath))
-        {
-            return;
-        }
-
-        string[] iconPaths = Directory.GetFiles(menuPath, "*.png", SearchOption.TopDirectoryOnly);
-        for (int i = 0; i < iconPaths.Length; i++)
-        {
-            string language = Path.GetFileNameWithoutExtension(iconPaths[i]);
-            Debug.Log("Found language icon file: " + iconPaths[i] + " for language: '" + language + "'", this);
-            if (string.IsNullOrWhiteSpace(language))
-            {
-                continue;
-            }
-
-            try
-            {
-                byte[] imageBytes = File.ReadAllBytes(iconPaths[i]);
-                Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-                if (!texture.LoadImage(imageBytes))
-                {
-                    Destroy(texture);
-                    continue;
-                }
-                Debug.Log("Loaded language icon for '" + language + "' from: " + iconPaths[i], this);
-                texture.wrapMode = TextureWrapMode.Clamp;
-                languageIcons[language] = texture;
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError("Failed to load language icon '" + iconPaths[i] + "': " + ex.Message, this);
-            }
-        }
     }
 
     Dictionary<string, Dictionary<string, string>> DeserializeLocaleEntries(string json)
