@@ -27,11 +27,17 @@ public class GameMenu : MonoBehaviour
     float hoveredSince;
     bool hoveredSelected;
     Vector3 hoveredOriginalScale = Vector3.one;
+    bool startTransitionRunning;
+    float startTransitionStartedAt;
 
     public GameObject langBTPrefab;
     public float hoverSelectTime = 1f;
+    public float evaporateTime = 0.75f;
+    public float nextMenuDelay = 2f;
     public float buttonScaling = 0.2f;
     public float buttonSpacing = 1.2f;
+    public Color idleHighlightColor = Color.white;
+    public Color selectedHighlightColor = Color.green;
     public bool lookAtCamera = true;
     public bool liveUpdateLayout = true;
 
@@ -58,6 +64,8 @@ public class GameMenu : MonoBehaviour
         {
             return;
         }
+
+        UpdateStartTransition();
 
         UpdateHoveredObjectAnimation();
     }
@@ -187,6 +195,7 @@ public class GameMenu : MonoBehaviour
         LoadLocale();
         LoadLanguageIcons();
         Debug.Log("GameMenu refresh - locale keys: " + localeEntries.Count + ", icons: " + languageIcons.Count, this);
+        startTransitionRunning = false;
         EnsureLanguageButtons();
         selectedLanguage = "";
         UpdateLanguageVisualState();
@@ -417,6 +426,8 @@ public class GameMenu : MonoBehaviour
         if (vfx != null)
         {
             vfx.SetFloat("Progression", string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase) ? 1f : 0f);
+            vfx.SetFloat("Evaporate", 0f);
+            vfx.SetVector4("Highlight Color", string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase) ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
         }
     }
 
@@ -434,10 +445,19 @@ public class GameMenu : MonoBehaviour
         VisualEffect vfx = hoveredObject.GetComponentInChildren<VisualEffect>(true);
         if (vfx != null)
         {
-            float baseProgression = languageByObject.TryGetValue(hoveredObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase)
-                ? 1f
-                : 0f;
+            bool isSelectedLanguage = languageByObject.TryGetValue(hoveredObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase);
+            bool isStartObject = hoveredObject == startBTObject && !string.IsNullOrWhiteSpace(selectedLanguage);
+            float baseProgression = (isSelectedLanguage || isStartObject) ? 1f : 0f;
             vfx.SetFloat("Progression", Mathf.Max(baseProgression, normalizedHover));
+            if (!isStartObject)
+            {
+                vfx.SetVector4("Highlight Color", isSelectedLanguage ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
+            }
+        }
+
+        if (hoveredObject == startBTObject)
+        {
+            SetStartButtonTextColor(idleHighlightColor);
         }
 
         if (!hoveredSelected && normalizedHover >= 1f)
@@ -510,10 +530,20 @@ public class GameMenu : MonoBehaviour
         VisualEffect vfx = targetObject.GetComponentInChildren<VisualEffect>(true);
         if (vfx != null)
         {
-            float progression = languageByObject.TryGetValue(targetObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase)
-                ? 1f
-                : 0f;
+            bool isSelectedLanguage = languageByObject.TryGetValue(targetObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase);
+            bool isStartObject = targetObject == startBTObject && !string.IsNullOrWhiteSpace(selectedLanguage);
+            float progression = (isSelectedLanguage || isStartObject) ? 1f : 0f;
             vfx.SetFloat("Progression", progression);
+            vfx.SetFloat("Evaporate", 0f);
+            if (!isStartObject)
+            {
+                vfx.SetVector4("Highlight Color", progression > 0f ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
+            }
+        }
+
+        if (targetObject == startBTObject)
+        {
+            SetStartButtonTextColor(!string.IsNullOrWhiteSpace(selectedLanguage) ? Color.white : idleHighlightColor);
         }
     }
 
@@ -563,6 +593,7 @@ public class GameMenu : MonoBehaviour
         if (vfx != null)
         {
             vfx.SetFloat("Progression", selected ? 1f : 0f);
+            vfx.SetVector4("Highlight Color", selected ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
         }
     }
 
@@ -580,6 +611,22 @@ public class GameMenu : MonoBehaviour
         if (text != null)
         {
             text.text = GetLocalizedText("start", selectedLanguage);
+        }
+
+        SetStartButtonTextColor(Color.white);
+    }
+
+    void SetStartButtonTextColor(Color color)
+    {
+        if (startBTObject == null)
+        {
+            return;
+        }
+
+        TextMeshPro text = startBTObject.GetComponentInChildren<TextMeshPro>(true);
+        if (text != null)
+        {
+            text.color = color;
         }
     }
 
@@ -603,13 +650,70 @@ public class GameMenu : MonoBehaviour
 
     void OnStartClicked()
     {
+        if (startTransitionRunning || string.IsNullOrWhiteSpace(selectedLanguage))
+        {
+            return;
+        }
+
         if (mainController != null)
         {
             mainController.language = selectedLanguage;
-            mainController.gameState = MainController.GameState.Intro;
         }
 
-        setActive(false);
+        startTransitionRunning = true;
+        startTransitionStartedAt = Time.time;
+        hoveredSelected = true;
+
+        SetStartButtonTextColor(selectedHighlightColor);
+
+        SetAllEvaporate(0f);
+    }
+
+    void UpdateStartTransition()
+    {
+        if (!startTransitionRunning)
+        {
+            return;
+        }
+
+        float progress = evaporateTime > 0f ? Mathf.Clamp01((Time.time - startTransitionStartedAt) / evaporateTime) : 1f;
+        SetAllEvaporate(progress);
+
+        if (Time.time - startTransitionStartedAt >= evaporateTime + nextMenuDelay)
+        {
+            startTransitionRunning = false;
+
+            if (mainController != null)
+            {
+                mainController.gameState = MainController.GameState.Intro;
+            }
+
+            setActive(false);
+        }
+    }
+
+    void SetAllEvaporate(float value)
+    {
+        SetObjectEvaporate(startBTObject, value);
+
+        for (int i = 0; i < langObjects.Count; i++)
+        {
+            SetObjectEvaporate(langObjects[i], value);
+        }
+    }
+
+    void SetObjectEvaporate(GameObject targetObject, float value)
+    {
+        if (targetObject == null)
+        {
+            return;
+        }
+
+        VisualEffect vfx = targetObject.GetComponentInChildren<VisualEffect>(true);
+        if (vfx != null)
+        {
+            vfx.SetFloat("Evaporate", value);
+        }
     }
 
     void PositionInFrontOfCamera()
