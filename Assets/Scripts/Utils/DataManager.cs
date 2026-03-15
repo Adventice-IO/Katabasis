@@ -32,7 +32,7 @@ public class DataManager : MonoBehaviour
 
     [Header("Storage")]
     public string desktopLocalStoragePath = "KatabasisData";
-    public string androidLocalStoragePath = "/storage/emulated/0/Android/data/com.DefaultCompany.Katabasis/files/KatabasisData";
+    public string androidLocalStoragePath = "/sdcard/KatabasisData";
 
     [Header("Preload")]
     public bool preloadOnStart = true;
@@ -52,8 +52,8 @@ public class DataManager : MonoBehaviour
     readonly Dictionary<DataFolder, string> cachedBasePaths = new Dictionary<DataFolder, string>();
     readonly Dictionary<DataFolder, bool> preloadResults = new Dictionary<DataFolder, bool>();
     readonly Dictionary<DataFolder, Coroutine> runningPreloads = new Dictionary<DataFolder, Coroutine>();
-    Coroutine archiveDownloadCoroutine;
-    bool archiveDownloadSucceeded;
+    readonly Dictionary<DataFolder, Coroutine> archiveDownloadCoroutines = new Dictionary<DataFolder, Coroutine>();
+    readonly Dictionary<DataFolder, bool> archiveDownloadResults = new Dictionary<DataFolder, bool>();
 
     void Awake()
     {
@@ -166,11 +166,6 @@ public class DataManager : MonoBehaviour
 
     string GetBasePathInternal(DataFolder folder)
     {
-        if (cachedBasePaths.TryGetValue(folder, out string cachedPath) && Directory.Exists(cachedPath))
-        {
-            return cachedPath;
-        }
-
         string path = ResolveExistingBasePath(folder);
         if (!string.IsNullOrWhiteSpace(path))
         {
@@ -178,6 +173,7 @@ public class DataManager : MonoBehaviour
             return path;
         }
 
+        cachedBasePaths.Remove(folder);
         return string.Empty;
     }
 
@@ -233,7 +229,14 @@ public class DataManager : MonoBehaviour
 
     bool EnsureFolderAvailableInternal(DataFolder folder)
     {
-        string path = GetBasePathInternal(folder);
+        string path = ResolveExistingBasePath(folder, true);
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            cachedBasePaths.Remove(folder);
+            return false;
+        }
+
+        cachedBasePaths[folder] = path;
         return !string.IsNullOrWhiteSpace(path) && Directory.Exists(path);
     }
 
@@ -300,9 +303,10 @@ public class DataManager : MonoBehaviour
 
     IEnumerator EnsureFolderAvailableCoroutine(DataFolder folder, Action<bool, string> onCompleted)
     {
-        string existingPath = GetBasePathInternal(folder);
+        string existingPath = ResolveExistingBasePath(folder, true);
         if (!string.IsNullOrWhiteSpace(existingPath) && Directory.Exists(existingPath))
         {
+            cachedBasePaths[folder] = existingPath;
             HideDownloadInfo();
             onCompleted?.Invoke(true, existingPath);
             yield break;
@@ -316,26 +320,28 @@ public class DataManager : MonoBehaviour
             yield break;
         }
 
-        if (archiveDownloadCoroutine == null)
+        if (!archiveDownloadCoroutines.TryGetValue(folder, out Coroutine archiveDownloadCoroutine) || archiveDownloadCoroutine == null)
         {
-            archiveDownloadCoroutine = StartCoroutine(DownloadArchiveCoroutine(downloadUrl));
+            archiveDownloadCoroutine = StartCoroutine(DownloadArchiveCoroutine(folder, downloadUrl));
+            archiveDownloadCoroutines[folder] = archiveDownloadCoroutine;
         }
 
-        while (archiveDownloadCoroutine != null)
+        while (archiveDownloadCoroutines.TryGetValue(folder, out archiveDownloadCoroutine) && archiveDownloadCoroutine != null)
         {
             yield return null;
         }
 
-        if (!archiveDownloadSucceeded)
+        if (!archiveDownloadResults.TryGetValue(folder, out bool archiveDownloadSucceeded) || !archiveDownloadSucceeded)
         {
             HideDownloadInfo();
             onCompleted?.Invoke(false, string.Empty);
             yield break;
         }
 
-        existingPath = GetBasePathInternal(folder);
+        existingPath = ResolveExistingBasePath(folder, true);
         if (!string.IsNullOrWhiteSpace(existingPath) && Directory.Exists(existingPath))
         {
+            cachedBasePaths[folder] = existingPath;
             HideDownloadInfo();
             onCompleted?.Invoke(true, existingPath);
             yield break;
@@ -345,16 +351,17 @@ public class DataManager : MonoBehaviour
         onCompleted?.Invoke(false, string.Empty);
     }
 
-    IEnumerator DownloadArchiveCoroutine(string downloadUrl)
+    IEnumerator DownloadArchiveCoroutine(DataFolder folder, string downloadUrl)
     {
-        archiveDownloadSucceeded = false;
+        archiveDownloadResults[folder] = false;
 
         string externalRoot = GetExternalDataRoot();
         Directory.CreateDirectory(externalRoot);
 
-        string zipPath = Path.Combine(externalRoot, "data.zip");
+        string folderName = GetFolderName(folder);
+        string zipPath = Path.Combine(externalRoot, folderName + ".zip");
 
-        ShowDownloadInfo("data", 0f);
+        ShowDownloadInfo(folderName, 0f);
 
         using (UnityWebRequest request = UnityWebRequest.Get(downloadUrl))
         {
@@ -362,31 +369,27 @@ public class DataManager : MonoBehaviour
             UnityWebRequestAsyncOperation operation = request.SendWebRequest();
             while (!operation.isDone)
             {
-                ShowDownloadInfo("data", request.downloadProgress);
+                ShowDownloadInfo(folderName, request.downloadProgress);
                 yield return null;
             }
 
-            ShowDownloadInfo("data", 1f);
+            ShowDownloadInfo(folderName, 1f);
 
             if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("Failed to download data archive: " + request.error);
+                Debug.LogError("Failed to download data archive for " + folderName + ": " + request.error);
                 HideDownloadInfo();
-                archiveDownloadCoroutine = null;
+                archiveDownloadCoroutines[folder] = null;
                 yield break;
             }
         }
 
         try
         {
-            Array folders = Enum.GetValues(typeof(DataFolder));
-            for (int i = 0; i < folders.Length; i++)
+            string folderPath = GetLocalStorageFolderPathInternal(folder);
+            if (Directory.Exists(folderPath))
             {
-                string folderPath = GetLocalStorageFolderPathInternal((DataFolder)folders.GetValue(i));
-                if (Directory.Exists(folderPath))
-                {
-                    Directory.Delete(folderPath, true);
-                }
+                Directory.Delete(folderPath, true);
             }
 
             ZipFile.ExtractToDirectory(zipPath, externalRoot);
@@ -397,29 +400,40 @@ public class DataManager : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError("Failed to extract data archive: " + ex.Message);
+            Debug.LogError("Failed to extract data archive for " + folderName + ": " + ex.Message);
             HideDownloadInfo();
-            archiveDownloadCoroutine = null;
+            archiveDownloadCoroutines[folder] = null;
             yield break;
         }
 
-        archiveDownloadSucceeded = true;
+        archiveDownloadResults[folder] = true;
         HideDownloadInfo();
-        archiveDownloadCoroutine = null;
+        archiveDownloadCoroutines[folder] = null;
     }
 
     string ResolveExistingBasePath(DataFolder folder)
     {
-        string streamingAssetsPath = GetStreamingAssetsFolderPathInternal(folder);
-        if (Directory.Exists(streamingAssetsPath))
+        return ResolveExistingBasePath(folder, false);
+    }
+
+    string ResolveExistingBasePath(DataFolder folder, bool preferLocalStorage)
+    {
+        string primaryPath = preferLocalStorage
+            ? GetLocalStorageFolderPathInternal(folder)
+            : GetStreamingAssetsFolderPathInternal(folder);
+
+        if (Directory.Exists(primaryPath))
         {
-            return streamingAssetsPath.Replace("\\", "/");
+            return primaryPath.Replace("\\", "/");
         }
 
-        string externalPath = GetLocalStorageFolderPathInternal(folder);
-        if (Directory.Exists(externalPath))
+        string fallbackPath = preferLocalStorage
+            ? GetStreamingAssetsFolderPathInternal(folder)
+            : GetLocalStorageFolderPathInternal(folder);
+
+        if (Directory.Exists(fallbackPath))
         {
-            return externalPath.Replace("\\", "/");
+            return fallbackPath.Replace("\\", "/");
         }
 
         return string.Empty;
@@ -427,7 +441,26 @@ public class DataManager : MonoBehaviour
 
     string GetDownloadUrl(DataFolder folder)
     {
-        return dataZipUrl;
+        if (string.IsNullOrWhiteSpace(dataZipUrl))
+        {
+            return string.Empty;
+        }
+
+        string normalizedBaseUrl = dataZipUrl.Trim();
+        string folderName = GetFolderName(folder);
+
+        if (normalizedBaseUrl.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+        {
+            string directory = Path.GetDirectoryName(normalizedBaseUrl)?.Replace("\\", "/");
+            if (string.IsNullOrWhiteSpace(directory))
+            {
+                return folderName + ".zip";
+            }
+
+            return directory.TrimEnd('/') + "/" + folderName + ".zip";
+        }
+
+        return normalizedBaseUrl.TrimEnd('/') + "/" + folderName + ".zip";
     }
 
     string GetFolderName(DataFolder folder)
