@@ -161,7 +161,7 @@ public class GameIntro : MonoBehaviour
         Destroy(currentCartonObject.GetComponent<Collider>());
 
         Vector3 spawnPosition = targetCamera.transform.position + (targetCamera.transform.forward * spawnDistance);
-        currentCartonObject.transform.position = spawnPosition;
+        currentCartonObject.transform.position = new Vector3(spawnPosition.x, targetCamera.transform.position.y, spawnPosition.z);
         currentCartonObject.transform.rotation = Quaternion.LookRotation(currentCartonObject.transform.position - targetCamera.transform.position, Vector3.up);
 
         float width = cartonSize.x;
