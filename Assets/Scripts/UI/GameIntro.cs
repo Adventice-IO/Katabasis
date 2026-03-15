@@ -20,6 +20,7 @@ public class GameIntro : MonoBehaviour
     Material currentCartonMaterial;
     int currentCartonIndex = -1;
     bool introFinished = false;
+    bool waitingForCartons;
 
     void Start()
     {
@@ -81,6 +82,23 @@ public class GameIntro : MonoBehaviour
 
     void LoadCartons()
     {
+        if (!DataManager.IsFolderReady(DataManager.DataFolder.Intro))
+        {
+            if (!waitingForCartons)
+            {
+                waitingForCartons = true;
+                DataManager.PreloadFolder(DataManager.DataFolder.Intro, (success, path) =>
+                {
+                    waitingForCartons = false;
+                    if (success)
+                    {
+                        LoadCartons();
+                    }
+                });
+            }
+            return;
+        }
+
         if (cartons != null)
         {
             foreach (Texture2D texture in cartons)
@@ -94,7 +112,7 @@ public class GameIntro : MonoBehaviour
 
         cartons.Clear();
 
-        string introPath = Path.Combine(Application.streamingAssetsPath, "intro");
+        string introPath = DataManager.GetBasePath(DataManager.DataFolder.Intro);
         if (!Directory.Exists(introPath))
         {
             return;

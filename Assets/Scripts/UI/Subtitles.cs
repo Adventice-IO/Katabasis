@@ -1,7 +1,6 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -35,7 +34,7 @@ public class Subtitles : MonoBehaviour
 
     void initDocument()
     {
-        if(uiDocument == null || uiDocument.rootVisualElement == null)
+        if (uiDocument == null || uiDocument.rootVisualElement == null)
         {
             //Debug.LogError("Cannot initialize subtitle document: UIDocument is null or rootVisualElement is null");
             return;
@@ -49,19 +48,19 @@ public class Subtitles : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(subtitleLabel == null)
+        if (subtitleLabel == null)
         {
             initDocument();
         }
 
-        if (isPlaying != lastPlaying)
+        if (isPlaying != lastPlaying || (isPlaying && timeAtPlay == 0))
         {
             //Debug.Log("Subtitle playback started at " + Time.time);
             subtitleLabel.AddToClassList("hidden");
             if (isPlaying)
             {
                 timeAtPlay = Time.time;
-            }   
+            }
             lastPlaying = isPlaying;
             //uiDocument.enabled = true;
         }
@@ -72,7 +71,7 @@ public class Subtitles : MonoBehaviour
             return;
         }
 
-        if (isPlaying && subs != null)
+        if (isPlaying && subs != null && timeAtPlay > 0)
         {
             float timeSincePlay = Time.time - timeAtPlay;
             SubtitleLine subtitle = getSubtitleAt(timeSincePlay, out bool isFinished);
@@ -112,6 +111,35 @@ public class Subtitles : MonoBehaviour
         //uiDocument.enabled = true;
     }
 
+    public void play(string relativeSubtitlePath)
+    {
+        if (!DataManager.IsFolderReady(DataManager.DataFolder.Interviews))
+        {
+            DataManager.PreloadFolder(DataManager.DataFolder.Interviews, (success, path) =>
+            {
+                if (!success)
+                {
+                    subs = null;
+                    isPlaying = false;
+                    return;
+                }
+
+                subs = LoadSubtitleAsset(relativeSubtitlePath);
+                isPlaying = subs != null;
+            });
+            return;
+        }
+
+        timeAtPlay = 0;
+        subs = LoadSubtitleAsset(relativeSubtitlePath);
+        if (subs != null)
+        {
+            Debug.Log("Loading subtitles for " + relativeSubtitlePath + ", first line at " + (subs.lines != null && subs.lines.Count > 0 ? subs.lines[0].startTime.ToString("F2") : "no lines"));
+        }
+
+        isPlaying = subs != null;
+    }
+
     public void stop()
     {
         isPlaying = false;
@@ -139,5 +167,23 @@ public class Subtitles : MonoBehaviour
         }
 
         return null;
+    }
+
+    SubtitleAsset LoadSubtitleAsset(string relativeSubtitlePath)
+    {
+        if (string.IsNullOrWhiteSpace(relativeSubtitlePath))
+        {
+            Debug.LogWarning("Relative subtitle path is null or empty");
+            return null;
+        }
+
+        string subtitlePath = DataManager.GetFilePath(DataManager.DataFolder.Interviews, relativeSubtitlePath);
+        if (!File.Exists(subtitlePath))
+        {
+            Debug.LogWarning($"Subtitle file not found at path: {subtitlePath}");
+            return null;
+        }
+
+        return SubtitleSrtParser.LoadFromFile(subtitlePath);
     }
 }

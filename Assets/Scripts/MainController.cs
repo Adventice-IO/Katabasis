@@ -21,6 +21,7 @@ public class MainController : MonoBehaviour
     [Header("Setup")]
     public Salle initialSalle;
 
+
     [Header("Audio Settings")]
     public AudioStateRefSO noAudioSO;
     public bool debugAudioStates = false;
@@ -36,6 +37,7 @@ public class MainController : MonoBehaviour
     [Header("State")]
     public GameState gameState = GameState.Menu;
     GameState lastGameState;
+    public string language = "en";
     public Salle salle;
     public Tunnel tunnel;
 
@@ -128,7 +130,7 @@ public class MainController : MonoBehaviour
     //Game memory
     List<Salle> visitedSalles = new List<Salle>();
 
-    
+
 
     Tunnel[] allTunnels;
 
@@ -137,8 +139,8 @@ public class MainController : MonoBehaviour
 
     private void Start()
     {
-        sallesGO = new GameObject("Salles");
-        tunnelsGO = new GameObject("Tunnels");
+        sallesGO = GameObject.Find("Salles");
+        tunnelsGO = GameObject.Find("Tunnels");
 
         gameStateUpdate();
     }
@@ -341,15 +343,16 @@ public class MainController : MonoBehaviour
     private void Update()
     {
 
+#if UNITY_EDITOR
         if (lockInfoPlane != null)
         {
-            lockInfoPlane.SetActive(!freeMotion);
+            lockInfoPlane.SetActive(!freeMotion && editMode);
         }
 
         if (speedInfo != null)
         {
-            speedInfo.SetActive(isInATunnel() && !freeMotion);
-            if (isInATunnel() && !freeMotion)
+            speedInfo.SetActive(isInATunnel() && !freeMotion && editMode);
+            if (isInATunnel() && !freeMotion && editMode)
             {
                 TextMeshPro textMesh = speedInfo.GetComponent<TextMeshPro>();
                 if (textMesh != null)
@@ -358,6 +361,7 @@ public class MainController : MonoBehaviour
                 }
             }
         }
+#endif
 
 
         if (Application.isPlaying)
@@ -371,7 +375,7 @@ public class MainController : MonoBehaviour
             bool shouldSee = gameState == GameState.Playing || gameState == GameState.Outro;
             float viewOffset = Time.deltaTime * (shouldSee ? 1f : -1f) * viewDistanceAnimSpeed;
             pointCloudViewDistanceMultiplier = Mathf.Clamp01(pointCloudViewDistanceMultiplier + viewOffset);
-            if(pointCloudViewDistanceMultiplier <= 0f && gameState == GameState.End)
+            if (pointCloudViewDistanceMultiplier <= 0f && gameState == GameState.End)
             {
                 ResetGame();
             }
@@ -392,6 +396,7 @@ public class MainController : MonoBehaviour
                 {
                     kt.updateActive();
                 }
+
 
             }
 
@@ -562,6 +567,8 @@ public class MainController : MonoBehaviour
     // --- Game State Management ---
     void gameStateUpdate()
     {
+        if (!Application.isPlaying) return;
+
         menu.setActive(gameState == GameState.Menu);
         intro.setActive(gameState == GameState.Intro);
         outro.setActive(gameState == GameState.Outro);
@@ -831,6 +838,17 @@ public class MainController : MonoBehaviour
                 tunnel.AddKnotAtPosition(rayProvider.rayEndPoint);
             }
         }
+    }
+
+
+
+    public string getLanguageSuffix()
+    {
+        if (language == "" || language == "vo")
+        {
+            return "";
+        }
+        return "_" + language;
     }
 
 #if UNITY_EDITOR

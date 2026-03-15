@@ -1,0 +1,65 @@
+:root {
+}
+
+.button {
+    border-top-left-radius: 22px;
+    border-top-right-radius: 22px;
+    border-bottom-right-radius: 22px;
+    border-bottom-left-radius: 22px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(255, 255, 255);
+    font-size: 35px;
+    -unity-font-definition: url("project://database/Assets/UI/CyGrotesk-GrandRegular.otf?fileID=12800000&guid=0133e082cbfc9144e8b62b1f581874b4&type=3#CyGrotesk-GrandRegular");
+    transition-duration: 0.3s;
+}
+
+.languages {
+    flex-direction: column;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    align-self: stretch;
+    justify-content: space-evenly;
+    align-content: center;
+    align-items: center;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+Image {
+    width: 200px;
+    height: 200px;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(226, 1, 1, 0);
+    -unity-background-image-tint-color: rgb(0, 0, 0);
+}
+
+.button:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.button.selected {
+    background-color: rgba(255, 255, 255, 0.23);
+}

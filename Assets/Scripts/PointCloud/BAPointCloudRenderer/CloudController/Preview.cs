@@ -109,12 +109,12 @@ namespace BAPointCloudRenderer.CloudController
                                                                     double.NegativeInfinity, double.NegativeInfinity, double.NegativeInfinity);
             foreach (PointCloudLoader loader in _loaders)
             {
-                string path = loader.cloudPath;
+                string path = loader.GetResolvedCloudPath();
                 if (!path.EndsWith("/"))
                 {
                     path += "/";
                 }
-                PointCloudMetaData metaData = CloudLoader.LoadMetaData(path, false);
+                PointCloudMetaData metaData = CloudLoader.LoadMetaData(path, false, false);
                 BoundingBox currentBoundingBox = metaData.tightBoundingBox_transformed;
                 overallBoundingBox.Lx = Math.Min(overallBoundingBox.Lx, currentBoundingBox.Lx);
                 overallBoundingBox.Ly = Math.Min(overallBoundingBox.Ly, currentBoundingBox.Ly);
