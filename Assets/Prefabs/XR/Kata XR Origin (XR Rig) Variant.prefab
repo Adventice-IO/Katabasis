@@ -241,6 +241,7 @@ GameObject:
   - component: {fileID: 1754731338089600304}
   - component: {fileID: 4681888216785060878}
   - component: {fileID: 3435000208997753045}
+  - component: {fileID: 5151684457104334210}
   - component: {fileID: 4868690768409120316}
   m_Layer: 0
   m_Name: GameMenu
@@ -257,8 +258,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6183091532248112595}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.4, z: 5}
+  m_LocalRotation: {x: 0, y: -0.00000004371139, z: 0, w: -1}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -294,11 +295,32 @@ MonoBehaviour:
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
-  m_WorldSpaceWidth: 1920
-  m_WorldSpaceHeight: 1080
+  m_WorldSpaceWidth: 800
+  m_WorldSpaceHeight: 400
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
+--- !u!65 &5151684457104334210
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183091532248112595}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 8, y: 4, z: 0.1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4868690768409120316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -767,7 +789,11 @@ PrefabInstance:
       objectReference: {fileID: 3351116618577223801}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: editMode
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: language
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: maxSpeed
@@ -1037,14 +1063,11 @@ PrefabInstance:
       addedObject: {fileID: 1125180523919180605}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2218496723442559054, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      insertIndex: 6
+      addedObject: {fileID: 3396597654067229339}
+    - targetCorrespondingSourceObject: {fileID: 2218496723442559054, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6704112130730892095}
-    - targetCorrespondingSourceObject: {fileID: 2218496723442559054, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7494252401154119776}
-    - targetCorrespondingSourceObject: {fileID: 2218496723442559054, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3396597654067229339}
     - targetCorrespondingSourceObject: {fileID: 657184242118504722, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7471194082835080143}
@@ -1057,40 +1080,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2218496723442559054, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
   m_PrefabInstance: {fileID: 1898103925645553382}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6704112130730892095
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 332919419242661544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33efbe488f673ea43acef27c22bcc7d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InterviewManager
-  generateAssignment: 0
-  simulateGameplay: 0
-  diversity: 0
-  levelUpBias: 1
-  simulatedCuriosity: 1
---- !u!114 &7494252401154119776
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 332919419242661544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33efbe488f673ea43acef27c22bcc7d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InterviewManager
-  generateAssignment: 0
-  simulateGameplay: 0
-  diversity: 1
-  levelUpBias: 0
-  simulatedCuriosity: 0.5
 --- !u!114 &3396597654067229339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1108,6 +1097,23 @@ MonoBehaviour:
   androidLocalStoragePath: /storage/emulated/0/Android/data/com.DefaultCompany.Katabasis/files/KatabasisData
   preloadOnStart: 1
   infoTM: {fileID: 299228346148256107}
+--- !u!114 &6704112130730892095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332919419242661544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33efbe488f673ea43acef27c22bcc7d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InterviewManager
+  generateAssignment: 0
+  simulateGameplay: 0
+  diversity: 0.5
+  levelUpBias: 0.5
+  simulatedCuriosity: 0.5
 --- !u!1 &517590615602817253 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2123925076275643907, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}

@@ -1,6 +1,12 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:GroupBox name="languages" style="height: 292px;"/>
+    <Style src="project://database/Assets/UI/GameMenu.uss?fileID=7433441132597879392&amp;guid=1c81c09424d8c1e468b51c4bb5c16ae8&amp;type=3#GameMenu"/>
+    <ui:GroupBox name="languages" class="languages" style="height: 200px; flex-direction: row; white-space: normal;">
+        <ui:Image class="button" style="width: 200px; height: 200px; align-self: auto; align-content: auto; justify-content: flex-start; align-items: auto;"/>
+        <ui:Image class="button"/>
+        <ui:Image class="button"/>
+    </ui:GroupBox>
+    <ui:VisualElement style="flex-grow: 1;"/>
     <ui:GroupBox style="-unity-text-align: upper-center; align-items: center;">
-        <ui:Button text="Button" name="startbt" style="height: 78px; width: 232px;"/>
+        <ui:Button text="Start" name="startbt" class="button" style="height: 78px; width: auto;"/>
     </ui:GroupBox>
 </ui:UXML>

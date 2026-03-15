@@ -45,6 +45,8 @@ public class Interview : MonoBehaviour
     public AudioEventRefSO evaporateEvent;
     public AudioRTPCRefSO progRTPC;
     bool debugWorkflow = false;
+
+    Subtitles subtitles;
     public enum State
     {
         Idle,
@@ -93,6 +95,7 @@ public class Interview : MonoBehaviour
         vfx = GetComponentInChildren<VisualEffect>();
         salle = GetComponentInParent<Salle>();
 
+        subtitles = FindAnyObjectByType<Subtitles>();
     }
 
     void resetPlaybackState()
@@ -324,6 +327,13 @@ public class Interview : MonoBehaviour
         }
         videoPlayer.Play();
         state = State.Playing;
+
+        if(subtitles != null)
+        {
+            string languageSuffix = MainController.instance != null ? MainController.instance.getLanguageSuffix() : "";
+            string subtitlePath = interviewId + languageSuffix + ".srt";
+            subtitles.play(subtitlePath);
+        }
     }
 
     public void StopPlaybackForAnotherInterview()

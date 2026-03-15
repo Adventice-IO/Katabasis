@@ -139,8 +139,8 @@ public class MainController : MonoBehaviour
 
     private void Start()
     {
-        sallesGO = new GameObject("Salles");
-        tunnelsGO = new GameObject("Tunnels");
+        sallesGO = GameObject.Find("Salles");
+        tunnelsGO = GameObject.Find("Tunnels");
 
         gameStateUpdate();
     }
@@ -567,6 +567,8 @@ public class MainController : MonoBehaviour
     // --- Game State Management ---
     void gameStateUpdate()
     {
+        if (!Application.isPlaying) return;
+
         menu.setActive(gameState == GameState.Menu);
         intro.setActive(gameState == GameState.Intro);
         outro.setActive(gameState == GameState.Outro);

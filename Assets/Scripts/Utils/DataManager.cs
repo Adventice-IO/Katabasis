@@ -65,16 +65,18 @@ public class DataManager : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+
+        if (preloadOnStart && Application.isPlaying)
+        {
+            PreloadAll();
+        }
     }
 
     void Start()
     {
         HideDownloadInfo();
 
-        if (preloadOnStart && Application.isPlaying)
-        {
-            PreloadAll();
-        }
+       
     }
 
     void Update()

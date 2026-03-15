@@ -15,20 +15,13 @@ public class GameMenu : MonoBehaviour
 
     MainController mainController;
     bool isActive;
-    bool menuInitialized;
     bool waitingForMenuData;
-    string selectedLanguage = "en";
+    string selectedLanguage = "";
 
     void OnEnable()
     {
-        uiDocument = GetComponent<UIDocument>();
         mainController = MainController.instance != null ? MainController.instance : FindAnyObjectByType<MainController>();
-        SetupDocument();
 
-        if (uiDocument != null)
-        {
-            uiDocument.enabled = false;
-        }
     }
 
     void Update()
@@ -38,23 +31,16 @@ public class GameMenu : MonoBehaviour
             return;
         }
 
-        if (!menuInitialized)
-        {
-            SetupDocument();
-            if (menuInitialized)
-            {
-                LoadLocale();
-                LoadLanguageIcons();
-                BuildLanguageButtons();
-            }
-        }
+    }
 
-        PositionInFrontOfCamera();
-
+    private void OnDestroy()
+    {
     }
 
     public void setActive(bool active)
     {
+        if (!Application.isPlaying) return;
+
         isActive = active;
         mainController = MainController.instance != null ? MainController.instance : FindAnyObjectByType<MainController>();
 
@@ -62,8 +48,6 @@ public class GameMenu : MonoBehaviour
         {
             uiDocument = GetComponent<UIDocument>();
         }
-
-        SetupDocument();
 
         if (uiDocument != null)
         {
@@ -76,17 +60,13 @@ public class GameMenu : MonoBehaviour
             collider.enabled = active;
         }
 
-        if (!active)
+        if(!isActive)
         {
             return;
         }
 
+        SetupDocument();
         PositionInFrontOfCamera();
-        SelectLanguage("en");
-        if (startButton != null)
-        {
-            startButton.style.display = DisplayStyle.None;
-        }
 
         if (!DataManager.IsFolderReady(DataManager.DataFolder.Menu))
         {
@@ -106,15 +86,11 @@ public class GameMenu : MonoBehaviour
             }
             return;
         }
-
-        LoadLocale();
-        LoadLanguageIcons();
-        BuildLanguageButtons();
     }
 
     void SetupDocument()
     {
-        if (menuInitialized || uiDocument == null || uiDocument.rootVisualElement == null)
+        if ( uiDocument == null || uiDocument.rootVisualElement == null)
         {
             return;
         }
@@ -130,7 +106,9 @@ public class GameMenu : MonoBehaviour
 
         LoadLocale();
         LoadLanguageIcons();
-        menuInitialized = true;
+        BuildLanguageButtons();
+        selectedLanguage = "";
+        UpdateStartButton();
     }
 
     void LoadLocale()
@@ -438,6 +416,7 @@ public class GameMenu : MonoBehaviour
             languageButton.style.paddingBottom = 0;
             languageButton.style.alignItems = Align.Center;
             languageButton.style.justifyContent = Justify.Center;
+            languageButton.AddToClassList("button");
 
             Texture2D icon = languageIcons[language];
             if (icon != null)
@@ -467,11 +446,27 @@ public class GameMenu : MonoBehaviour
 
     void SelectLanguage(string language)
     {
-        selectedLanguage = string.IsNullOrWhiteSpace(language) ? "en" : language;
+        selectedLanguage = string.IsNullOrWhiteSpace(language) ? "" : language;
 
         if (mainController != null)
         {
             mainController.language = selectedLanguage;
+        }
+
+        //Find button for this language and add selected class, remove from others
+        if (languagesContainer != null)
+        {
+            foreach (Button button in languagesContainer.Children())
+            {
+                if (string.Equals(button.name, language, StringComparison.OrdinalIgnoreCase))
+                {
+                    button.AddToClassList("selected");
+                }
+                else
+                {
+                    button.RemoveFromClassList("selected");
+                }
+            }
         }
     }
 
