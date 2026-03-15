@@ -1,27 +1,41 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class GameMenu : MonoBehaviour
 {
-    UIDocument uiDocument;
-    VisualElement languagesContainer;
-    Button startButton;
-
     readonly Dictionary<string, Texture2D> languageIcons = new Dictionary<string, Texture2D>(StringComparer.OrdinalIgnoreCase);
     readonly Dictionary<string, Dictionary<string, string>> localeEntries = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+    readonly Dictionary<GameObject, string> languageByObject = new Dictionary<GameObject, string>();
+    readonly Dictionary<XRSimpleInteractable, GameObject> objectByInteractable = new Dictionary<XRSimpleInteractable, GameObject>();
+    readonly List<GameObject> langObjects = new List<GameObject>();
 
     MainController mainController;
     bool isActive;
     bool waitingForMenuData;
     string selectedLanguage = "";
 
+    GameObject startBTObject;
+    GameObject languagesContainer;
+    UnityEngine.XR.Interaction.Toolkit.Interactors.IXRHoverInteractor currentHoverInteractor;
+    GameObject hoveredObject;
+    float hoveredSince;
+    bool hoveredSelected;
+    Vector3 hoveredOriginalScale = Vector3.one;
+
+    public GameObject langBTPrefab;
+    public float hoverSelectTime = 1f;
+    public float buttonScaling = 0.2f;
+    public float buttonSpacing = 1.2f;
+
     void OnEnable()
     {
         mainController = MainController.instance != null ? MainController.instance : FindAnyObjectByType<MainController>();
-
+        CacheReferences();
     }
 
     void Update()
@@ -31,28 +45,42 @@ public class GameMenu : MonoBehaviour
             return;
         }
 
+        for (int i = 0; i < langObjects.Count; i++)
+        {
+            GameObject langObject = langObjects[i];
+            if (langObject == null)
+            {
+                continue;
+            }
+
+            langObject.transform.localPosition = new Vector3((i - (langObjects.Count / 2f) + 0.5f) * buttonSpacing, 0f, 0f);
+            langObject.transform.LookAt(Camera.main.transform);
+            langObject.transform.localScale = Vector3.one * buttonScaling;
+        }
+
+        UpdateHoveredObjectAnimation();
+
+
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
+        ClearCurrentHover();
+        UnregisterStartButton();
+        UnregisterLanguageButtons();
     }
 
     public void setActive(bool active)
     {
-        if (!Application.isPlaying) return;
+        if (!Application.isPlaying)
+        {
+            return;
+        }
 
         isActive = active;
         mainController = MainController.instance != null ? MainController.instance : FindAnyObjectByType<MainController>();
 
-        if (uiDocument == null)
-        {
-            uiDocument = GetComponent<UIDocument>();
-        }
-
-        if (uiDocument != null)
-        {
-            uiDocument.enabled = active;
-        }
+        CacheReferences();
 
         Collider collider = GetComponent<Collider>();
         if (collider != null)
@@ -60,12 +88,15 @@ public class GameMenu : MonoBehaviour
             collider.enabled = active;
         }
 
-        if(!isActive)
+        SetMenuObjectsActive(active);
+
+        if (!isActive)
         {
+            ClearCurrentHover();
             return;
         }
 
-        SetupDocument();
+        EnsureInitialized();
         PositionInFrontOfCamera();
 
         if (!DataManager.IsFolderReady(DataManager.DataFolder.Menu))
@@ -78,37 +109,528 @@ public class GameMenu : MonoBehaviour
                     waitingForMenuData = false;
                     if (success && isActive)
                     {
-                        LoadLocale();
-                        LoadLanguageIcons();
-                        BuildLanguageButtons();
+                        RefreshMenuData();
                     }
                 });
             }
+
             return;
+        }
+
+        RefreshMenuData();
+    }
+
+    void CacheReferences()
+    {
+        if (startBTObject == null)
+        {
+            Transform startTransform = transform.Find("StartBT");
+            if (startTransform != null)
+            {
+                startBTObject = startTransform.gameObject;
+            }
+        }
+
+        if (languagesContainer == null)
+        {
+            Transform languagesTransform = transform.Find("Languages");
+            if (languagesTransform != null)
+            {
+                languagesContainer = languagesTransform.gameObject;
+            }
         }
     }
 
-    void SetupDocument()
+    void EnsureInitialized()
     {
-        if ( uiDocument == null || uiDocument.rootVisualElement == null)
+        RegisterStartButton();
+        EnsureExistingLanguageObjectsCached();
+    }
+
+    void RefreshMenuData()
+    {
+        LoadLocale();
+        LoadLanguageIcons();
+        Debug.Log("GameMenu refresh - locale keys: " + localeEntries.Count + ", icons: " + languageIcons.Count, this);
+        EnsureLanguageButtons();
+        selectedLanguage = "";
+        UpdateLanguageVisualState();
+        UpdateStartButton();
+    }
+
+    void SetMenuObjectsActive(bool active)
+    {
+        if (languagesContainer != null)
+        {
+            languagesContainer.SetActive(active);
+        }
+
+        for (int i = 0; i < langObjects.Count; i++)
+        {
+            if (langObjects[i] != null)
+            {
+                langObjects[i].SetActive(active);
+            }
+        }
+
+        if (startBTObject != null)
+        {
+            startBTObject.SetActive(active && !string.IsNullOrWhiteSpace(selectedLanguage));
+        }
+    }
+
+    void RegisterStartButton()
+    {
+        if (startBTObject == null)
         {
             return;
         }
 
-        languagesContainer = uiDocument.rootVisualElement.Q<VisualElement>("languages");
-        startButton = uiDocument.rootVisualElement.Q<Button>("startbt");
-
-        if (startButton != null)
+        XRSimpleInteractable interactable = startBTObject.GetComponent<XRSimpleInteractable>();
+        if (interactable == null)
         {
-            startButton.clicked -= OnStartClicked;
-            startButton.clicked += OnStartClicked;
+            return;
         }
 
-        LoadLocale();
-        LoadLanguageIcons();
-        BuildLanguageButtons();
-        selectedLanguage = "";
+        interactable.selectEntered.RemoveListener(OnStartSelected);
+        interactable.selectEntered.AddListener(OnStartSelected);
+
+        interactable.hoverEntered.RemoveListener(OnStartHoverEntered);
+        interactable.hoverEntered.AddListener(OnStartHoverEntered);
+
+        interactable.hoverExited.RemoveListener(OnStartHoverExited);
+        interactable.hoverExited.AddListener(OnStartHoverExited);
+    }
+
+    void UnregisterStartButton()
+    {
+        if (startBTObject == null)
+        {
+            return;
+        }
+
+        XRSimpleInteractable interactable = startBTObject.GetComponent<XRSimpleInteractable>();
+        if (interactable == null)
+        {
+            return;
+        }
+
+        interactable.selectEntered.RemoveListener(OnStartSelected);
+        interactable.hoverEntered.RemoveListener(OnStartHoverEntered);
+        interactable.hoverExited.RemoveListener(OnStartHoverExited);
+    }
+
+    void EnsureExistingLanguageObjectsCached()
+    {
+        if (languagesContainer == null || langObjects.Count > 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < languagesContainer.transform.childCount; i++)
+        {
+            GameObject child = languagesContainer.transform.GetChild(i).gameObject;
+            if (child != null)
+            {
+                langObjects.Add(child);
+            }
+        }
+    }
+
+    void EnsureLanguageButtons()
+    {
+        if (languagesContainer == null || langBTPrefab == null)
+        {
+            if (languagesContainer == null)
+            {
+                Debug.LogWarning("GameMenu could not find child object 'Languages'.", this);
+            }
+
+            if (langBTPrefab == null)
+            {
+                Debug.LogWarning("GameMenu has no 'langBTPrefab' assigned.", this);
+            }
+
+            return;
+        }
+
+        List<string> languages = GetAvailableLanguages();
+        languages.Sort(StringComparer.OrdinalIgnoreCase);
+        Debug.Log("GameMenu available languages: " + languages.Count + " -> " + string.Join(", ", languages), this);
+
+        while (langObjects.Count < languages.Count)
+        {
+            GameObject instance = Instantiate(langBTPrefab, languagesContainer.transform);
+            instance.name = "LanguageButton_" + langObjects.Count;
+            langObjects.Add(instance);
+        }
+
+        for (int i = 0; i < langObjects.Count; i++)
+        {
+            GameObject langObject = langObjects[i];
+            if (langObject == null)
+            {
+                continue;
+            }
+
+            bool shouldBeVisible = i < languages.Count;
+            langObject.SetActive(isActive && shouldBeVisible);
+
+            if (!shouldBeVisible)
+            {
+                RemoveLanguageRegistration(langObject);
+                continue;
+            }
+
+            string language = languages[i];
+            langObject.name = "Language_" + language;
+            langObject.transform.localPosition = new Vector3(i * buttonSpacing, 0f, 0f);
+            langObject.transform.localRotation = Quaternion.identity;
+
+            RegisterLanguageButton(langObject, language);
+            UpdateLanguageButtonContent(langObject, language);
+            ResetObjectAnimation(langObject);
+        }
+    }
+
+    List<string> GetAvailableLanguages()
+    {
+        HashSet<string> languages = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (string language in languageIcons.Keys)
+        {
+            if (!string.IsNullOrWhiteSpace(language))
+            {
+                languages.Add(language);
+            }
+        }
+
+        foreach (Dictionary<string, string> entry in localeEntries.Values)
+        {
+            if (entry == null)
+            {
+                continue;
+            }
+
+            foreach (string language in entry.Keys)
+            {
+                if (!string.IsNullOrWhiteSpace(language))
+                {
+                    languages.Add(language);
+                }
+            }
+        }
+
+        if (languages.Count == 0 && mainController != null && !string.IsNullOrWhiteSpace(mainController.language))
+        {
+            languages.Add(mainController.language);
+        }
+
+        if (languages.Count == 0)
+        {
+            languages.Add("en");
+        }
+
+        return new List<string>(languages);
+    }
+
+    void RegisterLanguageButton(GameObject langObject, string language)
+    {
+        Debug.Log("Registering language button for '" + language + "' on object: " + langObject.name, this);
+        RemoveLanguageRegistration(langObject);
+
+        XRSimpleInteractable interactable = langObject.GetComponentInChildren<XRSimpleInteractable>();
+        if (interactable == null)
+        {
+            return;
+        }
+
+        interactable.selectEntered.AddListener(OnLanguageSelected);
+        interactable.hoverEntered.AddListener(OnLanguageHoverEntered);
+        interactable.hoverExited.AddListener(OnLanguageHoverExited);
+
+        languageByObject[langObject] = language;
+        objectByInteractable[interactable] = langObject;
+    }
+
+    void RemoveLanguageRegistration(GameObject langObject)
+    {
+        if (langObject == null)
+        {
+            return;
+        }
+
+        XRSimpleInteractable interactable = langObject.GetComponentInChildren<XRSimpleInteractable>();
+        if (interactable != null)
+        {
+            interactable.selectEntered.RemoveListener(OnLanguageSelected);
+            interactable.hoverEntered.RemoveListener(OnLanguageHoverEntered);
+            interactable.hoverExited.RemoveListener(OnLanguageHoverExited);
+            objectByInteractable.Remove(interactable);
+        }
+
+        languageByObject.Remove(langObject);
+    }
+
+    void UnregisterLanguageButtons()
+    {
+        for (int i = 0; i < langObjects.Count; i++)
+        {
+            RemoveLanguageRegistration(langObjects[i]);
+        }
+    }
+
+    void UpdateLanguageButtonContent(GameObject langObject, string language)
+    {
+        Texture2D icon = null;
+        languageIcons.TryGetValue(language, out icon);
+
+        MeshRenderer renderer = langObject.GetComponentInChildren<MeshRenderer>(true);
+        if (renderer != null && renderer.material != null)
+        {
+            renderer.material.mainTexture = icon;
+            renderer.material.color = Color.white;
+        }
+
+        TextMeshPro text = langObject.GetComponentInChildren<TextMeshPro>(true);
+        if (text != null)
+        {
+            text.text = string.IsNullOrWhiteSpace(language) ? string.Empty : language.ToUpperInvariant();
+            text.gameObject.SetActive(icon == null);
+        }
+    }
+
+    void UpdateHoveredObjectAnimation()
+    {
+        if (hoveredObject == null)
+        {
+            return;
+        }
+
+        float hoverDuration = Time.time - hoveredSince;
+        float normalizedHover = hoverSelectTime > 0f ? Mathf.Clamp01(hoverDuration / hoverSelectTime) : 1f;
+        float pulse = 1f + Mathf.Sin(Time.time * 3f) * 0.03f;
+        float scaleMultiplier = Mathf.Lerp(1f, 1.12f, normalizedHover) * pulse;
+        hoveredObject.transform.localScale = hoveredOriginalScale * scaleMultiplier;
+
+        if (!hoveredSelected && normalizedHover >= 1f)
+        {
+            hoveredSelected = true;
+            ActivateHoveredObject();
+        }
+    }
+
+    void ActivateHoveredObject()
+    {
+        if (hoveredObject == null)
+        {
+            return;
+        }
+
+        if (hoveredObject == startBTObject)
+        {
+            OnStartClicked();
+            return;
+        }
+
+        if (languageByObject.TryGetValue(hoveredObject, out string language))
+        {
+            OnLanguageClicked(language);
+        }
+    }
+
+    void SetHoveredObject(GameObject targetObject)
+    {
+        if (hoveredObject == targetObject)
+        {
+            return;
+        }
+
+        ResetObjectAnimation(hoveredObject);
+        hoveredObject = targetObject;
+        hoveredSince = Time.time;
+        hoveredSelected = false;
+        hoveredOriginalScale = hoveredObject != null ? hoveredObject.transform.localScale : Vector3.one;
+    }
+
+    void ClearHoveredObject(GameObject targetObject)
+    {
+        if (hoveredObject == targetObject)
+        {
+            ClearCurrentHover();
+        }
+    }
+
+    void ClearCurrentHover()
+    {
+        currentHoverInteractor = null;
+        ResetObjectAnimation(hoveredObject);
+        hoveredObject = null;
+        hoveredSince = 0f;
+        hoveredSelected = false;
+        hoveredOriginalScale = Vector3.one;
+    }
+
+    void ResetObjectAnimation(GameObject targetObject)
+    {
+        if (targetObject == null)
+        {
+            return;
+        }
+
+        targetObject.transform.localScale = Vector3.one;
+    }
+
+    void OnLanguageClicked(string language)
+    {
+        SelectLanguage(language);
         UpdateStartButton();
+    }
+
+    void SelectLanguage(string language)
+    {
+        selectedLanguage = string.IsNullOrWhiteSpace(language) ? "" : language;
+
+        if (mainController != null)
+        {
+            mainController.language = selectedLanguage;
+        }
+
+        UpdateLanguageVisualState();
+    }
+
+    void UpdateLanguageVisualState()
+    {
+        for (int i = 0; i < langObjects.Count; i++)
+        {
+            GameObject langObject = langObjects[i];
+            if (langObject == null)
+            {
+                continue;
+            }
+
+            bool selected = languageByObject.TryGetValue(langObject, out string language) &&
+                string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase);
+
+            SetObjectSelectedVisual(langObject, selected);
+        }
+    }
+
+    void SetObjectSelectedVisual(GameObject targetObject, bool selected)
+    {
+        MeshRenderer renderer = targetObject != null ? targetObject.GetComponentInChildren<MeshRenderer>(true) : null;
+        if (renderer != null && renderer.material != null)
+        {
+            renderer.material.color = selected ? Color.green : Color.white;
+        }
+    }
+
+    void UpdateStartButton()
+    {
+        if (startBTObject == null)
+        {
+            return;
+        }
+
+        bool shouldShow = isActive && !string.IsNullOrWhiteSpace(selectedLanguage);
+        startBTObject.SetActive(shouldShow);
+
+        TextMeshPro text = startBTObject.GetComponentInChildren<TextMeshPro>(true);
+        if (text != null)
+        {
+            text.text = GetLocalizedText("start", selectedLanguage);
+        }
+    }
+
+    string GetLocalizedText(string key, string language)
+    {
+        if (localeEntries.TryGetValue(key, out Dictionary<string, string> entry) && entry != null)
+        {
+            if (entry.TryGetValue(language, out string value) && !string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+
+            if (entry.TryGetValue("en", out value) && !string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+        }
+
+        return key;
+    }
+
+    void OnStartClicked()
+    {
+        if (mainController != null)
+        {
+            mainController.language = selectedLanguage;
+            mainController.gameState = MainController.GameState.Intro;
+        }
+
+        setActive(false);
+    }
+
+    void PositionInFrontOfCamera()
+    {
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            return;
+        }
+
+        transform.position = mainCamera.transform.TransformPoint(Vector3.forward * 5f);
+        transform.LookAt(mainCamera.transform);
+        transform.Rotate(0f, 180f, 0f);
+    }
+
+    void OnStartSelected(SelectEnterEventArgs args)
+    {
+        OnStartClicked();
+    }
+
+    void OnStartHoverEntered(HoverEnterEventArgs args)
+    {
+        currentHoverInteractor = args.interactorObject;
+        SetHoveredObject(startBTObject);
+    }
+
+    void OnStartHoverExited(HoverExitEventArgs args)
+    {
+        if (ReferenceEquals(currentHoverInteractor, args.interactorObject))
+        {
+            ClearHoveredObject(startBTObject);
+        }
+    }
+
+    void OnLanguageSelected(SelectEnterEventArgs args)
+    {
+        if (args.interactableObject is XRSimpleInteractable interactable &&
+            objectByInteractable.TryGetValue(interactable, out GameObject langObject) &&
+            languageByObject.TryGetValue(langObject, out string language))
+        {
+            OnLanguageClicked(language);
+        }
+    }
+
+    void OnLanguageHoverEntered(HoverEnterEventArgs args)
+    {
+        if (args.interactableObject is XRSimpleInteractable interactable &&
+            objectByInteractable.TryGetValue(interactable, out GameObject langObject))
+        {
+            currentHoverInteractor = args.interactorObject;
+            SetHoveredObject(langObject);
+        }
+    }
+
+    void OnLanguageHoverExited(HoverExitEventArgs args)
+    {
+        if (args.interactableObject is XRSimpleInteractable interactable &&
+            objectByInteractable.TryGetValue(interactable, out GameObject langObject) &&
+            ReferenceEquals(currentHoverInteractor, args.interactorObject))
+        {
+            ClearHoveredObject(langObject);
+        }
     }
 
     void LoadLocale()
@@ -137,6 +659,46 @@ public class GameMenu : MonoBehaviour
         catch (Exception ex)
         {
             Debug.LogError("Failed to load locale.json: " + ex.Message, this);
+        }
+    }
+
+    void LoadLanguageIcons()
+    {
+        languageIcons.Clear();
+
+        string menuPath = DataManager.GetBasePath(DataManager.DataFolder.Menu);
+        if (string.IsNullOrWhiteSpace(menuPath) || !Directory.Exists(menuPath))
+        {
+            return;
+        }
+
+        string[] iconPaths = Directory.GetFiles(menuPath, "*.png", SearchOption.TopDirectoryOnly);
+        for (int i = 0; i < iconPaths.Length; i++)
+        {
+            string language = Path.GetFileNameWithoutExtension(iconPaths[i]);
+            Debug.Log("Found language icon file: " + iconPaths[i] + " for language: '" + language + "'", this);
+            if (string.IsNullOrWhiteSpace(language))
+            {
+                continue;
+            }
+
+            try
+            {
+                byte[] imageBytes = File.ReadAllBytes(iconPaths[i]);
+                Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                if (!texture.LoadImage(imageBytes))
+                {
+                    Destroy(texture);
+                    continue;
+                }
+                Debug.Log("Loaded language icon for '" + language + "' from: " + iconPaths[i], this);
+                texture.wrapMode = TextureWrapMode.Clamp;
+                languageIcons[language] = texture;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Failed to load language icon '" + iconPaths[i] + "': " + ex.Message, this);
+            }
         }
     }
 
@@ -349,183 +911,11 @@ public class GameMenu : MonoBehaviour
         return false;
     }
 
-    void LoadLanguageIcons()
+    public void GazeHover(HoverEnterEventArgs args)
     {
-        languageIcons.Clear();
-
-        string menuPath = DataManager.GetBasePath(DataManager.DataFolder.Menu);
-        if (string.IsNullOrWhiteSpace(menuPath) || !Directory.Exists(menuPath))
-        {
-            return;
-        }
-
-        string[] iconPaths = Directory.GetFiles(menuPath, "*.png", SearchOption.TopDirectoryOnly);
-        for (int i = 0; i < iconPaths.Length; i++)
-        {
-            string language = Path.GetFileNameWithoutExtension(iconPaths[i]);
-            if (string.IsNullOrWhiteSpace(language))
-            {
-                continue;
-            }
-
-            try
-            {
-                byte[] imageBytes = File.ReadAllBytes(iconPaths[i]);
-                Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-                if (!texture.LoadImage(imageBytes))
-                {
-                    Destroy(texture);
-                    continue;
-                }
-
-                texture.wrapMode = TextureWrapMode.Clamp;
-                languageIcons[language] = texture;
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError("Failed to load language icon '" + iconPaths[i] + "': " + ex.Message, this);
-            }
-        }
     }
 
-    void BuildLanguageButtons()
+    public void GazeExit(HoverExitEventArgs args)
     {
-        if (languagesContainer == null)
-        {
-            return;
-        }
-
-        languagesContainer.Clear();
-
-        List<string> languages = new List<string>(languageIcons.Keys);
-        languages.Sort(StringComparer.OrdinalIgnoreCase);
-
-        for (int i = 0; i < languages.Count; i++)
-        {
-            string language = languages[i];
-            Button languageButton = new Button(() => OnLanguageClicked(language));
-            languageButton.name = language;
-            languageButton.tooltip = language;
-
-            languageButton.text = string.Empty;
-            languageButton.style.width = 96;
-            languageButton.style.height = 64;
-            languageButton.style.paddingLeft = 0;
-            languageButton.style.paddingRight = 0;
-            languageButton.style.paddingTop = 0;
-            languageButton.style.paddingBottom = 0;
-            languageButton.style.alignItems = Align.Center;
-            languageButton.style.justifyContent = Justify.Center;
-            languageButton.AddToClassList("button");
-
-            Texture2D icon = languageIcons[language];
-            if (icon != null)
-            {
-                Image image = new Image();
-                image.image = icon;
-                image.scaleMode = ScaleMode.ScaleToFit;
-                image.pickingMode = PickingMode.Ignore;
-                image.style.width = Length.Percent(100);
-                image.style.height = Length.Percent(100);
-                languageButton.Add(image);
-            }
-            else
-            {
-                languageButton.text = language;
-            }
-
-            languagesContainer.Add(languageButton);
-        }
-    }
-
-    void OnLanguageClicked(string language)
-    {
-        SelectLanguage(language);
-        UpdateStartButton();
-    }
-
-    void SelectLanguage(string language)
-    {
-        selectedLanguage = string.IsNullOrWhiteSpace(language) ? "" : language;
-
-        if (mainController != null)
-        {
-            mainController.language = selectedLanguage;
-        }
-
-        //Find button for this language and add selected class, remove from others
-        if (languagesContainer != null)
-        {
-            foreach (Button button in languagesContainer.Children())
-            {
-                if (string.Equals(button.name, language, StringComparison.OrdinalIgnoreCase))
-                {
-                    button.AddToClassList("selected");
-                }
-                else
-                {
-                    button.RemoveFromClassList("selected");
-                }
-            }
-        }
-    }
-
-    void UpdateStartButton()
-    {
-        if (startButton == null)
-        {
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(selectedLanguage))
-        {
-            startButton.style.display = DisplayStyle.None;
-            return;
-        }
-
-        startButton.style.display = DisplayStyle.Flex;
-        startButton.text = GetLocalizedText("start", selectedLanguage);
-    }
-
-    string GetLocalizedText(string key, string language)
-    {
-        if (localeEntries.TryGetValue(key, out Dictionary<string, string> entry) && entry != null)
-        {
-            if (entry.TryGetValue(language, out string value) && !string.IsNullOrWhiteSpace(value))
-            {
-                return value;
-            }
-
-            if (entry.TryGetValue("en", out value) && !string.IsNullOrWhiteSpace(value))
-            {
-                return value;
-            }
-        }
-
-        return key;
-    }
-
-    void OnStartClicked()
-    {
-        if (mainController != null)
-        {
-            mainController.language = selectedLanguage;
-            mainController.gameState = MainController.GameState.Intro;
-        }
-
-        setActive(false);
-    }
-
-    void PositionInFrontOfCamera()
-    {
-        Camera mainCamera = Camera.main;
-        if (mainCamera == null)
-        {
-            return;
-        }
-
-        transform.position = mainCamera.transform.TransformPoint(Vector3.forward * 5f);
-        transform.LookAt(mainCamera.transform);
-        transform.Rotate(0f, 180f, 0f);
     }
 }
