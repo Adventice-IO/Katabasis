@@ -46,6 +46,7 @@
                 float4x4 worldToLocal;
                 float3 extents;
                 float alpha;
+                float soloWhenInside;
             };
 
             // Uniforms
@@ -114,6 +115,22 @@
                     float boxEffect = lerp(1.0, _MaskBoxes[j].alpha, featherFactor);
     
                     maskAlpha *= boxEffect;
+                    
+                    if (_MaskBoxes[j].soloWhenInside > 0.5) {
+                        //if solo, use boxsdf outside the box to hide everything else smoothly
+
+                        float3 camLocalPos = mul(_MaskBoxes[j].worldToLocal, float4(_WorldSpaceCameraPos, 1.0)).xyz;
+                        float3 camD = abs(camLocalPos);
+                        float3 camDistToEdge = _MaskBoxes[j].extents - camD;
+                        float camBoxSDF = min(camDistToEdge.x, min(camDistToEdge.y, camDistToEdge.z));
+                        bool isInside = boxSDF > 0;
+                        if (!isInside) {
+                            // If the point is outside, we want to hide it based on how close it is to the box edge.
+                            // We can use the same featherFactor logic, but inverted (1 at edge, 0 far away).
+                           float camFeatherFactor = 1.0 - saturate(camBoxSDF / max(0.001, _MaskFeather));
+                           maskAlpha *= camFeatherFactor;
+                        }   
+                    }
 
                     // Optimization: if we're already invisible, stop [cite: 20]
                     if (maskAlpha <= 0.001) break; 

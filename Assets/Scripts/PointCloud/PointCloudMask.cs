@@ -15,6 +15,8 @@ public class PointCloudMask : MonoBehaviour
     [Range(0, 1)]
     public float alpha = 1.0f;
 
+    public bool soloWhenInside = false;
+
     public AnimationCurve alphaCurve;
 
     public MaskBox maskBox;
@@ -44,7 +46,7 @@ public class PointCloudMask : MonoBehaviour
         }
 
         alpha = alphaCurve.Evaluate(rawAlpha);
-        maskBox = new MaskBox(transform.worldToLocalMatrix, Vector3.one / 2, alpha);
+        maskBox = new MaskBox(transform.worldToLocalMatrix, Vector3.one / 2, alpha, soloWhenInside? 1f : 0f);
     }
 
     bool isCameraInsideMask()
