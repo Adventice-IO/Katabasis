@@ -27,7 +27,7 @@ namespace BAPointCloudRenderer.Loading
             //Debug.Log(cloudPath);
 
             String cPath = cloudPath;
-            if (streamingAssetsAsRoot) cPath = Application.streamingAssetsPath + "/" + cloudPath;
+            if (streamingAssetsAsRoot) cPath = Application.streamingAssetsPath + "/" + cPath;
             else if (cPath.StartsWith(".."))
             {
                 cPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(Application.dataPath, cloudPath));

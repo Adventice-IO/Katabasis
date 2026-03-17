@@ -1,7 +1,6 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -26,27 +25,42 @@ public class Subtitles : MonoBehaviour
         uiDocument = GetComponent<UIDocument>();
         if (uiDocument == null)
         {
-            Debug.LogError("No UIDocument found on Subtitles component");
+            //Debug.LogError("No UIDocument found on Subtitles component");
             return;
         }
         //uiDocument.enabled = true;
-        Debug.Log("UIDocument found: " + uiDocument.name + " > " + uiDocument.rootVisualElement);
+        initDocument();
+    }
+
+    void initDocument()
+    {
+        if (uiDocument == null || uiDocument.rootVisualElement == null)
+        {
+            //Debug.LogError("Cannot initialize subtitle document: UIDocument is null or rootVisualElement is null");
+            return;
+        }
+
         subtitleLabel = uiDocument.rootVisualElement.Q<Label>("subtitle");
         subtitleLabel.AddToClassList("hidden");
-        Debug.Log("Subtitle label: " + (subtitleLabel != null ? subtitleLabel.name : "null"));
+        //Debug.Log("Subtitle label: " + (subtitleLabel != null ? subtitleLabel.name : "null"));
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isPlaying != lastPlaying)
+        if (subtitleLabel == null)
         {
-            Debug.Log("Subtitle playback started at " + Time.time);
+            initDocument();
+        }
+
+        if (isPlaying != lastPlaying || (isPlaying && timeAtPlay == 0))
+        {
+            //Debug.Log("Subtitle playback started at " + Time.time);
             subtitleLabel.AddToClassList("hidden");
             if (isPlaying)
             {
                 timeAtPlay = Time.time;
-            }   
+            }
             lastPlaying = isPlaying;
             //uiDocument.enabled = true;
         }
@@ -57,18 +71,18 @@ public class Subtitles : MonoBehaviour
             return;
         }
 
-        if (isPlaying && subs != null)
+        if (isPlaying && subs != null && timeAtPlay > 0)
         {
             float timeSincePlay = Time.time - timeAtPlay;
             SubtitleLine subtitle = getSubtitleAt(timeSincePlay, out bool isFinished);
             if (curLine != subtitle)
             {
-                Debug.Log($"Subtitle changed at {timeSincePlay:F2}s: {(subtitle != null ? subtitle.text : "null")}");
+                //Debug.Log($"Subtitle changed at {timeSincePlay:F2}s: {(subtitle != null ? subtitle.text : "null")}");
                 curLine = subtitle;
 
                 if (curLine != null)
                 {
-                    Debug.Log($"Current subtitle: {curLine.text}");
+                    //Debug.Log($"Current subtitle: {curLine.text}");
                     subtitleLabel.RemoveFromClassList("hidden");
                     subtitleLabel.text = subtitle.text;
                 }
@@ -95,6 +109,35 @@ public class Subtitles : MonoBehaviour
         subs = file;
         isPlaying = true;
         //uiDocument.enabled = true;
+    }
+
+    public void play(string relativeSubtitlePath)
+    {
+        if (!DataManager.IsFolderReady(DataManager.DataFolder.Interviews))
+        {
+            DataManager.PreloadFolder(DataManager.DataFolder.Interviews, (success, path) =>
+            {
+                if (!success)
+                {
+                    subs = null;
+                    isPlaying = false;
+                    return;
+                }
+
+                subs = LoadSubtitleAsset(relativeSubtitlePath);
+                isPlaying = subs != null;
+            });
+            return;
+        }
+
+        timeAtPlay = 0;
+        subs = LoadSubtitleAsset(relativeSubtitlePath);
+        if (subs != null)
+        {
+            Debug.Log("Loading subtitles for " + relativeSubtitlePath + ", first line at " + (subs.lines != null && subs.lines.Count > 0 ? subs.lines[0].startTime.ToString("F2") : "no lines"));
+        }
+
+        isPlaying = subs != null;
     }
 
     public void stop()
@@ -124,5 +167,23 @@ public class Subtitles : MonoBehaviour
         }
 
         return null;
+    }
+
+    SubtitleAsset LoadSubtitleAsset(string relativeSubtitlePath)
+    {
+        if (string.IsNullOrWhiteSpace(relativeSubtitlePath))
+        {
+            Debug.LogWarning("Relative subtitle path is null or empty");
+            return null;
+        }
+
+        string subtitlePath = DataManager.GetFilePath(DataManager.DataFolder.Interviews, relativeSubtitlePath);
+        if (!File.Exists(subtitlePath))
+        {
+            Debug.LogWarning($"Subtitle file not found at path: {subtitlePath}");
+            return null;
+        }
+
+        return SubtitleSrtParser.LoadFromFile(subtitlePath);
     }
 }

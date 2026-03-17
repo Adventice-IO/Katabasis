@@ -1,11 +1,12 @@
 using System;
 using UnityEngine;
 
-[ExecuteInEditMode]
+[ExecuteAlways]
 public class CustomDebugLogger : MonoBehaviour, ILogHandler
 {
     public bool logMetaXRFeature = false;
     public bool logWwise = false;
+    public bool logVive = false;
     private ILogHandler defaultLogger = Debug.unityLogger.logHandler;
 
     private void OnEnable()
@@ -33,6 +34,13 @@ public class CustomDebugLogger : MonoBehaviour, ILogHandler
         {
             return; // Skip logging Wwise messages if the flag is false
         }
+
+        bool isViveLog = format.Contains("Vive") || format.Contains("VIVE");
+        if (isViveLog && !logVive)
+        {
+            return; // Skip logging Vive messages
+        }
+
         defaultLogger.LogFormat(logType, context, format, args);
     }
 

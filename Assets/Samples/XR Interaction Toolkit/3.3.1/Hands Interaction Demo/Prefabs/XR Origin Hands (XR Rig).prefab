@@ -3460,6 +3460,8 @@ MonoBehaviour:
   initialSalle: {fileID: 0}
   noAudioSO: {fileID: 0}
   debugAudioStates: 0
+  gameState: 0
+  language: en
   salle: {fileID: 0}
   tunnel: {fileID: 0}
   animateRotation: 0
@@ -3624,10 +3626,30 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 0}
+  nativeTeleportAction: {fileID: 0}
+  prevNextSpeedTopAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: 
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: d241228c-f187-4d3d-a456-03c829bd1526
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
   removedInSpawnMode: 0
   removedCheckpoint: 0
+  menu: {fileID: 0}
+  intro: {fileID: 0}
+  outro: {fileID: 0}
   lockInfoPlane: {fileID: 7325477772855753073}
   speedInfo: {fileID: 0}
+  teleportationLoco: {fileID: 0}
+  turnLoco: {fileID: 0}
+  viewDistanceAnimSpeed: 0.2
+  pointCloudViewDistanceMultiplier: 1
 --- !u!114 &3732688429945291836 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4238984354899526239, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}

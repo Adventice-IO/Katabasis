@@ -39,7 +39,7 @@ public class KataTransformer : MonoBehaviour
     //make it usable in an event
     public ManipState manipState = ManipState.None;
     private ManipState lastManipState = ManipState.None;
-    bool removePressed = false;
+    //bool removePressed = false;
 
     void OnEnable()
     {

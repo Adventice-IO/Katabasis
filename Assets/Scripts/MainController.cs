@@ -7,9 +7,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using TMPro;
 using Unity.XR.CompositionLayers.UIInteraction;
-
-
-
+using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
 
 #if UNITY_EDITOR
@@ -23,11 +21,23 @@ public class MainController : MonoBehaviour
     [Header("Setup")]
     public Salle initialSalle;
 
+
     [Header("Audio Settings")]
     public AudioStateRefSO noAudioSO;
     public bool debugAudioStates = false;
 
+    public enum GameState
+    {
+        Menu,
+        Intro,
+        Playing,
+        Outro,
+        End
+    }
     [Header("State")]
+    public GameState gameState = GameState.Menu;
+    GameState lastGameState;
+    public string language = "en";
     public Salle salle;
     public Tunnel tunnel;
 
@@ -76,8 +86,8 @@ public class MainController : MonoBehaviour
     [SerializeField] private InputActionProperty cancelAction;
     [SerializeField] private InputActionProperty snapGroundAction;
     [SerializeField] private InputActionProperty spawnCheckPointAction;
-    [SerializeField] private InputActionProperty teleportForwardAction;
-    [SerializeField] private InputActionProperty teleportBackwardAction; //XRI SnapTurn
+    [SerializeField] private InputActionReference nativeTeleportAction;
+    [SerializeField] private InputActionProperty prevNextSpeedTopAction;
 
     bool spawningMode;
     public bool removedInSpawnMode;
@@ -91,10 +101,21 @@ public class MainController : MonoBehaviour
     float timeAtToggleFreeMotion;
     bool freeMotionSwitched;
 
+    [Header("Links")]
+    public GameMenu menu;
+    public GameIntro intro;
+    public GameOutro outro;
     public GameObject lockInfoPlane;
     public GameObject speedInfo;
     public GameObject teleportationLoco;
+    public GameObject turnLoco;
 
+    [Header("Point Cloud")]
+    [Range(0.01f, 1f)]
+    public float viewDistanceAnimSpeed = 0.2f;
+
+    [Range(0f, 1f)]
+    public float pointCloudViewDistanceMultiplier = 1.0f;
     float timeAtArrived; //in a salle or tunnel
     public float timeSinceArrived
     {
@@ -105,13 +126,23 @@ public class MainController : MonoBehaviour
     }
 
     public Tunnel comingFromTunnel { get; private set; }
+
+    //Game memory
     List<Salle> visitedSalles = new List<Salle>();
+
+
 
     Tunnel[] allTunnels;
 
+    GameObject sallesGO;
+    GameObject tunnelsGO;
+
     private void Start()
     {
-        Reset();
+        sallesGO = GameObject.Find("Salles");
+        tunnelsGO = GameObject.Find("Tunnels");
+
+        gameStateUpdate();
     }
 
 #if UNITY_EDITOR
@@ -222,34 +253,38 @@ public class MainController : MonoBehaviour
                 };
             }
 
-            if(teleportForwardAction.action != null)
+            if (prevNextSpeedTopAction.action != null)
             {
-                teleportForwardAction.action.Enable();
-                teleportForwardAction.action.performed += ctx =>
+                prevNextSpeedTopAction.action.Enable();
+                prevNextSpeedTopAction.action.performed += ctx =>
                 {
                     if (!freeMotion && isInATunnel())
                     {
-                        float nextSpeedPos = tunnel.getNextSpeedCheckpointPosition(trackPosition, isReversed);
-                        if (nextSpeedPos >= 0)                        
-                        {
-                            setPosition(nextSpeedPos);
-                        }
-                    }
-                };
-            }
+                        Debug.Log("Teleporting to nearest speed checkpoint");
+                        Cardinal cardinal = CardinalUtility.GetNearestCardinal(prevNextSpeedTopAction.action.ReadValue<Vector2>());
 
-            if (teleportBackwardAction.action != null)
-            {
-                teleportBackwardAction.action.Enable();
-                //XRI Snap Turn, check that it's joystick down
-                teleportBackwardAction.action.performed += ctx =>
-                {
-                    if (!freeMotion && isInATunnel())
-                    {
-                        float prevSpeedPos = tunnel.getPreviousSpeedCheckpointPosition(trackPosition, isReversed);
-                        if (prevSpeedPos >= 0)
+                        switch (cardinal)
                         {
-                            setPosition(prevSpeedPos);
+                            case Cardinal.North:
+                                {
+                                    Debug.Log("Teleporting forward to next speed checkpoint");
+                                    float nextSpeedPos = tunnel.getNextSpeedCheckpointPosition(trackPosition + .01f, isReversed);
+                                    if (nextSpeedPos >= 0)
+                                    {
+                                        setPosition(nextSpeedPos);
+                                    }
+                                }
+                                break;
+                            case Cardinal.South:
+                                {
+                                    Debug.Log("Teleporting backward to previous speed checkpoint");
+                                    float prevSpeedPos = tunnel.getPreviousSpeedCheckpointPosition(trackPosition - .01f, isReversed);
+                                    if (prevSpeedPos >= 0)
+                                    {
+                                        setPosition(prevSpeedPos);
+                                    }
+                                }
+                                break;
                         }
                     }
                 };
@@ -307,15 +342,17 @@ public class MainController : MonoBehaviour
 
     private void Update()
     {
+
+#if UNITY_EDITOR
         if (lockInfoPlane != null)
         {
-            lockInfoPlane.SetActive(!freeMotion);
+            lockInfoPlane.SetActive(!freeMotion && editMode);
         }
 
         if (speedInfo != null)
         {
-            speedInfo.SetActive(isInATunnel() && !freeMotion);
-            if (isInATunnel() && !freeMotion)
+            speedInfo.SetActive(isInATunnel() && !freeMotion && editMode);
+            if (isInATunnel() && !freeMotion && editMode)
             {
                 TextMeshPro textMesh = speedInfo.GetComponent<TextMeshPro>();
                 if (textMesh != null)
@@ -324,10 +361,25 @@ public class MainController : MonoBehaviour
                 }
             }
         }
+#endif
 
 
         if (Application.isPlaying)
         {
+            if (gameState != lastGameState)
+            {
+                gameStateUpdate();
+                lastGameState = gameState;
+            }
+
+            bool shouldSee = gameState == GameState.Playing || gameState == GameState.Outro;
+            float viewOffset = Time.deltaTime * (shouldSee ? 1f : -1f) * viewDistanceAnimSpeed;
+            pointCloudViewDistanceMultiplier = Mathf.Clamp01(pointCloudViewDistanceMultiplier + viewOffset);
+            if (pointCloudViewDistanceMultiplier <= 0f && gameState == GameState.End)
+            {
+                ResetGame();
+            }
+
             if (editMode != _lastEditMode)
             {
                 _lastEditMode = editMode;
@@ -344,6 +396,7 @@ public class MainController : MonoBehaviour
                 {
                     kt.updateActive();
                 }
+
 
             }
 
@@ -385,6 +438,17 @@ public class MainController : MonoBehaviour
                     }
                 }
             }
+
+            if (nativeTeleportAction.action != null)
+            {
+                if (nativeTeleportAction.action.enabled != freeMotion)
+                {
+                    if (freeMotion) nativeTeleportAction.action.Enable();
+                    else nativeTeleportAction.action.Disable();
+                }
+            }
+            teleportationLoco.SetActive(freeMotion);
+            turnLoco.SetActive(freeMotion);
         }
     }
 
@@ -404,14 +468,14 @@ public class MainController : MonoBehaviour
             }
             else if (!freeMotion && isInATunnel())
             {
-                if(joystickInput.y != 0f)
+                if (joystickInput.y != 0f)
                 {
                     Pause();
                 }
                 editSmoothSpeed = Mathf.MoveTowards(editSmoothSpeed, joystickInput.y * editMaxSpeed, maxAcceleration * deltaTime);
                 if (editSmoothSpeed != 0f && !isRunning)
                 {
-                    setPosition(trackPosition + editSmoothSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f)) ;
+                    setPosition(trackPosition + editSmoothSpeed * deltaTime / (splineContainer != null ? splineContainer.Spline.GetLength() : 1f));
                 }
             }
         }
@@ -460,7 +524,7 @@ public class MainController : MonoBehaviour
                     trackPosition = 1f;
                     currentSpeed = 0f;
                     isRunning = false;
-                    TeleportToSalle(tunnel.salleArrivee);
+                    TeleportToSalle(tunnel.salleArrivee, false);
                 }
                 else
                 {
@@ -498,10 +562,64 @@ public class MainController : MonoBehaviour
         }
     }
 
+
+
+    // --- Game State Management ---
+    void gameStateUpdate()
+    {
+        if (!Application.isPlaying) return;
+
+        menu.setActive(gameState == GameState.Menu);
+        intro.setActive(gameState == GameState.Intro);
+        outro.setActive(gameState == GameState.Outro);
+
+
+        sallesGO.SetActive(gameState != GameState.Menu);
+        tunnelsGO.SetActive(gameState != GameState.Menu);
+
+        switch (gameState)
+        {
+            case GameState.Menu:
+                ResetGame();
+                break;
+
+            case GameState.Intro:
+                break;
+            case GameState.Playing:
+                Reset();
+                break;
+
+            case GameState.Outro:
+                break;
+
+            case GameState.End:
+                break;
+        }
+    }
+
+
+
     // --- Public API for Buttons ---
+
+    public void ResetGame()
+    {
+        visitedSalles.Clear();
+        gameState = GameState.Menu;
+        salle = null;
+        pointCloudViewDistanceMultiplier = 0f;
+    }
 
     public void GoToSalle(Salle targetSalle)
     {
+        if (Application.isPlaying)
+        {
+            InterviewManager manager = InterviewManager.instance != null ? InterviewManager.instance : FindAnyObjectByType<InterviewManager>();
+            if (manager != null)
+            {
+                manager.RefreshAssignmentsForSalle(targetSalle);
+            }
+        }
+
         //find tunnel from current salle to target salle
         List<Tunnel> outTunnels = getAllOutTunnels();
         foreach (Tunnel tunnel in outTunnels)
@@ -525,12 +643,13 @@ public class MainController : MonoBehaviour
                 isReversed = true;
                 ResetPosition();
                 Play();
+
                 return;
             }
         }
     }
 
-    public void TeleportToSalle(Salle targetSalle)
+    public void TeleportToSalle(Salle targetSalle, bool assignInterviews = true)
     {
         freeMotion = true;
         comingFromTunnel = tunnel;
@@ -542,6 +661,19 @@ public class MainController : MonoBehaviour
             visitedSalles.Add(targetSalle);
         }
         ResetPosition();
+        if (salle.isExit)
+        {
+            gameState = GameState.Outro;
+        }
+
+        if (Application.isPlaying && assignInterviews)
+        {
+            InterviewManager manager = InterviewManager.instance != null ? InterviewManager.instance : FindAnyObjectByType<InterviewManager>();
+            if (manager != null)
+            {
+                manager.RefreshAssignmentsForSalle(salle);
+            }
+        }
     }
 
     public List<Tunnel> getAllOutTunnels()
@@ -706,6 +838,17 @@ public class MainController : MonoBehaviour
                 tunnel.AddKnotAtPosition(rayProvider.rayEndPoint);
             }
         }
+    }
+
+
+
+    public string getLanguageSuffix()
+    {
+        if (language == "" || language == "vo")
+        {
+            return "";
+        }
+        return "_" + language;
     }
 
 #if UNITY_EDITOR
