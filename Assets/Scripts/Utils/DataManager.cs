@@ -57,14 +57,8 @@ public class DataManager : MonoBehaviour
 
     void Awake()
     {
-        if (instance != null && instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        //(gameObject);DontDestroyOnLoad
 
         if (preloadOnStart && Application.isPlaying)
         {

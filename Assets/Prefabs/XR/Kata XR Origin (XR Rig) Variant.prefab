@@ -647,6 +647,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 517590615602817253}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: gameState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: noAudioSO
       value: 
       objectReference: {fileID: 11400000, guid: dc27565659fa27e45be8f55d03fc51df, type: 2}
@@ -911,9 +915,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2218496723442559054, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6704112130730892095}
-    - targetCorrespondingSourceObject: {fileID: 2218496723442559054, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 502877530282178702}
     - targetCorrespondingSourceObject: {fileID: 657184242118504722, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7471194082835080143}
@@ -957,25 +958,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InterviewManager
   generateAssignment: 0
   simulateGameplay: 0
-  diversity: 0.5
-  levelUpBias: 0.5
-  simulatedCuriosity: 0.5
---- !u!114 &502877530282178702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 332919419242661544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33efbe488f673ea43acef27c22bcc7d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InterviewManager
-  generateAssignment: 0
-  simulateGameplay: 0
-  diversity: 1
-  levelUpBias: 0
   simulatedCuriosity: 0.5
 --- !u!4 &332919419242661547 stripped
 Transform:
@@ -1055,6 +1037,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 332919419242661547}
     m_Modifications:
+    - target: {fileID: 694934798296274057, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[2].m_Value
+      value: 1.57
+      objectReference: {fileID: 0}
     - target: {fileID: 1218888235230366990, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1137,7 +1123,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1809112017611189029, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1939016368344581756, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
       propertyPath: m_LocalScale.x
@@ -1170,6 +1156,26 @@ PrefabInstance:
     - target: {fileID: 1939016368344581756, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995037280580032372, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995037280580032372, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995037280580032372, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995037280580032372, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 3995037280580032372, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8689465671872771370, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
       propertyPath: m_Name

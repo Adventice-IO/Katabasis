@@ -49,6 +49,7 @@ public class PointCloudMask : MonoBehaviour
 
     bool isCameraInsideMask()
     {
+        if(Camera.main == null) return false;
         Vector3 localCamPos = transform.worldToLocalMatrix.MultiplyPoint(Camera.main.transform.position);
         return Mathf.Abs(localCamPos.x) < 0.5f && Mathf.Abs(localCamPos.y) < 0.5f && Mathf.Abs(localCamPos.z) < 0.5f;
     }

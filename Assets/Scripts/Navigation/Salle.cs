@@ -1,4 +1,5 @@
 using Framework.Utils.Editor;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -11,12 +12,12 @@ public class Salle : MonoBehaviour
     public bool isExit = false;
     [Range(0, 4)]
     public int niveau = 0;
+    public int maxPlayedInterview = 1;
 
     public Transform origin { get; private set; }
 
     [Header("Audio Settings")]
     public AudioStateRefSO audioSO;
-
 
 
     void Awake()
@@ -29,6 +30,10 @@ public class Salle : MonoBehaviour
     private void OnEnable()
     {
         origin = transform.Find("Origin");
+        foreach (var i in interviews)
+        {
+            i.OnInterviewEnded += onInterviewEnd;
+        }
     }
 
     // Update is called once per frame
@@ -41,8 +46,6 @@ public class Salle : MonoBehaviour
             itw.transform.localRotation = Quaternion.Euler(0, 90, 0);
             itw.transform.parent.LookAt(lookAt, Vector3.up);
         });
-
-       
     }
 
 
@@ -65,6 +68,22 @@ public class Salle : MonoBehaviour
         style.normal.textColor = color;
         UnityEditor.Handles.Label(labelPos, gameObject.name, style);
 #endif
+    }
+
+
+    public void onInterviewEnd(Interview interview)
+    {
+        int playedInterviewCount = interviews.Count(i => i.state == Interview.State.Ending);
+        if (playedInterviewCount >= maxPlayedInterview)
+        {
+            foreach (var i in interviews)
+            {
+                if (i.state != Interview.State.Ending)
+                {
+                    i.evaporate();
+                }
+            }
+        }
     }
 
     public Interview[] interviews { get { return GetComponentsInChildren<Interview>(); } }

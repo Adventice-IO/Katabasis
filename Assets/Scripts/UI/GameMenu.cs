@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEngine;
+using Unity.Serialization.Json;
 using UnityEngine.VFX;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class GameMenu : MonoBehaviour
 {
-    readonly Dictionary<string, Texture2D> languageIcons = new Dictionary<string, Texture2D>(StringComparer.OrdinalIgnoreCase);
     readonly Dictionary<string, Dictionary<string, string>> localeEntries = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
     readonly Dictionary<GameObject, string> languageByObject = new Dictionary<GameObject, string>();
     readonly Dictionary<XRSimpleInteractable, GameObject> objectByInteractable = new Dictionary<XRSimpleInteractable, GameObject>();
@@ -28,14 +28,17 @@ public class GameMenu : MonoBehaviour
     bool hoveredSelected;
     Vector3 hoveredOriginalScale = Vector3.one;
     bool startTransitionRunning;
+    bool startSelected;
     float startTransitionStartedAt;
 
     public GameObject langBTPrefab;
     public float hoverSelectTime = 1f;
+    public float startHoverTime = 1f;
     public float evaporateTime = 0.75f;
     public float nextMenuDelay = 2f;
     public float buttonScaling = 0.2f;
     public float buttonSpacing = 1.2f;
+    public float buttonRadius = 2f;
     public Color idleHighlightColor = Color.white;
     public Color selectedHighlightColor = Color.green;
     public bool lookAtCamera = true;
@@ -92,8 +95,19 @@ public class GameMenu : MonoBehaviour
                 continue;
             }
 
-            float centeredX = (visibleIndex - ((visibleCount - 1) * 0.5f)) * buttonSpacing;
-            langObject.transform.localPosition = new Vector3(centeredX, 0f, 0f);
+            //float centeredX = (visibleIndex - ((visibleCount - 1) * 0.5f)) * buttonSpacing;
+            //langObject.transform.localPosition = new Vector3(centeredX, 0f, 0f);
+            //langObject.transform.localScale = Vector3.one * buttonScaling;
+
+
+            //rotate around this object
+            float totalAngle = visibleCount * buttonSpacing;
+            float angle = visibleIndex * buttonSpacing - (totalAngle * 0.5f) + (buttonSpacing * 0.5f);
+
+            float radians = angle * Mathf.Deg2Rad;
+            float x = Mathf.Sin(radians) * buttonRadius;
+            float z = Mathf.Cos(radians) * buttonRadius;
+            langObject.transform.localPosition = new Vector3(x, 0f, z);
             langObject.transform.localScale = Vector3.one * buttonScaling;
 
             if (lookAtCamera && mainCamera != null)
@@ -101,6 +115,8 @@ public class GameMenu : MonoBehaviour
                 Vector3 lookAt = new Vector3(mainCamera.transform.position.x, langObject.transform.position.y, mainCamera.transform.position.z);
                 langObject.transform.LookAt(lookAt);
             }
+
+            startBTObject.transform.localPosition = new Vector3(startBTObject.transform.localPosition.x, startBTObject.transform.localPosition.y, buttonRadius);
 
             visibleIndex++;
         }
@@ -193,13 +209,14 @@ public class GameMenu : MonoBehaviour
     void RefreshMenuData()
     {
         LoadLocale();
-        LoadLanguageIcons();
-        Debug.Log("GameMenu refresh - locale keys: " + localeEntries.Count + ", icons: " + languageIcons.Count, this);
+        Debug.Log("GameMenu refresh - locale keys: " + localeEntries.Count, this);
         startTransitionRunning = false;
+        startSelected = false;
         EnsureLanguageButtons();
         selectedLanguage = "";
         UpdateLanguageVisualState();
         UpdateStartButton();
+        ResetAllVisuals();
         ApplyLayout();
     }
 
@@ -300,7 +317,6 @@ public class GameMenu : MonoBehaviour
         }
 
         List<string> languages = GetAvailableLanguages();
-        languages.Sort(StringComparer.OrdinalIgnoreCase);
         Debug.Log("GameMenu available languages: " + languages.Count + " -> " + string.Join(", ", languages), this);
 
         while (langObjects.Count < languages.Count)
@@ -343,9 +359,9 @@ public class GameMenu : MonoBehaviour
     {
         HashSet<string> languages = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        if (localeEntries.TryGetValue("menu", out Dictionary<string, string> menuEntry) && menuEntry != null)
+        if (localeEntries.TryGetValue("languages", out Dictionary<string, string> languagesEntry) && languagesEntry != null)
         {
-            foreach (string language in menuEntry.Keys)
+            foreach (string language in languagesEntry.Keys)
             {
                 if (!string.IsNullOrWhiteSpace(language))
                 {
@@ -417,8 +433,8 @@ public class GameMenu : MonoBehaviour
         TextMeshPro text = langObject.GetComponentInChildren<TextMeshPro>(true);
         if (text != null)
         {
-            string label = GetLocalizedText("menu", language);
-            text.text = string.Equals(label, "menu", StringComparison.OrdinalIgnoreCase) ? language.ToUpperInvariant() : label;
+            string label = GetLocalizedText("languages", language);
+            text.text = string.Equals(label, "languages", StringComparison.OrdinalIgnoreCase) ? language.ToUpperInvariant() : label;
             text.gameObject.SetActive(true);
         }
 
@@ -439,7 +455,8 @@ public class GameMenu : MonoBehaviour
         }
 
         float hoverDuration = Time.time - hoveredSince;
-        float normalizedHover = hoverSelectTime > 0f ? Mathf.Clamp01(hoverDuration / hoverSelectTime) : 1f;
+        float targetHoverTime = hoveredObject == startBTObject ? startHoverTime : hoverSelectTime;
+        float normalizedHover = targetHoverTime > 0f ? Mathf.Clamp01(hoverDuration / targetHoverTime) : 1f;
         hoveredObject.transform.localScale = hoveredOriginalScale;
 
         VisualEffect vfx = hoveredObject.GetComponentInChildren<VisualEffect>(true);
@@ -447,8 +464,8 @@ public class GameMenu : MonoBehaviour
         {
             bool isSelectedLanguage = languageByObject.TryGetValue(hoveredObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase);
             bool isStartObject = hoveredObject == startBTObject && !string.IsNullOrWhiteSpace(selectedLanguage);
-            float baseProgression = (isSelectedLanguage || isStartObject) ? 1f : 0f;
-            vfx.SetFloat("Progression", Mathf.Max(baseProgression, normalizedHover));
+            float baseProgression = isSelectedLanguage ? 1f : 0f;
+            vfx.SetFloat("Progression", isStartObject ? normalizedHover : Mathf.Max(baseProgression, normalizedHover));
             if (!isStartObject)
             {
                 vfx.SetVector4("Highlight Color", isSelectedLanguage ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
@@ -457,7 +474,7 @@ public class GameMenu : MonoBehaviour
 
         if (hoveredObject == startBTObject)
         {
-            SetStartButtonTextColor(idleHighlightColor);
+            SetStartButtonProgression(startHoverTime > 0f ? normalizedHover : 0f);
         }
 
         if (!hoveredSelected && normalizedHover >= 1f)
@@ -531,19 +548,19 @@ public class GameMenu : MonoBehaviour
         if (vfx != null)
         {
             bool isSelectedLanguage = languageByObject.TryGetValue(targetObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase);
-            bool isStartObject = targetObject == startBTObject && !string.IsNullOrWhiteSpace(selectedLanguage);
-            float progression = (isSelectedLanguage || isStartObject) ? 1f : 0f;
+            bool isStartObject = targetObject == startBTObject;
+            float progression = isSelectedLanguage ? 1f : 0f;
             vfx.SetFloat("Progression", progression);
-            vfx.SetFloat("Evaporate", 0f);
             if (!isStartObject)
             {
+                vfx.SetFloat("Evaporate", 0f);
                 vfx.SetVector4("Highlight Color", progression > 0f ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
             }
         }
 
         if (targetObject == startBTObject)
         {
-            SetStartButtonTextColor(!string.IsNullOrWhiteSpace(selectedLanguage) ? Color.white : idleHighlightColor);
+            SetStartButtonProgression(startSelected && !string.IsNullOrWhiteSpace(selectedLanguage) ? 1f : 0f);
         }
     }
 
@@ -607,26 +624,20 @@ public class GameMenu : MonoBehaviour
         bool shouldShow = isActive && !string.IsNullOrWhiteSpace(selectedLanguage);
         startBTObject.SetActive(shouldShow);
 
-        TextMeshPro text = startBTObject.GetComponentInChildren<TextMeshPro>(true);
-        if (text != null)
-        {
-            text.text = GetLocalizedText("start", selectedLanguage);
-        }
-
-        SetStartButtonTextColor(Color.white);
+        SetStartButtonProgression(startSelected && shouldShow ? 1f : 0f);
     }
 
-    void SetStartButtonTextColor(Color color)
+    void SetStartButtonProgression(float progression)
     {
         if (startBTObject == null)
         {
             return;
         }
 
-        TextMeshPro text = startBTObject.GetComponentInChildren<TextMeshPro>(true);
-        if (text != null)
+        VisualEffect vfx = startBTObject.GetComponentInChildren<VisualEffect>(true);
+        if (vfx != null)
         {
-            text.color = color;
+            vfx.SetFloat("Progression", Mathf.Clamp01(progression));
         }
     }
 
@@ -661,10 +672,11 @@ public class GameMenu : MonoBehaviour
         }
 
         startTransitionRunning = true;
+        startSelected = true;
         startTransitionStartedAt = Time.time;
         hoveredSelected = true;
 
-        SetStartButtonTextColor(selectedHighlightColor);
+        SetStartButtonProgression(1f);
 
         SetAllEvaporate(0f);
     }
@@ -694,11 +706,29 @@ public class GameMenu : MonoBehaviour
 
     void SetAllEvaporate(float value)
     {
-        SetObjectEvaporate(startBTObject, value);
-
         for (int i = 0; i < langObjects.Count; i++)
         {
             SetObjectEvaporate(langObjects[i], value);
+        }
+    }
+
+    void ResetAllVisuals()
+    {
+        for (int i = 0; i < langObjects.Count; i++)
+        {
+            GameObject langObject = langObjects[i];
+            if (langObject == null)
+            {
+                continue;
+            }
+
+            SetObjectEvaporate(langObject, 0f);
+            ResetObjectAnimation(langObject);
+        }
+
+        if (startBTObject != null)
+        {
+            ResetObjectAnimation(startBTObject);
         }
     }
 
@@ -714,6 +744,14 @@ public class GameMenu : MonoBehaviour
         {
             vfx.SetFloat("Evaporate", value);
         }
+
+        TextMeshPro text = targetObject.GetComponentInChildren<TextMeshPro>(true);
+        if (text != null)
+        {
+            Color color = text.color;
+            color.a = 1f - Mathf.Clamp01(value);
+            text.color = color;
+        }
     }
 
     void PositionInFrontOfCamera()
@@ -724,11 +762,7 @@ public class GameMenu : MonoBehaviour
             return;
         }
 
-        transform.position = mainCamera.transform.TransformPoint(Vector3.forward * 5f);
-        transform.position = new Vector3(transform.position.x, 0, transform.position.z);
-        Vector3 lookAt = new Vector3(mainCamera.transform.position.x, transform.position.y, mainCamera.transform.position.z);
-        transform.LookAt(lookAt);
-        transform.Rotate(0f, 180f, 0f);
+        transform.rotation = Quaternion.Euler(0f, mainCamera.transform.eulerAngles.y, 0f);
     }
 
     void OnStartSelected(SelectEnterEventArgs args)
@@ -792,16 +826,7 @@ public class GameMenu : MonoBehaviour
 
         try
         {
-            Dictionary<string, Dictionary<string, string>> parsedEntries = DeserializeLocaleEntries(File.ReadAllText(localePath));
-            if (parsedEntries == null)
-            {
-                return;
-            }
-
-            foreach (KeyValuePair<string, Dictionary<string, string>> entry in parsedEntries)
-            {
-                localeEntries[entry.Key] = entry.Value;
-            }
+            DeserializeLocaleEntries(File.ReadAllText(localePath));
         }
         catch (Exception ex)
         {
@@ -809,218 +834,68 @@ public class GameMenu : MonoBehaviour
         }
     }
 
-    void LoadLanguageIcons()
-    {
-        languageIcons.Clear();
-    }
-
-    Dictionary<string, Dictionary<string, string>> DeserializeLocaleEntries(string json)
+    void DeserializeLocaleEntries(string json)
     {
         if (string.IsNullOrWhiteSpace(json))
         {
-            return null;
+            return;
         }
 
         try
         {
-            Type jsonSerializationType = Type.GetType("Unity.Serialization.Json.JsonSerialization, Unity.Serialization");
-            if (jsonSerializationType == null)
+            JsonObject root = JsonSerialization.FromJson<JsonObject>(json);
+            if (root == null)
             {
-                return ParseLocaleJsonFallback(json);
+                return;
             }
 
-            System.Reflection.MethodInfo fromJsonMethod = jsonSerializationType.GetMethod("FromJson", new[] { typeof(string), Type.GetType("Unity.Serialization.Json.JsonSerializationParameters, Unity.Serialization") });
-            if (fromJsonMethod == null)
+            Dictionary<string, string> languages = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            if (root.TryGetValue("languages", out object languagesValue) && languagesValue is JsonArray languagesArray)
             {
-                foreach (System.Reflection.MethodInfo method in jsonSerializationType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static))
+                for (int i = 0; i < languagesArray.Count; i++)
                 {
-                    if (method.Name == "FromJson" && method.IsGenericMethodDefinition)
+                    if (!(languagesArray[i] is JsonObject languageObject))
                     {
-                        System.Reflection.ParameterInfo[] parameters = method.GetParameters();
-                        if (parameters.Length > 0 && parameters[0].ParameterType == typeof(string))
-                        {
-                            fromJsonMethod = method;
-                            break;
-                        }
+                        continue;
+                    }
+
+                    string code = languageObject.TryGetValue("code", out object codeValue) ? Convert.ToString(codeValue) : string.Empty;
+                    string name = languageObject.TryGetValue("name", out object nameValue) ? Convert.ToString(nameValue) : string.Empty;
+
+                    if (!string.IsNullOrWhiteSpace(code))
+                    {
+                        languages[code] = string.IsNullOrWhiteSpace(name) ? code.ToUpperInvariant() : name;
                     }
                 }
             }
 
-            if (fromJsonMethod != null)
+            if (languages.Count > 0)
             {
-                object result;
-                if (fromJsonMethod.IsGenericMethodDefinition)
+                localeEntries["languages"] = languages;
+            }
+
+            if (root.TryGetValue("start", out object startValue) && startValue is JsonObject startObject)
+            {
+                Dictionary<string, string> startEntries = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                foreach (KeyValuePair<string, object> entry in startObject)
                 {
-                    System.Reflection.MethodInfo genericMethod = fromJsonMethod.MakeGenericMethod(typeof(Dictionary<string, Dictionary<string, string>>));
-                    object[] parameters = genericMethod.GetParameters().Length > 1
-                        ? new object[] { json, Activator.CreateInstance(genericMethod.GetParameters()[1].ParameterType) }
-                        : new object[] { json };
-                    result = genericMethod.Invoke(null, parameters);
-                }
-                else
-                {
-                    result = fromJsonMethod.Invoke(null, new object[] { json, null });
+                    string key = entry.Key;
+                    string value = Convert.ToString(entry.Value);
+                    if (!string.IsNullOrWhiteSpace(key))
+                    {
+                        startEntries[key] = value;
+                    }
                 }
 
-                if (result is Dictionary<string, Dictionary<string, string>> entries)
+                if (startEntries.Count > 0)
                 {
-                    return entries;
+                    localeEntries["start"] = startEntries;
                 }
             }
         }
         catch
         {
         }
-
-        return ParseLocaleJsonFallback(json);
-    }
-
-    Dictionary<string, Dictionary<string, string>> ParseLocaleJsonFallback(string json)
-    {
-        Dictionary<string, Dictionary<string, string>> result = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
-        int index = 0;
-
-        SkipWhitespace(json, ref index);
-        if (!TryConsume(json, ref index, '{'))
-        {
-            return result;
-        }
-
-        while (index < json.Length)
-        {
-            SkipWhitespace(json, ref index);
-            if (TryConsume(json, ref index, '}'))
-            {
-                break;
-            }
-
-            string key = ReadString(json, ref index);
-            if (string.IsNullOrWhiteSpace(key))
-            {
-                break;
-            }
-
-            if (!TryConsume(json, ref index, ':'))
-            {
-                break;
-            }
-
-            result[key] = ReadStringMap(json, ref index);
-
-            SkipWhitespace(json, ref index);
-            if (!TryConsume(json, ref index, ','))
-            {
-                TryConsume(json, ref index, '}');
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    Dictionary<string, string> ReadStringMap(string json, ref int index)
-    {
-        Dictionary<string, string> result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-        SkipWhitespace(json, ref index);
-        if (!TryConsume(json, ref index, '{'))
-        {
-            return result;
-        }
-
-        while (index < json.Length)
-        {
-            SkipWhitespace(json, ref index);
-            if (TryConsume(json, ref index, '}'))
-            {
-                break;
-            }
-
-            string key = ReadString(json, ref index);
-            if (string.IsNullOrWhiteSpace(key))
-            {
-                break;
-            }
-
-            if (!TryConsume(json, ref index, ':'))
-            {
-                break;
-            }
-
-            string value = ReadString(json, ref index);
-            result[key] = value ?? string.Empty;
-
-            SkipWhitespace(json, ref index);
-            if (!TryConsume(json, ref index, ','))
-            {
-                TryConsume(json, ref index, '}');
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    string ReadString(string json, ref int index)
-    {
-        SkipWhitespace(json, ref index);
-        if (!TryConsume(json, ref index, '"'))
-        {
-            return null;
-        }
-
-        System.Text.StringBuilder builder = new System.Text.StringBuilder();
-        while (index < json.Length)
-        {
-            char c = json[index++];
-            if (c == '"')
-            {
-                return builder.ToString();
-            }
-
-            if (c == '\\' && index < json.Length)
-            {
-                char escaped = json[index++];
-                switch (escaped)
-                {
-                    case '"': builder.Append('"'); break;
-                    case '\\': builder.Append('\\'); break;
-                    case '/': builder.Append('/'); break;
-                    case 'b': builder.Append('\b'); break;
-                    case 'f': builder.Append('\f'); break;
-                    case 'n': builder.Append('\n'); break;
-                    case 'r': builder.Append('\r'); break;
-                    case 't': builder.Append('\t'); break;
-                    default: builder.Append(escaped); break;
-                }
-            }
-            else
-            {
-                builder.Append(c);
-            }
-        }
-
-        return builder.ToString();
-    }
-
-    void SkipWhitespace(string json, ref int index)
-    {
-        while (index < json.Length && char.IsWhiteSpace(json[index]))
-        {
-            index++;
-        }
-    }
-
-    bool TryConsume(string json, ref int index, char character)
-    {
-        SkipWhitespace(json, ref index);
-        if (index < json.Length && json[index] == character)
-        {
-            index++;
-            return true;
-        }
-
-        return false;
     }
 
     public void GazeHover(HoverEnterEventArgs args)

@@ -37,6 +37,7 @@ public class KataPortal : MonoBehaviour
     public AudioRTPCRefSO progRTPC;
     public bool debugAudio = false;
 
+    public string portalName;
 
 
     public List<Salle> blacklist = new List<Salle>();
@@ -49,7 +50,6 @@ public class KataPortal : MonoBehaviour
         col = GetComponent<Collider>();
 
         interactable = GetComponent<XRSimpleInteractable>();
-
     }
 
     void OnDisable()

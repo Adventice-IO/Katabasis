@@ -47,6 +47,10 @@ public class Interview : MonoBehaviour
     bool debugWorkflow = false;
 
     Subtitles subtitles;
+
+    public delegate void InterviewEvent(Interview interview);
+    public event InterviewEvent OnInterviewStarted;
+    public event InterviewEvent OnInterviewEnded;
     public enum State
     {
         Idle,
@@ -59,7 +63,7 @@ public class Interview : MonoBehaviour
     public State state;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void OnEnable()
+    void OnEnable()
     {
         init();
         set(itwName, level);
@@ -138,13 +142,13 @@ public class Interview : MonoBehaviour
 
         if (clip == null || videoPlayer == null || vfx == null) init();
 
-        
+
         if (Application.isPlaying)
         {
             if (salle != null)
             {
                 bool shouldEnable = MainController.instance.isInSalle(salle);
-                if(shouldEnable != vfx.enabled)
+                if (shouldEnable != vfx.enabled)
                 {
                     show(shouldEnable);
                 }
@@ -160,7 +164,7 @@ public class Interview : MonoBehaviour
         }
 
         if (evaporateProg == 1) return; // finished evaporating
-    
+
         if (progression < 1 && !MainController.instance.editMode)
         {
             if (Application.isPlaying)
@@ -206,15 +210,14 @@ public class Interview : MonoBehaviour
                         evaporate();
                     }
                 }
-            }
-
-            if (shouldEvaporate && evaporateProg < 1)
-            {
-                float evapProg = Time.deltaTime / evaporateTime;
-                evaporateProg = Mathf.Clamp(evaporateProg + evapProg, 0, 1);
-            }
+            }           
         }
 
+        if (shouldEvaporate && evaporateProg < 1)
+        {
+            float evapProg = Time.deltaTime / evaporateTime;
+            evaporateProg = Mathf.Clamp(evaporateProg + evapProg, 0, 1);
+        }
 
         vfx.SetFloat("Progression", progression);
         vfx.SetFloat("Evaporate", evaporateProg);
@@ -224,7 +227,7 @@ public class Interview : MonoBehaviour
     {
         LogDebug("Show(" + shouldShow + ") for salle " + (salle != null ? salle.name : "None"));
         vfx.enabled = shouldShow;
-        if(shouldShow)
+        if (shouldShow)
         {
             load();
         }
@@ -288,12 +291,13 @@ public class Interview : MonoBehaviour
 
         LogDebug("Loading preview assets from '" + previewBasePath + "'");
 
-        if(!File.Exists(previewBasePath +".txt"))
+        if (!File.Exists(previewBasePath + ".txt"))
         {
-            Debug.LogWarning("Metadata doesn't exist for "+ previewBasePath+".txt");
+            Debug.LogWarning("Metadata doesn't exist for " + previewBasePath + ".txt");
             return;
-        };
-        
+        }
+        ;
+
         string metaData = File.ReadAllText(previewBasePath + ".txt");
         bool result = clip.LoadMetadata(metaData);
 
@@ -318,6 +322,7 @@ public class Interview : MonoBehaviour
     public void play()
     {
         LogDebug("Starting playback for mediaPath='" + interviewId + "' depthkitPath='" + itwName + "'");
+        OnInterviewStarted?.Invoke(this);
         InterviewManager manager = InterviewManager.instance != null ? InterviewManager.instance : FindAnyObjectByType<InterviewManager>();
         manager?.NotifyInterviewStarted(this);
 
@@ -328,7 +333,7 @@ public class Interview : MonoBehaviour
         videoPlayer.Play();
         state = State.Playing;
 
-        if(subtitles != null)
+        if (subtitles != null)
         {
             string languageSuffix = MainController.instance != null ? MainController.instance.getLanguageSuffix() : "";
             string subtitlePath = interviewId + languageSuffix + ".srt";
@@ -367,7 +372,7 @@ public class Interview : MonoBehaviour
 
     public void evaporate()
     {
-        if(evaporateProg > 0 || shouldEvaporate)
+        if (evaporateProg > 0 || shouldEvaporate)
         {
             return;
         }
@@ -377,6 +382,7 @@ public class Interview : MonoBehaviour
         videoEvent?.evt.Stop(gameObject);
         evaporateEvent?.evt.Post(gameObject);
         state = State.Ending;
+        OnInterviewEnded?.Invoke(this);
     }
 
     void resolveAndPlay()
@@ -484,10 +490,10 @@ public class Interview : MonoBehaviour
 
     void LogDebug(string message)
     {
-        if (!debugWorkflow)
-        {
-            return;
-        }
+        //if (!debugWorkflow)
+        //{
+            //return;
+        //}
 
         Debug.Log("[Interview] " + name + " | state=" + state + " | progression=" + progression.ToString("0.00") + " | " + message, this);
     }
@@ -498,4 +504,4 @@ public class Interview : MonoBehaviour
     {
 
     }
-    }
+}

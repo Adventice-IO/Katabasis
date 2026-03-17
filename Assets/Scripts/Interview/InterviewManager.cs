@@ -62,10 +62,6 @@ public class InterviewManager : MonoBehaviour
     public bool generateAssignment;
     public bool simulateGameplay;
     [Range(0f, 1f)]
-    public float diversity = 1f;
-    [Range(0f, 1f)]
-    public float levelUpBias = 0f;
-    [Range(0f, 1f)]
     public float simulatedCuriosity = 0.5f;
 
     void OnEnable()

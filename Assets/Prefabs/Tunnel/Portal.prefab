@@ -551,7 +551,7 @@ Transform:
   m_GameObject: {fileID: 6017384765114519916}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.7, y: 0, z: 0}
+  m_LocalPosition: {x: -2.312, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -870,6 +870,7 @@ MonoBehaviour:
   validateEvent: {fileID: 11400000, guid: 0d969d9346c1d5c478f1d906b1e3831f, type: 2}
   progRTPC: {fileID: 11400000, guid: 24474dcd683a34e4eac33dba0f81a9cf, type: 2}
   debugAudio: 0
+  portalName: 
   blacklist: []
 --- !u!73398921 &1612310653996590860
 VFXRenderer:
@@ -962,7 +963,10 @@ VisualEffect:
     m_Gradient:
       m_Array: []
     m_NamedObject:
-      m_Array: []
+      m_Array:
+      - m_Value: {fileID: 0}
+        m_Name: PortalMesh
+        m_Overridden: 1
     m_Bool:
       m_Array: []
 --- !u!135 &7982804627524420929
