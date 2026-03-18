@@ -39,7 +39,7 @@ public class VisionZone : MonoBehaviour
         float distZ1 = Mathf.Max(cp.z / fD, 0);
         float distZ2 = Mathf.Max((1 - cp.z) / fD, 0);
         float minDist = Mathf.Min(distX1, distX2, distY1, distY2, distZ1, distZ2);
-        return minDist;
+        return Mathf.Clamp01(minDist);
     }
 
     private void OnDrawGizmos()
@@ -52,7 +52,7 @@ public class VisionZone : MonoBehaviour
         Gizmos.DrawWireCube(Vector3.zero, Vector3.one * (1 - feather));
 
         Gizmos.color = new Color(0, .7f, .7f, getWeight()/3f);
-        Gizmos.DrawCube(Vector3.zero, Vector3.one * (1 - feather * 2));
+        Gizmos.DrawCube(Vector3.zero, Vector3.one * (1 - feather));
 
     }
 }

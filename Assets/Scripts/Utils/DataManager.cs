@@ -59,11 +59,18 @@ public class DataManager : MonoBehaviour
     void Awake()
     {
         instance = this;
-        //(gameObject);DontDestroyOnLoad
+        DontDestroyOnLoad(gameObject);
 
         if (preloadOnStart && Application.isPlaying)
         {
             PreloadAll();
+        }
+
+        //Log the resolved paths for debugging
+        foreach (DataFolder folder in Enum.GetValues(typeof(DataFolder)))
+        {
+            string path = GetBasePath(folder);
+            Debug.Log("Resolved path for " + folder + ": " + (string.IsNullOrWhiteSpace(path) ? "Not found" : path));
         }
     }
 
