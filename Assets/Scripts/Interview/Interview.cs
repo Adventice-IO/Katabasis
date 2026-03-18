@@ -66,7 +66,6 @@ public class Interview : MonoBehaviour
     void OnEnable()
     {
         init();
-        set(itwName, level);
         resetPlaybackState();
     }
 
@@ -139,6 +138,7 @@ public class Interview : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!Application.isPlaying) return;
 
         if (clip == null || videoPlayer == null || vfx == null) init();
 
@@ -210,7 +210,7 @@ public class Interview : MonoBehaviour
                         evaporate();
                     }
                 }
-            }           
+            }
         }
 
         if (shouldEvaporate && evaporateProg < 1)
