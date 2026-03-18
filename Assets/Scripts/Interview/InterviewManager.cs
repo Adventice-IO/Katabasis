@@ -268,7 +268,7 @@ public class InterviewManager : MonoBehaviour
 
         ApplyAssignmentsToScene(roomAssignments);
         lastAssignedSalle = salle;
-        logAssignments();
+        //logAssignments();
     }
 
     void ApplyAssignmentsToScene(List<RoomPersonAssignment> assignments)

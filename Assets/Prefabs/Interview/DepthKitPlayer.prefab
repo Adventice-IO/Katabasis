@@ -55,6 +55,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interview
   itwName: test
+  interviewId: test
   level: 1
   focusTime: 3
   progression: 0
@@ -67,7 +68,7 @@ MonoBehaviour:
   videoEvent: {fileID: 0}
   evaporateEvent: {fileID: 0}
   progRTPC: {fileID: 0}
-  state: 1
+  state: 0
 --- !u!114 &8510473340861075205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -464,7 +465,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6831333126047717105}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 02c0cafca3e6b64438253e75fe8f9f65, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: a528c2071bc04254691ecab31a16a29a, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -474,13 +475,13 @@ VideoPlayer:
   m_TargetMaterialProperty: <noninit>
   m_RenderMode: 4
   m_AspectRatio: 2
-  m_DataSource: 1
+  m_DataSource: 0
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 3
   m_TargetAudioSources: []
   m_DirectAudioVolumes: []
-  m_Url: file:///D:/Projects/Katabasis/Assets/StreamingAssets/depthkit/test/level1/test1.mp4
+  m_Url: 
   m_EnabledAudioTracks: 
   m_DirectAudioMutes: 
   m_ControlledAudioTrackCount: 0

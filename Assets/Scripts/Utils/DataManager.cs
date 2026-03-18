@@ -10,6 +10,7 @@ using UnityEngine.Networking;
 public class DataManager : MonoBehaviour
 {
     public static DataManager instance;
+    public bool enableDownload = false;
 
     public enum DataFolder
     {
@@ -31,8 +32,8 @@ public class DataManager : MonoBehaviour
     public string dataZipUrl;
 
     [Header("Storage")]
-    public string desktopLocalStoragePath = "KatabasisData";
-    public string androidLocalStoragePath = "/sdcard/KatabasisData";
+    public string desktopLocalStoragePath = "KataData";
+    public string androidLocalStoragePath = "/sdcard/KataData";
 
     [Header("Preload")]
     public bool preloadOnStart = true;
@@ -70,7 +71,7 @@ public class DataManager : MonoBehaviour
     {
         HideDownloadInfo();
 
-       
+
     }
 
     void Update()
@@ -173,12 +174,22 @@ public class DataManager : MonoBehaviour
 
     string GetStreamingAssetsFolderPathInternal(DataFolder folder)
     {
-        return Path.Combine(Application.streamingAssetsPath, GetFolderName(folder)).Replace("\\", "/");
+        return Path.Combine(Application.streamingAssetsPath,"KataData",  GetFolderName(folder)).Replace("\\", "/");
     }
 
     string GetLocalStorageFolderPathInternal(DataFolder folder)
     {
-        return Path.Combine(GetExternalDataRoot(), GetFolderName(folder)).Replace("\\", "/");
+        return Path.Combine(GetExternalDataRoot(), "KataData", GetFolderName(folder)).Replace("\\", "/");
+    }
+
+    string GetExecutableFolderPathInternal(DataFolder folder)
+    {
+        string execPath = Application.dataPath;
+        if (Application.platform == RuntimePlatform.OSXPlayer)
+        {
+            execPath = Path.GetDirectoryName(execPath);
+        }
+        return Path.Combine(execPath, "KataData", GetFolderName(folder)).Replace("\\", "/");
     }
 
     string GetFolderPathInternal(DataFolder folder, string relativePath)
@@ -314,22 +325,25 @@ public class DataManager : MonoBehaviour
             yield break;
         }
 
-        if (!archiveDownloadCoroutines.TryGetValue(folder, out Coroutine archiveDownloadCoroutine) || archiveDownloadCoroutine == null)
+        if (enableDownload)
         {
-            archiveDownloadCoroutine = StartCoroutine(DownloadArchiveCoroutine(folder, downloadUrl));
-            archiveDownloadCoroutines[folder] = archiveDownloadCoroutine;
-        }
+            if (!archiveDownloadCoroutines.TryGetValue(folder, out Coroutine archiveDownloadCoroutine) || archiveDownloadCoroutine == null)
+            {
+                archiveDownloadCoroutine = StartCoroutine(DownloadArchiveCoroutine(folder, downloadUrl));
+                archiveDownloadCoroutines[folder] = archiveDownloadCoroutine;
+            }
 
-        while (archiveDownloadCoroutines.TryGetValue(folder, out archiveDownloadCoroutine) && archiveDownloadCoroutine != null)
-        {
-            yield return null;
-        }
+            while (archiveDownloadCoroutines.TryGetValue(folder, out archiveDownloadCoroutine) && archiveDownloadCoroutine != null)
+            {
+                yield return null;
+            }
 
-        if (!archiveDownloadResults.TryGetValue(folder, out bool archiveDownloadSucceeded) || !archiveDownloadSucceeded)
-        {
-            HideDownloadInfo();
-            onCompleted?.Invoke(false, string.Empty);
-            yield break;
+            if (!archiveDownloadResults.TryGetValue(folder, out bool archiveDownloadSucceeded) || !archiveDownloadSucceeded)
+            {
+                HideDownloadInfo();
+                onCompleted?.Invoke(false, string.Empty);
+                yield break;
+            }
         }
 
         existingPath = ResolveExistingBasePath(folder, true);
@@ -428,6 +442,11 @@ public class DataManager : MonoBehaviour
         if (Directory.Exists(fallbackPath))
         {
             return fallbackPath.Replace("\\", "/");
+        }
+
+        if(Directory.Exists(GetExecutableFolderPathInternal(folder)))
+        {
+            return GetExecutableFolderPathInternal(folder).Replace("\\", "/");
         }
 
         return string.Empty;

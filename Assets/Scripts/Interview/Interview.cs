@@ -490,10 +490,10 @@ public class Interview : MonoBehaviour
 
     void LogDebug(string message)
     {
-        //if (!debugWorkflow)
-        //{
-            //return;
-        //}
+        if (!debugWorkflow)
+        {
+            return;
+        }
 
         Debug.Log("[Interview] " + name + " | state=" + state + " | progression=" + progression.ToString("0.00") + " | " + message, this);
     }
