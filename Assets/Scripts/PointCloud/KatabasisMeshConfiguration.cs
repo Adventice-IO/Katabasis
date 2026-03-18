@@ -7,18 +7,20 @@ using UnityEngine;
 [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
 public struct MaskBox
 {
-    public MaskBox(Matrix4x4 worldToLocal, Vector3 extents, float alpha, float soloWhenInside)
+    public MaskBox(Matrix4x4 worldToLocal, Vector3 extents, float alpha, float feather, float soloWhenInside)
     {
         this.worldToLocal = worldToLocal;
         this.extents = extents;
         this.alpha = alpha;
+        this.feather = feather;
         this.soloWhenInside = soloWhenInside;
     }
 
     public Matrix4x4 worldToLocal; // 64 bytes
     public Vector3 extents;        // 12 bytes
     public float alpha;           // 4 bytes (Total: 80 bytes, 16-byte aligned)
-    public float soloWhenInside;    // 4 bytes (Total: 84 bytes, 16-byte aligned)
+    public float feather;          // 4 bytes (Total: 84 bytes, 16-byte aligned)
+    public float soloWhenInside;    // 4 bytes (Total: 88 bytes, 16-byte aligned)
 }
 
 public class KatabasisMeshConfiguration : MeshConfiguration
@@ -42,7 +44,7 @@ public class KatabasisMeshConfiguration : MeshConfiguration
 
         masks = GetComponentsInChildren<PointCloudMask>();
         _boxes = new MaskBox[masks.Length];
-        const int maskBoxSize = 84; // Size of MaskBox struct in bytes (16-byte aligned)
+        const int maskBoxSize = 88; // Size of MaskBox struct in bytes (16-byte aligned)
         _maskBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, _boxes.Length, maskBoxSize);
     }
 

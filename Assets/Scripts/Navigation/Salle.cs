@@ -1,7 +1,10 @@
-using Framework.Utils.Editor;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using Framework.Utils.Editor;
+#endif
 
 [ExecuteAlways]
 public class Salle : MonoBehaviour

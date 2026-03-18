@@ -17,6 +17,9 @@ public class PointCloudMask : MonoBehaviour
 
     public bool soloWhenInside = false;
 
+    [Range(0, 1)]
+    public float feather = 0.1f;
+
     public AnimationCurve alphaCurve;
 
     public MaskBox maskBox;
@@ -46,20 +49,23 @@ public class PointCloudMask : MonoBehaviour
         }
 
         alpha = alphaCurve.Evaluate(rawAlpha);
-        maskBox = new MaskBox(transform.worldToLocalMatrix, Vector3.one / 2, alpha, soloWhenInside? 1f : 0f);
+        maskBox = new MaskBox(transform.worldToLocalMatrix, Vector3.one / 2, alpha, feather, soloWhenInside ? 1f : 0f);
     }
 
     bool isCameraInsideMask()
     {
-        if(Camera.main == null) return false;
+        if (Camera.main == null) return false;
         Vector3 localCamPos = transform.worldToLocalMatrix.MultiplyPoint(Camera.main.transform.position);
         return Mathf.Abs(localCamPos.x) < 0.5f && Mathf.Abs(localCamPos.y) < 0.5f && Mathf.Abs(localCamPos.z) < 0.5f;
     }
 
     void OnDrawGizmos()
     {
-        Gizmos.color = new Color(1f, alpha, 0f, 1f);
         Gizmos.matrix = transform.localToWorldMatrix;
+        Gizmos.color = new Color(1f, alpha, 0f, 1f);
         Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+
+        Gizmos.color = new Color(1f, .3f, 0f, 0.6f);
+        Gizmos.DrawWireCube(Vector3.zero, Vector3.one * (1 - feather));
     }
 }

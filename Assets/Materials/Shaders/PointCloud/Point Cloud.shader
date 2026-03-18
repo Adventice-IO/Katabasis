@@ -6,7 +6,6 @@
         _MaxDistance ("Max Distance", float) = 50
         _DistFade("Distance Fade", float) = 10
         _Reveal("Reveal", Range(0,1)) = 0
-        _MaskFeather("Mask Feather", Range(0, 1)) = 0.1
     }
 
     SubShader
@@ -46,6 +45,7 @@
                 float4x4 worldToLocal;
                 float3 extents;
                 float alpha;
+                float feather;
                 float soloWhenInside;
             };
 
@@ -54,7 +54,6 @@
             float _MaxDistance;
             float _DistFade;
             float _Reveal;
-            float _MaskFeather;
             
             // Buffers
             StructuredBuffer<OrientedMaskBox> _MaskBoxes;
@@ -106,7 +105,7 @@
 
                     // If boxSDF > 0, we are inside. 
                     // We calculate a 0-1 gradient based on the feather distance.
-                    float featherFactor = saturate(boxSDF / max(0.001, _MaskFeather));
+                    float featherFactor = saturate(boxSDF / max(0.001,_MaskBoxes[j].feather ));
     
                     // If the box is intended to hide points (alpha < 1):
                     // We blend the point's current visibility with the box's alpha.
@@ -127,7 +126,7 @@
                         if (!isInside) {
                             // If the point is outside, we want to hide it based on how close it is to the box edge.
                             // We can use the same featherFactor logic, but inverted (1 at edge, 0 far away).
-                           float camFeatherFactor = 1.0 - saturate(camBoxSDF / max(0.001, _MaskFeather));
+                           float camFeatherFactor = 1.0 - saturate(camBoxSDF / max(0.001, _MaskBoxes[j].feather));
                            maskAlpha *= camFeatherFactor;
                         }   
                     }

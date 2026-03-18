@@ -47,6 +47,8 @@ public class MainController : MonoBehaviour
     [Range(0f, 1f)]
     public float trackPosition; // 0.0 = Start, 1.0 = End
 
+    [Header("Camera")]
+    public float defaultCamMaxDistance = 50f;
 
     [Header("Physics Settings")]
     public float baseSpeed = 4f; // km/h, for reference
@@ -343,6 +345,8 @@ public class MainController : MonoBehaviour
     private void Update()
     {
 
+        Camera.main.farClipPlane = getAverageVisionZoneMaxDistance();
+
 #if UNITY_EDITOR
         if (lockInfoPlane != null)
         {
@@ -560,6 +564,7 @@ public class MainController : MonoBehaviour
                 }
             }
         }
+
     }
 
 
@@ -824,6 +829,41 @@ public class MainController : MonoBehaviour
 
         return closestTunnel;
     }
+
+
+    //Vision zones
+
+    float getAverageVisionZoneMaxDistance()
+    {
+        VisionZone[] zones = FindObjectsByType<VisionZone>(FindObjectsSortMode.None);
+
+        //total zones weight 0 to 1 = use defaultMaxDistance and zones max distance
+        //total zones weight > 1 = use only zones max distance, divided by total weight to avoid stacking too much
+
+        float totalWeight = 0f;
+        float weightedMaxDistance = 0f;
+        foreach (var zone in zones)
+        {
+            float weight = zone.getWeight();
+            totalWeight += weight;
+            weightedMaxDistance += weight * zone.maxDistance;
+        }
+
+        if(totalWeight == 0f)
+        {
+            return defaultCamMaxDistance;
+        }
+
+        float target = weightedMaxDistance / totalWeight;
+
+        if (totalWeight < 1f)
+        {
+            return Mathf.Lerp(defaultCamMaxDistance, target, totalWeight);
+        }
+
+        return target;
+    }
+
 
     //Spawning
 
