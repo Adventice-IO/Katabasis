@@ -1,0 +1,173 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Android",
+  "BasePlatform": "Android",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "172",
+  "SoundBanks": [
+   {
+    "Id": "3161908922",
+    "Type": "User",
+    "GUID": "{7E734BBA-16C9-46F8-8CBD-B94EE4B45669}",
+    "Language": "SFX",
+    "Hash": "{1E9B9D96-F140-45FA-2CCD-F21752D3D19C}",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\MAIN",
+    "ShortName": "MAIN",
+    "Path": "MAIN.bnk",
+    "Media": [
+     {
+      "Id": "183963844",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Soundly Audio\\Wind, General, Mountain Wind, Constant With Strong Gusts, Winter, Snowy, Cabin Area 05 (AmbiX) SND89932.wav",
+      "CachePath": "C5/{C5F6B645-DCEC-005C-DD6F-27AA79C6E0F8}.wem"
+     },
+     {
+      "Id": "198843051",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "VOX\\VOX_Test\\SteveMona.wav",
+      "CachePath": "0E/{0ED403BD-51B2-5071-7AB1-3AA2114BDBA8}.wem"
+     }
+    ],
+    "Plugins": {
+     "Custom": [
+      {
+       "Id": "86776161",
+       "Name": "Tone Generator",
+       "ObjectPath": "\\Containers\\Default Work Unit\\SFX\\SFX_Test\\SFX_Tone_Test\\Tone Generator",
+       "GUID": "{1E9C7711-CB44-4703-8CCD-BCAA17AB596D}",
+       "LibName": "Wwise Tone Generator",
+       "LibId": "6684674"
+      },
+      {
+       "Id": "187488359",
+       "Name": "Synth One",
+       "ObjectPath": "\\Containers\\Default Work Unit\\SFX\\SFX_Test\\SFX_Portal_Activate\\Synth One",
+       "GUID": "{B7C57EA1-60A4-472B-82AA-1D05630C1027}",
+       "LibName": "Wwise Synth One",
+       "LibId": "9699330"
+      },
+      {
+       "Id": "729039563",
+       "Name": "Tone Generator",
+       "ObjectPath": "\\Containers\\Default Work Unit\\SFX\\SFX_Test\\SFX_Portal_Validate\\Tone Generator",
+       "GUID": "{A3ECAD77-C6FF-424C-B543-8C4183116C5B}",
+       "LibName": "Wwise Tone Generator",
+       "LibId": "6684674"
+      }
+     ]
+    },
+    "Events": [
+     {
+      "Id": "1378078392",
+      "Name": "AMB_Ambi_Test_01",
+      "ObjectPath": "\\Events\\Default Work Unit\\TEST\\AMB_Ambi_Test_01",
+      "GUID": "{DA39880E-9BE6-4E74-A913-3720138A718A}",
+      "MaxAttenuation": "100",
+      "DurationType": "Infinite",
+      "MediaRefs": [
+       {
+        "Id": "183963844"
+       }
+      ]
+     },
+     {
+      "Id": "4131803333",
+      "Name": "SFX_Portal_Activate",
+      "ObjectPath": "\\Events\\Default Work Unit\\TEST\\SFX_Portal_Activate",
+      "GUID": "{7BB7BFAC-C831-4AFF-B2B5-4F249548937D}",
+      "MaxAttenuation": "100",
+      "DurationType": "Unknown",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "187488359"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "1155651648",
+      "Name": "SFX_Portal_Validate",
+      "ObjectPath": "\\Events\\Default Work Unit\\TEST\\SFX_Portal_Validate",
+      "GUID": "{DD94F51F-CF3D-4D20-852A-10D0270AE417}",
+      "MaxAttenuation": "50",
+      "DurationType": "OneShot",
+      "DurationMin": "2.0586045",
+      "DurationMax": "2.0586045",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "729039563"
+        }
+       ]
+      },
+      "AuxBusRefs": [
+       {
+        "Id": "266044713",
+        "Name": "REV_Long",
+        "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Long",
+        "GUID": "{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}"
+       }
+      ]
+     },
+     {
+      "Id": "3501277368",
+      "Name": "SFX_Tone_Test",
+      "ObjectPath": "\\Events\\Default Work Unit\\TEST\\SFX_Tone_Test",
+      "GUID": "{71A9A207-F29A-44AB-9930-66DA3F3E1658}",
+      "MaxAttenuation": "50",
+      "DurationType": "Infinite",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "86776161"
+        }
+       ]
+      },
+      "AuxBusRefs": [
+       {
+        "Id": "266044713",
+        "Name": "REV_Long",
+        "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Long",
+        "GUID": "{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}"
+       }
+      ]
+     },
+     {
+      "Id": "2108038015",
+      "Name": "VOX_Test_Steve",
+      "ObjectPath": "\\Events\\Default Work Unit\\TEST\\VOX_Test_Steve",
+      "GUID": "{F5760C28-CF24-44CB-9CA0-65A50B66536A}",
+      "DurationType": "OneShot",
+      "DurationMin": "59.033333",
+      "DurationMax": "59.033333",
+      "MediaRefs": [
+       {
+        "Id": "198843051"
+       }
+      ]
+     }
+    ],
+    "GameParameters": [
+     {
+      "Id": "1540479560",
+      "Name": "RTCP_Distance",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\RTCP_Distance",
+      "GUID": "{EF377E40-8E9B-4D70-8BE2-BC7BB1F8B571}"
+     },
+     {
+      "Id": "2942853976",
+      "Name": "RTPC_Progression",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\RTPC_Progression",
+      "GUID": "{5BD8080A-DA64-43F0-98B7-79BD20A6BAC9}"
+     }
+    ]
+   }
+  ],
+  "FileHash": "{E85855B2-4DA2-AF64-6ED7-D1393EE66321}"
+ }
+}

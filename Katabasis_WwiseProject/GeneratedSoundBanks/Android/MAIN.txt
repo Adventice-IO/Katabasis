@@ -1,0 +1,31 @@
+Event	ID	Name			Wwise Object Path	Notes
+	1155651648	SFX_Portal_Validate			\Default Work Unit\TEST\SFX_Portal_Validate	
+	1378078392	AMB_Ambi_Test_01			\Default Work Unit\TEST\AMB_Ambi_Test_01	
+	2108038015	VOX_Test_Steve			\Default Work Unit\TEST\VOX_Test_Steve	
+	3501277368	SFX_Tone_Test			\Default Work Unit\TEST\SFX_Tone_Test	
+	4131803333	SFX_Portal_Activate			\Default Work Unit\TEST\SFX_Portal_Activate	
+
+State Group	ID	Name			Wwise Object Path	Notes
+	188982067	State_Map			\Default Work Unit\State_Map	
+
+State	ID	Name	State Group			Notes
+	84696446	A	State_Map			
+	748895195	None	State_Map			
+	2876034013	A_to_B	State_Map			
+
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	1540479560	RTCP_Distance			\Default Work Unit\RTCP_Distance	
+	2942853976	RTPC_Progression			\Default Work Unit\RTPC_Progression	
+
+Modulator Envelope	ID	Name			Wwise Object Path	Notes
+	391150580	Modulator Envelope (Custom)				
+
+Source plug-ins	ID	Name	Type		Wwise Object Path	Notes
+	86776161	Tone Generator	Wwise Tone Generator		\Containers\Default Work Unit\SFX\SFX_Test\SFX_Tone_Test\Tone Generator	
+	187488359	Synth One	Wwise Synth One		\Containers\Default Work Unit\SFX\SFX_Test\SFX_Portal_Activate\Synth One	
+	729039563	Tone Generator	Wwise Tone Generator		\Containers\Default Work Unit\SFX\SFX_Test\SFX_Portal_Validate\Tone Generator	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	183963844	AMB_Ambi_Test_01	.cache\C5\{C5F6B645-DCEC-005C-DD6F-27AA79C6E0F8}.wem		\Containers\Default Work Unit\AMB\AMB_Ambi\AMB_Ambi_Test_01		22281400
+	198843051	SteveMona	.cache\0E\{0ED403BD-51B2-5071-7AB1-3AA2114BDBA8}.wem		\Containers\Default Work Unit\VOX\SteveMona		1885110
+
