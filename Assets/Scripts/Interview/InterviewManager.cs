@@ -67,7 +67,6 @@ public class InterviewManager : MonoBehaviour
     void OnEnable()
     {
         instance = this;
-        LoadInterviewData();
         RefreshAssignmentsForCurrentSalle();
     }
 
@@ -79,6 +78,11 @@ public class InterviewManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        LoadInterviewData();
+    }
+    
     void Update()
     {
         MainController controller = MainController.instance;
@@ -120,7 +124,6 @@ public class InterviewManager : MonoBehaviour
         playedThemesHistory.Clear();
         consumedSlots.Clear();
         RebuildPersonStats();
-        RefreshAssignmentsForCurrentSalle();
     }
 
     public void ClearVisits()
@@ -606,6 +609,8 @@ public class InterviewManager : MonoBehaviour
         }
 
         RebuildPersonStats();
+
+        logAssignments();
     }
 
     void RebuildPersonStats()
@@ -847,7 +852,7 @@ public class InterviewManager : MonoBehaviour
                 .Where(assignment => assignment.salle == currentSalle && !string.IsNullOrWhiteSpace(assignment.person))
                 .ToList();
 
-            Debug.Log($"<b><color=#ffaa55>STEP {stepIndex}</color></b> — Room <b><color=#ffff55>{currentSalle.name}</color></b>");
+            Debug.Log($"<b><color=#ffaa55>STEP {stepIndex}</color></b> ï¿½ Room <b><color=#ffff55>{currentSalle.name}</color></b>");
 
             if (roomPeople.Count == 0)
             {
@@ -873,7 +878,7 @@ public class InterviewManager : MonoBehaviour
 
                     if (toPlay.Length == 0)
                     {
-                        Debug.Log($"    • <color=#00ffff>{assignment.person}</color> -> <color=#ff7777>no playable interview</color>");
+                        Debug.Log($"    ï¿½ <color=#00ffff>{assignment.person}</color> -> <color=#ff7777>no playable interview</color>");
                         continue;
                     }
 
@@ -881,7 +886,7 @@ public class InterviewManager : MonoBehaviour
                         " <color=#aaaaaa>+</color> ",
                         toPlay.Select(data => FormatInterviewForLog(data)).ToArray());
 
-                    Debug.Log($"    • Person <b><color=#00ffff>{assignment.person}</color></b> -> {sequence}");
+                    Debug.Log($"    ï¿½ Person <b><color=#00ffff>{assignment.person}</color></b> -> {sequence}");
 
                     simulatedPlayedPersons.Add(assignment.person);
                     InterviewData lastPlayedInterview = toPlay[toPlay.Length - 1];

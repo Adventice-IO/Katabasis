@@ -181,7 +181,7 @@ public class DataManager : MonoBehaviour
 
     string GetStreamingAssetsFolderPathInternal(DataFolder folder)
     {
-        return Path.Combine(Application.streamingAssetsPath,"KataData",  GetFolderName(folder)).Replace("\\", "/");
+        return Path.Combine(Application.streamingAssetsPath, "KataData", GetFolderName(folder)).Replace("\\", "/");
     }
 
     string GetLocalStorageFolderPathInternal(DataFolder folder)
@@ -218,23 +218,43 @@ public class DataManager : MonoBehaviour
 
     string GetRootFilePathInternal(string relativePath)
     {
+
         if (string.IsNullOrWhiteSpace(relativePath))
         {
             return string.Empty;
         }
 
         string normalizedRelativePath = relativePath.Replace("\\", "/").TrimStart('/');
+
+        string externalPath = Path.Combine(GetExternalDataRoot(), "KataData", normalizedRelativePath);
+        Debug.Log("Looking for root file at custom path : " + externalPath);
+        if (File.Exists(externalPath))
+        {
+            return externalPath.Replace("\\", "/");
+        }
+
         string streamingPath = Path.Combine(Application.streamingAssetsPath, normalizedRelativePath);
+        Debug.Log("Looking for root file at streamingassets: " + streamingPath);
         if (File.Exists(streamingPath))
         {
             return streamingPath.Replace("\\", "/");
         }
 
-        string externalPath = Path.Combine(GetExternalDataRoot(), normalizedRelativePath);
-        if (File.Exists(externalPath))
+
+
+        string execPath = Application.dataPath;
+        if (Application.platform == RuntimePlatform.OSXPlayer)
         {
-            return externalPath.Replace("\\", "/");
+            execPath = Path.GetDirectoryName(execPath);
         }
+        string executablePath = Path.Combine(execPath, "KataData", normalizedRelativePath);
+        Debug.Log("Looking for root file at executable path: " + executablePath);
+        if (File.Exists(executablePath))
+        {
+            return executablePath.Replace("\\", "/");
+        }
+
+        Debug.LogWarning("Root file not found at: " + streamingPath + " or " + externalPath);
 
         return string.Empty;
     }
@@ -451,7 +471,7 @@ public class DataManager : MonoBehaviour
             return fallbackPath.Replace("\\", "/");
         }
 
-        if(Directory.Exists(GetExecutableFolderPathInternal(folder)))
+        if (Directory.Exists(GetExecutableFolderPathInternal(folder)))
         {
             return GetExecutableFolderPathInternal(folder).Replace("\\", "/");
         }
