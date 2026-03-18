@@ -144,6 +144,20 @@
                     return o;
                 }
 
+                //Color pass : compensate dark points so they remain visible
+                // Brighten dark colors smoothly
+                float brightness = dot(v.color.rgb, float3(0.299, 0.587, 0.114));
+                float darknessThreshold = 0.1;
+                float brightnessFactor = smoothstep(0.0, darknessThreshold, brightness);
+                
+                // Brighten dark colors
+                float3 brightened = lerp(v.color.rgb * 10, v.color.rgb, brightnessFactor);
+                
+                // Desaturate as they get darker
+                float3 gray = float3(brightness, brightness, brightness);
+                brightened = lerp(gray, brightened, brightnessFactor);
+
+
                 o.color = v.color * visibility;
                 
                 return o;

@@ -104,6 +104,20 @@ Shader "Custom/PointCloudDistanceFade"
                 // We use max() to clamp the lower bound
                 col.a *= max(distanceOpacity, minAlpha);
 
+
+                //Color pass : compensate dark points so they remain visible
+                // Brighten dark colors smoothly
+                float brightness = dot(col.rgb, float3(0.299, 0.587, 0.114));
+                float darknessThreshold = 0.1;
+                float brightnessFactor = smoothstep(0.0, darknessThreshold, brightness);
+                
+                // Brighten dark colors
+                col.rgb = lerp(col.rgb * 10, col.rgb, brightnessFactor);
+                
+                // Desaturate as they get darker
+                float3 gray = float3(brightness, brightness, brightness);
+                col.rgb = lerp(gray, col.rgb, brightnessFactor);
+
                 return col;
             }
             ENDCG

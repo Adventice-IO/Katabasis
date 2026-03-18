@@ -217,16 +217,18 @@ public class Tunnel : MonoBehaviour
         {
             Vector3 departLookAt = salleDepart.origin.position;
             departLookAt.y = portal.transform.parent.position.y;
-            portal.transform.rotation = Quaternion.identity;
             portal.transform.parent.LookAt(departLookAt, Vector3.up);
+            portal.transform.LookAt(salleDepart.origin.position);
+            portal.transform.Rotate(Vector3.up, 180); // Face the opposite direction since this is the reverse portal
         }
 
         if (portalReverse != null && salleArrivee != null)
         {
             Vector3 arriveeLookAt = salleArrivee.origin.position;
             arriveeLookAt.y = portalReverse.transform.parent.position.y;
-            portalReverse.transform.rotation = Quaternion.identity;
             portalReverse.transform.parent.LookAt(arriveeLookAt, Vector3.up);
+            portalReverse.transform.LookAt(salleArrivee.origin.position);
+            portalReverse.transform.Rotate(Vector3.up, 180); // Face the opposite direction since this is the reverse portal
         }
     }
 
