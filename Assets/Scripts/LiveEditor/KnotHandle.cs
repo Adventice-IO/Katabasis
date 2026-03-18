@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Splines;
+#if UNITY_EDITOR
 using Framework.Utils.Editor;
-using NUnit.Framework;
+#endif
 
 public class KnotHandle : MonoBehaviour
 {
@@ -406,7 +407,9 @@ public class KnotHandle : MonoBehaviour
     {
         if (Application.isPlaying)
         {
+#if UNITY_EDITOR
             UnityPlayModeSaver.SaveComponent(splineContainer);
+#endif
         }
 
     }

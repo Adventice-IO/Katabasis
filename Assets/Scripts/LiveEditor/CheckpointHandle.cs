@@ -1,4 +1,6 @@
+#if UNITY_EDITOR
 using Framework.Utils.Editor;
+#endif
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -185,8 +187,9 @@ public class CheckpointHandle : MonoBehaviour
 
             transform.position = tunnel.getPositionOnTrack(checkpoint.pos);
 
+#if UNITY_EDITOR
             UnityPlayModeSaver.SaveComponent(tunnel.GetComponent<CheckpointContainer>());
-
+#endif
 
         }
     }

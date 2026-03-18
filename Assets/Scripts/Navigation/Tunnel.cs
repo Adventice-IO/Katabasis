@@ -9,8 +9,9 @@ using System;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.UIElements;
+#if UNITY_EDITOR
 using Framework.Utils.Editor;
-
+#endif
 
 
 #if UNITY_EDITOR
@@ -577,15 +578,18 @@ public class Tunnel : MonoBehaviour
         checkpointContainer.speedCheckpoints = checkpointContainer.speedCheckpoints.OrderBy(c => c.pos).ToList();
 
         updateSpeedCheckpoints();
+#if UNITY_EDITOR
         UnityPlayModeSaver.SaveComponent(checkpointContainer);
-
+#endif
         return checkpoint;
     }
 
     public void RemoveSpeedCheckpoint(SpeedCheckpoint checkpoint)
     {
         checkpointContainer.speedCheckpoints.Remove(checkpoint);
+#if UNITY_EDITOR
         UnityPlayModeSaver.SaveComponent(checkpointContainer);
+#endif
         updateSpeedCheckpoints();
     }
 
