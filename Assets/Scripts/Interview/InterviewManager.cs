@@ -37,6 +37,12 @@ public class InterviewManager : MonoBehaviour
         public int note;
         public Vector3 offset;
         public float angle;
+        public List<float> cutTimes;
+
+        public override string ToString()
+        {
+            return $"InterviewData(person={person}, filename={filename}, themes=[{string.Join(", ", themes ?? new List<string>())}], levels=[{string.Join(", ", levels ?? new List<int>())}], isIntro={isIntro}, visited={visited}, proposed={proposed}, depthkitId={depthkitId}, depthkitPath={depthkitPath}, level={level}, note={note}, offset={offset}, angle={angle}, cuts=[{string.Join(", ", cutTimes ?? new List<float>())}])";
+        }
     }
 
     public struct PersonInterviewStats
@@ -578,7 +584,24 @@ public class InterviewManager : MonoBehaviour
                 levels = ParseLevels(GetField(fields, 2)),
                 offset = offset,
                 angle = angleOffset,
-
+                cutTimes = SplitMultiValueField(GetField(fields, 7)).Select(
+                    s =>
+                    {
+                        //Format HH:MM:SS:FF where FF is frames at 30fps
+                        string[] timeParts = s.Split(':');
+                        if (timeParts.Length != 4)
+                        {
+                            Debug.LogWarning("Invalid cut time format: " + s);
+                            return 0f;
+                        }
+                        int hours = int.Parse(timeParts[0]);
+                        int minutes = int.Parse(timeParts[1]);
+                        int seconds = int.Parse(timeParts[2]);
+                        int frames = int.Parse(timeParts[3]);
+                        float totalSeconds = hours * 3600 + minutes * 60 + seconds + frames / 30f;
+                        return totalSeconds;
+                    }
+                    ).ToList(),
                 visited = false,
                 proposed = false
             };

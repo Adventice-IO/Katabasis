@@ -1,4 +1,5 @@
 using Depthkit;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -20,6 +21,8 @@ public class Interview : MonoBehaviour
 
     public string itwName;
     public string interviewId;
+    List<float> cutTimes;
+
     [Range(0, 4)]
     public int level;
     string basePath;
@@ -32,12 +35,24 @@ public class Interview : MonoBehaviour
     public float progression;
     [Range(0, 1)]
     public float evaporateProg;
+    [Range(0, 1)]
+    public float glitchFactor;
 
+    [Header("Glitch Settings")]
+    public float glitchTimeAroundCut = 1f;
+    public float glitchTimeBeforeActivate = 1f;
+    [Range(0, 1)]
+    public float glitchIntensity = 1f;
+    public AnimationCurve glitchCurve;
+
+    [Header("Evaporation Settings")]
     public float evaporatePreDelay = 0.5f;
     public float evaporateTime = 3f;
     public bool shouldEvaporate = false;
 
     Salle salle;
+
+
 
     [Header("Audio Settings")]
     public AudioEventRefSO loadingEvent;
@@ -242,8 +257,17 @@ public class Interview : MonoBehaviour
             evaporateProg = Mathf.Clamp(evaporateProg + evapProg, 0, 1);
         }
 
+        float diffToClosestCut = getDiffToClosestCut();
+        float glitchCutF = diffToClosestCut == -1 ? 0f : 1 - Mathf.Clamp01(diffToClosestCut / glitchTimeAroundCut);
+        float progTime = progression == 1 && videoPlayer.isPlaying ? 0f : progression * focusTime;
+        float glitchStartTime = Mathf.Clamp01(focusTime - glitchTimeBeforeActivate);
+        float glitchActivateF = (progTime - glitchStartTime) / glitchTimeBeforeActivate;
+
+        glitchFactor = glitchIntensity * glitchCurve.Evaluate(Mathf.Max(glitchCutF, glitchActivateF));
+
         vfx.SetFloat("Progression", progression);
         vfx.SetFloat("Evaporate", evaporateProg);
+        vfx.SetFloat("GlitchFactor", glitchFactor);
     }
 
     void show(bool shouldShow)
@@ -287,6 +311,9 @@ public class Interview : MonoBehaviour
         basePath = BuildMediaBasePath(itwName);
         previewBasePath = BuildPreviewBasePath(itwName);
         videoPlayer.url = BuildVideoUrl(interviewId);
+
+        cutTimes = data.cutTimes != null ? new List<float>(data.cutTimes) : new List<float>();
+
         LogDebug("Assigned interview slot -> depthkitPath='" + itwName + "', mediaPath='" + interviewId + "', level=" + level + ", basePath='" + basePath + "', previewBasePath='" + previewBasePath + "', videoUrl='" + videoPlayer.url + "'");
     }
 
@@ -480,6 +507,7 @@ public class Interview : MonoBehaviour
         return true;
     }
 
+
     void OnVideoFinished(VideoPlayer vp)
     {
         LogDebug("Video finished for mediaPath='" + interviewId + "'");
@@ -523,6 +551,39 @@ public class Interview : MonoBehaviour
         {
             evaporate();
         }
+    }
+
+    float getDiffToClosestCut()
+    {
+        if (!videoPlayer.isPlaying)
+        {
+            return -1;
+        }
+        float t = (float)videoPlayer.time;
+        float minDiff = float.MaxValue;
+        float closestCut = -1;
+        foreach (float cut in cutTimes)
+        {
+            float diff = Mathf.Abs(cut - (float)t);
+            if (diff < minDiff)
+            {
+                minDiff = diff;
+                closestCut = cut;
+            }
+        }
+
+        if (videoPlayer.length > 0)
+        {
+            float finalDiff = Mathf.Abs((float)videoPlayer.length - (float)t);
+            if (finalDiff < minDiff)
+            {
+                minDiff = finalDiff;
+                closestCut = (float)videoPlayer.length;
+            }
+        }
+
+
+        return minDiff;
     }
 
     void LogDebug(string message)
