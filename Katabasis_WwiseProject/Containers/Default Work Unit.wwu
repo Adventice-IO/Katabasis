@@ -852,7 +852,7 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="SteveMona" ID="{5E63C21F-AA4D-49F2-A6D8-23585014327C}" ShortID="105655988">
+						<PropertyContainer Name="VOX_Test" ID="{CA832A70-3020-446D-A041-9770822FD7BF}" ShortID="5164472">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
@@ -862,18 +862,1118 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="SteveMona" ID="{D6CCD924-EA68-4B95-83E2-5ADB9DD5FC95}">
-									<Language>SFX</Language>
-									<AudioFile>VOX\VOX_Test\SteveMona.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="198843051"/>
-									</MediaIDList>
-								</AudioFileSource>
+								<Sound Name="SteveMona" ID="{5E63C21F-AA4D-49F2-A6D8-23585014327C}" ShortID="105655988">
+									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="EnableAttenuation" Type="bool" Value="False"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="VOX" ID="{F084076F-FA0E-460B-A770-ED15E9E13214}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SteveMona" ID="{D6CCD924-EA68-4B95-83E2-5ADB9DD5FC95}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_Test\SteveMona.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="198843051"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<PositioningInfo>
+										<Position Name="" ID="{57B93A12-C611-4F79-81F9-352CC3463E57}">
+											<ChildrenList>
+												<Path2D Name="VOX_Path" ID="{626C3686-7509-4CBE-A895-01366BA12720}">
+													<PointList>
+														<Point>
+															<XPos>-49.23858</XPos>
+															<YPos>0.28249</YPos>
+															<Flags>12</Flags>
+															<Time>0</Time>
+														</Point>
+													</PointList>
+												</Path2D>
+											</ChildrenList>
+										</Position>
+									</PositioningInfo>
+									<ActiveSourceList>
+										<ActiveSource Name="SteveMona" ID="{D6CCD924-EA68-4B95-83E2-5ADB9DD5FC95}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
 							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SteveMona" ID="{D6CCD924-EA68-4B95-83E2-5ADB9DD5FC95}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
+						</PropertyContainer>
+						<PropertyContainer Name="VOX_ITW" ID="{14D9F7B3-A9EC-406C-88F9-7C74ECC68B8B}" ShortID="563605944">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="Alex0_Intro" ID="{D9736CA5-546B-43C0-AF05-1F1F5A9B4AD3}" ShortID="640432960">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Alex0_Intro" ID="{41892BF3-2C82-48F9-93B4-27DAA7012557}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Alex0.Intro.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="140096958"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Alex0_Intro" ID="{41892BF3-2C82-48F9-93B4-27DAA7012557}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Alex1_Suicides(1)" ID="{E9284AD5-8F4A-4829-B724-51454E62BD6A}" ShortID="137684091">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Alex1_Suicides(1)" ID="{4B520142-F1BB-4D22-9AB1-332A8354260C}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Alex1.Suicides(1).wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="87326526"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Alex1_Suicides(1)" ID="{4B520142-F1BB-4D22-9AB1-332A8354260C}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Alex1_Suicides(2)" ID="{9FD26F0E-E4C8-40CC-84F0-15C47E131C28}" ShortID="68127218">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Alex1_Suicides(2)" ID="{16267913-4EA5-4028-B094-AC6EAB8CAB03}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Alex1.Suicides(2).wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="520504057"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Alex1_Suicides(2)" ID="{16267913-4EA5-4028-B094-AC6EAB8CAB03}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Alex2_Bebe" ID="{256B50C2-40BB-416A-9088-0796430938A7}" ShortID="464907007">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Alex2_Bebe" ID="{FCD62991-A8D3-4FDE-B600-C021358E4CB9}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Alex2.Bebe.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="950247579"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Alex2_Bebe" ID="{FCD62991-A8D3-4FDE-B600-C021358E4CB9}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Alex3_Hidebelow" ID="{03DA0DDD-8101-4543-A1F8-A09C9553ABBB}" ShortID="497503471">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Alex3_Hidebelow" ID="{E7CF00EF-8A99-4E7F-9CDE-F52CFAC87F22}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Alex3.Hidebelow.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="1069461006"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Alex3_Hidebelow" ID="{E7CF00EF-8A99-4E7F-9CDE-F52CFAC87F22}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Alex4_Zerotolerance" ID="{CEEE3A57-FAD3-4773-BAD3-608089D737B9}" ShortID="236322052">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Alex4_Zerotolerance" ID="{1B3B6711-1843-430B-9725-FF846F2D1660}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Alex4.Zerotolerance.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="71976296"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Alex4_Zerotolerance" ID="{1B3B6711-1843-430B-9725-FF846F2D1660}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Alex5_Solitude" ID="{42ACC32B-D52B-4D8B-80E8-456E3D140E28}" ShortID="877765864">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Alex5_Solitude" ID="{44C44E86-4ADF-4919-9E75-8F4B92DF495D}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Alex5.Solitude.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="45131898"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Alex5_Solitude" ID="{44C44E86-4ADF-4919-9E75-8F4B92DF495D}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Chris(2)0_Intro" ID="{73681BCF-BEF8-4A76-955A-68746D70BB99}" ShortID="204837254">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Chris(2)0_Intro" ID="{E27512A6-6078-46D9-85BB-13E2EFA4CC96}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Chris(2)0.Intro.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="922685986"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Chris(2)0_Intro" ID="{E27512A6-6078-46D9-85BB-13E2EFA4CC96}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Chris(2)2_Radio" ID="{8E1E24CA-B53B-448B-8668-2F9EC768378C}" ShortID="142555031">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Chris(2)2_Radio" ID="{F518895F-4B26-4261-A785-D0F17160931D}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Chris(2)2.Radio.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="359485055"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Chris(2)2_Radio" ID="{F518895F-4B26-4261-A785-D0F17160931D}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Chris(2)3_Dadssteps" ID="{19FEEA84-E3C2-4C02-A2DD-2E995E71520A}" ShortID="849911529">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Chris(2)3_Dadssteps" ID="{E94BCD62-041D-4165-B8EE-72587A217F08}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Chris(2)3.Dadssteps.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="401512624"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Chris(2)3_Dadssteps" ID="{E94BCD62-041D-4165-B8EE-72587A217F08}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Chris(3)4_Professional" ID="{F456A7BD-2B71-4CD6-9E4A-CBF87828D30F}" ShortID="890989810">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Chris(3)4_Professional" ID="{D2228397-C56A-437D-8214-67BC8B08A43E}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Chris(3)4.Professional.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="553368960"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Chris(3)4_Professional" ID="{D2228397-C56A-437D-8214-67BC8B08A43E}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Chris(4)1_Cupoftea" ID="{00DC7AF9-A4C4-4629-A300-3D43D7446260}" ShortID="990035933">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Chris(4)1_Cupoftea" ID="{F7B2E8B1-01DB-4D26-AA9E-9E888FD37085}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Chris(4)1.Cupoftea.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="341265225"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Chris(4)1_Cupoftea" ID="{F7B2E8B1-01DB-4D26-AA9E-9E888FD37085}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="ExitPlan0_Intro" ID="{34F22016-C48C-4F5F-92D9-FA35869309AE}" ShortID="626199977">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="ExitPlan0_Intro" ID="{CB821C28-200E-446D-8140-7B4F560BB873}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\ExitPlan0.Intro.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="914185507"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="ExitPlan0_Intro" ID="{CB821C28-200E-446D-8140-7B4F560BB873}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="ExitPlan1_Goodlife" ID="{0428380E-D4D4-4119-9CB1-F2DCCAF9FD93}" ShortID="117913508">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="ExitPlan1_Goodlife" ID="{A02CF6AE-A430-4D8F-8A9E-9259D32FCBCA}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\ExitPlan1.Goodlife.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="225288330"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="ExitPlan1_Goodlife" ID="{A02CF6AE-A430-4D8F-8A9E-9259D32FCBCA}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="ExitPlan2_Sorrymum" ID="{CBBC22EF-E8E1-4979-950A-F987464AA0D0}" ShortID="835855157">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="ExitPlan2_Sorrymum" ID="{284B47C5-9AF4-42DC-A06B-E5DE456C9504}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\ExitPlan2.Sorrymum.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="81411257"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="ExitPlan2_Sorrymum" ID="{284B47C5-9AF4-42DC-A06B-E5DE456C9504}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="ExitPlan3_FuckNYPD" ID="{8E643775-E96E-4778-91B7-A23450297D1C}" ShortID="4272801">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="ExitPlan3_FuckNYPD" ID="{8899560E-AC67-4DCF-8D27-30BBBFE204ED}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\ExitPlan3.FuckNYPD.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="182701135"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="ExitPlan3_FuckNYPD" ID="{8899560E-AC67-4DCF-8D27-30BBBFE204ED}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Freedom0_Intro" ID="{B0AEDFC9-FB85-4155-A511-23078FB2B8B1}" ShortID="250480327">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Freedom0_Intro" ID="{70F3B8AF-9243-4624-9DF8-36E31881498E}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Freedom0.Intro.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="723960566"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Freedom0_Intro" ID="{70F3B8AF-9243-4624-9DF8-36E31881498E}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Freedom1_MolePeople(1)" ID="{4B7822A6-FC52-423C-BEBC-B138041DE498}" ShortID="977119527">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Freedom1_MolePeople(1)" ID="{4A751F94-8E4A-44AE-B795-7C70909A21B5}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Freedom1.MolePeople(1).wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="692083144"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Freedom1_MolePeople(1)" ID="{4A751F94-8E4A-44AE-B795-7C70909A21B5}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Freedom1_MolePeople(2)" ID="{C54ED29E-BA63-48ED-A99E-382DD60064C5}" ShortID="523886994">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Freedom1_MolePeople(2)" ID="{FF298412-E712-40CE-A5DB-C69F524158B9}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Freedom1.MolePeople(2).wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="78329027"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Freedom1_MolePeople(2)" ID="{FF298412-E712-40CE-A5DB-C69F524158B9}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Freedom2_EverybodyOut" ID="{050FC29F-4F1C-4542-AD3E-38EA8D0DD0FA}" ShortID="270651458">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Freedom2_EverybodyOut" ID="{A9DD93DB-F8E6-4A59-B70D-5672E3C0FF07}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Freedom2.EverybodyOut.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="90295570"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Freedom2_EverybodyOut" ID="{A9DD93DB-F8E6-4A59-B70D-5672E3C0FF07}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Freedom3_Drugs" ID="{721C7F45-4E37-404F-8083-327E8EF9AE47}" ShortID="657083942">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Freedom3_Drugs" ID="{2C289D15-1E93-44F0-981E-893129B080D7}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Freedom3.Drugs.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="887129349"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Freedom3_Drugs" ID="{2C289D15-1E93-44F0-981E-893129B080D7}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Kirk0_Intro" ID="{6CD22252-4C7E-488F-9EE2-DB443E3D1EF1}" ShortID="467433289">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Kirk0_Intro" ID="{1B1D4151-93E5-4334-A5C1-BE2C75C26CD6}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Kirk0.Intro.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="638761536"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Kirk0_Intro" ID="{1B1D4151-93E5-4334-A5C1-BE2C75C26CD6}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Kirk1_Pips" ID="{10660371-0381-47D4-98BE-DFFCD4519B87}" ShortID="727816810">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Kirk1_Pips" ID="{56D52ACC-84F8-48B9-8D31-129A503BC255}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Kirk1.Pips.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="562491777"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Kirk1_Pips" ID="{56D52ACC-84F8-48B9-8D31-129A503BC255}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Kirk2_Oysters" ID="{D79EAAA5-4DD4-4A4D-A7AC-646617E8D239}" ShortID="480403124">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Kirk2_Oysters" ID="{D12C10B6-D403-4A85-898A-469479AF9B43}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Kirk2.Oysters.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="690408805"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Kirk2_Oysters" ID="{D12C10B6-D403-4A85-898A-469479AF9B43}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Lucinda0_Intro" ID="{BCD56250-7B2D-43C0-ACB4-F140CDF80A27}" ShortID="729037147">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Lucinda0_Intro" ID="{9A5E1048-B537-484C-AE93-8E41702A6639}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Lucinda0.Intro.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="492049197"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Lucinda0_Intro" ID="{9A5E1048-B537-484C-AE93-8E41702A6639}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Lucinda1_community" ID="{84DC83BF-AF47-408E-9F42-1221C9BCA287}" ShortID="235546354">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Lucinda1_community" ID="{E4C16D7B-9D8D-4D0A-AC92-5B6256CD198E}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Lucinda1.community.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="649767239"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Lucinda1_community" ID="{E4C16D7B-9D8D-4D0A-AC92-5B6256CD198E}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Lucinda2_accident" ID="{17C962BF-73F4-4854-9B04-8116DAEF4E00}" ShortID="107669982">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Lucinda2_accident" ID="{DD18E104-D2FE-4679-B684-E46EA3038B57}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Lucinda2.accident.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="870430772"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Lucinda2_accident" ID="{DD18E104-D2FE-4679-B684-E46EA3038B57}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Max0_Intro" ID="{D1E99B86-1FD9-45BF-97EA-44F4DED1485A}" ShortID="268156546">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Max0_Intro" ID="{B04CA8D4-905E-4DC1-83BA-3600C48C329F}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Max0.Intro.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="1027776549"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Max0_Intro" ID="{B04CA8D4-905E-4DC1-83BA-3600C48C329F}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Max1_Fearandalert" ID="{07E17401-0858-464D-9022-45C97864C401}" ShortID="485165992">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Max1_Fearandalert" ID="{61F58FB3-8E8A-43C3-9704-5384051D08D3}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Max1.Fearandalert.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="1011942493"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Max1_Fearandalert" ID="{61F58FB3-8E8A-43C3-9704-5384051D08D3}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Max3_Sharing" ID="{9B6AC82F-A3E0-467A-80D5-8D005A013CBF}" ShortID="253382145">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Max3_Sharing" ID="{CE4E17A7-9B72-4BCB-BF70-88BDB1E19700}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Max3.Sharing.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="411107387"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Max3_Sharing" ID="{CE4E17A7-9B72-4BCB-BF70-88BDB1E19700}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Max4_Deadbody" ID="{5F4C2E89-2DC7-4D58-B6F1-13BDEA4CBEAC}" ShortID="145441438">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Max4_Deadbody" ID="{F97F9208-8CAA-4153-B397-25D5985D281B}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Max4.Deadbody.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="448923001"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Max4_Deadbody" ID="{F97F9208-8CAA-4153-B397-25D5985D281B}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SteveMona0_Intro" ID="{71D9DBED-BD56-4158-BBBD-AE36717FD698}" ShortID="146529713">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SteveMona0_Intro" ID="{2BC3661A-525A-4079-BB71-48A6EF0562DB}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\SteveMona0.Intro.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="148602390"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SteveMona0_Intro" ID="{2BC3661A-525A-4079-BB71-48A6EF0562DB}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SteveMona1_Underground" ID="{0C42B40C-39D5-4043-BF5D-7A402319346E}" ShortID="583988214">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SteveMona1_Underground" ID="{EC45D613-091E-4563-8395-372D8E40B0A7}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\SteveMona1.Underground.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="413909747"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SteveMona1_Underground" ID="{EC45D613-091E-4563-8395-372D8E40B0A7}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SteveMona2_Vietnam" ID="{4B50D3FF-6F6F-42EC-A22C-603D091E11F6}" ShortID="362992118">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SteveMona2_Vietnam" ID="{573B316A-A9F2-4D46-B366-7C8F95D0CB4B}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\SteveMona2.Vietnam.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="378758222"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SteveMona2_Vietnam" ID="{573B316A-A9F2-4D46-B366-7C8F95D0CB4B}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SteveMona3_MICA" ID="{E06FA22E-E8E9-4FCB-85F5-C4B06E476936}" ShortID="297181998">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SteveMona3_MICA" ID="{E40D547B-6B31-496E-8AF7-118616F60F40}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\SteveMona3.MICA.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="633679150"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SteveMona3_MICA" ID="{E40D547B-6B31-496E-8AF7-118616F60F40}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SteveMona4_Cat&amp;Mouse" ID="{63526D1F-72D3-48A2-9898-D46A44BFFD50}" ShortID="272122534">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SteveMona4_Cat&amp;Mouse" ID="{D4DE176A-BB58-4C3A-8CC3-8AB6DFEBC26B}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\SteveMona4.Cat&amp;Mouse.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="1018587951"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SteveMona4_Cat&amp;Mouse" ID="{D4DE176A-BB58-4C3A-8CC3-8AB6DFEBC26B}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SteveMona5_11Sept" ID="{6181C288-96CC-4EF5-BCDA-7D794EB5A61C}" ShortID="218354672">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SteveMona5_11Sept" ID="{E6D824E3-23CF-4C0A-A35D-FD4FADDF3955}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\SteveMona5.11Sept.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="799796375"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SteveMona5_11Sept" ID="{E6D824E3-23CF-4C0A-A35D-FD4FADDF3955}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Terry0_Intro" ID="{F2BF5227-D13E-4D49-804A-C1FA01903C5E}" ShortID="521127298">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Terry0_Intro" ID="{7F613132-7B27-49AB-B0AF-D618977D5EA5}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Terry0.Intro.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="619978886"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Terry0_Intro" ID="{7F613132-7B27-49AB-B0AF-D618977D5EA5}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Terry1_Whatisunderground" ID="{0AB10550-3982-48DD-871E-EFF4EFDC9808}" ShortID="187835514">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Terry1_Whatisunderground" ID="{9B285523-9358-4528-BE97-BA8F397BE10B}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Terry1.Whatisunderground.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="770475165"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Terry1_Whatisunderground" ID="{9B285523-9358-4528-BE97-BA8F397BE10B}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Terry2_Historical" ID="{7816D53B-BF5B-486D-A6B6-C24C7DFE3826}" ShortID="530249317">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Terry2_Historical" ID="{B3D4758F-CDBD-4D4F-BAB7-2E18FFD0FD1C}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Terry2.Historical.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="66668079"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Terry2_Historical" ID="{B3D4758F-CDBD-4D4F-BAB7-2E18FFD0FD1C}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Terry3_Molepeople" ID="{2052A7E5-D0E8-42AB-AE16-84AFE130829B}" ShortID="1057254143">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Terry3_Molepeople" ID="{660BE9BA-659A-4CC8-A151-E48449A40CB6}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Terry3.Molepeople.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="702325895"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Terry3_Molepeople" ID="{660BE9BA-659A-4CC8-A151-E48449A40CB6}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Terry4_Feeling" ID="{61FE3631-6024-4FCA-B851-2BFB986FB447}" ShortID="657605980">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Terry4_Feeling" ID="{81282826-F87E-4816-9FD5-F50B1D7456E3}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Terry4.Feeling.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="937676156"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Terry4_Feeling" ID="{81282826-F87E-4816-9FD5-F50B1D7456E3}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Tommy0_Intro" ID="{C1C15E97-4F9D-4AB5-BB8B-9ACDF1B8CB02}" ShortID="454454381">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Tommy0_Intro" ID="{B94352E0-E2BE-4E9C-BBD8-B474085A6741}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Tommy0.Intro.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="12465638"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Tommy0_Intro" ID="{B94352E0-E2BE-4E9C-BBD8-B474085A6741}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Tommy1_Jungle" ID="{5394CB4E-888B-41B5-BB64-6D74A32B8FC0}" ShortID="167047489">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Tommy1_Jungle" ID="{2E4415C3-AB72-478E-B524-539115741B18}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Tommy1.Jungle.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="550546250"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Tommy1_Jungle" ID="{2E4415C3-AB72-478E-B524-539115741B18}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Tommy2_TheEnergyyougive" ID="{0EF08D43-3F24-4C4C-9EBF-4ADCAA1DE503}" ShortID="1018737373">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Tommy2_TheEnergyyougive" ID="{390DC137-ED71-4420-AB0F-BA45612F8CA1}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Tommy2.TheEnergyyougive.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="930046194"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Tommy2_TheEnergyyougive" ID="{390DC137-ED71-4420-AB0F-BA45612F8CA1}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Tommy3_ExitSign" ID="{95FB5F90-17D5-402D-A562-180B8A95F1A5}" ShortID="487798164">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Tommy3_ExitSign" ID="{54B98556-EAEA-424F-B8EC-F5B2B216AE91}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Tommy3.ExitSign.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="260052111"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Tommy3_ExitSign" ID="{54B98556-EAEA-424F-B8EC-F5B2B216AE91}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Tommy4_Noservice" ID="{1ED73CD5-064B-404F-A3B2-4838F8A9E6A3}" ShortID="480494329">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Tommy4_Noservice" ID="{04CF44ED-0008-4469-A420-D610E4699EAD}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Tommy4.Noservice.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="517806539"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Tommy4_Noservice" ID="{04CF44ED-0008-4469-A420-D610E4699EAD}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Tommy5_Hypersensitive" ID="{ACA2E5AC-C73B-4D8A-B890-6AC05C48A2CA}" ShortID="28808843">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Tommy5_Hypersensitive" ID="{1CBA622D-C4D8-4075-A691-5A8B4F663F96}">
+											<Language>SFX</Language>
+											<AudioFile>VOX\VOX_ITW\Tommy5.Hypersensitive.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="909955197"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Tommy5_Hypersensitive" ID="{1CBA622D-C4D8-4075-A691-5A8B4F663F96}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</PropertyContainer>
 					</ChildrenList>
 					<PositioningInfo>
 						<Position Name="" ID="{6656D62C-9608-470B-8BEA-F091BF63B97B}">
