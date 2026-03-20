@@ -20,6 +20,8 @@ public class GameMenu : MonoBehaviour
     bool waitingForMenuData;
     string selectedLanguage = "";
 
+    GameObject selectedObject;
+
     GameObject startBTObject;
     GameObject languagesContainer;
     UnityEngine.XR.Interaction.Toolkit.Interactors.IXRHoverInteractor currentHoverInteractor;
@@ -36,13 +38,19 @@ public class GameMenu : MonoBehaviour
     public float startHoverTime = 1f;
     public float evaporateTime = 0.75f;
     public float nextMenuDelay = 2f;
-    public float buttonScaling = 0.2f;
+    public float buttonScaling = 1f;
     public float buttonSpacing = 1.2f;
     public float buttonRadius = 2f;
+
+    public float startScaling = 1f;
+    public float startYOffset = 2f;
+    public float startSmoothing = 5f;
+    public float startZRadiusOffset = 1f;
     public Color idleHighlightColor = Color.white;
     public Color selectedHighlightColor = Color.green;
     public bool lookAtCamera = true;
     public bool liveUpdateLayout = true;
+
 
     DataManager dataManager;
     void OnEnable()
@@ -73,6 +81,8 @@ public class GameMenu : MonoBehaviour
         UpdateStartTransition();
 
         UpdateHoveredObjectAnimation();
+
+
     }
 
     void ApplyLayout()
@@ -114,11 +124,19 @@ public class GameMenu : MonoBehaviour
 
             if (lookAtCamera && mainCamera != null)
             {
-                Vector3 lookAt = new Vector3(mainCamera.transform.position.x, langObject.transform.position.y, mainCamera.transform.position.z);
+                Vector3 lookAt = new Vector3(transform.position.x, langObject.transform.position.y, transform.position.z);
                 langObject.transform.LookAt(lookAt);
             }
 
-            startBTObject.transform.localPosition = new Vector3(startBTObject.transform.localPosition.x, startBTObject.transform.localPosition.y, buttonRadius);
+
+            if (selectedObject != null)
+            {
+                Vector3 targetPosition = selectedObject.transform.position + selectedObject.transform.forward * startZRadiusOffset + Vector3.up * startYOffset;
+                Quaternion targetRotation = selectedObject.transform.rotation;
+                targetRotation *= Quaternion.Euler(0f, 180f, 0f);
+                startBTObject.transform.position = Vector3.Lerp(startBTObject.transform.position, targetPosition, Time.deltaTime * startSmoothing);
+                startBTObject.transform.rotation = Quaternion.Slerp(startBTObject.transform.rotation, targetRotation, Time.deltaTime * startSmoothing);
+            }
 
             visibleIndex++;
         }
@@ -457,13 +475,15 @@ public class GameMenu : MonoBehaviour
         float hoverDuration = Time.time - hoveredSince;
         float targetHoverTime = hoveredObject == startBTObject ? startHoverTime : hoverSelectTime;
         float normalizedHover = targetHoverTime > 0f ? Mathf.Clamp01(hoverDuration / targetHoverTime) : 1f;
-        hoveredObject.transform.localScale = hoveredOriginalScale;
+
+        bool isStartObject = hoveredObject == startBTObject && !string.IsNullOrWhiteSpace(selectedLanguage);
+
+        if (!isStartObject) hoveredObject.transform.localScale = hoveredOriginalScale;
 
         VisualEffect vfx = hoveredObject.GetComponentInChildren<VisualEffect>(true);
         if (vfx != null)
         {
             bool isSelectedLanguage = languageByObject.TryGetValue(hoveredObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase);
-            bool isStartObject = hoveredObject == startBTObject && !string.IsNullOrWhiteSpace(selectedLanguage);
             float baseProgression = isSelectedLanguage ? 1f : 0f;
             vfx.SetFloat("Progression", isStartObject ? normalizedHover : Mathf.Max(baseProgression, normalizedHover));
             if (!isStartObject)
@@ -500,6 +520,8 @@ public class GameMenu : MonoBehaviour
         if (languageByObject.TryGetValue(hoveredObject, out string language))
         {
             OnLanguageClicked(language);
+            Debug.Log("ActivateHoveredObject: " + language, this);
+            selectedObject = hoveredObject;
         }
     }
 
@@ -542,13 +564,14 @@ public class GameMenu : MonoBehaviour
             return;
         }
 
-        targetObject.transform.localScale = Vector3.one * buttonScaling;
+        bool isStartObject = targetObject == startBTObject;
+
+        if (!isStartObject) targetObject.transform.localScale = Vector3.one * buttonScaling;
 
         VisualEffect vfx = targetObject.GetComponentInChildren<VisualEffect>(true);
         if (vfx != null)
         {
             bool isSelectedLanguage = languageByObject.TryGetValue(targetObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase);
-            bool isStartObject = targetObject == startBTObject;
             float progression = isSelectedLanguage ? 1f : 0f;
             vfx.SetFloat("Progression", progression);
             if (!isStartObject)
@@ -791,6 +814,8 @@ public class GameMenu : MonoBehaviour
             languageByObject.TryGetValue(langObject, out string language))
         {
             OnLanguageClicked(language);
+            Debug.Log("Language selected: " + language, this);
+            selectedObject = langObject;
         }
     }
 

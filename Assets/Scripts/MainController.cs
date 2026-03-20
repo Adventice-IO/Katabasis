@@ -666,7 +666,7 @@ public class MainController : MonoBehaviour
             visitedSalles.Add(targetSalle);
         }
         ResetPosition();
-        if (salle.isExit)
+        if (salle.isExit && !editMode)
         {
             gameState = GameState.Outro;
         }
