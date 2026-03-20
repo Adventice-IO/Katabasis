@@ -1,0 +1,48 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "172",
+  "SoundBanks": [
+   {
+    "Id": "266044713",
+    "Type": "Bus",
+    "GUID": "{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}",
+    "Language": "SFX",
+    "Hash": "{5A3EBC80-B075-A5BB-6AF6-DB959EBDAF06}",
+    "ObjectPath": "REV_Long",
+    "ShortName": "REV_Long",
+    "Path": "Bus/REV_Long.bnk",
+    "Plugins": {
+     "ShareSets": [
+      {
+       "Id": "2513915904",
+       "Name": "Hall_Large",
+       "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Halls\\Hall_Large",
+       "GUID": "{6D154498-FF6D-4823-96FC-56841B70E079}",
+       "LibName": "Wwise RoomVerb",
+       "LibId": "7733251"
+      }
+     ]
+    },
+    "AuxBusses": [
+     {
+      "Id": "266044713",
+      "Name": "REV_Long",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Long",
+      "GUID": "{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}",
+      "PluginRefs": {
+       "ShareSets": [
+        {
+         "Id": "2513915904"
+        }
+       ]
+      }
+     }
+    ]
+   }
+  ],
+  "FileHash": "{B01C2F40-B959-4C40-7EF4-C2BF7B027F0E}"
+ }
+}
