@@ -17,7 +17,6 @@ using UnityEditor;
 [ExecuteAlways] // This makes the script run even when NOT in Play mode
 public class MainController : MonoBehaviour
 {
-    public static MainController instance;
     [Header("Setup")]
     public Salle initialSalle;
 
@@ -150,14 +149,6 @@ public class MainController : MonoBehaviour
 #if UNITY_EDITOR
     private void OnEnable()
     {
-        if (instance != null && instance != this)
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-        instance = this;
-
-        allTunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
 
         if (!Application.isPlaying)
         {
@@ -344,6 +335,10 @@ public class MainController : MonoBehaviour
 
     private void Update()
     {
+        if (allTunnels == null)
+        {
+            allTunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
+        }
 
         Camera.main.farClipPlane = getAverageVisionZoneMaxDistance();
 
@@ -398,11 +393,12 @@ public class MainController : MonoBehaviour
                 KataTransformer[] kataTransformers = FindObjectsByType<KataTransformer>(FindObjectsSortMode.None);
                 foreach (var kt in kataTransformers)
                 {
-                    kt.updateActive();
+                    if (kt != null) kt.updateActive();
                 }
 
 
             }
+
 
             if (spawnAction.action != null)
             {
@@ -410,13 +406,13 @@ public class MainController : MonoBehaviour
                 if (pressed != spawningMode)
                 {
                     spawningMode = pressed;
-                    if (spawningMode) timeAtSpawnMode = (float)EditorApplication.timeSinceStartup;
+                    if (spawningMode) timeAtSpawnMode = (float)Time.time;
                     else
                     {
                         if (!removedInSpawnMode)
                         {
                             Debug.Log("Adding knot at end of spawn mode");
-                            float duration = (float)(EditorApplication.timeSinceStartup - timeAtSpawnMode);
+                            float duration = (float)(Time.time - timeAtSpawnMode);
                             if (duration < .3f)
                             {
                                 Tunnel tTunnel = tunnel;
@@ -610,6 +606,7 @@ public class MainController : MonoBehaviour
     {
         visitedSalles.Clear();
         gameState = GameState.Menu;
+        if (salle != null) salle.setActive(false);
         salle = null;
         pointCloudViewDistanceMultiplier = 0f;
     }
@@ -618,7 +615,7 @@ public class MainController : MonoBehaviour
     {
         if (Application.isPlaying)
         {
-            InterviewManager manager = InterviewManager.instance != null ? InterviewManager.instance : FindAnyObjectByType<InterviewManager>();
+            InterviewManager manager = FindAnyObjectByType<InterviewManager>();
             if (manager != null)
             {
                 manager.RefreshAssignmentsForSalle(targetSalle);
@@ -632,6 +629,7 @@ public class MainController : MonoBehaviour
             if (tunnel.salleArrivee == targetSalle)
             {
                 this.tunnel = tunnel;
+                if (salle != null) salle.setActive(false);
                 salle = null;
                 splineContainer = null; //force re-cache
                 isReversed = false;
@@ -643,6 +641,7 @@ public class MainController : MonoBehaviour
             {
 
                 this.tunnel = tunnel;
+                if (salle != null) salle.setActive(false);
                 salle = null;
                 splineContainer = null; //force re-cache
                 isReversed = true;
@@ -659,6 +658,7 @@ public class MainController : MonoBehaviour
         freeMotion = true;
         comingFromTunnel = tunnel;
         tunnel = null;
+        if (salle != null) salle.setActive(false);
         salle = targetSalle;
         timeAtArrived = Time.time;
         if (!visitedSalles.Contains(targetSalle))
@@ -673,20 +673,31 @@ public class MainController : MonoBehaviour
 
         if (Application.isPlaying && assignInterviews)
         {
-            InterviewManager manager = InterviewManager.instance != null ? InterviewManager.instance : FindAnyObjectByType<InterviewManager>();
+            InterviewManager manager = FindAnyObjectByType<InterviewManager>();
             if (manager != null)
             {
                 manager.RefreshAssignmentsForSalle(salle);
             }
         }
+
+        if (salle != null) salle.setActive(true);
     }
 
     public List<Tunnel> getAllOutTunnels()
     {
         if (!isInASalle()) return new List<Tunnel>();
         List<Tunnel> outTunnels = new List<Tunnel>();
+        if (allTunnels == null)
+        {
+            allTunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
+        }
         foreach (Tunnel tunnel in allTunnels)
         {
+            if (tunnel == null)
+            {
+                continue;
+            }
+
             if (tunnel.salleDepart == salle)
             {
                 outTunnels.Add(tunnel);
@@ -742,6 +753,7 @@ public class MainController : MonoBehaviour
     {
         if (isInASalle())
         {
+            if (salle.origin == null) return;
             transform.position = salle.origin.position;
             timeAtArrived = Time.time;
 
@@ -849,7 +861,7 @@ public class MainController : MonoBehaviour
             weightedMaxDistance += weight * zone.maxDistance;
         }
 
-        if(totalWeight == 0f)
+        if (totalWeight == 0f)
         {
             return defaultCamMaxDistance;
         }

@@ -50,7 +50,11 @@ public class KatabasisMeshConfiguration : MeshConfiguration
 
     public void Update()
     {
-       
+       if(masks == null || _boxes == null || _maskBuffer == null)
+        {
+            return;
+        }
+
         if (displayLOD)
         {
             foreach (PointCloudBlock go in gameObjectCollection)

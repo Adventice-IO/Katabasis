@@ -35,7 +35,11 @@ public class GroundFinder : MonoBehaviour
         }
         else
         {
+#if UNITY_EDITOR
             return meshConfig.transform.GetComponentInChildren<MultiPreview>().getPreviewRoot();
+#else
+            return meshConfig.root;
+#endif
         }
 
     }

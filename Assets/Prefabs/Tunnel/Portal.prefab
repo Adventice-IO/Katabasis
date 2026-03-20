@@ -142,7 +142,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.46240002, y: 0.46240005, z: 0.46240002}
+  m_LocalScale: {x: 0.46240005, y: 0.46240014, z: 0.4623993}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7938289205382562167}
@@ -1105,7 +1105,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7938289205382562167
 Transform:
   m_ObjectHideFlags: 0
@@ -1146,6 +1146,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2761450627926467382, guid: eb7faa01184ffbc4aa72a649be79ed3d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3460013760001878450, guid: eb7faa01184ffbc4aa72a649be79ed3d, type: 3}
       propertyPath: extraEditObject
       value: 
@@ -1197,6 +1201,14 @@ PrefabInstance:
     - target: {fileID: 6295223440294623699, guid: eb7faa01184ffbc4aa72a649be79ed3d, type: 3}
       propertyPath: m_Name
       value: Portal
+      objectReference: {fileID: 0}
+    - target: {fileID: 7986210930112882848, guid: eb7faa01184ffbc4aa72a649be79ed3d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8475201463271472706, guid: eb7faa01184ffbc4aa72a649be79ed3d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

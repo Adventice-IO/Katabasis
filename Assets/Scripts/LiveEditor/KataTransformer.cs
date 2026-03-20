@@ -20,7 +20,7 @@ public class KataTransformer : MonoBehaviour
 
     public Transform extraSaveTransform;
 
-    public GameObject extraEditObject; 
+    public GameObject extraEditObject;
 
     public bool forceDisabled = false;
 
@@ -52,7 +52,11 @@ public class KataTransformer : MonoBehaviour
         snap = transform.Find("Snap");
         snapRenderers = snap.GetComponentsInChildren<Renderer>();
 
-        mainController = MainController.instance;
+
+        baseT?.gameObject.SetActive(false);
+        up?.gameObject.SetActive(false);
+        snap?.gameObject.SetActive(false);
+
     }
 
     private void OnDisable()
@@ -60,10 +64,16 @@ public class KataTransformer : MonoBehaviour
 
     }
 
+    void Start()
+    {
+        mainController = GameObject.FindAnyObjectByType<MainController>();
+        updateActive();
+    }
+
     void Update()
     {
 
-
+#if UNITY_EDITOR
         if (manipState != lastManipState)
         {
             lastManipState = manipState;
@@ -102,38 +112,45 @@ public class KataTransformer : MonoBehaviour
         }
 
         updateActive();
+#endif
 
     }
 
 
     public void updateActive()
     {
+#if UNITY_EDITOR
         if (!Application.isPlaying)
         {
             baseT.gameObject.SetActive(true);
             up.gameObject.SetActive(true);
             snap.gameObject.SetActive(true);
-            if(extraEditObject != null)
+            if (extraEditObject != null)
             {
                 extraEditObject.SetActive(true);
             }
             return;
         }
 
+#endif
+        Collider collider = GetComponent<Collider>();
 
-
-        bool editMode = MainController.instance.editMode;
+#if UNITY_EDITOR
+        bool editMode = mainController.editMode;
         bool finalActive = editMode && !forceDisabled;
+
         baseT.gameObject.SetActive(finalActive);
         up.gameObject.SetActive(finalActive);
         snap.gameObject.SetActive(finalActive);
-        if(extraEditObject != null)
+        if (extraEditObject != null)
         {
             extraEditObject.SetActive(finalActive);
         }
 
-        Collider collider = GetComponent<Collider>();
         if (collider != null) collider.enabled = finalActive;
+#else
+         if(collider != null) collider.enabled = true;
+#endif
     }
     public bool isMoving()
     {
@@ -190,7 +207,7 @@ public class KataTransformer : MonoBehaviour
             Debug.Log("Found batch persister on game object " + batchPersister.gameObject.name + ", staging change.");
             batchPersister.StageChange(transform);
 
-            if(extraSaveTransform != null)
+            if (extraSaveTransform != null)
             {
                 batchPersister.StageChange(extraSaveTransform);
             }

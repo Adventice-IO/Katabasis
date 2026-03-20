@@ -4,11 +4,15 @@ using BAPointCloudRenderer.Loading;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEngine;
+
+using UnityEngine.SceneManagement;
+
+#if UNITY_EDITOR
+using UnityEngine.Rendering;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Rendering;
+#endif
 
 namespace BAPointCloudRenderer.CloudController
 {
@@ -36,6 +40,7 @@ namespace BAPointCloudRenderer.CloudController
         private bool _createMesh = false;
         private Thread loadingThread = null;
 
+#if UNITY_EDITOR
         /// <summary>
         /// PointCloudSet for which to create the preview
         /// </summary>
@@ -65,6 +70,7 @@ namespace BAPointCloudRenderer.CloudController
         private GameObject _previewRoot;
         private Scene previewScene;
 
+#if UNITY_EDITOR
         public void OnEnable()
         {
             //Check when exiting edit mode to unload the preview scene, so we don't keep it around accidentally with all the preview objects when entering play mode
@@ -87,6 +93,7 @@ namespace BAPointCloudRenderer.CloudController
                 }
             }
         }
+#endif
 
         public void Start()
         {
@@ -115,7 +122,7 @@ namespace BAPointCloudRenderer.CloudController
             // else
             // {
 
-            if(!Application.isPlaying)
+            if (!Application.isPlaying)
             {
                 previewScene = EnsurePreviewSceneLoaded();
             }
@@ -663,5 +670,6 @@ namespace BAPointCloudRenderer.CloudController
 
             return null;
         }
+#endif 
     }
 }

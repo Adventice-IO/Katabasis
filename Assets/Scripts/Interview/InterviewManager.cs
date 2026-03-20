@@ -7,8 +7,6 @@ using UnityEngine;
 [ExecuteAlways]
 public class InterviewManager : MonoBehaviour
 {
-    public static InterviewManager instance;
-
     [Serializable]
     public struct RoomPersonAssignment
     {
@@ -37,6 +35,8 @@ public class InterviewManager : MonoBehaviour
         public string depthkitPath;
         public int level;
         public int note;
+        public Vector3 offset;
+        public float angle;
     }
 
     public struct PersonInterviewStats
@@ -64,29 +64,21 @@ public class InterviewManager : MonoBehaviour
     [Range(0f, 1f)]
     public float simulatedCuriosity = 0.5f;
 
-    void OnEnable()
-    {
-        instance = this;
-        RefreshAssignmentsForCurrentSalle();
-    }
+    MainController mainController;
 
-    void OnDisable()
-    {
-        if (instance == this)
-        {
-            instance = null;
-        }
-    }
+    DataManager dataManager;
 
     void Start()
     {
+        dataManager = GameObject.FindAnyObjectByType<DataManager>();
+        mainController = GameObject.FindAnyObjectByType<MainController>();
+        assignmentRandom = new System.Random(Environment.TickCount);
         LoadInterviewData();
     }
-    
+
     void Update()
     {
-        MainController controller = MainController.instance;
-        Salle currentSalle = controller != null ? controller.salle : null;
+        Salle currentSalle = mainController != null ? mainController.salle : null;
         if (currentSalle != lastAssignedSalle)
         {
             consumedSlots.Clear();
@@ -271,7 +263,7 @@ public class InterviewManager : MonoBehaviour
 
         ApplyAssignmentsToScene(roomAssignments);
         lastAssignedSalle = salle;
-        //logAssignments();
+        logAssignments();
     }
 
     void ApplyAssignmentsToScene(List<RoomPersonAssignment> assignments)
@@ -296,7 +288,7 @@ public class InterviewManager : MonoBehaviour
             if (selectedInterview.HasValue && !string.IsNullOrWhiteSpace(selectedInterview.Value.depthkitPath))
             {
                 assignment.interviewSlot.ResetForPreviewAssignment();
-                assignment.interviewSlot.set(selectedInterview.Value.depthkitPath, selectedInterview.Value.level, selectedInterview.Value.mediaPath);
+                if (selectedInterview.HasValue) assignment.interviewSlot.set(selectedInterview.Value);
                 assignment.interviewSlot.load();
                 activeAssignmentsBySlot[assignment.interviewSlot] = assignment;
             }
@@ -355,8 +347,7 @@ public class InterviewManager : MonoBehaviour
 
     public InterviewData[] GetInterviewsToPlayForPerson(string person)
     {
-        MainController controller = MainController.instance;
-        int? salleLevel = controller != null && controller.salle != null ? controller.salle.niveau : null;
+        int? salleLevel = mainController != null && mainController.salle != null ? mainController.salle.niveau : null;
         return GetInterviewsToPlayForPerson(person, salleLevel, playedPersonsSinceAssignment, playedThemesHistory);
     }
 
@@ -540,31 +531,22 @@ public class InterviewManager : MonoBehaviour
         interviewDataList.Clear();
         personStatsList.Clear();
 
-        if (!DataManager.IsFolderReady(DataManager.DataFolder.Interviews))
-        {
-            DataManager.PreloadFolder(DataManager.DataFolder.Interviews, (success, path) =>
-            {
-                if (success)
-                {
-                    LoadInterviewData();
-                    RefreshAssignmentsForCurrentSalle();
-                }
-            });
-            return;
-        }
 
-        string csvPath = DataManager.GetRootFilePath("interviews.csv");
+        string csvPath = dataManager.GetRootFilePath("interviews/interviews.csv");
         if (!File.Exists(csvPath))
         {
             Debug.LogWarning("Interview CSV not found at " + csvPath);
             return;
         }
 
+        Debug.Log("Loading interview data from " + csvPath);
+
         string[] lines = File.ReadAllLines(csvPath);
         if (lines.Length <= 1)
         {
             return;
         }
+
 
         for (int i = 1; i < lines.Length; i++)
         {
@@ -580,6 +562,11 @@ public class InterviewManager : MonoBehaviour
                 continue;
             }
 
+            List<string> offsets = SplitMultiValueField(GetField(fields, 6));
+            Vector3 offset = new Vector3(float.Parse(offsets[0]), 0, float.Parse(offsets[1]));
+            float angleOffset = float.Parse(offsets[2]);
+
+
             InterviewData data = new InterviewData
             {
                 filename = GetField(fields, 0),
@@ -589,15 +576,16 @@ public class InterviewManager : MonoBehaviour
                 person = GetField(fields, 4),
                 themes = SplitMultiValueField(GetField(fields, 5)),
                 levels = ParseLevels(GetField(fields, 2)),
+                offset = offset,
+                angle = angleOffset,
+
                 visited = false,
                 proposed = false
             };
 
-            data.mediaPath = CombineInterviewFolder(data.person, data.filename);
-            data.depthkitPath = CombineInterviewFolder(data.person, data.depthkitId);
+            data.mediaPath = CombineInterviewFolder(data.person.Replace(" ", "_"), data.filename);
+            data.depthkitPath = CombineInterviewFolder(data.person.Replace(" ", "_"), data.depthkitId);
 
-            string personFolder = CombineInterviewFolder(data.person, data.person);
-            data.depthkitPath = personFolder;
 
             data.isIntro = data.themes.Any(t => string.Equals(t, "Intro", StringComparison.OrdinalIgnoreCase));
             if (data.levels.Count == 0)
@@ -642,6 +630,8 @@ public class InterviewManager : MonoBehaviour
 
             personStatsList.Add(stats);
         }
+
+        Debug.Log("Rebuilt person stats for " + personStatsList.Count + " people.");
     }
 
     List<InterviewData> GetPlayableCandidates(string person, List<InterviewData> interviews)
@@ -1189,7 +1179,7 @@ public class InterviewManager : MonoBehaviour
 
     void logAssignments()
     {
-        Debug.Log("Current Room Person Assignments:");
+        Debug.Log("Current Room Person Assignments (Salle " + (mainController.salle != null ? mainController.salle.name : "None") + ")");
         for (int i = 0; i < roomAssignments.Count; i++)
         {
             var assignment = roomAssignments[i];
@@ -1206,8 +1196,8 @@ public class InterviewManager : MonoBehaviour
             assignmentRandom = new System.Random(Environment.TickCount);
         }
 
-        MainController controller = MainController.instance;
-        Salle currentSalle = controller != null ? controller.salle : null;
+
+        Salle currentSalle = mainController.salle;
         RefreshAssignmentsForSalle(currentSalle);
     }
 
@@ -1225,6 +1215,7 @@ public class InterviewManager : MonoBehaviour
         {
             return assignments;
         }
+        Debug.Log("Build assignments for salle " + currentSalle.name + " with " + slots.Length + " slots, stats list : " + (personStatsList.Count > 0 ? personStatsList[0].person : "None"));
 
         int salleLevel = currentSalle.niveau;
         List<string> candidatePersons = personStatsList

@@ -22,31 +22,42 @@ public class Salle : MonoBehaviour
     [Header("Audio Settings")]
     public AudioStateRefSO audioSO;
 
+    public Interview[] interviews;
 
-    void Awake()
-    {
-
-
-        origin = transform.Find("Origin");
-    }
-
-    private void OnEnable()
+    private void Start()
     {
         origin = transform.Find("Origin");
+        interviews = GetComponentsInChildren<Interview>(true);
         foreach (var i in interviews)
         {
             i.OnInterviewEnded += onInterviewEnd;
         }
     }
 
+
+    public void setActive(bool active)
+    {
+        if (!active)
+        {
+            foreach (var i in interviews)
+            {
+                i.cleanup();
+            }
+        }
+        else
+        {
+            interviews.ToList().ForEach(itw => itw.gameObject.SetActive(true));
+
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
-        GetComponentsInChildren<Interview>().ToList().ForEach(itw =>
+        interviews.ToList().ForEach(itw =>
         {
             Vector3 lookAt = origin.position;
             lookAt.y = itw.transform.position.y;
-            itw.transform.localRotation = Quaternion.Euler(0, 90, 0);
             itw.transform.parent.LookAt(lookAt, Vector3.up);
         });
     }
@@ -88,6 +99,4 @@ public class Salle : MonoBehaviour
             }
         }
     }
-
-    public Interview[] interviews { get { return GetComponentsInChildren<Interview>(); } }
 }

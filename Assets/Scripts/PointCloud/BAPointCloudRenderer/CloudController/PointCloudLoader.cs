@@ -41,6 +41,7 @@ namespace BAPointCloudRenderer.CloudController
         bool waitingForPotreeData;
         string resolvedCloudPath;
 
+        DataManager dataManager;
         private void Awake()
         {
 
@@ -48,6 +49,8 @@ namespace BAPointCloudRenderer.CloudController
 
         void Start()
         {
+            dataManager = GameObject.FindAnyObjectByType<DataManager>();
+
             if (Application.isPlaying)
             {
                 if (loadOnStart)
@@ -95,12 +98,12 @@ namespace BAPointCloudRenderer.CloudController
         {
             if (rootNode == null && setController != null && cloudPath != null)
             {
-                if (streamingAssetsAsRoot && !DataManager.IsFolderReady(DataManager.DataFolder.Potree))
+                if (streamingAssetsAsRoot && !dataManager.IsFolderReady(DataManager.DataFolder.Potree))
                 {
                     if (!waitingForPotreeData)
                     {
                         waitingForPotreeData = true;
-                        DataManager.PreloadFolder(DataManager.DataFolder.Potree, (success, path) =>
+                        dataManager.PreloadFolder(DataManager.DataFolder.Potree, (success, path) =>
                         {
                             waitingForPotreeData = false;
                             if (success)
@@ -130,7 +133,7 @@ namespace BAPointCloudRenderer.CloudController
             string normalizedPath = (cloudPath ?? string.Empty).Replace("\\", "/").Trim('/');
             if (string.IsNullOrWhiteSpace(normalizedPath))
             {
-                return DataManager.GetBasePath(DataManager.DataFolder.Potree);
+                return dataManager.GetBasePath(DataManager.DataFolder.Potree);
             }
 
             if (Uri.IsWellFormedUriString(normalizedPath, UriKind.Absolute) || Path.IsPathRooted(normalizedPath))
@@ -140,7 +143,7 @@ namespace BAPointCloudRenderer.CloudController
 
             if (string.Equals(normalizedPath, "potree", StringComparison.OrdinalIgnoreCase))
             {
-                return DataManager.GetBasePath(DataManager.DataFolder.Potree);
+                return dataManager.GetBasePath(DataManager.DataFolder.Potree);
             }
 
             if (normalizedPath.StartsWith("potree/", StringComparison.OrdinalIgnoreCase))
@@ -148,7 +151,7 @@ namespace BAPointCloudRenderer.CloudController
                 normalizedPath = normalizedPath.Substring("potree/".Length);
             }
 
-            return DataManager.GetFolderPath(DataManager.DataFolder.Potree, normalizedPath);
+            return dataManager.GetFolderPath(DataManager.DataFolder.Potree, normalizedPath);
         }
 
         /// <summary>

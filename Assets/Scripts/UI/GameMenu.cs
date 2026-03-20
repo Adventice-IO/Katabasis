@@ -44,9 +44,11 @@ public class GameMenu : MonoBehaviour
     public bool lookAtCamera = true;
     public bool liveUpdateLayout = true;
 
+    DataManager dataManager;
     void OnEnable()
     {
-        mainController = MainController.instance != null ? MainController.instance : FindAnyObjectByType<MainController>();
+        mainController = GameObject.FindAnyObjectByType<MainController>();
+        dataManager = GameObject.FindAnyObjectByType<DataManager>();
         CacheReferences();
     }
 
@@ -137,8 +139,6 @@ public class GameMenu : MonoBehaviour
         }
 
         isActive = active;
-        mainController = MainController.instance != null ? MainController.instance : FindAnyObjectByType<MainController>();
-
         CacheReferences();
 
         Collider collider = GetComponent<Collider>();
@@ -158,12 +158,12 @@ public class GameMenu : MonoBehaviour
         EnsureInitialized();
         PositionInFrontOfCamera();
 
-        if (!DataManager.IsFolderReady(DataManager.DataFolder.Menu))
+        if (!dataManager.IsFolderReady(DataManager.DataFolder.Menu))
         {
             if (!waitingForMenuData)
             {
                 waitingForMenuData = true;
-                DataManager.PreloadFolder(DataManager.DataFolder.Menu, (success, path) =>
+                dataManager.PreloadFolder(DataManager.DataFolder.Menu, (success, path) =>
                 {
                     waitingForMenuData = false;
                     if (success && isActive)
@@ -818,7 +818,7 @@ public class GameMenu : MonoBehaviour
     {
         localeEntries.Clear();
 
-        string localePath = DataManager.GetFilePath(DataManager.DataFolder.Menu, "locale.json");
+        string localePath = dataManager.GetFilePath(DataManager.DataFolder.Menu, "locale.json");
         if (string.IsNullOrWhiteSpace(localePath) || !File.Exists(localePath))
         {
             return;

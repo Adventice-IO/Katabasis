@@ -22,8 +22,12 @@ public class GameIntro : MonoBehaviour
     bool introFinished = false;
     bool waitingForCartons;
 
+    MainController mainController;
+    DataManager dataManager;
     void Start()
     {
+        mainController = GameObject.FindAnyObjectByType<MainController>();
+        dataManager = GameObject.FindAnyObjectByType<DataManager>();
         LoadCartons();
     }
 
@@ -82,12 +86,12 @@ public class GameIntro : MonoBehaviour
 
     void LoadCartons()
     {
-        if (!DataManager.IsFolderReady(DataManager.DataFolder.Intro))
+        if (!dataManager.IsFolderReady(DataManager.DataFolder.Intro))
         {
             if (!waitingForCartons)
             {
                 waitingForCartons = true;
-                DataManager.PreloadFolder(DataManager.DataFolder.Intro, (success, path) =>
+                dataManager.PreloadFolder(DataManager.DataFolder.Intro, (success, path) =>
                 {
                     waitingForCartons = false;
                     if (success)
@@ -112,7 +116,7 @@ public class GameIntro : MonoBehaviour
 
         cartons.Clear();
 
-        string introPath = DataManager.GetBasePath(DataManager.DataFolder.Intro);
+        string introPath = dataManager.GetBasePath(DataManager.DataFolder.Intro);
         if (!Directory.Exists(introPath))
         {
             return;
@@ -259,6 +263,6 @@ public class GameIntro : MonoBehaviour
 
         introFinished = true;
         isActive = false;
-        MainController.instance.gameState = MainController.GameState.Playing;
+        mainController.gameState = MainController.GameState.Playing;
     }
 }
