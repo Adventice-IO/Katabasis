@@ -1,8 +1,13 @@
 using UnityEngine;
-using UnityEditor;
 using System.Collections.Generic;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+#if UNITY_EDITOR
 [InitializeOnLoad]
+#endif
 public class VRBatchPersister : MonoBehaviour
 {
     struct StagedChange
@@ -18,7 +23,9 @@ public class VRBatchPersister : MonoBehaviour
 
     static VRBatchPersister()
     {
+#if UNITY_EDITOR
         EditorApplication.playModeStateChanged += OnStateChanged;
+#endif
     }
 
     [Header("Configuration")]
@@ -55,6 +62,7 @@ public class VRBatchPersister : MonoBehaviour
         Debug.Log($"<color=yellow>[{assetPath}] Staged:</color> {path} (Buffer count: {buffer.Count})");
     }
 
+#if UNITY_EDITOR
     private static void OnStateChanged(PlayModeStateChange state)
     {
         if (state == PlayModeStateChange.EnteredEditMode && _stagedByPrefab.Count > 0)
@@ -122,6 +130,7 @@ public class VRBatchPersister : MonoBehaviour
 
         _stagedByPrefab.Clear();
     }
+#endif
 
     private string GetPrefabAssetPath()
     {

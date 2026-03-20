@@ -2,25 +2,20 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using UnityEditor.Splines;
-using UnityEditor;
 using System.Linq;
 using System;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.UIElements;
-using Framework.Utils.Editor;
-
-
-
 #if UNITY_EDITOR
-using UnityEditor.EditorTools; // Required for ToolManager
+using UnityEditor;
+using Framework.Utils.Editor;
+using UnityEditor.Splines;
 using UnityEditor.Splines.Editor;    // Required for SplineTool
 #endif
 
 [RequireComponent(typeof(SplineContainer))]
 [ExecuteAlways]
-[CanEditMultipleObjects]
 public class Tunnel : MonoBehaviour
 {
     [Header("General Settings")]
@@ -101,20 +96,18 @@ public class Tunnel : MonoBehaviour
 
         checkpointContainer = GetComponent<CheckpointContainer>();
         lineRenderer = GetComponentInChildren<LineRenderer>();
-        UpdateLineRenderer();
-        updateHandles();
-        updateSpeedCheckpoints();
 
-        mainController = MainController.instance;
+
     }
 
     private void OnEnable()
     {
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
         if (checkpointContainer == null) checkpointContainer = GetComponent<CheckpointContainer>();
+
+#if UNITY_EDITOR
         Spline.Changed += OnSplineChanged;
-        UpdateLineRenderer();
-        // updateHandles();
+#endif
 
         portal = transform.Find("Portal")?.GetComponentInChildren<KataPortal>();
         portalReverse = transform.Find("Portal Retour")?.GetComponentInChildren<KataPortal>();
@@ -139,6 +132,7 @@ public class Tunnel : MonoBehaviour
 
     }
 
+#if UNITY_EDITOR
     private void OnDisable()
     {
         Spline.Changed -= OnSplineChanged;
@@ -162,6 +156,24 @@ public class Tunnel : MonoBehaviour
         //recalculate lineRenderer
 
 
+    }
+#endif
+
+    private void Start()
+    {
+        mainController = GameObject.FindAnyObjectByType<MainController>();
+
+
+#if UNITY_EDITOR
+        UpdateLineRenderer();
+        updateHandles();
+        updateSpeedCheckpoints();
+#else
+      if (lineRenderer != null)
+        {
+            lineRenderer.enabled = false; // Disable line renderer in play mode; it's only for editing visualization
+        }
+#endif
     }
 
     void Update()
@@ -210,7 +222,7 @@ public class Tunnel : MonoBehaviour
         if (gameObject.name != n)
             gameObject.name = n;
 
-        if (Application.isPlaying) lineRenderer.material.color = MainController.instance.isInTunnel(this) ? Color.yellow : Color.white;
+        if (Application.isPlaying) lineRenderer.material.color = mainController.isInTunnel(this) ? Color.yellow : Color.white;
 
 
         if (portal != null && salleDepart != null)
@@ -236,7 +248,7 @@ public class Tunnel : MonoBehaviour
     public float getDesiredSpeedAtPosition(float t, bool reverse)
     {
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
-        if (splineContainer == null || splineContainer.Spline == null) return MainController.instance.baseSpeed;
+        if (splineContainer == null || splineContainer.Spline == null) return mainController.baseSpeed;
 
 
         Tuple<SpeedCheckpoint, SpeedCheckpoint> checkpoints = getSpeedCheckpointsAtPosition(t, reverse);
@@ -245,7 +257,7 @@ public class Tunnel : MonoBehaviour
         {
             bool isNearEnd = reverse ? t < 0.2f : t > 0.8f;
 
-            return isNearEnd ? 0.001f : MainController.instance.baseSpeed;
+            return isNearEnd ? 0.001f : mainController.baseSpeed;
         }
 
 
@@ -277,7 +289,7 @@ public class Tunnel : MonoBehaviour
         if (segmentLength > 0.0001f)
         {
             float tSegment = (t - initPos) / segmentLength;
-            float tSpeed = initSpeed + Mathf.Lerp(initSpeed, targetSpeed, tSegment);//MainController.instance.speedCurve.Evaluate(tSegment));
+            float tSpeed = initSpeed + Mathf.Lerp(initSpeed, targetSpeed, tSegment);//mainController.speedCurve.Evaluate(tSegment));
             return Math.Max(tSpeed, 0.01f);
         }
 
@@ -340,6 +352,7 @@ public class Tunnel : MonoBehaviour
 
     public void AddKnotAtPosition(Vector3 position, bool forceOnCurve = false)
     {
+#if UNITY_EDITOR
         Debug.Log("Adding knot at position " + position + " (forceOnCurve=" + forceOnCurve + ")");
         float3 localProj = splineContainer.transform.InverseTransformPoint(position);
         SplineUtility.GetNearestPoint(spline, localProj, out float3 nearestLocal, out float refinedT);
@@ -396,9 +409,7 @@ public class Tunnel : MonoBehaviour
 
         var newKnot = new BezierKnot(targetLocalPos, tanIn, tanOut);
 
-#if UNITY_EDITOR
         Undo.RecordObject(splineContainer, "Add Spline Knot");
-#endif
 
         if (Application.isPlaying)
         {
@@ -424,7 +435,6 @@ public class Tunnel : MonoBehaviour
 
         // updateHandles();
 
-#if UNITY_EDITOR
         EditorUtility.SetDirty(splineContainer);
 #endif
 
@@ -433,6 +443,8 @@ public class Tunnel : MonoBehaviour
 
     public void UpdateLineRenderer()
     {
+
+#if UNITY_EDITOR
         if (lineRenderer == null)
         {
             lineRenderer = GetComponent<LineRenderer>();
@@ -448,6 +460,10 @@ public class Tunnel : MonoBehaviour
                 lineRenderer.endColor = Color.white;
             }
         }
+
+        lineRenderer.enabled = !Application.isPlaying || (mainController?.editMode == true);
+
+        if(Application.isPlaying && !mainController.editMode) return;
 
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
         if (splineContainer == null || splineContainer.Spline == null) return;
@@ -469,7 +485,7 @@ public class Tunnel : MonoBehaviour
 
         if (Application.isPlaying)
         {
-            if (MainController.instance.editMode)
+            if (mainController.editMode)
             {
                 lineRenderer.enabled = true;
                 lineRenderer.material.SetFloat("_Width", lineRenderer.startWidth * lineRenderer.widthMultiplier);
@@ -480,11 +496,13 @@ public class Tunnel : MonoBehaviour
                 lineRenderer.enabled = false;
             }
         }
+#endif
     }
 
 
     public void updateHandles()
     {
+#if UNITY_EDITOR
         if (!Application.isPlaying) return;
 
         //Debug.Log($"{gameObject.name} Updating handles for spline with " + spline.Count + " knots");
@@ -507,7 +525,7 @@ public class Tunnel : MonoBehaviour
         }
         handles.Clear();
 
-        if (!MainController.instance.editMode) return;
+        if (!mainController.editMode) return;
 
         //Debug.Log("Cleared existing handles, spawning new ones for each knot (except endpoints)");
 
@@ -529,9 +547,7 @@ public class Tunnel : MonoBehaviour
             handle.knotIndex = i;
             handle.splineContainer = splineContainer;
         }
-
-
-
+#endif
     }
 
     public float getClosestTrackPosition(Vector3 position)
@@ -577,21 +593,24 @@ public class Tunnel : MonoBehaviour
         checkpointContainer.speedCheckpoints = checkpointContainer.speedCheckpoints.OrderBy(c => c.pos).ToList();
 
         updateSpeedCheckpoints();
+#if UNITY_EDITOR
         UnityPlayModeSaver.SaveComponent(checkpointContainer);
-
+#endif
         return checkpoint;
     }
 
     public void RemoveSpeedCheckpoint(SpeedCheckpoint checkpoint)
     {
         checkpointContainer.speedCheckpoints.Remove(checkpoint);
+#if UNITY_EDITOR
         UnityPlayModeSaver.SaveComponent(checkpointContainer);
+#endif
         updateSpeedCheckpoints();
     }
 
     public void updateSpeedCheckpoints()
     {
-
+#if UNITY_EDITOR
 
         if (!Application.isPlaying) return;
 
@@ -616,7 +635,7 @@ public class Tunnel : MonoBehaviour
 
         checkpointHandles.Clear();
 
-        if (!MainController.instance.editMode) return;
+        if (!mainController.editMode) return;
 
 
         foreach (var checkpoint in checkpointContainer.speedCheckpoints)
@@ -633,6 +652,7 @@ public class Tunnel : MonoBehaviour
             handle.init();
             checkpointHandles.Add(handle);
         }
+#endif
     }
 
 
@@ -683,7 +703,7 @@ public class Tunnel : MonoBehaviour
 
         if (mainController == null)
         {
-            mainController = MainController.instance;
+            mainController = mainController;
             if (mainController == null)
             {
                 Debug.LogWarning("Tunnel: MainController instance not found, cannot compute heatmap.");
@@ -712,7 +732,7 @@ public class Tunnel : MonoBehaviour
     public float getNextSpeedCheckpointPosition(float trackPosition, bool isReversed)
     {
         SpeedCheckpoint checkpoint = checkpointContainer.speedCheckpoints.OrderBy(c => c.pos).FirstOrDefault(c => isReversed ? c.pos < trackPosition : c.pos > trackPosition);
-        if(checkpoint != null)
+        if (checkpoint != null)
         {
             return checkpoint.pos;
         }

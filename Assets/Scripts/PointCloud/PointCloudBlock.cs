@@ -18,6 +18,8 @@ public class PointCloudBlock : MonoBehaviour
     GraphicsBuffer masksBuffer;
     int masksCount = 0;
 
+    MainController mainController;
+
     public void init(PointCloudProfile profile)
     {
         this.profile = profile;
@@ -25,6 +27,7 @@ public class PointCloudBlock : MonoBehaviour
 
     void Start()
     {
+        mainController = GameObject.FindAnyObjectByType<MainController>();
         block = new MaterialPropertyBlock();
         render = GetComponent<Renderer>();
         timeAtStart = Time.time;
@@ -52,7 +55,7 @@ public class PointCloudBlock : MonoBehaviour
         block.SetFloat("_Reveal", reveal);
         block.SetFloat("_Alpha", profile._Alpha);
 
-        float maxDistance = (profile.linkMaxDistanceToCamera ? Camera.main.farClipPlane : profile._MaxDistance) * MainController.instance.pointCloudViewDistanceMultiplier;
+        float maxDistance = (profile.linkMaxDistanceToCamera ? Camera.main.farClipPlane : profile._MaxDistance) * mainController.pointCloudViewDistanceMultiplier;
         block.SetFloat("_MaxDistance", maxDistance);
         block.SetFloat("_DistFade", profile._DistanceFade * maxDistance);
         block.SetFloat("_NoiseAmplitude", profile._NoiseAmplitude);

@@ -1,9 +1,12 @@
-using Framework.Utils.Editor;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+
+#if UNITY_EDITOR
+using Framework.Utils.Editor;
+#endif
 
 [AddComponentMenu("XR/Custom/Spline Grab Interactable")]
 public class SplineGrabInteractable : XRGrabInteractable
@@ -42,7 +45,9 @@ public class SplineGrabInteractable : XRGrabInteractable
         // 4. Apply the position back to world space
         transform.position = splineContainer.transform.TransformPoint(nearestLocalPos);
 
+#if UNITY_EDITOR
         UnityPlayModeSaver.SaveComponent(GetComponentInParent<CheckpointContainer>());
+#endif
 
     }
 }

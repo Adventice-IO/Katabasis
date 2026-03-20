@@ -4,8 +4,19 @@
 		<WorkUnit Name="Default Work Unit" ID="{79D521CF-91C6-4CC0-8B9E-860A24359FAF}" PersistMode="Standalone">
 			<ChildrenList>
 				<SoundBank Name="MAIN" ID="{7E734BBA-16C9-46F8-8CBD-B94EE4B45669}">
+					<PropertyList>
+						<Property Name="Maximum" Type="int32">
+							<ValueList>
+								<Value>500000000</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
 					<ObjectInclusionList>
+						<ObjectRef Name="AMB" ID="{99813B28-F2CD-409D-A7A7-53147129EEFF}" WorkUnitID="{B952947A-196A-492C-B1DE-E4209A541FAC}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="VOX" ID="{E11D1231-89F2-4183-8758-BE9784BC627E}" WorkUnitID="{B952947A-196A-492C-B1DE-E4209A541FAC}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="TEST" ID="{A1151B3A-DF7B-472F-802A-FB2EF6D90E1E}" WorkUnitID="{B952947A-196A-492C-B1DE-E4209A541FAC}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="MUS" ID="{51D934EE-62D9-4AE2-8D56-5DF1E49F47A4}" WorkUnitID="{B952947A-196A-492C-B1DE-E4209A541FAC}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="SFX" ID="{F096BC94-02BF-4BEE-922C-CD80EFFAC6F5}" WorkUnitID="{B952947A-196A-492C-B1DE-E4209A541FAC}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>

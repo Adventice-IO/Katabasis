@@ -42,13 +42,10 @@ public class KataPortal : MonoBehaviour
 
     public List<Salle> blacklist = new List<Salle>();
 
+
     void OnEnable()
     {
-        mainController = MainController.instance;
-        tunnel = transform.parent.GetComponent<Tunnel>();
-        vfx = GetComponent<VisualEffect>();
-        col = GetComponent<Collider>();
-
+       
         interactable = GetComponent<XRSimpleInteractable>();
     }
 
@@ -62,12 +59,21 @@ public class KataPortal : MonoBehaviour
 
     void Start()
     {
+        mainController = GameObject.FindAnyObjectByType<MainController>();
+        tunnel = transform.parent.GetComponent<Tunnel>();
+        vfx = GetComponent<VisualEffect>();
+        col = GetComponent<Collider>();
+
         if (Application.isPlaying)
         {
             showing = false;
             vfx.enabled = false;
             col.enabled = false;
         }
+
+        
+
+        //Debug.Log("KataPortal " + portalName + " start, tunnel: " + tunnel?.name);
     }
 
     // Update is called once per frame
@@ -75,10 +81,12 @@ public class KataPortal : MonoBehaviour
     {
         if (mainController == null || tunnel == null)
         {
-            mainController = MainController.instance;
+            mainController = GameObject.FindAnyObjectByType<MainController>();
             if (transform.parent != null) tunnel = GetComponentInParent<Tunnel>();
         }
 
+
+        //Debug.Log("KataPortal " + portalName + " update, tunnel: " + (tunnel != null ? tunnel.name : "null") + ", mainController: " + (mainController != null ? mainController.name : "null"));
         if (tunnel == null) return;
 
         //transform.position = tunnel.getPositionOnTrack(positionAlongTunnel) + Vector3.up * elevation;
@@ -87,7 +95,7 @@ public class KataPortal : MonoBehaviour
         bool shouldShow = true;
         bool isInTunnel = mainController.isInTunnel(tunnel);
 
-        if (MainController.instance.editMode)
+        if (mainController.editMode)
         {
             shouldShow = isInTunnel || mainController.isTunnelACurrentOut(tunnel);
         }
@@ -125,6 +133,7 @@ public class KataPortal : MonoBehaviour
 
         if (showing != shouldShow)
         {
+            Debug.Log($"KataPortal {portalName} should show: {shouldShow}");
             show(shouldShow);
         }
 
@@ -134,7 +143,7 @@ public class KataPortal : MonoBehaviour
 
             float newProg = Mathf.Clamp01(progression + focusProg);
 
-            if (MainController.instance.editMode)
+            if (mainController.editMode)
             {
                 newProg = .2f; //force half progression in edit mode to see the portal effect without having to focus on it
             }

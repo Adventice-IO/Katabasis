@@ -1,4 +1,5 @@
 using Depthkit;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -16,9 +17,12 @@ public class Interview : MonoBehaviour
     int playbackIndex = -1;
     bool isResolvedPlayback;
     bool isTransitioningSequence;
+    bool resourcesReleased;
 
     public string itwName;
     public string interviewId;
+    List<float> cutTimes;
+
     [Range(0, 4)]
     public int level;
     string basePath;
@@ -31,12 +35,24 @@ public class Interview : MonoBehaviour
     public float progression;
     [Range(0, 1)]
     public float evaporateProg;
+    [Range(0, 1)]
+    public float glitchFactor;
 
+    [Header("Glitch Settings")]
+    public float glitchTimeAroundCut = 1f;
+    public float glitchTimeBeforeActivate = 1f;
+    [Range(0, 1)]
+    public float glitchIntensity = 1f;
+    public AnimationCurve glitchCurve;
+
+    [Header("Evaporation Settings")]
     public float evaporatePreDelay = 0.5f;
     public float evaporateTime = 3f;
     public bool shouldEvaporate = false;
 
     Salle salle;
+
+
 
     [Header("Audio Settings")]
     public AudioEventRefSO loadingEvent;
@@ -44,7 +60,7 @@ public class Interview : MonoBehaviour
     public AudioEventRefSO videoEvent;
     public AudioEventRefSO evaporateEvent;
     public AudioRTPCRefSO progRTPC;
-    bool debugWorkflow = false;
+    bool debugWorkflow = true;
 
     Subtitles subtitles;
 
@@ -63,14 +79,22 @@ public class Interview : MonoBehaviour
     public State state;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void OnEnable()
+
+    MainController mainController;
+
+    DataManager dataManager;
+
+    void Start()
     {
+        dataManager = GameObject.FindAnyObjectByType<DataManager>();
         init();
         resetPlaybackState();
     }
 
     void OnDisable()
     {
+        ReleasePlaybackResources(true);
+
         if (videoPlayer != null && loopPointReachedSubscribed)
         {
             videoPlayer.loopPointReached -= OnVideoFinished;
@@ -78,8 +102,11 @@ public class Interview : MonoBehaviour
         }
     }
 
+
     void init()
     {
+        mainController = GameObject.FindAnyObjectByType<MainController>();
+        dataManager = GameObject.FindAnyObjectByType<DataManager>();
         clip = GetComponent<Depthkit.Clip>();
         videoPlayer = GetComponent<VideoPlayer>();
         Depthkit.MeshSource meshSource = GetComponent<Depthkit.MeshSource>();
@@ -89,10 +116,12 @@ public class Interview : MonoBehaviour
             meshSource.pausePlayerWhenInvisible = false;
         }
 
-        if (videoPlayer != null && !loopPointReachedSubscribed)
+        if (videoPlayer != null)
         {
+            videoPlayer.loopPointReached -= OnVideoFinished;
             videoPlayer.loopPointReached += OnVideoFinished;
             loopPointReachedSubscribed = true;
+            Debug.Log("loop point reached subscribed");
         }
 
         vfx = GetComponentInChildren<VisualEffect>();
@@ -100,6 +129,12 @@ public class Interview : MonoBehaviour
 
         subtitles = FindAnyObjectByType<Subtitles>();
     }
+
+    public void cleanup()
+    {
+        evaporate();
+    }
+
 
     void resetPlaybackState()
     {
@@ -110,6 +145,7 @@ public class Interview : MonoBehaviour
         playbackIndex = -1;
         isResolvedPlayback = false;
         isTransitioningSequence = false;
+        resourcesReleased = false;
         state = State.Idle;
     }
 
@@ -117,16 +153,9 @@ public class Interview : MonoBehaviour
     {
         LogDebug("Resetting slot state for next assignment");
         resetPlaybackState();
+        ReleasePlaybackResources(true);
 
-        if (videoPlayer != null)
-        {
-            videoPlayer.Stop();
-        }
-
-        loadingEvent?.evt.Stop(gameObject);
-        videoEvent?.evt.Stop(gameObject);
-
-        InterviewManager manager = InterviewManager.instance != null ? InterviewManager.instance : FindAnyObjectByType<InterviewManager>();
+        InterviewManager manager = FindAnyObjectByType<InterviewManager>();
         manager?.NotifyInterviewStopped(this);
     }
 
@@ -147,7 +176,7 @@ public class Interview : MonoBehaviour
         {
             if (salle != null)
             {
-                bool shouldEnable = MainController.instance.isInSalle(salle);
+                bool shouldEnable = mainController.isInSalle(salle);
                 if (shouldEnable != vfx.enabled)
                 {
                     show(shouldEnable);
@@ -163,9 +192,18 @@ public class Interview : MonoBehaviour
 #endif
         }
 
-        if (evaporateProg == 1) return; // finished evaporating
+        if (evaporateProg == 1)
+        {
+            if (!resourcesReleased)
+            {
+                ReleasePlaybackResources(true);
+                resourcesReleased = true;
+            }
 
-        if (progression < 1 && !MainController.instance.editMode)
+            return;
+        }
+
+        if (progression < 1 && !mainController.editMode)
         {
             if (Application.isPlaying)
             {
@@ -219,8 +257,17 @@ public class Interview : MonoBehaviour
             evaporateProg = Mathf.Clamp(evaporateProg + evapProg, 0, 1);
         }
 
+        float diffToClosestCut = getDiffToClosestCut();
+        float glitchCutF = diffToClosestCut == -1 ? 0f : 1 - Mathf.Clamp01(diffToClosestCut / glitchTimeAroundCut);
+        float progTime = progression == 1 && videoPlayer.isPlaying ? 0f : progression * focusTime;
+        float glitchStartTime = Mathf.Clamp01(focusTime - glitchTimeBeforeActivate);
+        float glitchActivateF = (progTime - glitchStartTime) / glitchTimeBeforeActivate;
+
+        glitchFactor = glitchIntensity * glitchCurve.Evaluate(Mathf.Max(glitchCutF, glitchActivateF));
+
         vfx.SetFloat("Progression", progression);
         vfx.SetFloat("Evaporate", evaporateProg);
+        vfx.SetFloat("GlitchFactor", glitchFactor);
     }
 
     void show(bool shouldShow)
@@ -231,19 +278,25 @@ public class Interview : MonoBehaviour
         {
             load();
         }
+        else
+        {
+            ReleasePlaybackResources(true);
+            resetPlaybackState();
+        }
 
     }
 
-    public void set(string itwName, int level)
+    public void set(InterviewManager.InterviewData data)
     {
-        set(itwName, level, itwName);
-    }
-
-    public void set(string itwName, int level, string interviewId)
-    {
-        this.itwName = itwName;
-        this.interviewId = interviewId;
-        this.level = level;
+        if (vfx == null)
+        {
+            init();
+        }
+        this.itwName = data.depthkitPath;
+        this.interviewId = data.mediaPath;
+        this.level = data.level;
+        vfx.SetVector3("Offset", data.offset);
+        vfx.SetFloat("OffsetAngle", data.angle);
 
         if (playbackSequence == null || playbackIndex < 0 || playbackIndex >= playbackSequence.Length)
         {
@@ -258,17 +311,20 @@ public class Interview : MonoBehaviour
         basePath = BuildMediaBasePath(itwName);
         previewBasePath = BuildPreviewBasePath(itwName);
         videoPlayer.url = BuildVideoUrl(interviewId);
+
+        cutTimes = data.cutTimes != null ? new List<float>(data.cutTimes) : new List<float>();
+
         LogDebug("Assigned interview slot -> depthkitPath='" + itwName + "', mediaPath='" + interviewId + "', level=" + level + ", basePath='" + basePath + "', previewBasePath='" + previewBasePath + "', videoUrl='" + videoPlayer.url + "'");
     }
 
     string BuildMediaBasePath(string mediaPath)
     {
-        return DataManager.GetFolderPath(DataManager.DataFolder.Interviews, mediaPath);
+        return dataManager.GetFolderPath(DataManager.DataFolder.Interviews, mediaPath);
     }
 
     string BuildVideoUrl(string mediaPath)
     {
-        return DataManager.GetFileUrl(DataManager.DataFolder.Interviews, mediaPath + ".mov");
+        return dataManager.GetFileUrl(DataManager.DataFolder.Interviews, mediaPath + ".mp4");
     }
 
     string BuildPreviewBasePath(string depthkitPath)
@@ -276,12 +332,14 @@ public class Interview : MonoBehaviour
         string normalizedPath = (depthkitPath ?? string.Empty).Replace("\\", "/").Trim('/');
         string[] pathParts = normalizedPath.Split('/');
         string personFolder = pathParts.Length > 0 && !string.IsNullOrWhiteSpace(pathParts[0]) ? pathParts[0] : normalizedPath;
-        return BuildMediaBasePath(personFolder + "/" + personFolder);
+        return BuildMediaBasePath(depthkitPath);
     }
 
     public void load()
     {
+        ReleasePosterTexture();
         clip.metadataFile = null;
+        clip.poster = null;
         if (videoPlayer != null)
         {
             videoPlayer.Stop();
@@ -323,7 +381,7 @@ public class Interview : MonoBehaviour
     {
         LogDebug("Starting playback for mediaPath='" + interviewId + "' depthkitPath='" + itwName + "'");
         OnInterviewStarted?.Invoke(this);
-        InterviewManager manager = InterviewManager.instance != null ? InterviewManager.instance : FindAnyObjectByType<InterviewManager>();
+        InterviewManager manager = FindAnyObjectByType<InterviewManager>();
         manager?.NotifyInterviewStarted(this);
 
         if (!videoPlayer.isPlaying && !isTransitioningSequence)
@@ -335,7 +393,7 @@ public class Interview : MonoBehaviour
 
         if (subtitles != null)
         {
-            string languageSuffix = MainController.instance != null ? MainController.instance.getLanguageSuffix() : "";
+            string languageSuffix = mainController != null ? mainController.getLanguageSuffix() : "";
             string subtitlePath = interviewId + languageSuffix + ".srt";
             subtitles.play(subtitlePath);
         }
@@ -354,9 +412,7 @@ public class Interview : MonoBehaviour
         }
 
         LogDebug("Stopping playback because another interview started");
-        videoPlayer.Stop();
-        videoEvent?.evt.Stop(gameObject);
-        loadingEvent?.evt.Stop(gameObject);
+        ReleasePlaybackResources(false);
         shouldEvaporate = false;
         evaporateProg = 0;
         progression = 0;
@@ -366,12 +422,13 @@ public class Interview : MonoBehaviour
         isTransitioningSequence = false;
         state = State.Loaded;
 
-        InterviewManager manager = InterviewManager.instance != null ? InterviewManager.instance : FindAnyObjectByType<InterviewManager>();
+        InterviewManager manager = FindAnyObjectByType<InterviewManager>();
         manager?.NotifyInterviewStopped(this);
     }
 
     public void evaporate()
     {
+
         if (evaporateProg > 0 || shouldEvaporate)
         {
             return;
@@ -383,14 +440,22 @@ public class Interview : MonoBehaviour
         evaporateEvent?.evt.Post(gameObject);
         state = State.Ending;
         OnInterviewEnded?.Invoke(this);
+
+        Invoke(nameof(endEvaporate), evaporateTime + 5f);
     }
 
+    void endEvaporate()
+    {
+        if (videoPlayer != null) videoPlayer.Stop();
+        ReleasePlaybackResources(true);
+        gameObject.SetActive(false);
+    }
     void resolveAndPlay()
     {
         LogDebug("Resolving playback at validation time for slot '" + name + "'");
         if (!isResolvedPlayback && Application.isPlaying)
         {
-            InterviewManager manager = InterviewManager.instance != null ? InterviewManager.instance : FindAnyObjectByType<InterviewManager>();
+            InterviewManager manager = FindAnyObjectByType<InterviewManager>();
             if (manager != null && manager.TryResolvePlaybackForSlot(this, out InterviewManager.ResolvedInterviewPlayback playback))
             {
                 playbackSequence = playback.sequence;
@@ -414,7 +479,7 @@ public class Interview : MonoBehaviour
     void loadPlaybackEntry(InterviewManager.InterviewData data)
     {
         LogDebug("Loading playback entry -> person='" + data.person + "', depthkitPath='" + data.depthkitPath + "', mediaPath='" + data.mediaPath + "', intro=" + data.isIntro);
-        set(data.depthkitPath, data.level, data.mediaPath);
+        set(data);
         load();
     }
 
@@ -442,6 +507,7 @@ public class Interview : MonoBehaviour
         return true;
     }
 
+
     void OnVideoFinished(VideoPlayer vp)
     {
         LogDebug("Video finished for mediaPath='" + interviewId + "'");
@@ -453,7 +519,7 @@ public class Interview : MonoBehaviour
             return;
         }
 
-        InterviewManager consumedManager = InterviewManager.instance != null ? InterviewManager.instance : FindAnyObjectByType<InterviewManager>();
+        InterviewManager consumedManager = FindAnyObjectByType<InterviewManager>();
         consumedManager?.MarkSlotConsumed(this);
 
         if (videoPlayer != null)
@@ -461,8 +527,7 @@ public class Interview : MonoBehaviour
             videoPlayer.Stop();
         }
 
-        loadingEvent?.evt.Stop(gameObject);
-        videoEvent?.evt.Stop(gameObject);
+        ReleasePlaybackResources(false);
         consumedManager?.NotifyInterviewStopped(this);
 
         if (completedSequence != null && completedSequence.Length > 0)
@@ -488,6 +553,39 @@ public class Interview : MonoBehaviour
         }
     }
 
+    float getDiffToClosestCut()
+    {
+        if (!videoPlayer.isPlaying)
+        {
+            return -1;
+        }
+        float t = (float)videoPlayer.time;
+        float minDiff = float.MaxValue;
+        float closestCut = -1;
+        foreach (float cut in cutTimes)
+        {
+            float diff = Mathf.Abs(cut - (float)t);
+            if (diff < minDiff)
+            {
+                minDiff = diff;
+                closestCut = cut;
+            }
+        }
+
+        if (videoPlayer.length > 0)
+        {
+            float finalDiff = Mathf.Abs((float)videoPlayer.length - (float)t);
+            if (finalDiff < minDiff)
+            {
+                minDiff = finalDiff;
+                closestCut = (float)videoPlayer.length;
+            }
+        }
+
+
+        return minDiff;
+    }
+
     void LogDebug(string message)
     {
         if (!debugWorkflow)
@@ -496,6 +594,62 @@ public class Interview : MonoBehaviour
         }
 
         Debug.Log("[Interview] " + name + " | state=" + state + " | progression=" + progression.ToString("0.00") + " | " + message, this);
+    }
+
+    void ReleasePlaybackResources(bool clearDepthkitAssets)
+    {
+        if (videoPlayer != null)
+        {
+            videoPlayer.Stop();
+            videoPlayer.clip = null;
+            videoPlayer.targetTexture = null;
+            if (clearDepthkitAssets)
+            {
+                videoPlayer.url = string.Empty;
+            }
+        }
+
+        subtitles?.stop();
+        loadingEvent?.evt.Stop(gameObject);
+        videoEvent?.evt.Stop(gameObject);
+
+        if (clearDepthkitAssets && clip != null)
+        {
+            clip.poster = null;
+            clip.metadataFile = null;
+            clip.metadataFilePath = string.Empty;
+        }
+
+        if (clearDepthkitAssets)
+        {
+            ReleasePosterTexture();
+        }
+
+        resourcesReleased = true;
+    }
+
+    void ReleasePosterTexture()
+    {
+        if (posterTex == null)
+        {
+            return;
+        }
+
+        if (clip != null && ReferenceEquals(clip.poster, posterTex))
+        {
+            clip.poster = null;
+        }
+
+        if (Application.isPlaying)
+        {
+            Destroy(posterTex);
+        }
+        else
+        {
+            DestroyImmediate(posterTex);
+        }
+
+        posterTex = null;
     }
 
 

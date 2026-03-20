@@ -56,7 +56,7 @@ MonoBehaviour:
     - line: '|   targetDevice: 2'
     - line: '|   useOnDemandResources: 0'
     - line: '|   accelerometerFrequency: 60'
-    - line: '|   companyName: DefaultCompany'
+    - line: '|   companyName: Zorba'
     - line: '|   productName: Katabasis'
     - line: '|   defaultCursor: {instanceID: 0}'
     - line: '|   cursorHotspot: {x: 0, y: 0}'
@@ -189,15 +189,7 @@ MonoBehaviour:
     - line: '|   visionOSBundleVersion: 1.0'
     - line: '|   tvOSBundleVersion: 1.0'
     - line: '|   bundleVersion: 9.2.1'
-    - line: '|   preloadedAssets:'
-    - line: '|   - {fileID: 9030113687040111788, guid: 4b3de149e50ea0c4f8ad04c79b9f12ec,
-        type: 2}'
-    - line: '|   - {fileID: 11400000, guid: 3e9797126f5bc174e9952a42cd2d4975, type:
-        2}'
-    - line: '|   - {fileID: 8775450446106690992, guid: b716680a41c7a094fa3b7fb9a8024a67,
-        type: 2}'
-    - line: '|   - {fileID: 11400000, guid: 908d62378b8205449861e5838a18a596, type:
-        2}'
+    - line: '|   preloadedAssets: []'
     - line: '|   metroInputSource: 0'
     - line: '|   wsaTransparentSwapchain: 0'
     - line: '|   m_HolographicPauseOnTrackingLoss: 1'
@@ -219,7 +211,7 @@ MonoBehaviour:
     - line: '|   androidMaxAspectRatio: 2.4'
     - line: '|   androidMinAspectRatio: 1'
     - line: '|   applicationIdentifier:'
-    - line: '|     Android: com.DefaultCompany.VRTemplate'
+    - line: '|     Android: com.Zorba.Katabasis'
     - line: '|     Standalone: com.Default-Company.VR-Template'
     - line: '|     VisionOS: com.Default-Company.VR-Template'
     - line: '|     iPhone: com.Default-Company.VR-Template'
@@ -231,7 +223,7 @@ MonoBehaviour:
     - line: '|   overrideDefaultApplicationIdentifier: 1'
     - line: '|   AndroidBundleVersionCode: 1'
     - line: '|   AndroidMinSdkVersion: 32'
-    - line: '|   AndroidTargetSdkVersion: 32'
+    - line: '|   AndroidTargetSdkVersion: 0'
     - line: '|   AndroidPreferredInstallLocation: 0'
     - line: '|   AndroidPreferredDataLocation: 1'
     - line: '|   aotOptions: '
@@ -239,7 +231,7 @@ MonoBehaviour:
     - line: '|   iPhoneStrippingLevel: 0'
     - line: '|   iPhoneScriptCallOptimization: 0'
     - line: '|   ForceInternetPermission: 0'
-    - line: '|   ForceSDCardPermission: 0'
+    - line: '|   ForceSDCardPermission: 1'
     - line: '|   CreateWallpaper: 0'
     - line: '|   androidSplitApplicationBinary: 0'
     - line: '|   keepLoadedShadersAlive: 0'
@@ -1086,10 +1078,10 @@ MonoBehaviour:
     - rid: 4289656020420264006
       type: {class: AndroidPlatformBuildSettings, ns: UnityEditor.Android, asm: UnityEditor.Android.Extensions}
       data:
-        m_Development: 0
+        m_Development: 1
         m_ConnectProfiler: 0
         m_BuildWithDeepProfilingSupport: 0
-        m_AllowDebugging: 0
+        m_AllowDebugging: 1
         m_WaitForManagedDebugger: 0
         m_ManagedDebuggerFixedPort: 0
         m_ExplicitNullChecks: 0
@@ -1106,7 +1098,7 @@ MonoBehaviour:
         m_DebugSymbolLevel: 1
         m_DebugSymbolFormat: 5
         m_CurrentDeploymentTargetId: __builtin__target_default
-        m_BuildType: 2
+        m_BuildType: 1
         m_LinkTimeOptimization: 1
         m_BuildAppBundle: 0
         m_IPAddressToConnect: 

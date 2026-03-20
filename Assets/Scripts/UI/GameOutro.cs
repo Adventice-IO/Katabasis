@@ -22,8 +22,12 @@ public class GameOutro : MonoBehaviour
     bool outroFinished = false;
     bool waitingForCartons;
 
+    MainController mainController;
+    DataManager dataManager;
     void Start()
     {
+        mainController = GameObject.FindAnyObjectByType<MainController>();
+        dataManager = GameObject.FindAnyObjectByType<DataManager>();
         LoadCartons();
     }
 
@@ -82,12 +86,12 @@ public class GameOutro : MonoBehaviour
 
     void LoadCartons()
     {
-        if (!DataManager.IsFolderReady(DataManager.DataFolder.Outro))
+        if (!dataManager.IsFolderReady(DataManager.DataFolder.Outro))
         {
             if (!waitingForCartons)
             {
                 waitingForCartons = true;
-                DataManager.PreloadFolder(DataManager.DataFolder.Outro, (success, path) =>
+                dataManager.PreloadFolder(DataManager.DataFolder.Outro, (success, path) =>
                 {
                     waitingForCartons = false;
                     if (success)
@@ -112,7 +116,7 @@ public class GameOutro : MonoBehaviour
 
         cartons.Clear();
 
-        string outroPath = DataManager.GetBasePath(DataManager.DataFolder.Outro);
+        string outroPath = dataManager.GetBasePath(DataManager.DataFolder.Outro);
         if (!Directory.Exists(outroPath))
         {
             return;
@@ -259,6 +263,6 @@ public class GameOutro : MonoBehaviour
 
         outroFinished = true;
         isActive = false;
-        MainController.instance.gameState = MainController.GameState.End;
+        mainController.gameState = MainController.GameState.End;
     }
 }

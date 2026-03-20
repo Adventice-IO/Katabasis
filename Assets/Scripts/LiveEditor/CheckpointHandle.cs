@@ -1,4 +1,6 @@
+#if UNITY_EDITOR
 using Framework.Utils.Editor;
+#endif
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -28,6 +30,8 @@ public class CheckpointHandle : MonoBehaviour
     Gradient gradient = new Gradient();
     Color color;
 
+    MainController mainController;
+
     public void init()
     {
 
@@ -40,6 +44,8 @@ public class CheckpointHandle : MonoBehaviour
 
     public void Start()
     {
+        mainController = GameObject.FindAnyObjectByType<MainController>();
+
         gradient.colorKeys = new GradientColorKey[] {
             new GradientColorKey(Color.cyan, 0f),
             new GradientColorKey(Color.green, .3f),
@@ -58,7 +64,7 @@ public class CheckpointHandle : MonoBehaviour
         slider = doc.rootVisualElement.Q<Slider>("slider");
         label = doc.rootVisualElement.Q<Label>("label");
 
-        slider.highValue = MainController.instance.maxSpeed;
+        slider.highValue = mainController.maxSpeed;
         slider.lowValue = 1;
         slider.value = checkpoint.speed;
 
@@ -76,7 +82,9 @@ public class CheckpointHandle : MonoBehaviour
             if (tunnel == null) return;
             RuntimeUndoManager.changeCheckpointSpeed(checkpoint, initSpeed, checkpoint.speed);
             initSpeed = checkpoint.speed;
+#if UNITY_EDITOR
             UnityPlayModeSaver.SaveComponent(tunnel.GetComponent<CheckpointContainer>());
+#endif
         });
 
         if (checkpoint != null)
@@ -99,7 +107,7 @@ public class CheckpointHandle : MonoBehaviour
                 {
                     Debug.Log($"CheckpointHandle spawnRemoveAction performed, isHover: {isHover}");
                     RuntimeUndoManager.removeCheckpoint(tunnel, checkpoint);
-                    MainController.instance.removedCheckpoint = true;
+                    mainController.removedCheckpoint = true;
                 }
                 else
                 {
@@ -146,7 +154,7 @@ public class CheckpointHandle : MonoBehaviour
 
     void setColorFromSpeed()
     {
-        color = gradient.Evaluate(checkpoint.speed / MainController.instance.maxSpeed);
+        color = gradient.Evaluate(checkpoint.speed / mainController.maxSpeed);
         setColor(color);
     }
 
@@ -185,8 +193,9 @@ public class CheckpointHandle : MonoBehaviour
 
             transform.position = tunnel.getPositionOnTrack(checkpoint.pos);
 
+#if UNITY_EDITOR
             UnityPlayModeSaver.SaveComponent(tunnel.GetComponent<CheckpointContainer>());
-
+#endif
 
         }
     }

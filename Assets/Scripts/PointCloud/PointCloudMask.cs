@@ -24,16 +24,19 @@ public class PointCloudMask : MonoBehaviour
 
     public MaskBox maskBox;
 
+    MainController mainController;
+
     void Start()
     {
+        mainController = GameObject.FindAnyObjectByType<MainController>();
     }
 
     // Update is called once per frame
     void Update()
     {
         bool shouldBeVisible = false;
-        if (MainController.instance.salle != null && visibleInSalles.Contains(MainController.instance.salle)) shouldBeVisible = true;
-        if (MainController.instance.tunnel != null && visibleInTunnels.Contains(MainController.instance.tunnel)) shouldBeVisible = true;
+        if (mainController.salle != null && visibleInSalles.Contains(mainController.salle)) shouldBeVisible = true;
+        if (mainController.tunnel != null && visibleInTunnels.Contains(mainController.tunnel)) shouldBeVisible = true;
         if (isCameraInsideMask()) shouldBeVisible = true;
 
         if (Application.isPlaying)

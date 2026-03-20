@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Splines;
+#if UNITY_EDITOR
 using Framework.Utils.Editor;
-using NUnit.Framework;
+#endif
 
 public class KnotHandle : MonoBehaviour
 {
@@ -88,7 +89,7 @@ public class KnotHandle : MonoBehaviour
         snap = transform.Find("Snap");
         snapRenderers = snap.GetComponentsInChildren<Renderer>();
 
-        mainController = MainController.instance;
+        mainController = GameObject.FindAnyObjectByType<MainController>();
 
         parentTunnel = GetComponentInParent<Tunnel>();
 
@@ -199,10 +200,10 @@ public class KnotHandle : MonoBehaviour
         }
 
         bool isEditable = true;
-        if (MainController.instance != null)
+        if (mainController != null)
         {
-            if (MainController.instance.isInATunnel() && !MainController.instance.isInTunnel(parentTunnel)) isEditable = false;
-            if (MainController.instance.isRunning)  isEditable = false;
+            if (mainController.isInATunnel() && !mainController.isInTunnel(parentTunnel)) isEditable = false;
+            if (mainController.isRunning)  isEditable = false;
             knot.gameObject.SetActive(isEditable);
             upKnot.gameObject.SetActive(isEditable);
             prevHandle.gameObject.SetActive(isEditable && knotIndex > 0);
@@ -311,7 +312,7 @@ public class KnotHandle : MonoBehaviour
     public void updateActive()
     {
         bool isMiddle = knotIndex > 0 && knotIndex < splineContainer.Spline.Count - 1;
-        bool editMode = MainController.instance != null && !MainController.instance.isInATunnel();
+        bool editMode = mainController != null && !mainController.isInATunnel();
 
         if (editMode)
         {
@@ -406,7 +407,9 @@ public class KnotHandle : MonoBehaviour
     {
         if (Application.isPlaying)
         {
+#if UNITY_EDITOR
             UnityPlayModeSaver.SaveComponent(splineContainer);
+#endif
         }
 
     }

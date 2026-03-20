@@ -20,6 +20,8 @@ public class Subtitles : MonoBehaviour
 
     SubtitleLine curLine;
 
+    DataManager dataManager;
+
     void OnEnable()
     {
         uiDocument = GetComponent<UIDocument>();
@@ -43,6 +45,11 @@ public class Subtitles : MonoBehaviour
         subtitleLabel = uiDocument.rootVisualElement.Q<Label>("subtitle");
         subtitleLabel.AddToClassList("hidden");
         //Debug.Log("Subtitle label: " + (subtitleLabel != null ? subtitleLabel.name : "null"));
+    }
+
+    private void Start()
+    {
+        dataManager = GameObject.FindAnyObjectByType<DataManager>();
     }
 
     // Update is called once per frame
@@ -113,9 +120,9 @@ public class Subtitles : MonoBehaviour
 
     public void play(string relativeSubtitlePath)
     {
-        if (!DataManager.IsFolderReady(DataManager.DataFolder.Interviews))
+        if (!dataManager.IsFolderReady(DataManager.DataFolder.Interviews))
         {
-            DataManager.PreloadFolder(DataManager.DataFolder.Interviews, (success, path) =>
+            dataManager.PreloadFolder(DataManager.DataFolder.Interviews, (success, path) =>
             {
                 if (!success)
                 {
@@ -177,7 +184,7 @@ public class Subtitles : MonoBehaviour
             return null;
         }
 
-        string subtitlePath = DataManager.GetFilePath(DataManager.DataFolder.Interviews, relativeSubtitlePath);
+        string subtitlePath = dataManager.GetFilePath(DataManager.DataFolder.Interviews, relativeSubtitlePath);
         if (!File.Exists(subtitlePath))
         {
             Debug.LogWarning($"Subtitle file not found at path: {subtitlePath}");
