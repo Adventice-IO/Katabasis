@@ -10,12 +10,20 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{D40D775D-4A68-D4D2-1003-FD9EAFD2F347}",
+    "Hash": "{04F480E2-E256-8397-C9C9-00F8B40BD356}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
     "Plugins": {
      "Custom": [
+      {
+       "Id": "57406059",
+       "Name": "Multiband Meter (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\VOX\\[Effect Slot [0]: (Multiband Meter)]\\Multiband Meter (Custom)",
+       "GUID": "{0481484E-6FC4-437A-8DCE-8544BC8696A0}",
+       "LibName": "Wwise Multiband Meter",
+       "LibId": "12845059"
+      },
       {
        "Id": "206879750",
        "Name": "Resonance Audio Renderer (Custom)",
@@ -23,14 +31,38 @@
        "GUID": "{EB1F2F02-52FC-40CD-8077-6FC79D589BD6}",
        "LibName": "Resonance Audio Renderer",
        "LibId": "6557955"
+      },
+      {
+       "Id": "320538764",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\AMB\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{F6DC2C40-2DC4-49DD-8AC7-2FDF3C533C4E}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
+       "Id": "622950439",
+       "Name": "Delay (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_DEL_Outdoor\\[Effect Slot [1]: (Delay)]\\Delay (Custom)",
+       "GUID": "{52A9C5B1-F637-45A1-9942-1831164C0054}",
+       "LibName": "Wwise Delay",
+       "LibId": "6946819"
       }
      ],
      "ShareSets": [
       {
-       "Id": "2849147824",
-       "Name": "Medium",
-       "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Cathedrals\\Medium",
-       "GUID": "{AEB3F175-958B-45F2-A4C2-3FBD4F456568}",
+       "Id": "48620415",
+       "Name": "Have_U_Ever_Been_Outside",
+       "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Exteriors\\Have_U_Ever_Been_Outside",
+       "GUID": "{FE29AE8D-FD86-4652-A95D-68D32F5760EC}",
+       "LibName": "Wwise RoomVerb",
+       "LibId": "7733251"
+      },
+      {
+       "Id": "2513915904",
+       "Name": "Hall_Large",
+       "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Halls\\Hall_Large",
+       "GUID": "{6D154498-FF6D-4823-96FC-56841B70E079}",
        "LibName": "Wwise RoomVerb",
        "LibId": "7733251"
       }
@@ -65,13 +97,33 @@
       "Id": "543694036",
       "Name": "VOX",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\VOX",
-      "GUID": "{F084076F-FA0E-460B-A770-ED15E9E13214}"
+      "GUID": "{F084076F-FA0E-460B-A770-ED15E9E13214}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "57406059"
+        }
+       ]
+      }
      },
      {
       "Id": "1117531639",
       "Name": "AMB",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\AMB",
-      "GUID": "{05683D88-4E37-44B7-B210-E36B7D9FD447}"
+      "GUID": "{05683D88-4E37-44B7-B210-E36B7D9FD447}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "320538764"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "2182414867",
+      "Name": "AMB_3D",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\AMB\\AMB_3D",
+      "GUID": "{50581E6F-B531-4A7D-80D7-D9503E9EFF14}"
      },
      {
       "Id": "2246998526",
@@ -101,6 +153,24 @@
     ],
     "AuxBusses": [
      {
+      "Id": "152793239",
+      "Name": "REV_DEL_Outdoor",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_DEL_Outdoor",
+      "GUID": "{58FB9EAA-AFC0-4C4A-B598-0A3D596993A8}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "622950439"
+        }
+       ],
+       "ShareSets": [
+        {
+         "Id": "48620415"
+        }
+       ]
+      }
+     },
+     {
       "Id": "223314761",
       "Name": "DEL_Long",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\DEL_Long",
@@ -114,7 +184,7 @@
       "PluginRefs": {
        "ShareSets": [
         {
-         "Id": "2849147824"
+         "Id": "2513915904"
         }
        ]
       }
@@ -145,6 +215,24 @@
      }
     ],
     "GameParameters": [
+     {
+      "Id": "598118289",
+      "Name": "RTPC_VOX_Meter_B4",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\RTPC_VOX_Meter_B4",
+      "GUID": "{96447150-A56A-4AF3-A14A-D63B0D44623D}"
+     },
+     {
+      "Id": "598118294",
+      "Name": "RTPC_VOX_Meter_B3",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\RTPC_VOX_Meter_B3",
+      "GUID": "{FCE89B4A-DD7A-4AE6-BF57-3EA2986E2751}"
+     },
+     {
+      "Id": "598118295",
+      "Name": "RTPC_VOX_Meter_B2",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\RTPC_VOX_Meter_B2",
+      "GUID": "{085DACC3-98C2-4E8E-81C2-1101A08AAC97}"
+     },
      {
       "Id": "1540479560",
       "Name": "RTCP_Distance",
@@ -188,6 +276,6 @@
     ]
    }
   ],
-  "FileHash": "{0B99A432-4574-605E-9A1D-7900481EF567}"
+  "FileHash": "{3B99DF6C-53E3-C6D6-21CF-1A417D371CE4}"
  }
 }

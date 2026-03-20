@@ -11,11 +11,32 @@
     "StaticLib": "ResonanceAudioFX"
    },
    {
+    "LibName": "Wwise Silence",
+    "LibId": "6619138",
+    "Type": "Source",
+    "DLL": "AkSilenceGenerator",
+    "StaticLib": "AkSilenceSource"
+   },
+   {
     "LibName": "Wwise Tone Generator",
     "LibId": "6684674",
     "Type": "Source",
     "DLL": "AkToneGen",
     "StaticLib": "AkToneSource"
+   },
+   {
+    "LibName": "Wwise Parametric EQ",
+    "LibId": "6881283",
+    "Type": "Effect",
+    "DLL": "AkParametricEQ",
+    "StaticLib": "AkParametricEQFX"
+   },
+   {
+    "LibName": "Wwise Delay",
+    "LibId": "6946819",
+    "Type": "Effect",
+    "DLL": "AkDelay",
+    "StaticLib": "AkDelayFX"
    },
    {
     "LibName": "Wwise RoomVerb",
@@ -40,8 +61,15 @@
     "LibName": "No Output",
     "LibId": "11862023",
     "Type": "AudioDevice"
+   },
+   {
+    "LibName": "Wwise Multiband Meter",
+    "LibId": "12845059",
+    "Type": "Effect",
+    "DLL": "AkMeter",
+    "StaticLib": "AkMeterFX"
    }
   ],
-  "FileHash": "{0E376400-48AB-42EE-6FF2-8CE2DE081658}"
+  "FileHash": "{DFBA7542-D34D-78C3-B9DF-407D2B67F089}"
  }
 }
