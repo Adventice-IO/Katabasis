@@ -20,6 +20,9 @@ public class PointCloudBlock : MonoBehaviour
 
     MainController mainController;
 
+    Vector3 boxMin;
+    Vector3 boxMax;
+
     public void init(PointCloudProfile profile)
     {
         this.profile = profile;
@@ -31,6 +34,8 @@ public class PointCloudBlock : MonoBehaviour
         block = new MaterialPropertyBlock();
         render = GetComponent<Renderer>();
         timeAtStart = Time.time;
+
+
     }
 
     // Update is called once per frame
@@ -39,7 +44,6 @@ public class PointCloudBlock : MonoBehaviour
 
         float fadeInVal = Mathf.Clamp01((Time.time - timeAtStart) / profile.fadeIn);
         float fadeOutVal = timeAtKill > -1 ? 1f - Mathf.Clamp01((Time.time - (float)timeAtKill) / profile.fadeOut) : 1f;
-
 
         if (timeAtKill > -1 && fadeOutVal == 0f)
         {
@@ -50,6 +54,14 @@ public class PointCloudBlock : MonoBehaviour
         float reveal = Mathf.Min(fadeInVal, fadeOutVal);
 
         if (render == null || block == null) return;
+
+
+        //Get world space bounding box of the block
+        Vector3 localMin = GetComponent<MeshFilter>().mesh.bounds.min;
+        Vector3 localMax = GetComponent<MeshFilter>().mesh.bounds.max;
+
+        boxMin = transform.TransformPoint(localMin);
+        boxMax = transform.TransformPoint(localMax);
 
         render.GetPropertyBlock(block);
         block.SetFloat("_Reveal", reveal);
@@ -62,6 +74,9 @@ public class PointCloudBlock : MonoBehaviour
         block.SetFloat("_NoiseThickness", profile._NoiseThickness);
         block.SetFloat("_NoiseScale", profile._NoiseScale);
         block.SetFloat("_NoiseAlphaMultiplier", profile._NoiseAlphaMultiplier);
+        block.SetVector("_BoxMin", boxMin);
+        block.SetVector("_BoxMax", boxMax);
+        block.SetFloat("_BoxFeather", profile._BoxFeather);
 
         if (masksBuffer != null)
         {
@@ -82,5 +97,17 @@ public class PointCloudBlock : MonoBehaviour
         masksBuffer = maskBuffer;
         masksCount = count;
 
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Vector3 center = (boxMin + boxMax) / 2;
+        Vector3 size = boxMax - boxMin;
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(center, size);
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(boxMin, 0.1f);
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(boxMax, 0.1f);
     }
 }

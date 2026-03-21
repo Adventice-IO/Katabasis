@@ -41,11 +41,7 @@ public class GameMenu : MonoBehaviour
     public float buttonScaling = 1f;
     public float buttonSpacing = 1.2f;
     public float buttonRadius = 2f;
-
-    public float startScaling = 1f;
-    public float startYOffset = 2f;
-    public float startSmoothing = 5f;
-    public float startZRadiusOffset = 1f;
+    public bool autoRadius = true;
     public Color idleHighlightColor = Color.white;
     public Color selectedHighlightColor = Color.green;
     public bool lookAtCamera = true;
@@ -117,8 +113,9 @@ public class GameMenu : MonoBehaviour
             float angle = visibleIndex * buttonSpacing - (totalAngle * 0.5f) + (buttonSpacing * 0.5f);
 
             float radians = angle * Mathf.Deg2Rad;
-            float x = Mathf.Sin(radians) * buttonRadius;
-            float z = Mathf.Cos(radians) * buttonRadius;
+            float radius = autoRadius ? buttonRadius : 360f / visibleCount;
+            float x = Mathf.Sin(radians) * radius;
+            float z = Mathf.Cos(radians) * radius;
             langObject.transform.localPosition = new Vector3(x, 0f, z);
             langObject.transform.localScale = Vector3.one * buttonScaling;
 

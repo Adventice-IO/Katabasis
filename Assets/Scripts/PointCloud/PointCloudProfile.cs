@@ -12,6 +12,9 @@ public class PointCloudProfile : ScriptableObject
     [Range(0f, 1f)]
     public float _DistanceFade = .3f;
 
+    [Header("Box")]
+    public float _BoxFeather = .5f;
+
 
     [Header("Noise")]
     public float _NoiseAmplitude = .5f;
