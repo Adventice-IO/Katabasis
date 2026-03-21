@@ -64,7 +64,7 @@ public class Interview : MonoBehaviour
     public AudioRTPCRefSO progRTPC;
 
     public float videoStopFade = 1f;
-    uint videoEventID = AkSoundEngine.AK_INVALID_PLAYING_ID;
+    uint videoEventID = AkUnitySoundEngine.AK_INVALID_PLAYING_ID;
     bool debugWorkflow = true;
 
     Subtitles subtitles;
@@ -319,6 +319,7 @@ public class Interview : MonoBehaviour
 
         cutTimes = data.cutTimes != null ? new List<float>(data.cutTimes) : new List<float>();
 
+        stopWwiseVideoEvent();
         wwiseEventName = Path.GetFileNameWithoutExtension(data.mediaPath);
 
         LogDebug("Assigned interview slot -> depthkitPath='" + itwName + "', mediaPath='" + interviewId + "', wwiseEventName = " + wwiseEventName + ", level=" + level + ", basePath='" + basePath + "', previewBasePath='" + previewBasePath + "', videoUrl='" + videoPlayer.url + "'");
@@ -460,21 +461,14 @@ public class Interview : MonoBehaviour
      //Stop video
     {
         Debug.Log("Stop Wwise Event " + videoEventID);
-        if (videoEventID != AkSoundEngine.AK_INVALID_PLAYING_ID)
-        {
             // Stop the specific instance
             // AkCurveInterpolation defines the fade curve (e.g., Linear, Sine)
-            AkSoundEngine.ExecuteActionOnPlayingID(AkActionOnEventType.AkActionOnEventType_Stop,
-                                                videoEventID,
+            AkUnitySoundEngine.ExecuteActionOnEvent(wwiseEventName, AkActionOnEventType.AkActionOnEventType_Stop,
+                                                gameObject,
                                                 (int)videoStopFade*1000,
                                                 AkCurveInterpolation.AkCurveInterpolation_Linear);
 
-            videoEventID = AkSoundEngine.AK_INVALID_PLAYING_ID;
-        }else
-        {
-            Debug.Log("Wwise Video Event was not set");
-        }
-
+            videoEventID = AkUnitySoundEngine.AK_INVALID_PLAYING_ID;
 
     }
 
