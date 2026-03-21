@@ -24,6 +24,10 @@ public class MainController : MonoBehaviour
     [Header("Audio Settings")]
     public AudioStateRefSO noAudioSO;
     public bool debugAudioStates = false;
+    public AudioStateRefSO menuRefSO;
+    public AudioStateRefSO introRefSO;
+    public AudioStateRefSO outroRefSO;
+    public AudioStateRefSO endRefSO;
 
     public enum GameState
     {
@@ -582,18 +586,23 @@ public class MainController : MonoBehaviour
         {
             case GameState.Menu:
                 ResetGame();
+                menuRefSO?.state.SetValue();
                 break;
 
             case GameState.Intro:
+                introRefSO?.state.SetValue();
                 break;
+
             case GameState.Playing:
                 Reset();
                 break;
 
             case GameState.Outro:
+                outroRefSO?.state.SetValue();
                 break;
 
             case GameState.End:
+                endRefSO.state.SetValue();
                 break;
         }
     }
@@ -757,14 +766,17 @@ public class MainController : MonoBehaviour
             transform.position = salle.origin.position;
             timeAtArrived = Time.time;
 
-            if (salle.audioSO != null && salle.audioSO.state != null)
+            if (gameState == GameState.Playing)
             {
-                if (debugAudioStates) Debug.Log("Setting salle audio state: " + salle.audioSO.state.Name);
-                salle.audioSO.state.SetValue();
-            }
-            else
-            {
-                noAudioSO.state.SetValue();
+                if (salle.audioSO != null && salle.audioSO.state != null)
+                {
+                    if (debugAudioStates) Debug.Log("Setting salle audio state: " + salle.audioSO.state.Name);
+                    salle.audioSO.state.SetValue();
+                }
+                else
+                {
+                    noAudioSO.state.SetValue();
+                }
             }
         }
         else
@@ -778,15 +790,18 @@ public class MainController : MonoBehaviour
                 lookAtPos.y = transform.position.y;
                 if (resetRotation) transform.LookAt(lookAtPos, Vector3.up);
 
-                AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
-                if (audioSO != null && audioSO.state != null)
+                if (gameState == GameState.Playing)
                 {
-                    if (debugAudioStates) Debug.Log("Setting tunnel audio state: " + audioSO.state.Name);
-                    audioSO.state.SetValue();
-                }
-                else
-                {
-                    noAudioSO.state.SetValue();
+                    AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
+                    if (audioSO != null && audioSO.state != null)
+                    {
+                        if (debugAudioStates) Debug.Log("Setting tunnel audio state: " + audioSO.state.Name);
+                        audioSO.state.SetValue();
+                    }
+                    else
+                    {
+                        noAudioSO.state.SetValue();
+                    }
                 }
             }
             isRunning = false;
