@@ -50,7 +50,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6563357743839231433
 Transform:
   m_ObjectHideFlags: 0
@@ -79,12 +79,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WwiseStateRemote
   manager: {fileID: 0}
-  selectedIndex: 0
+  selected: {fileID: 0}
   autoApplyOnChange: 0
-  enableHotkeys: 0
-  prevKey: 44
-  nextKey: 46
-  applyKey: 47
+  autoApplyDelay: 0.15
 --- !u!1 &3313916756488657062
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,7 +98,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5352191417997741397
 Transform:
   m_ObjectHideFlags: 0
@@ -129,27 +126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d918ccd4d439a3742ab28bad6b5be928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioStateManager
-  states:
-  - label: A
-    state:
-      idInternal: 0
-      valueGuidInternal: 
-      groupIdInternal: 0
-      groupGuidInternal: 
-      WwiseObjectReference: {fileID: 11400000, guid: 5d2d26c55e793af4fbc77410efec47d9, type: 2}
-  - label: A_to_B
-    state:
-      idInternal: 0
-      valueGuidInternal: 
-      groupIdInternal: 0
-      groupGuidInternal: 
-      WwiseObjectReference: {fileID: 11400000, guid: f3408a1b8b82bcd49abdef79f53461d7, type: 2}
-  defaultState:
-    idInternal: 0
-    valueGuidInternal: 
-    groupIdInternal: 0
-    groupGuidInternal: 
-    WwiseObjectReference: {fileID: 11400000, guid: fe90624de586b3d4482b71637e0d7949, type: 2}
+  stateRefs: []
+  defaultState: {fileID: 0}
   logChanges: 0
 --- !u!1 &6919324496157352417
 GameObject:
