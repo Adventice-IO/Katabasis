@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Unity.Serialization.Json;
 using UnityEngine.VFX;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -13,6 +13,12 @@ public class GameMenu : MonoBehaviour
     readonly Dictionary<string, Dictionary<string, string>> localeEntries = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
     readonly Dictionary<GameObject, string> languageByObject = new Dictionary<GameObject, string>();
     readonly Dictionary<XRSimpleInteractable, GameObject> objectByInteractable = new Dictionary<XRSimpleInteractable, GameObject>();
+    readonly Dictionary<GameObject, Transform> titleByObject = new Dictionary<GameObject, Transform>();
+    readonly Dictionary<GameObject, Renderer> titleRendererByObject = new Dictionary<GameObject, Renderer>();
+    readonly Dictionary<GameObject, Vector3> titleStartPositionByObject = new Dictionary<GameObject, Vector3>();
+    readonly Dictionary<GameObject, Vector3> titleTargetPositionByObject = new Dictionary<GameObject, Vector3>();
+    readonly Dictionary<GameObject, float> titleAnimStartedAtByObject = new Dictionary<GameObject, float>();
+    readonly Dictionary<string, Texture2D> languageTextures = new Dictionary<string, Texture2D>(StringComparer.OrdinalIgnoreCase);
     readonly List<GameObject> langObjects = new List<GameObject>();
 
     MainController mainController;
@@ -20,12 +26,11 @@ public class GameMenu : MonoBehaviour
     bool waitingForMenuData;
     string selectedLanguage = "";
 
-    GameObject selectedObject;
-
     GameObject startBTObject;
     GameObject languagesContainer;
     UnityEngine.XR.Interaction.Toolkit.Interactors.IXRHoverInteractor currentHoverInteractor;
     GameObject hoveredObject;
+    GameObject selectedObject;
     float hoveredSince;
     bool hoveredSelected;
     Vector3 hoveredOriginalScale = Vector3.one;
@@ -38,14 +43,23 @@ public class GameMenu : MonoBehaviour
     public float startHoverTime = 1f;
     public float evaporateTime = 0.75f;
     public float nextMenuDelay = 2f;
-    public float buttonScaling = 1f;
+    public float buttonScaling = 0.2f;
     public float buttonSpacing = 1.2f;
+    public bool autoButtonSpacing = true;
     public float buttonRadius = 2f;
-    public bool autoRadius = true;
+    public Vector3 startBTOffset = new Vector3(0f, 0f, 2.5f);
+    public Vector3 startBTRotOffset = new Vector3(0f, 180f, 0f);
     public Color idleHighlightColor = Color.white;
     public Color selectedHighlightColor = Color.green;
     public bool lookAtCamera = true;
     public bool liveUpdateLayout = true;
+
+    public float selectAnimTime = 1f;
+    float timeAtSelection = 0;
+    public AnimationCurve titleAnimCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
+    [FormerlySerializedAs("titleSelectedPosition")]
+    public Vector3 titleSelectionPosition = new Vector3(0f, 0.25f, 0f);
 
 
     DataManager dataManager;
@@ -64,7 +78,7 @@ public class GameMenu : MonoBehaviour
 
     void Update()
     {
-        if (liveUpdateLayout)
+        if (liveUpdateLayout || (Application.isPlaying && isActive))
         {
             ApplyLayout();
         }
@@ -77,8 +91,6 @@ public class GameMenu : MonoBehaviour
         UpdateStartTransition();
 
         UpdateHoveredObjectAnimation();
-
-
     }
 
     void ApplyLayout()
@@ -109,13 +121,13 @@ public class GameMenu : MonoBehaviour
 
 
             //rotate around this object
-            float totalAngle = visibleCount * buttonSpacing;
-            float angle = visibleIndex * buttonSpacing - (totalAngle * 0.5f) + (buttonSpacing * 0.5f);
+            float bSpacing = autoButtonSpacing ? 360f / visibleCount : buttonSpacing;
+            float totalAngle =  visibleCount * bSpacing;
+            float angle = visibleIndex * bSpacing - (totalAngle * 0.5f) + (bSpacing * 0.5f);
 
             float radians = angle * Mathf.Deg2Rad;
-            float radius = autoRadius ? buttonRadius : 360f / visibleCount;
-            float x = Mathf.Sin(radians) * radius;
-            float z = Mathf.Cos(radians) * radius;
+            float x = Mathf.Sin(radians) * buttonRadius;
+            float z = Mathf.Cos(radians) * buttonRadius;
             langObject.transform.localPosition = new Vector3(x, 0f, z);
             langObject.transform.localScale = Vector3.one * buttonScaling;
 
@@ -126,16 +138,43 @@ public class GameMenu : MonoBehaviour
             }
 
 
-            if (selectedObject != null)
+            visibleIndex++;
+        }
+
+        for (int i = 0; i < langObjects.Count; i++)
+        {
+            UpdateTitleAnimation(langObjects[i]);
+        }
+
+        if (selectedObject != null)
+        {
+            float selectionProgress = selectAnimTime > 0f ? Mathf.Clamp01((Time.time - timeAtSelection) / selectAnimTime) : 1f;
+            float halfProgress = Mathf.Clamp01(selectionProgress * 5f);
+            float secondHalfProgress = Mathf.Clamp01((selectionProgress - 0.5f) * 2f);
+
+            VisualEffect selectedVfx = selectedObject.GetComponentInChildren<VisualEffect>(true);
+            if (selectedVfx != null)
             {
-                Vector3 targetPosition = selectedObject.transform.position + selectedObject.transform.forward * startZRadiusOffset + Vector3.up * startYOffset;
-                Quaternion targetRotation = selectedObject.transform.rotation;
-                targetRotation *= Quaternion.Euler(0f, 180f, 0f);
-                startBTObject.transform.position = Vector3.Lerp(startBTObject.transform.position, targetPosition, Time.deltaTime * startSmoothing);
-                startBTObject.transform.rotation = Quaternion.Slerp(startBTObject.transform.rotation, targetRotation, Time.deltaTime * startSmoothing);
+                selectedVfx.SetFloat("Evaporate", halfProgress);
             }
 
-            visibleIndex++;
+            VisualEffect startVfx = startBTObject != null ? startBTObject.GetComponent<VisualEffect>() : null;
+            if (startVfx != null)
+            {
+                startVfx.SetFloat("SpawnRate", secondHalfProgress);
+                startVfx.SetFloat("ParticleSize", secondHalfProgress);
+            }
+
+            if (secondHalfProgress > 0)
+            {
+                Vector3 targetPos = selectedObject.transform.TransformPoint(startBTOffset);
+                Quaternion targetRot = selectedObject.transform.rotation * Quaternion.Euler(startBTRotOffset);
+                if (startBTObject != null)
+                {
+                    startBTObject.transform.position = targetPos;
+                    startBTObject.transform.rotation = targetRot;
+                }
+            }
         }
     }
 
@@ -144,6 +183,7 @@ public class GameMenu : MonoBehaviour
         ClearCurrentHover();
         UnregisterStartButton();
         UnregisterLanguageButtons();
+        ReleaseLanguageTextures();
     }
 
     public void setActive(bool active)
@@ -223,12 +263,14 @@ public class GameMenu : MonoBehaviour
 
     void RefreshMenuData()
     {
+        selectedLanguage = "";
+        selectedObject = null;
+        ReleaseLanguageTextures();
         LoadLocale();
         Debug.Log("GameMenu refresh - locale keys: " + localeEntries.Count, this);
         startTransitionRunning = false;
         startSelected = false;
         EnsureLanguageButtons();
-        selectedLanguage = "";
         UpdateLanguageVisualState();
         UpdateStartButton();
         ResetAllVisuals();
@@ -445,13 +487,8 @@ public class GameMenu : MonoBehaviour
 
     void UpdateLanguageButtonContent(GameObject langObject, string language)
     {
-        TextMeshPro text = langObject.GetComponentInChildren<TextMeshPro>(true);
-        if (text != null)
-        {
-            string label = GetLocalizedText("languages", language);
-            text.text = string.Equals(label, "languages", StringComparison.OrdinalIgnoreCase) ? language.ToUpperInvariant() : label;
-            text.gameObject.SetActive(true);
-        }
+        ApplyLanguageTexture(langObject, language);
+        SetTitleTargetPosition(langObject, string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase) ? titleSelectionPosition : Vector3.zero, !Application.isPlaying);
 
         VisualEffect vfx = langObject.GetComponentInChildren<VisualEffect>(true);
         if (vfx != null)
@@ -472,15 +509,13 @@ public class GameMenu : MonoBehaviour
         float hoverDuration = Time.time - hoveredSince;
         float targetHoverTime = hoveredObject == startBTObject ? startHoverTime : hoverSelectTime;
         float normalizedHover = targetHoverTime > 0f ? Mathf.Clamp01(hoverDuration / targetHoverTime) : 1f;
-
-        bool isStartObject = hoveredObject == startBTObject && !string.IsNullOrWhiteSpace(selectedLanguage);
-
-        if (!isStartObject) hoveredObject.transform.localScale = hoveredOriginalScale;
+        hoveredObject.transform.localScale = hoveredOriginalScale;
 
         VisualEffect vfx = hoveredObject.GetComponentInChildren<VisualEffect>(true);
         if (vfx != null)
         {
             bool isSelectedLanguage = languageByObject.TryGetValue(hoveredObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase);
+            bool isStartObject = hoveredObject == startBTObject && !string.IsNullOrWhiteSpace(selectedLanguage);
             float baseProgression = isSelectedLanguage ? 1f : 0f;
             vfx.SetFloat("Progression", isStartObject ? normalizedHover : Mathf.Max(baseProgression, normalizedHover));
             if (!isStartObject)
@@ -517,8 +552,6 @@ public class GameMenu : MonoBehaviour
         if (languageByObject.TryGetValue(hoveredObject, out string language))
         {
             OnLanguageClicked(language);
-            Debug.Log("ActivateHoveredObject: " + language, this);
-            selectedObject = hoveredObject;
         }
     }
 
@@ -561,14 +594,13 @@ public class GameMenu : MonoBehaviour
             return;
         }
 
-        bool isStartObject = targetObject == startBTObject;
-
-        if (!isStartObject) targetObject.transform.localScale = Vector3.one * buttonScaling;
+        targetObject.transform.localScale = Vector3.one * buttonScaling;
 
         VisualEffect vfx = targetObject.GetComponentInChildren<VisualEffect>(true);
         if (vfx != null)
         {
             bool isSelectedLanguage = languageByObject.TryGetValue(targetObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase);
+            bool isStartObject = targetObject == startBTObject;
             float progression = isSelectedLanguage ? 1f : 0f;
             vfx.SetFloat("Progression", progression);
             if (!isStartObject)
@@ -581,7 +613,11 @@ public class GameMenu : MonoBehaviour
         if (targetObject == startBTObject)
         {
             SetStartButtonProgression(startSelected && !string.IsNullOrWhiteSpace(selectedLanguage) ? 1f : 0f);
+            return;
         }
+
+        bool isSelectedLanguageObject = languageByObject.TryGetValue(targetObject, out string selectedLanguageCode) && string.Equals(selectedLanguageCode, selectedLanguage, StringComparison.OrdinalIgnoreCase);
+        SetTitleTargetPosition(targetObject, isSelectedLanguageObject ? titleSelectionPosition : Vector3.zero, !Application.isPlaying);
     }
 
     void OnLanguageClicked(string language)
@@ -604,6 +640,8 @@ public class GameMenu : MonoBehaviour
 
     void UpdateLanguageVisualState()
     {
+        selectedObject = null;
+
         for (int i = 0; i < langObjects.Count; i++)
         {
             GameObject langObject = langObjects[i];
@@ -626,12 +664,30 @@ public class GameMenu : MonoBehaviour
             return;
         }
 
+        if (selected)
+        {
+            selectedObject = targetObject;
+            timeAtSelection = Time.time;
+        }
+
+
         VisualEffect vfx = targetObject.GetComponentInChildren<VisualEffect>(true);
+
         if (vfx != null)
         {
             vfx.SetFloat("Progression", selected ? 1f : 0f);
             vfx.SetVector4("Highlight Color", selected ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
+            vfx.SetFloat("Evaporate", 0f);
         }
+
+        SetTitleTargetPosition(targetObject, selected ? titleSelectionPosition : Vector3.zero, !Application.isPlaying);
+
+        Collider collider = vfx != null ? vfx.GetComponent<Collider>() : targetObject.GetComponent<Collider>();
+        if (collider != null)
+        {
+            collider.enabled = !selected;
+        }
+
     }
 
     void UpdateStartButton()
@@ -765,12 +821,254 @@ public class GameMenu : MonoBehaviour
             vfx.SetFloat("Evaporate", value);
         }
 
-        TextMeshPro text = targetObject.GetComponentInChildren<TextMeshPro>(true);
-        if (text != null)
+        SetTitleAlpha(targetObject, 1f - Mathf.Clamp01(value));
+    }
+
+    void ApplyLanguageTexture(GameObject langObject, string language)
+    {
+        Renderer titleRenderer = GetTitleRenderer(langObject);
+        if (titleRenderer == null)
         {
-            Color color = text.color;
-            color.a = 1f - Mathf.Clamp01(value);
-            text.color = color;
+            return;
+        }
+
+        Texture2D texture = LoadLanguageTexture(language);
+        if (texture == null)
+        {
+            return;
+        }
+
+        Material material = titleRenderer.material;
+        if (material == null)
+        {
+            return;
+        }
+
+        if (material.HasProperty("_MainTex"))
+        {
+            material.mainTexture = texture;
+        }
+
+        if (material.HasProperty("_BaseMap"))
+        {
+            material.SetTexture("_BaseMap", texture);
+        }
+    }
+
+    Texture2D LoadLanguageTexture(string language)
+    {
+        if (string.IsNullOrWhiteSpace(language) || dataManager == null)
+        {
+            return null;
+        }
+
+        if (languageTextures.TryGetValue(language, out Texture2D cachedTexture) && cachedTexture != null)
+        {
+            return cachedTexture;
+        }
+
+        string texturePath = dataManager.GetFilePath(DataManager.DataFolder.Menu, language + ".png");
+        if (string.IsNullOrWhiteSpace(texturePath) || !File.Exists(texturePath))
+        {
+            Debug.LogWarning("Missing language texture: " + language + ".png", this);
+            return null;
+        }
+
+        try
+        {
+            byte[] pngData = File.ReadAllBytes(texturePath);
+            Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            if (!texture.LoadImage(pngData))
+            {
+                Destroy(texture);
+                return null;
+            }
+
+            texture.name = language;
+            languageTextures[language] = texture;
+            return texture;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Failed to load language texture '" + language + ".png': " + ex.Message, this);
+            return null;
+        }
+    }
+
+    void ReleaseLanguageTextures()
+    {
+        foreach (KeyValuePair<string, Texture2D> entry in languageTextures)
+        {
+            if (entry.Value != null)
+            {
+                Destroy(entry.Value);
+            }
+        }
+
+        languageTextures.Clear();
+    }
+
+    void SetTitleTargetPosition(GameObject langObject, Vector3 targetLocalPosition, bool instant)
+    {
+        Transform titleTransform = GetTitleTransform(langObject);
+        if (titleTransform == null)
+        {
+            return;
+        }
+
+        if (titleTargetPositionByObject.TryGetValue(langObject, out Vector3 currentTarget) && currentTarget == targetLocalPosition && !instant)
+        {
+            return;
+        }
+
+        titleStartPositionByObject[langObject] = titleTransform.localPosition;
+        titleTargetPositionByObject[langObject] = targetLocalPosition;
+        titleAnimStartedAtByObject[langObject] = Time.time;
+
+        if (instant || !Application.isPlaying || selectAnimTime <= 0f)
+        {
+            titleTransform.localPosition = targetLocalPosition;
+            titleStartPositionByObject[langObject] = targetLocalPosition;
+            titleAnimStartedAtByObject[langObject] = 0f;
+        }
+    }
+
+    void UpdateTitleAnimation(GameObject langObject)
+    {
+        Transform titleTransform = GetTitleTransform(langObject);
+        if (titleTransform == null)
+        {
+            return;
+        }
+
+        if (!titleTargetPositionByObject.TryGetValue(langObject, out Vector3 targetLocalPosition))
+        {
+            targetLocalPosition = Vector3.zero;
+            titleTargetPositionByObject[langObject] = targetLocalPosition;
+        }
+
+        if (!Application.isPlaying || selectAnimTime <= 0f)
+        {
+            titleTransform.localPosition = targetLocalPosition;
+            return;
+        }
+
+        if (!titleStartPositionByObject.TryGetValue(langObject, out Vector3 startLocalPosition))
+        {
+            startLocalPosition = titleTransform.localPosition;
+        }
+
+        float startedAt = titleAnimStartedAtByObject.TryGetValue(langObject, out float storedStartedAt) ? storedStartedAt : 0f;
+        float progress = Mathf.Clamp01((Time.time - startedAt) / selectAnimTime);
+        progress = titleAnimCurve.Evaluate(progress);
+        titleTransform.localPosition = Vector3.Lerp(startLocalPosition, targetLocalPosition, progress);
+    }
+
+    Transform GetTitleTransform(GameObject langObject)
+    {
+        if (langObject == null)
+        {
+            return null;
+        }
+
+        if (titleByObject.TryGetValue(langObject, out Transform cachedTitle) && cachedTitle != null)
+        {
+            return cachedTitle;
+        }
+
+        Transform container = langObject.transform.Find("Container");
+        Transform titleTransform = container != null ? container.Find("Title") : langObject.transform.Find("Title");
+        if (titleTransform == null)
+        {
+            titleTransform = FindChildRecursive(langObject.transform, "Title");
+        }
+
+        if (titleTransform != null)
+        {
+            titleByObject[langObject] = titleTransform;
+        }
+
+        return titleTransform;
+    }
+
+    Renderer GetTitleRenderer(GameObject langObject)
+    {
+        if (langObject == null)
+        {
+            return null;
+        }
+
+        if (titleRendererByObject.TryGetValue(langObject, out Renderer cachedRenderer) && cachedRenderer != null)
+        {
+            return cachedRenderer;
+        }
+
+        Transform titleTransform = GetTitleTransform(langObject);
+        Renderer titleRenderer = titleTransform != null ? titleTransform.GetComponent<Renderer>() : null;
+        if (titleRenderer == null && titleTransform != null)
+        {
+            titleRenderer = titleTransform.GetComponentInChildren<Renderer>(true);
+        }
+
+        if (titleRenderer != null)
+        {
+            titleRendererByObject[langObject] = titleRenderer;
+        }
+
+        return titleRenderer;
+    }
+
+    Transform FindChildRecursive(Transform root, string childName)
+    {
+        if (root == null)
+        {
+            return null;
+        }
+
+        for (int i = 0; i < root.childCount; i++)
+        {
+            Transform child = root.GetChild(i);
+            if (string.Equals(child.name, childName, StringComparison.OrdinalIgnoreCase))
+            {
+                return child;
+            }
+
+            Transform nestedChild = FindChildRecursive(child, childName);
+            if (nestedChild != null)
+            {
+                return nestedChild;
+            }
+        }
+
+        return null;
+    }
+
+    void SetTitleAlpha(GameObject langObject, float alpha)
+    {
+        Renderer titleRenderer = GetTitleRenderer(langObject);
+        if (titleRenderer == null)
+        {
+            return;
+        }
+
+        Material material = titleRenderer.material;
+        if (material == null)
+        {
+            return;
+        }
+
+        if (material.HasProperty("_Color"))
+        {
+            Color color = material.color;
+            color.a = alpha;
+            material.color = color;
+        }
+
+        if (material.HasProperty("_BaseColor"))
+        {
+            Color color = material.GetColor("_BaseColor");
+            color.a = alpha;
+            material.SetColor("_BaseColor", color);
         }
     }
 
@@ -811,8 +1109,6 @@ public class GameMenu : MonoBehaviour
             languageByObject.TryGetValue(langObject, out string language))
         {
             OnLanguageClicked(language);
-            Debug.Log("Language selected: " + language, this);
-            selectedObject = langObject;
         }
     }
 
