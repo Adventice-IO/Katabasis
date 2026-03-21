@@ -207,14 +207,22 @@ namespace BAPointCloudRenderer.CloudController
             List<PointCloudLoader> collectedLoaders = new List<PointCloudLoader>();
             foreach (PointCloudLoader loader in _loaders)
             {
-                Debug.Log($"Preview: processing loader {loader.cloudPath}");
-                string path = loader.cloudPath;
-                if (!path.EndsWith("/"))
+                string resolvedPath = loader.GetResolvedCloudPath();
+                Debug.Log($"Preview: processing loader {loader.cloudPath} resolved to {resolvedPath}");
+
+                if (string.IsNullOrWhiteSpace(resolvedPath))
                 {
-                    path += "/";
+                    Debug.LogWarning($"Preview: resolved path empty for loader {loader.cloudPath}. Skipping.");
+                    continue;
                 }
-                PointCloudMetaData metaData = CloudLoader.LoadMetaData(path, false);
-                Debug.Log($"Preview: loaded metadata for {path} (version {metaData.version})");
+
+                if (!resolvedPath.EndsWith("/"))
+                {
+                    resolvedPath += "/";
+                }
+
+                PointCloudMetaData metaData = CloudLoader.LoadMetaData(resolvedPath, false, false);
+                Debug.Log($"Preview: loaded metadata for {resolvedPath} (version {metaData.version})");
                 BoundingBox currentBoundingBox = metaData.tightBoundingBox_transformed;
                 overallBoundingBox.Lx = Math.Min(overallBoundingBox.Lx, currentBoundingBox.Lx);
                 overallBoundingBox.Ly = Math.Min(overallBoundingBox.Ly, currentBoundingBox.Ly);

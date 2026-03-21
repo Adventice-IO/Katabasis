@@ -396,9 +396,19 @@ class StreamingLasPointWriter:
         packed["Z"] = np.round((pts["z"] - off_z) / scale_z).astype(np.int32)
 
         if self.has_color:
-            packed["red"] = pts["red"].astype(np.uint16)
-            packed["green"] = pts["green"].astype(np.uint16)
-            packed["blue"] = pts["blue"].astype(np.uint16)
+            red = pts["red"].astype(np.uint16)
+            green = pts["green"].astype(np.uint16)
+            blue = pts["blue"].astype(np.uint16)
+
+            # PLY colors are typically 8-bit [0..255]; LAS uses 16-bit [0..65535].
+            if pts["red"].dtype == np.uint8:
+                red = np.minimum(red * 257, np.uint16(65535))
+                green = np.minimum(green * 257, np.uint16(65535))
+                blue = np.minimum(blue * 257, np.uint16(65535))
+
+            packed["red"] = red
+            packed["green"] = green
+            packed["blue"] = blue
 
         self._writer.write_points(packed)
         self.vertex_count += len(pts)

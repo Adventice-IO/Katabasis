@@ -74,7 +74,6 @@
                 o.position = UnityObjectToClipPos(v.position);
                 o.uv = v.uv;
 
-
                 // 1. Quick Global Exit
                 float globalAlpha = _Alpha * _Reveal;
                 if (globalAlpha <= 0.0) {
