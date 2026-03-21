@@ -3,18 +3,13 @@ import numpy as np
 import torch
 import argparse
 import ast
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 import shutil
 import gc
 import os
 import sys
 from pathlib import Path
 from tqdm import tqdm
-
-try:
-    from plyfile import PlyData, PlyElement
-except ImportError:
-    PlyData = None
-    PlyElement = None
 
 # --- CONFIG ---
 TILE_SIZE_METERS = 40.0
@@ -24,8 +19,12 @@ os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 PLY_TEMP_SUFFIX = ".bin"
 PLY_META_FILENAME = "_ply_dtype.txt"
 PLY_SPLIT_CHUNK_SIZE = 2_000_000
+PLY_ASCII_SPLIT_CHUNK_SIZE = 250_000
 PLY_VOXEL_CHUNK_SIZE = 5_000_000
 PLY_COUNT_FIELD_WIDTH = 20
+PLY_HEADER_MAX_LINES = 1024
+PLY_ASCII_LOG_INTERVAL = 100_000
+DEFAULT_PLY_SPLIT_WORKERS = max(1, min(16, (os.cpu_count() or 2) - 1))
 
 
 def log(message):
@@ -53,31 +52,129 @@ def is_ply_file(path):
     return path.suffix.lower() == ".ply"
 
 
-def require_plyfile():
-    if PlyData is None or PlyElement is None:
-        raise ImportError("PLY support requires the 'plyfile' package. Install it with 'pip install plyfile'.")
+def ply_scalar_dtype(property_type):
+    scalar_map = {
+        "char": np.dtype("i1"),
+        "int8": np.dtype("i1"),
+        "uchar": np.dtype("u1"),
+        "uint8": np.dtype("u1"),
+        "short": np.dtype("i2"),
+        "int16": np.dtype("i2"),
+        "ushort": np.dtype("u2"),
+        "uint16": np.dtype("u2"),
+        "int": np.dtype("i4"),
+        "int32": np.dtype("i4"),
+        "uint": np.dtype("u4"),
+        "uint32": np.dtype("u4"),
+        "float": np.dtype("f4"),
+        "float32": np.dtype("f4"),
+        "double": np.dtype("f8"),
+        "float64": np.dtype("f8"),
+    }
+    if property_type not in scalar_map:
+        raise ValueError(f"Unsupported PLY scalar property type: {property_type}")
+    return scalar_map[property_type]
+
+
+def parse_ply_header(input_path):
+    log(f"    Reading PLY header: {input_path.name}")
+
+    with open(input_path, "rb") as handle:
+        first_line = handle.readline()
+        if first_line != b"ply\n" and first_line != b"ply\r\n":
+            raise ValueError(f"PLY file '{input_path.name}' does not start with a valid PLY signature.")
+
+        format_name = None
+        vertex_count = None
+        vertex_fields = []
+        current_element = None
+        header_lines = 1
+
+        while True:
+            raw_line = handle.readline()
+            if not raw_line:
+                raise ValueError(f"PLY file '{input_path.name}' ended before end_header.")
+
+            header_lines += 1
+            if header_lines > PLY_HEADER_MAX_LINES:
+                raise ValueError(f"PLY header in '{input_path.name}' exceeds {PLY_HEADER_MAX_LINES} lines.")
+
+            try:
+                line = raw_line.decode("ascii").strip()
+            except UnicodeDecodeError as exc:
+                raise ValueError(f"PLY header in '{input_path.name}' contains non-ASCII data.") from exc
+
+            if not line:
+                continue
+
+            if header_lines <= 12 or line == "end_header":
+                log(f"    [HEADER:{header_lines}] {line}")
+
+            parts = line.split()
+            keyword = parts[0]
+
+            if keyword == "comment" or keyword == "obj_info":
+                continue
+
+            if keyword == "format":
+                if len(parts) < 3:
+                    raise ValueError(f"Invalid format line in '{input_path.name}': {line}")
+                format_name = parts[1]
+                log(f"    PLY format detected: {format_name}")
+                if format_name not in {"binary_little_endian", "ascii"}:
+                    raise ValueError(
+                        f"PLY file '{input_path.name}' uses unsupported format '{format_name}'. Supported formats are ascii and binary_little_endian."
+                    )
+            elif keyword == "element":
+                if len(parts) != 3:
+                    raise ValueError(f"Invalid element line in '{input_path.name}': {line}")
+                current_element = parts[1]
+                if current_element == "vertex":
+                    vertex_count = int(parts[2])
+                    log(f"    Vertex count: {vertex_count}")
+                else:
+                    log(f"    Found element '{current_element}' with count {parts[2]}")
+            elif keyword == "property":
+                if current_element == "vertex":
+                    if len(parts) == 3:
+                        property_type = parts[1]
+                        property_name = parts[2]
+                        vertex_fields.append((property_name, ply_scalar_dtype(property_type)))
+                        log(f"    Vertex property: {property_name} ({property_type})")
+                    elif len(parts) >= 5 and parts[1] == "list":
+                        raise ValueError(
+                            f"PLY file '{input_path.name}' has list properties in the vertex element, which are not supported."
+                        )
+                    else:
+                        raise ValueError(f"Invalid property line in '{input_path.name}': {line}")
+            elif keyword == "end_header":
+                break
+
+        if format_name is None:
+            raise ValueError(f"PLY file '{input_path.name}' is missing a format declaration.")
+        if vertex_count is None:
+            raise ValueError(f"PLY file '{input_path.name}' does not contain a vertex element.")
+
+        vertex_dtype = np.dtype(vertex_fields)
+        vertex_names = vertex_dtype.names or ()
+        missing_axes = [axis for axis in ("x", "y", "z") if axis not in vertex_names]
+        if missing_axes:
+            raise ValueError(f"PLY file '{input_path.name}' is missing vertex properties: {', '.join(missing_axes)}")
+
+        data_offset = handle.tell()
+        log(f"    Header complete at byte offset {data_offset}")
+        log(f"    Vertex stride: {vertex_dtype.itemsize} bytes")
+        log(f"    Vertex data bytes: {vertex_count * vertex_dtype.itemsize}")
+
+    return format_name, vertex_count, vertex_dtype, data_offset
 
 
 def open_ply_vertices(input_path):
-    require_plyfile()
-    log(f"    Reading PLY header: {input_path.name}")
-    try:
-        ply_data = PlyData.read(str(input_path), mmap=True)
-    except TypeError:
-        ply_data = PlyData.read(str(input_path))
-
-    if "vertex" not in ply_data:
-        raise ValueError(f"PLY file '{input_path.name}' does not contain a vertex element.")
-
-    vertex_data = ply_data["vertex"].data
-    vertex_names = vertex_data.dtype.names or ()
-    missing_axes = [axis for axis in ("x", "y", "z") if axis not in vertex_names]
-    if missing_axes:
-        raise ValueError(f"PLY file '{input_path.name}' is missing vertex properties: {', '.join(missing_axes)}")
-
-    log(f"    PLY header loaded: {len(vertex_data)} vertices")
-
-    return vertex_data
+    format_name, vertex_count, vertex_dtype, data_offset = parse_ply_header(input_path)
+    if format_name != "binary_little_endian":
+        raise ValueError(f"PLY file '{input_path.name}' is '{format_name}', which cannot be memory-mapped.")
+    log(f"    Memory-mapping vertex data for {input_path.name}")
+    return np.memmap(input_path, dtype=vertex_dtype, mode="r", offset=data_offset, shape=(vertex_count,))
 
 
 def get_ply_dtype_path(temp_dir):
@@ -133,6 +230,97 @@ def iter_array_chunks(points, chunk_size):
         yield start_idx, end_idx, points[start_idx:end_idx]
 
 
+def iter_binary_ply_chunks(input_path, data_offset, vertex_count, vertex_dtype, chunk_size):
+    points = np.memmap(input_path, dtype=vertex_dtype, mode="r", offset=data_offset, shape=(vertex_count,))
+    yield from iter_array_chunks(points, chunk_size)
+
+
+def iter_ascii_ply_chunks(input_path, data_offset, vertex_count, vertex_dtype, chunk_size):
+    field_names = list(vertex_dtype.names or ())
+    if not field_names:
+        raise ValueError(f"PLY file '{input_path.name}' has no vertex fields.")
+
+    field_types = [vertex_dtype.fields[name][0] for name in field_names]
+    num_fields = len(field_names)
+
+    with open(input_path, "r", encoding="ascii", newline="") as handle:
+        handle.seek(data_offset)
+        chunk_lines = []
+        lines_read = 0
+        next_log_at = min(PLY_ASCII_LOG_INTERVAL, vertex_count)
+
+        while lines_read < vertex_count:
+            line = handle.readline()
+            if not line:
+                raise ValueError(
+                    f"PLY file '{input_path.name}' ended early while reading vertex {lines_read + 1} of {vertex_count}."
+                )
+
+            stripped = line.strip()
+            if not stripped:
+                continue
+
+            chunk_lines.append(stripped)
+            lines_read += 1
+
+            if lines_read >= next_log_at:
+                # log(
+                #     "    ASCII read progress "
+                #     f"{input_path.name}: {format_progress(lines_read, vertex_count)} | "
+                #     f"buffered lines={len(chunk_lines)}"
+                # )
+                next_log_at = min(next_log_at + PLY_ASCII_LOG_INTERVAL, vertex_count)
+
+            if len(chunk_lines) >= chunk_size or lines_read == vertex_count:
+                chunk_start = lines_read - len(chunk_lines) + 1
+                # log(
+                #     "    Parsing ASCII chunk "
+                #     f"{input_path.name}: vertices {chunk_start}-{lines_read} | "
+                #     f"chunk size={len(chunk_lines)}"
+                # )
+                chunk_text = "\n".join(chunk_lines)
+                flat_values = np.fromstring(chunk_text, sep=" ", dtype=np.float64)
+                expected_values = len(chunk_lines) * num_fields
+                if flat_values.size != expected_values:
+                    raise ValueError(
+                        f"PLY file '{input_path.name}' has malformed ASCII vertex data near vertex {lines_read}. "
+                        f"Expected {expected_values} values, found {flat_values.size}."
+                    )
+
+                matrix = flat_values.reshape(len(chunk_lines), num_fields)
+                chunk = np.empty(len(chunk_lines), dtype=vertex_dtype)
+                for column_index, (field_name, field_dtype) in enumerate(zip(field_names, field_types)):
+                    chunk[field_name] = matrix[:, column_index].astype(field_dtype, copy=False)
+
+                start_idx = lines_read - len(chunk_lines)
+                # log(
+                #     "    Parsed ASCII chunk "
+                #     f"{input_path.name}: {format_progress(lines_read, vertex_count)}"
+                # )
+                yield start_idx, lines_read, chunk
+                chunk_lines = []
+
+
+def build_tile_batches(points):
+    x, y, _ = extract_xyz(points)
+    tx_idx = np.floor(x / TILE_SIZE_METERS).astype(np.int32)
+    ty_idx = np.floor(y / TILE_SIZE_METERS).astype(np.int32)
+    unique_tiles = np.unique(np.stack((tx_idx, ty_idx), axis=1), axis=0)
+
+    tile_batches = []
+    for tx, ty in unique_tiles:
+        mask = (tx_idx == tx) & (ty_idx == ty)
+        tile_batches.append(((int(tx), int(ty)), np.asarray(points[mask]).copy()))
+
+    return tile_batches
+
+
+def process_ply_split_chunk(chunk):
+    _, end_idx, points = chunk
+    tile_batches = build_tile_batches(points)
+    return end_idx, len(points), tile_batches
+
+
 class StreamingPlyPointWriter:
     def __init__(self, output_path, vertex_dtype):
         self.output_path = output_path
@@ -161,19 +349,65 @@ class StreamingPlyPointWriter:
 
     def write_points(self, points):
         if len(points) > 0:
-            array_points = np.asarray(points)
+            array_points = np.ascontiguousarray(np.asarray(points))
             if array_points.dtype != self.vertex_dtype:
                 array_points = array_points.astype(self.vertex_dtype, copy=False)
+            # Ensure proper contiguous storage for tofile and any downstream torch.from_numpy
+            if not array_points.flags.c_contiguous:
+                array_points = np.ascontiguousarray(array_points)
             array_points.tofile(self._file)
             self.vertex_count += len(array_points)
 
-    def close(self):
-        if self._file.closed:
+
+class StreamingLasPointWriter:
+    def __init__(self, output_path, vertex_dtype):
+        self.output_path = output_path
+        self.vertex_dtype = to_little_endian_dtype(vertex_dtype)
+
+        # Determine target LAS point format from available fields.
+        has_color = all(k in self.vertex_dtype.names for k in ("red", "green", "blue"))
+        point_format_id = 3 if has_color else 0
+
+        self.header = laspy.LasHeader(point_format=point_format_id, version="1.2")
+        self.header.scales = (0.001, 0.001, 0.001)
+        self.header.offsets = (0.0, 0.0, 0.0)
+
+        self._writer = laspy.open(output_path, mode="w", header=self.header)
+        self.vertex_count = 0
+        self.has_color = has_color
+
+    def write_points(self, points):
+        if len(points) == 0:
             return
 
-        self._file.seek(self._count_offset)
-        self._file.write(f"{self.vertex_count:0{PLY_COUNT_FIELD_WIDTH}d}".encode("ascii"))
-        self._file.close()
+        pts = np.ascontiguousarray(np.asarray(points))
+        if pts.dtype != self.vertex_dtype:
+            pts = pts.astype(self.vertex_dtype, copy=False)
+
+        # Convert float coordinates to LAS integer coordinates.
+        scale_x, scale_y, scale_z = self.header.scales
+        off_x, off_y, off_z = self.header.offsets
+
+        packed = laspy.point.record.PackedPointRecord.zeros(
+            len(pts), laspy.point.format.PointFormat(self.header.point_format.id)
+        )
+        packed["X"] = np.round((pts["x"] - off_x) / scale_x).astype(np.int32)
+        packed["Y"] = np.round((pts["y"] - off_y) / scale_y).astype(np.int32)
+        packed["Z"] = np.round((pts["z"] - off_z) / scale_z).astype(np.int32)
+
+        if self.has_color:
+            packed["red"] = pts["red"].astype(np.uint16)
+            packed["green"] = pts["green"].astype(np.uint16)
+            packed["blue"] = pts["blue"].astype(np.uint16)
+
+        self._writer.write_points(packed)
+        self.vertex_count += len(pts)
+
+    def close(self):
+        try:
+            self._writer.close()
+        except Exception:
+            pass
 
     def __enter__(self):
         return self
@@ -183,16 +417,33 @@ class StreamingPlyPointWriter:
 
 
 def build_output_writer(input_path, output_path):
-    if is_las_file(input_path):
-        with laspy.open(input_path) as src:
-            header = src.header
-        return laspy.open(output_path, mode="w", header=header)
+    output_suffix = output_path.suffix.lower()
 
-    if is_ply_file(input_path):
-        vertex_dtype = open_ply_vertices(input_path).dtype
-        return StreamingPlyPointWriter(output_path, vertex_dtype)
+    if output_suffix == ".las":
+        if is_las_file(input_path):
+            with laspy.open(input_path) as src:
+                header = src.header
+            return laspy.open(output_path, mode="w", header=header)
 
-    raise ValueError(f"Unsupported file format: {input_path.suffix}")
+        if is_ply_file(input_path):
+            _, _, vertex_dtype, _ = parse_ply_header(input_path)
+            return StreamingLasPointWriter(output_path, vertex_dtype)
+
+        raise ValueError(f"Unsupported input format for LAS output: {input_path.suffix}")
+
+    if output_suffix == ".ply":
+        if is_las_file(input_path):
+            with laspy.open(input_path) as src:
+                header = src.header
+            return laspy.open(output_path, mode="w", header=header)
+
+        if is_ply_file(input_path):
+            _, _, vertex_dtype, _ = parse_ply_header(input_path)
+            return StreamingPlyPointWriter(output_path, vertex_dtype)
+
+        raise ValueError(f"Unsupported input format for PLY output: {input_path.suffix}")
+
+    raise ValueError(f"Unsupported output format: {output_suffix}")
 
 
 def get_tile_suffix(input_path):
@@ -205,16 +456,32 @@ def get_tile_suffix(input_path):
 
 def extract_xyz(points):
     if hasattr(points, "x") and hasattr(points, "y") and hasattr(points, "z"):
-        return np.array(points.x), np.array(points.y), np.array(points.z)
+        return (
+            np.array(points.x, copy=True),
+            np.array(points.y, copy=True),
+            np.array(points.z, copy=True),
+        )
 
     point_names = points.dtype.names or ()
     if all(axis in point_names for axis in ("x", "y", "z")):
-        return points["x"], points["y"], points["z"]
+        return (
+            np.array(points["x"], copy=True),
+            np.array(points["y"], copy=True),
+            np.array(points["z"], copy=True),
+        )
 
     raise ValueError("Point data must include x, y, and z coordinates.")
 
 
 def select_voxel_indices(x_np, y_np, z_np, voxel_size, device, seen_hashes_tile):
+    x_np = np.array(x_np, copy=True)
+    y_np = np.array(y_np, copy=True)
+    z_np = np.array(z_np, copy=True)
+
+    x_np = np.ascontiguousarray(x_np)
+    y_np = np.ascontiguousarray(y_np)
+    z_np = np.ascontiguousarray(z_np)
+
     x = torch.from_numpy(x_np).to(device)
     y = torch.from_numpy(y_np).to(device)
     z = torch.from_numpy(z_np).to(device)
@@ -333,7 +600,8 @@ def voxelize_ply_tile(tile_path, output_writer, voxel_size, device):
             )
 
             if len(indices_cpu) > 0:
-                output_writer.write_points(chunk[indices_cpu])
+                selected = chunk[indices_cpu]
+                output_writer.write_points(np.ascontiguousarray(selected).copy())
                 points_written_total += len(indices_cpu)
 
             log(
@@ -359,13 +627,13 @@ def voxelize_ply_tile(tile_path, output_writer, voxel_size, device):
 # ==========================================
 # SPLITTING
 # ==========================================
-def split_into_tiles(input_path, temp_dir):
+def split_into_tiles(input_path, temp_dir, ply_workers):
     if is_las_file(input_path):
         split_las_into_tiles(input_path, temp_dir)
         return
 
     if is_ply_file(input_path):
-        split_ply_into_tiles(input_path, temp_dir)
+        split_ply_into_tiles(input_path, temp_dir, ply_workers)
         return
 
     raise ValueError(f"Unsupported file format: {input_path.suffix}")
@@ -400,63 +668,95 @@ def split_las_into_tiles(input_path, temp_dir):
                     count += np.sum(mask) # Track written points
                 
                 pbar.update(len(points))
-                log(
-                    "    Split progress "
-                    f"{input_path.name}: {format_progress(count, total_points)} | tiles={len(writers)}"
-                )
+                # log(
+                #     "    Split progress "
+                #     f"{input_path.name}: {format_progress(count, total_points)} | tiles={len(writers)}"
+                # )
     
     log(f"    > Split finished. Distributed {count} points into {len(writers)} tiles.")
     for w in writers.values(): w.close()
 
 
-def split_ply_into_tiles(input_path, temp_dir):
+def split_ply_into_tiles(input_path, temp_dir, ply_workers):
     log(f"    Opening PLY source: {input_path}")
-    points = open_ply_vertices(input_path)
-    total_points = len(points)
-    log(f"    Loaded {total_points} PLY vertices")
-    write_ply_dtype_metadata(temp_dir, points.dtype)
+    format_name, total_points, vertex_dtype, data_offset = parse_ply_header(input_path)
+    log(f"    PLY source format: {format_name}")
+    log(f"    Total PLY vertices: {total_points}")
+    write_ply_dtype_metadata(temp_dir, vertex_dtype)
 
     count = 0
     tile_keys = set()
-    chunk_count = max((total_points + PLY_SPLIT_CHUNK_SIZE - 1) // PLY_SPLIT_CHUNK_SIZE, 1)
+    inflight_limit = max(1, ply_workers * 2)
+    completed_chunks = 0
 
-    with tqdm(total=len(points), unit="pts", desc="    Splitting", leave=False) as pbar:
-        for chunk_index, (_, end_idx, chunk) in enumerate(iter_array_chunks(points, PLY_SPLIT_CHUNK_SIZE), start=1):
-            x, y, _ = extract_xyz(chunk)
-            tx_idx = np.floor(x / TILE_SIZE_METERS).astype(np.int32)
-            ty_idx = np.floor(y / TILE_SIZE_METERS).astype(np.int32)
-            unique_tiles = np.unique(np.stack((tx_idx, ty_idx), axis=1), axis=0)
+    if format_name == "ascii":
+        log("    Using ASCII streaming reader for PLY vertices")
+        split_chunk_size = PLY_ASCII_SPLIT_CHUNK_SIZE
+        chunk_iter = iter_ascii_ply_chunks(input_path, data_offset, total_points, vertex_dtype, split_chunk_size)
+    else:
+        log("    Using binary memory-mapped reader for PLY vertices")
+        split_chunk_size = PLY_SPLIT_CHUNK_SIZE
+        chunk_iter = iter_binary_ply_chunks(input_path, data_offset, total_points, vertex_dtype, split_chunk_size)
 
-            for tx, ty in unique_tiles:
-                key = (int(tx), int(ty))
+    chunk_count = max((total_points + split_chunk_size - 1) // split_chunk_size, 1)
+
+    log(f"    Using {ply_workers} worker threads for PLY split processing")
+    log(f"    PLY split chunk size: {split_chunk_size}")
+
+    def flush_completed_futures(completed_futures):
+        nonlocal count, completed_chunks
+        for completed_future in completed_futures:
+            end_idx, chunk_points, tile_batches = completed_future.result()
+            count += chunk_points
+            completed_chunks += 1
+            pbar.update(chunk_points)
+            for key, tile_points in tile_batches:
                 tile_keys.add(key)
-                mask = (tx_idx == tx) & (ty_idx == ty)
-                tile_points = np.asarray(chunk[mask])
-                out_p = temp_dir / f"{tx}_{ty}{PLY_TEMP_SUFFIX}"
+                out_p = temp_dir / f"{key[0]}_{key[1]}{PLY_TEMP_SUFFIX}"
                 with open(out_p, "ab") as tile_file:
                     tile_points.tofile(tile_file)
-                count += len(tile_points)
 
-            pbar.update(len(chunk))
-            log(
-                "    Split progress "
-                f"{input_path.name}: {format_progress(count, total_points)} | "
-                f"chunks={format_progress(chunk_index, chunk_count)} | "
-                f"tile files={len(tile_keys)}"
-            )
+            # log(
+            #     "    Split progress "
+            #     f"{input_path.name}: {format_progress(count, total_points)} | "
+            #     f"chunks={format_progress(completed_chunks, chunk_count)} | "
+            #     f"tile files={len(tile_keys)}"
+            # )
+
+    with tqdm(total=total_points, unit="pts", desc="    Splitting", leave=False) as pbar:
+        with ThreadPoolExecutor(max_workers=ply_workers) as executor:
+            futures = set()
+
+            for chunk in chunk_iter:
+                # log(
+                #     "    Queueing split chunk "
+                #     f"{input_path.name}: {format_progress(chunk[1], total_points)} | "
+                #     f"inflight={len(futures) + 1}/{inflight_limit}"
+                # )
+                futures.add(executor.submit(process_ply_split_chunk, chunk))
+
+                if len(futures) >= inflight_limit:
+                    done, futures = wait(futures, return_when=FIRST_COMPLETED)
+                    flush_completed_futures(done)
+
+            if futures:
+                done, _ = wait(futures)
+                flush_completed_futures(done)
 
     log(f"    > Split finished. Distributed {count} points into {len(tile_keys)} tiles.")
 
 # ==========================================
 # PIPELINE
 # ==========================================
-def voxelize_tiled_pipeline(input_path, output_path, voxel_size, device, skip_split=False):
+def voxelize_tiled_pipeline(input_path, output_path, voxel_size, device, skip_split=False, ply_workers=DEFAULT_PLY_SPLIT_WORKERS):
     temp_dir = output_path.parent.resolve() / f"_temp_{input_path.stem}"
     tile_suffix = get_tile_suffix(input_path)
     log(f"  > Output: {output_path}")
     log(f"  > Temp Dir: {temp_dir}")
     log(f"  > Source Type: {input_path.suffix.lower()}")
     log(f"  > Voxel Size: {voxel_size}")
+    if is_ply_file(input_path):
+        log(f"  > PLY Split Workers: {ply_workers}")
 
     # --- PHASE 1: SPLIT OR SKIP ---
     do_split = True
@@ -485,7 +785,7 @@ def voxelize_tiled_pipeline(input_path, output_path, voxel_size, device, skip_sp
         log("    [PHASE 1] Splitting source into tiles...")
         if temp_dir.exists(): shutil.rmtree(temp_dir)
         temp_dir.mkdir()
-        split_into_tiles(input_path, temp_dir)
+        split_into_tiles(input_path, temp_dir, ply_workers)
     else:
         log("    [PHASE 1] Reusing existing tiles.")
 
@@ -539,6 +839,8 @@ def main():
     parser.add_argument("--size", type=float, default=0.01)
     parser.add_argument("--tiled", action="store_true")
     parser.add_argument("--skip-split", action="store_true")
+    parser.add_argument("--ply-workers", type=int, default=DEFAULT_PLY_SPLIT_WORKERS)
+    parser.add_argument("--output-ext", choices=["ply", "las"], default="las")
     
     args = parser.parse_args()
 
@@ -548,6 +850,11 @@ def main():
     log(f"[ARGS] voxel_size={args.size}")
     log(f"[ARGS] tiled={args.tiled}")
     log(f"[ARGS] skip_split={args.skip_split}")
+    log(f"[ARGS] ply_workers={args.ply_workers}")
+
+    if args.ply_workers < 1:
+        log("ERROR: --ply-workers must be at least 1.")
+        return
     
     if not torch.cuda.is_available():
         log("ERROR: CUDA not found.")
@@ -575,10 +882,13 @@ def main():
     
     for i, f in enumerate(files):
         log(f"\n[{i+1}/{len(files)}] Processing {f.name} | overall progress={format_progress(i, len(files))}")
-        out_file = output_path / f.name
-        
+
+        out_suffix = ".las" if args.output_ext == "las" else f.suffix
+        out_name = f.with_suffix(out_suffix).name
+        out_file = output_path / out_name
+
         if args.tiled:
-            voxelize_tiled_pipeline(f, out_file, args.size, device, args.skip_split)
+            voxelize_tiled_pipeline(f, out_file, args.size, device, args.skip_split, args.ply_workers)
         else:
             log("[INFO] Non-tiled mode is not implemented. Use --tiled.")
 
