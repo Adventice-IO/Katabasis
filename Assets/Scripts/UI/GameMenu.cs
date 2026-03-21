@@ -562,6 +562,9 @@ public class GameMenu : MonoBehaviour
             return;
         }
 
+        if (startSelected) return;
+
+
         ResetObjectAnimation(hoveredObject);
         hoveredObject = targetObject;
         hoveredSince = Time.time;

@@ -3460,10 +3460,15 @@ MonoBehaviour:
   initialSalle: {fileID: 0}
   noAudioSO: {fileID: 0}
   debugAudioStates: 0
+  menuRefSO: {fileID: 0}
+  introRefSO: {fileID: 0}
+  outroRefSO: {fileID: 0}
+  endRefSO: {fileID: 0}
   gameState: 0
   language: en
   salle: {fileID: 0}
   tunnel: {fileID: 0}
+  endAutoNextTime: 3
   animateRotation: 0
   trackPosition: 0
   defaultCamMaxDistance: 50
@@ -3650,6 +3655,7 @@ MonoBehaviour:
   teleportationLoco: {fileID: 0}
   turnLoco: {fileID: 0}
   viewDistanceAnimSpeed: 0.2
+  viewDistanceHideSpeed: 10
   pointCloudViewDistanceMultiplier: 1
 --- !u!114 &3732688429945291836 stripped
 MonoBehaviour:

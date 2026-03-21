@@ -103,7 +103,7 @@ public class KataPortal : MonoBehaviour
         {
             bool showInSalle = mainController.isTunnelACurrentOut(tunnel) && mainController.timeSinceArrived > timeBeforeReveal;
             bool showInTunnel = isInTunnel && (isReverse ? mainController.trackPosition > .5f : mainController.trackPosition < .5f);
-            shouldShow = showInTunnel || showInSalle;
+            shouldShow = mainController.gameState == MainController.GameState.Playing && (showInTunnel || showInSalle);
             if (showInSalle)
             {
                 if (mainController.comingFromTunnel == tunnel)
@@ -154,12 +154,12 @@ public class KataPortal : MonoBehaviour
                 if (newProg > 0 && progression == 0)
                 {
                     if (debugAudio) Debug.Log("Posting loading event");
-                    loadingEvent.evt.Post(gameObject);
+                    loadingEvent.evt?.Post(gameObject);
                 }
                 else if (newProg == 0 && progression > 0)
                 {
                     if (debugAudio) Debug.Log("Stopping loading event");
-                    loadingEvent.evt.Stop(gameObject);
+                    loadingEvent.evt?.Stop(gameObject);
                 }
 
                 progression = newProg;

@@ -238,11 +238,11 @@ Transform:
   m_GameObject: {fileID: 5758827369740554275}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 5}
+  m_LocalPosition: {x: 0, y: 1.7, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1389821045676622806}
+  m_Father: {fileID: 332919419242661547}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6054136577354756175
 MonoBehaviour:
@@ -468,11 +468,11 @@ Transform:
   m_GameObject: {fileID: 7516514722154597253}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 5}
+  m_LocalPosition: {x: 0, y: 1.7, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1389821045676622806}
+  m_Father: {fileID: 332919419242661547}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3351116618577223801
 MonoBehaviour:
@@ -486,11 +486,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79d19d78dc8452a418325558be004847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameOutro
-  cartonTime: 2
-  cartonFadeTime: 1
-  spawnDistance: 2
-  cartonSize: {x: 1.6, y: 0.9}
+  totalRevealTime: 4
+  cartonRevealTime: 1
+  firstCartonExtraTime: 1
+  finishFadeOutTime: 1
+  layoutRadius: 2
+  angleStep: 20
+  autoAngle: 1
+  autoNext: 1
+  cartonScale: 1
+  nextDelay: 2
+  fadePointCloud: 0
+  pointCloudFadeTime: 2
   cartons: []
+  cartonObjects: []
 --- !u!1 &7746020257354616683
 GameObject:
   m_ObjectHideFlags: 0
@@ -1016,12 +1025,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2218496723442559053, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6579544661160099061}
-    - targetCorrespondingSourceObject: {fileID: 657184242161839408, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4294248152049674104}
-    - targetCorrespondingSourceObject: {fileID: 657184242161839408, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 2218496723442559053, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4294607192093061832}
+    - targetCorrespondingSourceObject: {fileID: 2218496723442559053, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4294248152049674104}
     - targetCorrespondingSourceObject: {fileID: 657184242161839408, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1611614628706869100}

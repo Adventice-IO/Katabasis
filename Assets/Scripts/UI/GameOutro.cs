@@ -8,22 +8,29 @@ public class GameOutro : MonoBehaviour
     bool isActive = false;
     float timeOnActiveChange = 0f;
 
-    public float cartonTime = 2f;
-    public float cartonFadeTime = 1f;
-    public float spawnDistance = 2f;
-    public Vector2 cartonSize = new Vector2(1.6f, 0.9f);
+    public float totalRevealTime = 4f;
+    public float cartonRevealTime = 1f;
+    public float firstCartonExtraTime = 1f;
+    public float finishFadeOutTime = 1f;
+    public float layoutRadius = 2f;
+    public float angleStep = 20f;
+    public bool autoAngle = true;
+    public bool autoNext = true;
+    public float cartonScale = 1f;
+    public float nextDelay = 2f;
+    public bool fadePointCloud = false;
+    public float pointCloudFadeTime = 2f;
 
     public List<Texture2D> cartons = new List<Texture2D>();
+    public List<GameObject> cartonObjects = new List<GameObject>();
 
-    GameObject currentCartonObject;
-    MeshRenderer currentCartonRenderer;
-    Material currentCartonMaterial;
-    int currentCartonIndex = -1;
     bool outroFinished = false;
     bool waitingForCartons;
 
     MainController mainController;
     DataManager dataManager;
+
+
     void Start()
     {
         mainController = GameObject.FindAnyObjectByType<MainController>();
@@ -33,35 +40,34 @@ public class GameOutro : MonoBehaviour
 
     void Update()
     {
+        UpdateCartonLayout();
+
+        if (mainController == null)
+        {
+            mainController = GameObject.FindAnyObjectByType<MainController>();
+        }
+
         if (!isActive)
         {
             return;
         }
 
         float timeSinceActiveChange = Time.time - timeOnActiveChange;
-        float cartonDuration = cartonFadeTime + cartonTime + cartonFadeTime;
 
-        if (cartons == null || cartons.Count == 0 || cartonDuration <= 0f)
+        if (cartons == null || cartons.Count == 0)
         {
             FinishOutro();
             return;
         }
 
-        int newCartonIndex = Mathf.FloorToInt(timeSinceActiveChange / cartonDuration);
-        if (newCartonIndex >= cartons.Count)
+        UpdateCartonReveal(timeSinceActiveChange);
+        UpdatePointCloudFade(timeSinceActiveChange);
+
+        float totalOutroDuration = totalRevealTime + finishFadeOutTime + nextDelay;
+        if (timeSinceActiveChange >= totalOutroDuration)
         {
-            HideCurrentCarton();
             FinishOutro();
-            return;
         }
-
-        if (newCartonIndex != currentCartonIndex)
-        {
-            ShowCarton(newCartonIndex);
-        }
-
-        float cartonElapsed = timeSinceActiveChange - (newCartonIndex * cartonDuration);
-        UpdateCartonAlpha(cartonElapsed);
     }
 
     public void setActive(bool active)
@@ -73,36 +79,23 @@ public class GameOutro : MonoBehaviour
         {
             LoadCartons();
             outroFinished = false;
-            currentCartonIndex = -1;
-            HideCurrentCarton();
+            if (mainController != null)
+            {
+            }
         }
         else
         {
             outroFinished = false;
-            currentCartonIndex = -1;
-            HideCurrentCarton();
+            HideCurrentCartons();
+            if (mainController != null && !fadePointCloud)
+            {
+                mainController.pointCloudViewDistanceMultiplier = 1f;
+            }
         }
     }
 
     void LoadCartons()
     {
-        if (!dataManager.IsFolderReady(DataManager.DataFolder.Outro))
-        {
-            if (!waitingForCartons)
-            {
-                waitingForCartons = true;
-                dataManager.PreloadFolder(DataManager.DataFolder.Outro, (success, path) =>
-                {
-                    waitingForCartons = false;
-                    if (success)
-                    {
-                        LoadCartons();
-                    }
-                });
-            }
-            return;
-        }
-
         if (cartons != null)
         {
             foreach (Texture2D texture in cartons)
@@ -115,16 +108,20 @@ public class GameOutro : MonoBehaviour
         }
 
         cartons.Clear();
+        HideCurrentCartons();
 
         string outroPath = dataManager.GetBasePath(DataManager.DataFolder.Outro);
         if (!Directory.Exists(outroPath))
         {
+            Debug.LogWarning("Outro directory not found: " + outroPath);
             return;
         }
 
         string[] pngFiles = Directory.GetFiles(outroPath, "*.png")
             .OrderBy(path => path, System.StringComparer.OrdinalIgnoreCase)
             .ToArray();
+
+        Debug.Log("Found " + pngFiles.Length + " outro carton(s) in: " + outroPath);
 
         foreach (string pngFile in pngFiles)
         {
@@ -140,118 +137,263 @@ public class GameOutro : MonoBehaviour
                 Destroy(texture);
             }
         }
+
+        CreateCartonObjects();
     }
 
-    void ShowCarton(int index)
+    void OnValidate()
     {
-        HideCurrentCarton();
+        UpdateCartonLayout();
+    }
 
-        Texture2D texture = cartons[index];
-        if (texture == null)
+    void CreateCartonObjects()
+    {
+        HideCurrentCartons();
+
+        Debug.Log("Creating carton objects for " + cartons.Count + " carton(s).");
+        Camera targetCamera = Camera.main;
+        if (targetCamera == null)
         {
-            currentCartonIndex = index;
+            return;
+        }
+
+        Vector3 forward = transform.forward;
+        forward.y = 0f;
+        if (forward == Vector3.zero)
+        {
+            forward = targetCamera.transform.forward;
+            forward.y = 0f;
+            if (forward == Vector3.zero)
+            {
+                forward = Vector3.forward;
+            }
+        }
+
+        forward.Normalize();
+        for (int i = 0; i < cartons.Count; i++)
+        {
+            Texture2D texture = cartons[i];
+            if (texture == null)
+            {
+                Debug.Log("Skipping null texture for carton index " + i);
+                continue;
+            }
+
+            GameObject cartonObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            cartonObject.name = "OutroCarton_" + i;
+            Destroy(cartonObject.GetComponent<Collider>());
+            cartonObject.transform.SetParent(transform, false);
+
+            cartonObject.transform.localScale = new Vector3(cartonScale, cartonScale, 1f);
+
+            MeshRenderer cartonRenderer = cartonObject.GetComponent<MeshRenderer>();
+            Shader unlitTransparent = Shader.Find("Sprites/Default");
+            if (unlitTransparent == null)
+            {
+                unlitTransparent = Shader.Find("Unlit/Texture");
+            }
+
+            Material cartonMaterial = new Material(unlitTransparent);
+            cartonMaterial.mainTexture = texture;
+            cartonRenderer.material = cartonMaterial;
+            SetCartonAlpha(cartonRenderer, 0f);
+
+            cartonObjects.Add(cartonObject);
+            Debug.Log("Created carton object for texture: " + texture.name);
+        }
+
+        UpdateCartonLayout();
+    }
+
+    float GetCartonAngle(int index)
+    {
+        if (index <= 0)
+        {
+            return 0f;
+        }
+
+        int sideIndex = ((index - 1) / 2) + 1;
+        bool isLeft = index % 2 == 1;
+        float step = GetResolvedAngleStep();
+        float signedStep = sideIndex * step;
+        return isLeft ? -signedStep : signedStep;
+    }
+
+    float GetResolvedAngleStep()
+    {
+        if (!autoAngle)
+        {
+            return angleStep;
+        }
+
+        int sideCount = cartons != null && cartons.Count > 1 ? ((cartons.Count - 1) + 1) / 2 : 0;
+        if (sideCount <= 0)
+        {
+            return angleStep;
+        }
+
+        return 180f / (sideCount + 1);
+    }
+
+    void UpdateCartonLayout()
+    {
+        if (cartonObjects == null || cartonObjects.Count == 0)
+        {
             return;
         }
 
         Camera targetCamera = Camera.main;
         if (targetCamera == null)
         {
-            currentCartonIndex = index;
             return;
         }
 
-        currentCartonObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        currentCartonObject.name = "IntroCarton_" + index;
-        Destroy(currentCartonObject.GetComponent<Collider>());
-
-        Vector3 spawnPosition = targetCamera.transform.position + (targetCamera.transform.forward * spawnDistance);
-        currentCartonObject.transform.position = new Vector3(spawnPosition.x, targetCamera.transform.position.y, spawnPosition.z);
-        currentCartonObject.transform.rotation = Quaternion.LookRotation(currentCartonObject.transform.position - targetCamera.transform.position, Vector3.up);
-
-        float width = cartonSize.x;
-        float height = cartonSize.y;
-        if (texture.height > 0)
+        Vector3 forward = transform.forward;
+        forward.y = 0f;
+        if (forward == Vector3.zero)
         {
-            height = width * ((float)texture.height / texture.width);
-        }
-        currentCartonObject.transform.localScale = new Vector3(width, height, 1f);
-
-        currentCartonRenderer = currentCartonObject.GetComponent<MeshRenderer>();
-        Shader unlitTransparent = Shader.Find("Sprites/Default");
-        if (unlitTransparent == null)
-        {
-            unlitTransparent = Shader.Find("Unlit/Texture");
+            forward = targetCamera.transform.forward;
+            forward.y = 0f;
+            if (forward == Vector3.zero)
+            {
+                forward = Vector3.forward;
+            }
         }
 
-        currentCartonMaterial = new Material(unlitTransparent);
-        currentCartonMaterial.mainTexture = texture;
-        currentCartonRenderer.material = currentCartonMaterial;
+        forward.Normalize();
 
-        currentCartonIndex = index;
-        SetCurrentCartonAlpha(0f);
+        for (int i = 0; i < cartonObjects.Count; i++)
+        {
+            GameObject cartonObject = cartonObjects[i];
+            if (cartonObject == null)
+            {
+                continue;
+            }
+
+            Texture2D texture = i < cartons.Count ? cartons[i] : null;
+            cartonObject.transform.localScale = new Vector3(cartonScale, cartonScale, 1f);
+
+            float angle = GetCartonAngle(i);
+            Quaternion rotationOffset = Quaternion.AngleAxis(angle, Vector3.up);
+            Vector3 direction = rotationOffset * forward;
+            cartonObject.transform.position = transform.position + (direction * layoutRadius);
+            cartonObject.transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
+        }
     }
 
-    void UpdateCartonAlpha(float cartonElapsed)
+    float GetCartonStepDelay()
     {
-        if (currentCartonMaterial == null)
+        if (cartons == null || cartons.Count <= 1)
         {
-            return;
+            return 0f;
         }
 
-        float alpha;
-        if (cartonFadeTime <= 0f)
-        {
-            alpha = cartonElapsed < cartonTime ? 1f : 0f;
-        }
-        else if (cartonElapsed < cartonFadeTime)
-        {
-            alpha = Mathf.Clamp01(cartonElapsed / cartonFadeTime);
-        }
-        else if (cartonElapsed < cartonFadeTime + cartonTime)
-        {
-            alpha = 1f;
-        }
-        else
-        {
-            float fadeOutElapsed = cartonElapsed - cartonFadeTime - cartonTime;
-            alpha = 1f - Mathf.Clamp01(fadeOutElapsed / cartonFadeTime);
-        }
-
-        SetCurrentCartonAlpha(alpha);
+        float remainingTime = Mathf.Max(0f, totalRevealTime - firstCartonExtraTime - cartonRevealTime);
+        return remainingTime <= 0f ? 0f : remainingTime / (cartons.Count - 1);
     }
 
-    void SetCurrentCartonAlpha(float alpha)
+    float GetCartonStartTime(int index)
     {
-        if (currentCartonMaterial == null)
+        if (index <= 0)
+        {
+            return 0f;
+        }
+
+        return firstCartonExtraTime + (GetCartonStepDelay() * (index - 1));
+    }
+
+    float GetRevealEndTime()
+    {
+        return Mathf.Max(0f, totalRevealTime);
+    }
+
+    void UpdateCartonReveal(float elapsed)
+    {
+        float revealEndTime = GetRevealEndTime();
+        float fadeOutStart = revealEndTime;
+
+        for (int i = 0; i < cartonObjects.Count; i++)
+        {
+            GameObject cartonObject = cartonObjects[i];
+            if (cartonObject == null)
+            {
+                continue;
+            }
+
+            MeshRenderer cartonRenderer = cartonObject.GetComponent<MeshRenderer>();
+            if (cartonRenderer == null)
+            {
+                continue;
+            }
+
+            float cartonStart = GetCartonStartTime(i);
+            float revealProgress = cartonRevealTime <= 0f ? (elapsed >= cartonStart ? 1f : 0f) : Mathf.Clamp01((elapsed - cartonStart) / cartonRevealTime);
+            float fadeOutMultiplier = 1f;
+            if (finishFadeOutTime <= 0f)
+            {
+                fadeOutMultiplier = elapsed >= fadeOutStart ? 0f : 1f;
+            }
+            else if (elapsed > fadeOutStart)
+            {
+                fadeOutMultiplier = 1f - Mathf.Clamp01((elapsed - fadeOutStart) / finishFadeOutTime);
+            }
+
+            SetCartonAlpha(cartonRenderer, revealProgress * fadeOutMultiplier);
+        }
+    }
+
+    void UpdatePointCloudFade(float elapsed)
+    {
+        if (!fadePointCloud || mainController == null)
         {
             return;
         }
 
-        if (!currentCartonMaterial.HasProperty("_Color"))
+        float fadeDuration = pointCloudFadeTime <= 0f ? totalRevealTime : pointCloudFadeTime;
+        float fadeStart = Mathf.Max(0f, totalRevealTime - fadeDuration);
+        float progress = fadeDuration <= 0f ? 1f : Mathf.Clamp01((elapsed - fadeStart) / fadeDuration);
+        mainController.pointCloudViewDistanceMultiplier = Mathf.Lerp(1f, 0f, progress);
+    }
+
+    void SetCartonAlpha(MeshRenderer renderer, float alpha)
+    {
+        if (renderer == null || renderer.material == null)
         {
             return;
         }
 
-        Color color = currentCartonMaterial.color;
+        Material material = renderer.material;
+        if (!material.HasProperty("_Color"))
+        {
+            return;
+        }
+
+        Color color = material.color;
         color.a = alpha;
-        currentCartonMaterial.color = color;
+        material.color = color;
     }
 
-    void HideCurrentCarton()
+    void HideCurrentCartons()
     {
-        if (currentCartonObject != null)
+        Debug.Log("Hiding and destroying " + cartonObjects.Count + " existing carton object(s).");
+        for (int i = 0; i < cartonObjects.Count; i++)
         {
-            Destroy(currentCartonObject);
+            GameObject cartonObject = cartonObjects[i];
+            if (cartonObject == null)
+            {
+                continue;
+            }
+
+            MeshRenderer renderer = cartonObject.GetComponent<MeshRenderer>();
+            if (renderer != null && renderer.material != null)
+            {
+                Destroy(renderer.material);
+            }
+
+            Destroy(cartonObject);
         }
 
-        if (currentCartonMaterial != null)
-        {
-            Destroy(currentCartonMaterial);
-        }
-
-        currentCartonObject = null;
-        currentCartonRenderer = null;
-        currentCartonMaterial = null;
+        cartonObjects.Clear();
     }
 
     void FinishOutro()
@@ -263,6 +405,6 @@ public class GameOutro : MonoBehaviour
 
         outroFinished = true;
         isActive = false;
-        mainController.gameState = MainController.GameState.End;
+        if(autoNext) mainController.gameState = MainController.GameState.End;
     }
 }

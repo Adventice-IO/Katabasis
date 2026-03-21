@@ -40,9 +40,11 @@ public class MainController : MonoBehaviour
     [Header("State")]
     public GameState gameState = GameState.Menu;
     GameState lastGameState;
+    float timeAtStateChange;
     public string language = "en";
     public Salle salle;
     public Tunnel tunnel;
+    public float endAutoNextTime = 3f;
 
     [Header("Controls")]
     public bool animateRotation = false;
@@ -118,6 +120,7 @@ public class MainController : MonoBehaviour
     [Header("Point Cloud")]
     [Range(0.01f, 1f)]
     public float viewDistanceAnimSpeed = 0.2f;
+    public float viewDistanceHideSpeed = 10f;
 
     [Range(0f, 1f)]
     public float pointCloudViewDistanceMultiplier = 1.0f;
@@ -375,10 +378,13 @@ public class MainController : MonoBehaviour
                 lastGameState = gameState;
             }
 
-            bool shouldSee = gameState == GameState.Playing || gameState == GameState.Outro;
-            float viewOffset = Time.deltaTime * (shouldSee ? 1f : -1f) * viewDistanceAnimSpeed;
-            pointCloudViewDistanceMultiplier = Mathf.Clamp01(pointCloudViewDistanceMultiplier + viewOffset);
-            if (pointCloudViewDistanceMultiplier <= 0f && gameState == GameState.End)
+            if (gameState == GameState.Playing)
+            {
+                float viewOffset = Time.deltaTime * viewDistanceAnimSpeed;
+                pointCloudViewDistanceMultiplier = Mathf.Clamp01(pointCloudViewDistanceMultiplier + viewOffset);
+            }
+            
+            if (gameState == GameState.End && Time.time - timeAtStateChange > endAutoNextTime)
             {
                 ResetGame();
             }
@@ -581,6 +587,8 @@ public class MainController : MonoBehaviour
 
         sallesGO.SetActive(gameState != GameState.Menu);
         tunnelsGO.SetActive(gameState != GameState.Menu);
+
+        timeAtStateChange = Time.time;
 
         switch (gameState)
         {
