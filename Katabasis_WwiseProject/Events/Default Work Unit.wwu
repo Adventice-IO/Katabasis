@@ -16,17 +16,6 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="AMB_Ambi_Test_01" ID="{DA39880E-9BE6-4E74-A913-3720138A718A}">
-							<ChildrenList>
-								<Action Name="" ID="{E98E4050-4890-4DA6-8B68-93A6FA31BDB4}" ShortID="315750242">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="AMB_Ambi_Test_01" ID="{CCFE7DA5-7A5A-4EA7-B7AA-E9DA8DC0B1E4}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
 						<Event Name="SFX_Portal_Validate" ID="{DD94F51F-CF3D-4D20-852A-10D0270AE417}">
 							<ChildrenList>
 								<Action Name="" ID="{347E986A-C36B-4D6A-852C-4829242677CD}" ShortID="56804106">
@@ -998,6 +987,28 @@
 											<ReferenceList>
 												<Reference Name="Target">
 													<ObjectRef Name="AMB_City_Alarms_C" ID="{6E9AA0A0-51E9-4CD6-A81E-82C7C654283E}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="AMB_City_I_Cars_A" ID="{41FCE102-83AA-489B-8FB6-B396847940FF}">
+									<ChildrenList>
+										<Action Name="" ID="{AF2F4EE8-38E4-407A-8B9D-C12E29693BA2}" ShortID="876255698">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="AMB_City_I_Cars_A" ID="{75882460-587C-4312-A5C9-E8124077C178}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="AMB_City_I_Cars_B" ID="{5C64BF35-FF08-4F02-A1F4-AEC8504506E1}">
+									<ChildrenList>
+										<Action Name="" ID="{39BA89EF-D138-4BFD-8B9A-53A7BB43B26A}" ShortID="41014671">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="AMB_City_I_Cars_B" ID="{6AA08BCF-7361-4CC1-8A88-ABE42076B2FB}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>

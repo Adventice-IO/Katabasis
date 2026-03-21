@@ -30,7 +30,6 @@ Event	ID	Name			Wwise Object Path	Notes
 	1305479495	AMB_City_A_People_Cars			\Default Work Unit\AMB\AMB_City\AMB_City_A_People_Cars	
 	1312797074	Exit_Plan_2_Sorry_mum			\Default Work Unit\VOX\VOX_ITW\Exit_Plan_2_Sorry_mum	
 	1367803575	Terry_1_What_is_underground			\Default Work Unit\VOX\VOX_ITW\Terry_1_What_is_underground	
-	1378078392	AMB_Ambi_Test_01			\Default Work Unit\TEST\AMB_Ambi_Test_01	
 	1382446273	Max_2_Family			\Default Work Unit\VOX\VOX_ITW\Max_2_Family	
 	1509907605	Alex_4_Zero_tolerance			\Default Work Unit\VOX\VOX_ITW\Alex_4_Zero_tolerance	
 	1615727631	Chris_2_0_Intro			\Default Work Unit\VOX\VOX_ITW\Chris_2_0_Intro	
@@ -41,6 +40,8 @@ Event	ID	Name			Wwise Object Path	Notes
 	1837304316	Steve_Mona_1_Underground			\Default Work Unit\VOX\VOX_ITW\Steve_Mona_1_Underground	
 	1846744149	Steve_Duncan_5_Police			\Default Work Unit\VOX\VOX_ITW\Steve_Duncan_5_Police	
 	1867442572	Spiderman_2_Mouv_muette			\Default Work Unit\VOX\VOX_ITW\Spiderman_2_Mouv_muette	
+	1869628172	AMB_City_I_Cars_B			\Default Work Unit\AMB\AMB_City\AMB_City_I_Cars_B	
+	1869628175	AMB_City_I_Cars_A			\Default Work Unit\AMB\AMB_City\AMB_City_I_Cars_A	
 	1949327327	Freedom_3_Drugs			\Default Work Unit\VOX\VOX_ITW\Freedom_3_Drugs	
 	2050142790	Max_3_Sharing			\Default Work Unit\VOX\VOX_ITW\Max_3_Sharing	
 	2078122011	Alex_0_Intro			\Default Work Unit\VOX\VOX_ITW\Alex_0_Intro	
@@ -92,9 +93,30 @@ State Group	ID	Name			Wwise Object Path	Notes
 	188982067	State_Map			\Default Work Unit\State_Map	
 
 State	ID	Name	State Group			Notes
+	84696430	Q	State_Map			
+	84696431	P	State_Map			
+	84696432	O	State_Map			
+	84696433	N	State_Map			
+	84696434	M	State_Map			
+	84696435	L	State_Map			
+	84696436	K	State_Map			
+	84696437	J	State_Map			
+	84696438	I	State_Map			
+	84696439	H	State_Map			
+	84696440	G	State_Map			
+	84696441	F	State_Map			
+	84696442	E	State_Map			
+	84696443	D	State_Map			
+	84696444	C	State_Map			
+	84696445	B	State_Map			
 	84696446	A	State_Map			
+	616254008	R_Exit	State_Map			
+	683028902	D_Exit	State_Map			
 	748895195	None	State_Map			
-	2876034013	A_to_B	State_Map			
+	3419115107	K_Exit	State_Map			
+	3583228001	E_Exit	State_Map			
+	4082180463	O_Exit	State_Map			
+	4143968025	M_Exit	State_Map			
 
 Game Parameter	ID	Name			Wwise Object Path	Notes
 	1540479560	RTCP_Distance			\Default Work Unit\RTCP_Distance	
@@ -124,12 +146,14 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	32925724	Chris_2_0_Intro	.cache\93\{9387E4D8-9DA5-F803-D88F-D8FC4C389E79}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Chris_2_0_Intro		90754
 	40113707	Spiderman_2_Mouv_muette	.cache\FE\{FEB3F96A-0393-494F-2BC5-711F2DECB65C}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Spiderman_2_Mouv_muette		133226
 	88786783	Freedom_1_Mole_People_1	.cache\B8\{B8367025-BC2A-3FD0-2714-88FFA2E634DD}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Freedom_1_Mole_People_1		934688
+	95469996	AMB_City_I_Cars_A_02	.cache\E3\{E3A0A949-7E8D-3893-0F92-D53B4ED76A95}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_A\AMB_City_I_Cars_A_02		149294
+	98321888	AMB_City_I_Cars_A_07	.cache\BA\{BAD49681-1D16-D2EC-B9CF-989E5BA5FE2F}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_A\AMB_City_I_Cars_A_07		234695
 	104482706	Chris_4_1_Cup_of_tea	.cache\4E\{4E07FF89-290B-F0AD-19F9-58FA13253C44}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Chris_4_1_Cup_of_tea		488617
 	106868379	Steve_Duncan_1_Dont_like_people	.cache\3D\{3DEBE606-896C-34FA-8BA9-95638A409832}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Steve_Duncan_1_Dont_like_people		357851
 	113183432	Kirk_1_Pips	.cache\EA\{EA639341-7971-BEF5-5786-4B5DD7790029}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Kirk_1_Pips		413052
+	141067283	AMB_City_I_Cars_B_06	.cache\FB\{FBCA79D2-26BA-6A0C-966D-E68F28079BE4}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_B\AMB_City_I_Cars_B_06		100899
 	157039249	Spiderman_0_Intro	.cache\34\{34295289-2D8E-1130-0635-63243290B78D}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Spiderman_0_Intro		66778
 	172071795	Omilio_0_Intro	.cache\BE\{BEAB0A52-7AF6-2594-F091-30CDE42E11FA}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Omilio_0_Intro		160467
-	183963844	AMB_Ambi_Test_01	.cache\EE\{EEDDF92F-B899-15FB-6A46-1D064E8D1832}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_Ambi_Test_01		9363265
 	198843051	SteveMona	.cache\CC\{CCC77D84-349A-FCDF-EDA5-33C2D80CE746}.wem		\Containers\Default Work Unit\VOX\VOX_Test\SteveMona		855417
 	203089093	AMB_Ambi_Ext_Park_Kids_01	.cache\13\{1306F729-BA35-813D-8869-9A2FD8D46EE5}.wem		\Containers\Default Work Unit\AMB\AMB_Ambi\AMB_Ambi_Ext\AMB_Ambi_Ext_Park_Kids_01		8738080
 	204851852	Terry_0_Intro	.cache\2A\{2A52DE14-34B6-F776-43D5-A2BF3912BF2F}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Terry_0_Intro		146373
@@ -137,22 +161,27 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	238314222	Tommy_1_Jungle	.cache\77\{77DF9FA5-EA45-0C89-0E4C-D50601AE9C2F}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Tommy_1_Jungle		652718
 	263187687	Freedom_0_Intro	.cache\45\{45D5BA4D-D3D4-5107-FA4F-A61769FDF2D6}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Freedom_0_Intro		108568
 	273518031	Steve_Mona_5_11Sept	.cache\91\{914B22BF-4803-BC26-43C8-FD265FC964DD}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Steve_Mona_5_11Sept		361042
+	279803452	AMB_City_I_Cars_B_01	.cache\59\{59ACB8CD-7C5A-1FBB-8499-C13A2A87F116}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_B\AMB_City_I_Cars_B_01		141604
+	285214637	AMB_City_I_Cars_A_04	.cache\62\{6217A4C3-E57B-343A-60AB-0A4130534C86}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_A\AMB_City_I_Cars_A_04		247663
 	296029900	Lucinda_2_accident	.cache\09\{0972AF1F-F2CC-33D1-648F-F5E21EADE240}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Lucinda_2_accident		427301
 	307883586	Omilio_1_Sante	.cache\4C\{4C8BCCFE-C216-5192-E25B-5255B85561AC}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Omilio_1_Sante		464502
 	314110337	Moses_0_Intro	.cache\FB\{FBD86D43-C57D-54B1-E4CD-AC9FDCEB9484}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Moses_0_Intro		43448
 	315386616	Steve_Mona_3_MICA	.cache\43\{438F132C-7F69-539A-1B25-256B741AFFA3}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Steve_Mona_3_MICA		345997
+	366838495	AMB_City_I_Cars_B_03	.cache\76\{765EE115-F7B0-A2EF-A6DD-EC57A06958BB}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_B\AMB_City_I_Cars_B_03		176362
 	386517990	Chris_3_4_Professional	.cache\F9\{F9A9768D-452F-8575-2C1D-1D43594B3936}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Chris_3_4_Professional		584561
+	391091026	AMB_City_I_Cars_B_07	.cache\4A\{4A4348E0-D341-A4D6-6A39-7E55A8D4858A}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_B\AMB_City_I_Cars_B_07		145024
 	399546684	AMB_City_D_Trumpet_01	.cache\99\{9999EEF3-8C0D-EF1C-7845-7E4EB9C8A051}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_D_Trumpet\AMB_City_D_Trumpet_01		428239
 	401434766	Moses_2_Rats	.cache\04\{045539B9-6E25-2D36-4B7B-35E50DB820E4}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Moses_2_Rats		343415
 	403250149	Terry_3_Mole_people	.cache\E3\{E334AA15-8EF6-E61D-E9E1-0E2A39A05715}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Terry_3_Mole_people		484049
 	417117700	Max_0_Intro	.cache\43\{43CA8253-1915-6777-B882-BF48B047B9E0}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Max_0_Intro		48753
 	424017703	Steve_Mona_1_Underground	.cache\60\{60032F3E-A418-D487-680A-997DCB8E40C5}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Steve_Mona_1_Underground		388540
+	425604551	AMB_City_I_Cars_B_02	.cache\C9\{C9AB9B3B-6C80-635F-8F27-8C11DAE74CCF}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_B\AMB_City_I_Cars_B_02		246870
 	438474891	Kirk_2_Oysters	.cache\D7\{D7EEE20E-43D5-E186-F10D-F98B3BAB9B52}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Kirk_2_Oysters		174490
 	450015599	Lucinda_1_community	.cache\E3\{E3AC143E-B277-C856-EFBD-79C100553E5B}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Lucinda_1_community		304279
 	466230538	Max_4_Dead_body	.cache\90\{9063B7B6-A49B-3CA4-ABA5-36675619C2E3}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Max_4_Dead_body		439006
 	487521039	Alex_0_Intro	.cache\9F\{9F70451E-FDD1-A460-B5CD-4905D9C705FD}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Alex_0_Intro		112495
-	494187231	AMB_City_Alarms_C	.cache\98\{9815F4C6-56C3-F2FE-452B-C459485C4423}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_H_Alarms\AMB_City_Alarms_C\AMB_City_Alarms_C		177364
-	506164236	AMB_City_Alarms_A	.cache\30\{30C880D0-AC65-05D8-2DE6-C591D3114018}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_H_Alarms\AMB_City_Alarms_A\AMB_City_Alarms_A		44658
+	494187232	AMB_City_Alarms_C	.cache\CC\{CC89EA32-D21A-BE37-ABFA-6A2B15EB15EA}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_H_Alarms\AMB_City_Alarms_C\AMB_City_Alarms_C		177364
+	506164237	AMB_City_Alarms_A	.cache\30\{30C880D0-AC65-05D8-2DE6-C591D3114018}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_H_Alarms\AMB_City_Alarms_A\AMB_City_Alarms_A		44658
 	520484305	Alex_4_Zero_tolerance	.cache\9B\{9B8D0E56-4240-6CF0-52D1-970A0583F9A5}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Alex_4_Zero_tolerance		545869
 	521078067	AMB_Ambi_Ext_Street_03	.cache\FA\{FAFB7EB9-A1F1-8BD4-A8C4-704B88D6796E}.wem		\Containers\Default Work Unit\AMB\AMB_Ambi\AMB_Ambi_Ext\AMB_Ambi_Ext_Street_03		6303868
 	532944603	Tommy_0_Intro	.cache\2A\{2A0844D2-A6B8-54DD-2A7A-690C3849F6F7}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Tommy_0_Intro		97596
@@ -179,16 +208,21 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	771366812	Alex_1_Suicides_1	.cache\73\{73FEA50D-B208-1ECD-516F-EB69191F8252}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Alex_1_Suicides_1		376379
 	776192475	Max_1_Fear_and_alert	.cache\14\{14D37AE9-1E3A-BD5D-19DD-CFAB1029B797}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Max_1_Fear_and_alert		423070
 	778711841	Steve_Duncan_5_Police	.cache\BF\{BF1846D3-4A23-6E55-2ADC-F16F6374F6DD}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Steve_Duncan_5_Police		237049
+	781526763	AMB_City_I_Cars_A_01	.cache\24\{24065859-AC21-8C93-BDF2-2A3A17C22A05}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_A\AMB_City_I_Cars_A_01		125362
 	828651791	Rob_0_Intro	.cache\88\{880156AD-5AF8-81AB-3889-6E2AFF8296C0}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Rob_0_Intro		93508
 	831783834	Steve_Duncan_3_Water	.cache\EC\{ECB05B34-53F6-EDAC-B85A-6EEB3F5685E1}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Steve_Duncan_3_Water		359871
 	838953995	AMB_Ambi_Ext_Street_02	.cache\62\{62841148-75EA-0E21-ACA6-347F3A61115A}.wem		\Containers\Default Work Unit\AMB\AMB_Ambi\AMB_Ambi_Ext\AMB_Ambi_Ext_Street_02		5665861
 	862414571	Alex_1_Suicides_2	.cache\DE\{DEA2173A-554D-6CC5-D10F-01C8EF83FAF1}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Alex_1_Suicides_2		391153
+	877581416	AMB_City_I_Cars_B_05	.cache\6A\{6AC5BF61-8103-660D-7E0B-7B4EC59FDAF7}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_B\AMB_City_I_Cars_B_05		102272
 	880458741	Rob_3_Lenfer_trom	.cache\A6\{A6192B50-50C3-6649-6B49-1E71EFC5FBEF}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Rob_3_Lenfer_trom		469759
 	890379907	Terry_4_Feeling	.cache\4A\{4A94F53E-BD44-394C-73B3-3D88BF0DB85B}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Terry_4_Feeling		469538
+	893042766	AMB_City_I_Cars_A_06	.cache\51\{515D12FC-7794-8965-21B1-7E3DDEC7A40A}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_A\AMB_City_I_Cars_A_06		110484
+	895449567	AMB_City_I_Cars_B_04	.cache\17\{17DC3C8B-FEB1-8B81-5C9D-DBE5F2E3A612}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_B\AMB_City_I_Cars_B_04		160370
 	901901747	Omilio_2_Passengers	.cache\92\{92B3637C-7531-0C3C-77D6-277B254BDD32}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Omilio_2_Passengers		458169
+	902717989	AMB_City_I_Cars_A_03	.cache\32\{322D2E3D-D180-B79A-246F-221597A0766B}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_A\AMB_City_I_Cars_A_03		307656
 	905211731	Moses_1_Urban_planner	.cache\3A\{3AA54CC8-B78D-154A-7332-91F1D86F84DE}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Moses_1_Urban_planner		364940
-	908095893	AMB_City_Alarms_B	.cache\19\{19B4995D-7A4C-0BD2-5C27-5295D759CC73}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_H_Alarms\AMB_City_Alarms_B\AMB_City_Alarms_B		992790
-	913016264	AMB_City_F_Church_01	.cache\9D\{9D7C4F09-770A-CA85-2BE0-14D0C9E6F662}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_F_Church\AMB_City_F_Church_01		175309
+	908095894	AMB_City_Alarms_B	.cache\BA\{BADFDE62-7C45-B70E-8AE0-9FF9138751E8}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_H_Alarms\AMB_City_Alarms_B\AMB_City_Alarms_B		992790
+	913016264	AMB_City_F_Church_01	.cache\8E\{8E4D6A6B-22EE-11E2-76D6-3D11F1423C47}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_F_Church\AMB_City_F_Church_01		175309
 	915782291	Chris_2_2_Radio	.cache\5F\{5FFD7F94-C4EF-3C40-67D4-925A59E61EAD}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Chris_2_2_Radio		296730
 	916036818	Alex_3_Hide_below	.cache\83\{833E41E9-0BC1-8952-3897-695DB8A95BA0}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Alex_3_Hide_below		532830
 	925658979	Freedom_3_Drugs	.cache\5A\{5AF87C22-367A-3D4A-293F-1663B0CC79C4}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Freedom_3_Drugs		833061
@@ -196,6 +230,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	947765759	Alex_2_Bebe	.cache\D9\{D9EFE568-FCE2-874D-D865-16F29EE380E1}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Alex_2_Bebe		571871
 	967671067	AMB_City_A_People_Cars_01	.cache\A9\{A930C836-1026-1A76-AEF3-08F54A823AD5}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_A_People_Cars\AMB_City_A_People_Cars_01		462089
 	969255766	Lucinda_0_Intro	.cache\2B\{2B40F872-C9BA-5BE1-0E80-B2FAF85F56BE}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Lucinda_0_Intro		72007
+	976824496	AMB_City_I_Cars_A_05	.cache\D0\{D0BCA0ED-9C23-4719-90E2-FB268A6E7F76}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_A\AMB_City_I_Cars_A_05		185078
 	988279800	Alex_5_Solitude	.cache\32\{32D9C3B0-E5C2-8B1C-5F3B-397AE03D3315}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Alex_5_Solitude		360913
 	993512241	AMB_City_B_People_Cars_01	.cache\5F\{5FBC8CBA-B4B3-9B61-A062-1404711FA063}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_B_People_Cars\AMB_City_B_People_Cars_01		358165
 	1006295590	Spiderman_1_Family_problems	.cache\F1\{F13B7883-0F1F-D916-57A0-D0DBBD34779A}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Spiderman_1_Family_problems		444084
