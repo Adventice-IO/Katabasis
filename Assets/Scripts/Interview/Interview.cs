@@ -23,6 +23,8 @@ public class Interview : MonoBehaviour
     public string interviewId;
     List<float> cutTimes;
 
+    string wwiseEventName;
+
     [Range(0, 4)]
     public int level;
     string basePath;
@@ -57,9 +59,12 @@ public class Interview : MonoBehaviour
     [Header("Audio Settings")]
     public AudioEventRefSO loadingEvent;
     public AudioEventRefSO validateEvent;
-    public AudioEventRefSO videoEvent;
+    // public AudioEventRefSO videoEvent;
     public AudioEventRefSO evaporateEvent;
     public AudioRTPCRefSO progRTPC;
+
+    public float videoStopFade = 1f;
+    uint videoEventID = AkSoundEngine.AK_INVALID_PLAYING_ID;
     bool debugWorkflow = true;
 
     Subtitles subtitles;
@@ -314,7 +319,9 @@ public class Interview : MonoBehaviour
 
         cutTimes = data.cutTimes != null ? new List<float>(data.cutTimes) : new List<float>();
 
-        LogDebug("Assigned interview slot -> depthkitPath='" + itwName + "', mediaPath='" + interviewId + "', level=" + level + ", basePath='" + basePath + "', previewBasePath='" + previewBasePath + "', videoUrl='" + videoPlayer.url + "'");
+        wwiseEventName = Path.GetFileNameWithoutExtension(data.mediaPath);
+
+        LogDebug("Assigned interview slot -> depthkitPath='" + itwName + "', mediaPath='" + interviewId + "', wwiseEventName = " + wwiseEventName + ", level=" + level + ", basePath='" + basePath + "', previewBasePath='" + previewBasePath + "', videoUrl='" + videoPlayer.url + "'");
     }
 
     string BuildMediaBasePath(string mediaPath)
@@ -342,6 +349,7 @@ public class Interview : MonoBehaviour
         clip.poster = null;
         if (videoPlayer != null)
         {
+            stopWwiseVideoEvent(); 
             videoPlayer.Stop();
             videoPlayer.playOnAwake = false;
             videoPlayer.waitForFirstFrame = true;
@@ -383,11 +391,12 @@ public class Interview : MonoBehaviour
         OnInterviewStarted?.Invoke(this);
         InterviewManager manager = FindAnyObjectByType<InterviewManager>();
         manager?.NotifyInterviewStarted(this);
+        
+        stopWwiseVideoEvent();
+        Debug.Log("Start Wwise Event from play");
+        AkUnitySoundEngine.PostEvent(wwiseEventName, gameObject);
+        
 
-        if (!videoPlayer.isPlaying && !isTransitioningSequence)
-        {
-            videoEvent?.evt.Post(gameObject);
-        }
         videoPlayer.Play();
         state = State.Playing;
 
@@ -412,6 +421,7 @@ public class Interview : MonoBehaviour
         }
 
         LogDebug("Stopping playback because another interview started");
+        stopWwiseVideoEvent();
         ReleasePlaybackResources(false);
         shouldEvaporate = false;
         evaporateProg = 0;
@@ -436,7 +446,9 @@ public class Interview : MonoBehaviour
 
         LogDebug("Evaporating interview '" + interviewId + "'");
         shouldEvaporate = true;
-        videoEvent?.evt.Stop(gameObject);
+        
+        stopWwiseVideoEvent();
+
         evaporateEvent?.evt.Post(gameObject);
         state = State.Ending;
         OnInterviewEnded?.Invoke(this);
@@ -444,9 +456,33 @@ public class Interview : MonoBehaviour
         Invoke(nameof(endEvaporate), evaporateTime + 5f);
     }
 
+    void stopWwiseVideoEvent()
+     //Stop video
+    {
+        Debug.Log("Stop Wwise Event " + videoEventID);
+        if (videoEventID != AkSoundEngine.AK_INVALID_PLAYING_ID)
+        {
+            // Stop the specific instance
+            // AkCurveInterpolation defines the fade curve (e.g., Linear, Sine)
+            AkSoundEngine.ExecuteActionOnPlayingID(AkActionOnEventType.AkActionOnEventType_Stop,
+                                                videoEventID,
+                                                (int)videoStopFade*1000,
+                                                AkCurveInterpolation.AkCurveInterpolation_Linear);
+
+            videoEventID = AkSoundEngine.AK_INVALID_PLAYING_ID;
+        }else
+        {
+            Debug.Log("Wwise Video Event was not set");
+        }
+
+
+    }
+
+
     void endEvaporate()
     {
         if (videoPlayer != null) videoPlayer.Stop();
+        stopWwiseVideoEvent();
         ReleasePlaybackResources(true);
         gameObject.SetActive(false);
     }
@@ -525,6 +561,8 @@ public class Interview : MonoBehaviour
         if (videoPlayer != null)
         {
             videoPlayer.Stop();
+        stopWwiseVideoEvent();
+
         }
 
         ReleasePlaybackResources(false);
@@ -611,7 +649,8 @@ public class Interview : MonoBehaviour
 
         subtitles?.stop();
         loadingEvent?.evt.Stop(gameObject);
-        videoEvent?.evt.Stop(gameObject);
+         stopWwiseVideoEvent();
+
 
         if (clearDepthkitAssets && clip != null)
         {

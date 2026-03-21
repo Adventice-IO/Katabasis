@@ -20,6 +20,7 @@ namespace AK
         static const AkUniqueID ALEX_3_HIDE_BELOW = 3369146532U;
         static const AkUniqueID ALEX_4_ZERO_TOLERANCE = 1509907605U;
         static const AkUniqueID ALEX_5_SOLITUDE = 2982750171U;
+        static const AkUniqueID AMB_AMBI_D = 2687390210U;
         static const AkUniqueID AMB_AMBI_EXT_PARK_BIRDS_01 = 561904127U;
         static const AkUniqueID AMB_AMBI_EXT_PARK_KIDS_01 = 757254316U;
         static const AkUniqueID AMB_AMBI_EXT_STREET_01 = 3388850435U;
@@ -64,6 +65,10 @@ namespace AK
         static const AkUniqueID MOSES_0_INTRO = 4081052794U;
         static const AkUniqueID MOSES_1_URBAN_PLANNER = 3896159808U;
         static const AkUniqueID MOSES_2_RATS = 88498974U;
+        static const AkUniqueID MUS_C = 4159718928U;
+        static const AkUniqueID MUS_D = 4159718935U;
+        static const AkUniqueID MUS_E = 4159718934U;
+        static const AkUniqueID MUS_F = 4159718933U;
         static const AkUniqueID OMILIO_0_INTRO = 581233776U;
         static const AkUniqueID OMILIO_1_SANTE = 3617820752U;
         static const AkUniqueID OMILIO_2_PASSENGERS = 2376804707U;
@@ -72,6 +77,12 @@ namespace AK
         static const AkUniqueID ROB_1_EVERYDAYLIFE = 3792984946U;
         static const AkUniqueID ROB_2_METROMAN = 3556172709U;
         static const AkUniqueID ROB_3_LENFER_TROM = 3798978392U;
+        static const AkUniqueID SFX_ELEC_A = 3373651682U;
+        static const AkUniqueID SFX_ELEC_D = 3373651687U;
+        static const AkUniqueID SFX_ELEC_E = 3373651686U;
+        static const AkUniqueID SFX_ELEC_F = 3373651685U;
+        static const AkUniqueID SFX_ELEC_G = 3373651684U;
+        static const AkUniqueID SFX_ELEC_H = 3373651691U;
         static const AkUniqueID SFX_PORTAL_ACTIVATE = 4131803333U;
         static const AkUniqueID SFX_PORTAL_VALIDATE = 1155651648U;
         static const AkUniqueID SFX_TONE_TEST = 3501277368U;
@@ -162,16 +173,15 @@ namespace AK
         static const AkUniqueID AMB_3D = 2182414867U;
         static const AkUniqueID AMBI = 3537656764U;
         static const AkUniqueID MAIN_AUDIO_BUS = 2246998526U;
+        static const AkUniqueID MUS = 712897226U;
         static const AkUniqueID SFX = 393239870U;
+        static const AkUniqueID SFX_3D = 2822524704U;
         static const AkUniqueID SFX_TEST = 3018450665U;
         static const AkUniqueID VOX = 543694036U;
     } // namespace BUSSES
 
     namespace AUX_BUSSES
     {
-        static const AkUniqueID DEL_LONG = 223314761U;
-        static const AkUniqueID DEL_MID = 2114071087U;
-        static const AkUniqueID DEL_SHORT = 3972424543U;
         static const AkUniqueID REV_DEL_OUTDOOR = 152793239U;
         static const AkUniqueID REV_LONG = 266044713U;
         static const AkUniqueID REV_MID = 618132367U;

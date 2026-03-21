@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{F3DE4592-F84C-7B05-94A6-1C5CFCB5D98C}",
+    "Hash": "{7558D229-89B4-2A7A-4507-8B948877877E}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -47,6 +47,30 @@
        "GUID": "{52A9C5B1-F637-45A1-9942-1831164C0054}",
        "LibName": "Wwise Delay",
        "LibId": "6946819"
+      },
+      {
+       "Id": "828438383",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\SFX\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{2172E1E0-7D0D-4312-9153-DED82727DE28}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
+       "Id": "865612985",
+       "Name": "Brick_Wall_Minus_1dB_Peak_Fast_Release (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\[Effect Slot [0]: (Peak Limiter)]\\Brick_Wall_Minus_1dB_Peak_Fast_Release (Custom)",
+       "GUID": "{ACB54C64-6A1F-4A39-99CC-27F26D25FF23}",
+       "LibName": "Wwise Peak Limiter",
+       "LibId": "7208963"
+      },
+      {
+       "Id": "1029697112",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{845B809B-A98D-4D96-9616-1D56A4BD5FA0}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
       }
      ],
      "ShareSets": [
@@ -63,6 +87,22 @@
        "Name": "Hall_Large",
        "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Halls\\Hall_Large",
        "GUID": "{6D154498-FF6D-4823-96FC-56841B70E079}",
+       "LibName": "Wwise RoomVerb",
+       "LibId": "7733251"
+      },
+      {
+       "Id": "2791153688",
+       "Name": "Hall_Small",
+       "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Halls\\Hall_Small",
+       "GUID": "{D65B5F04-B83B-412C-9434-34A13A477E24}",
+       "LibName": "Wwise RoomVerb",
+       "LibId": "7733251"
+      },
+      {
+       "Id": "3451596814",
+       "Name": "Hall_Medium",
+       "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Halls\\Hall_Medium",
+       "GUID": "{50286348-176A-4235-9E4C-CA5F73D87818}",
        "LibName": "Wwise RoomVerb",
        "LibId": "7733251"
       }
@@ -91,7 +131,14 @@
       "Id": "393239870",
       "Name": "SFX",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\SFX",
-      "GUID": "{232EC043-CFB9-4144-B0E4-D1BF03682891}"
+      "GUID": "{232EC043-CFB9-4144-B0E4-D1BF03682891}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "828438383"
+        }
+       ]
+      }
      },
      {
       "Id": "543694036",
@@ -102,6 +149,19 @@
        "Custom": [
         {
          "Id": "57406059"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "712897226",
+      "Name": "MUS",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS",
+      "GUID": "{E9B4A790-D51D-4C7D-BA5E-B0B7741926A3}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "1029697112"
         }
        ]
       }
@@ -129,7 +189,20 @@
       "Id": "2246998526",
       "Name": "Main Audio Bus",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus",
-      "GUID": "{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}"
+      "GUID": "{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "865612985"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "2822524704",
+      "Name": "SFX_3D",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\SFX\\SFX_3D",
+      "GUID": "{2558D0E1-5FF0-4876-B806-1A0689ACB07F}"
      },
      {
       "Id": "3018450665",
@@ -171,12 +244,6 @@
       }
      },
      {
-      "Id": "223314761",
-      "Name": "DEL_Long",
-      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\DEL_Long",
-      "GUID": "{BE94DD61-BCB9-4190-89EF-9A147B41DECE}"
-     },
-     {
       "Id": "266044713",
       "Name": "REV_Long",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Long",
@@ -193,25 +260,27 @@
       "Id": "618132367",
       "Name": "REV_Mid",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Mid",
-      "GUID": "{7B31E6A4-D56A-427A-B365-4FDB7B7F6DAD}"
-     },
-     {
-      "Id": "2114071087",
-      "Name": "DEL_Mid",
-      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\DEL_Mid",
-      "GUID": "{2C4BF258-5F1D-4FC6-A4AB-8C1857068236}"
+      "GUID": "{7B31E6A4-D56A-427A-B365-4FDB7B7F6DAD}",
+      "PluginRefs": {
+       "ShareSets": [
+        {
+         "Id": "3451596814"
+        }
+       ]
+      }
      },
      {
       "Id": "3475958207",
       "Name": "REV_Short",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Short",
-      "GUID": "{DD8363FB-1ADB-4318-80FB-870CFD5359EF}"
-     },
-     {
-      "Id": "3972424543",
-      "Name": "DEL_Short",
-      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\DEL_Short",
-      "GUID": "{7F8EC602-9857-483D-9BB0-179E8BF3F255}"
+      "GUID": "{DD8363FB-1ADB-4318-80FB-870CFD5359EF}",
+      "PluginRefs": {
+       "ShareSets": [
+        {
+         "Id": "2791153688"
+        }
+       ]
+      }
      }
     ],
     "GameParameters": [
@@ -402,6 +471,6 @@
     ]
    }
   ],
-  "FileHash": "{EB3CAF08-44D7-78F9-D8E7-2AA1A7146EEC}"
+  "FileHash": "{585FCB9D-074B-182B-7397-EB8D76FC28FC}"
  }
 }
