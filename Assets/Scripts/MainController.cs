@@ -24,6 +24,10 @@ public class MainController : MonoBehaviour
     [Header("Audio Settings")]
     public AudioStateRefSO noAudioSO;
     public bool debugAudioStates = false;
+    public AudioStateRefSO menuRefSO;
+    public AudioStateRefSO introRefSO;
+    public AudioStateRefSO outroRefSO;
+    public AudioStateRefSO endRefSO;
 
     public enum GameState
     {
@@ -36,9 +40,11 @@ public class MainController : MonoBehaviour
     [Header("State")]
     public GameState gameState = GameState.Menu;
     GameState lastGameState;
+    float timeAtStateChange;
     public string language = "en";
     public Salle salle;
     public Tunnel tunnel;
+    public float endAutoNextTime = 3f;
 
     [Header("Controls")]
     public bool animateRotation = false;
@@ -114,6 +120,7 @@ public class MainController : MonoBehaviour
     [Header("Point Cloud")]
     [Range(0.01f, 1f)]
     public float viewDistanceAnimSpeed = 0.2f;
+    public float viewDistanceHideSpeed = 10f;
 
     [Range(0f, 1f)]
     public float pointCloudViewDistanceMultiplier = 1.0f;
@@ -371,10 +378,13 @@ public class MainController : MonoBehaviour
                 lastGameState = gameState;
             }
 
-            bool shouldSee = gameState == GameState.Playing || gameState == GameState.Outro;
-            float viewOffset = Time.deltaTime * (shouldSee ? 1f : -1f) * viewDistanceAnimSpeed;
-            pointCloudViewDistanceMultiplier = Mathf.Clamp01(pointCloudViewDistanceMultiplier + viewOffset);
-            if (pointCloudViewDistanceMultiplier <= 0f && gameState == GameState.End)
+            if (gameState == GameState.Playing)
+            {
+                float viewOffset = Time.deltaTime * viewDistanceAnimSpeed;
+                pointCloudViewDistanceMultiplier = Mathf.Clamp01(pointCloudViewDistanceMultiplier + viewOffset);
+            }
+            
+            if (gameState == GameState.End && Time.time - timeAtStateChange > endAutoNextTime)
             {
                 ResetGame();
             }
@@ -578,22 +588,29 @@ public class MainController : MonoBehaviour
         sallesGO.SetActive(gameState != GameState.Menu);
         tunnelsGO.SetActive(gameState != GameState.Menu);
 
+        timeAtStateChange = Time.time;
+
         switch (gameState)
         {
             case GameState.Menu:
                 ResetGame();
+                menuRefSO?.state.SetValue();
                 break;
 
             case GameState.Intro:
+                introRefSO?.state.SetValue();
                 break;
+
             case GameState.Playing:
                 Reset();
                 break;
 
             case GameState.Outro:
+                outroRefSO?.state.SetValue();
                 break;
 
             case GameState.End:
+                endRefSO.state.SetValue();
                 break;
         }
     }
@@ -757,14 +774,17 @@ public class MainController : MonoBehaviour
             transform.position = salle.origin.position;
             timeAtArrived = Time.time;
 
-            if (salle.audioSO != null && salle.audioSO.state != null)
+            if (gameState == GameState.Playing)
             {
-                if (debugAudioStates) Debug.Log("Setting salle audio state: " + salle.audioSO.state.Name);
-                salle.audioSO.state.SetValue();
-            }
-            else
-            {
-                noAudioSO.state.SetValue();
+                if (salle.audioSO != null && salle.audioSO.state != null)
+                {
+                    if (debugAudioStates) Debug.Log("Setting salle audio state: " + salle.audioSO.state.Name);
+                    salle.audioSO.state.SetValue();
+                }
+                else
+                {
+                    noAudioSO.state.SetValue();
+                }
             }
         }
         else
@@ -778,15 +798,18 @@ public class MainController : MonoBehaviour
                 lookAtPos.y = transform.position.y;
                 if (resetRotation) transform.LookAt(lookAtPos, Vector3.up);
 
-                AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
-                if (audioSO != null && audioSO.state != null)
+                if (gameState == GameState.Playing)
                 {
-                    if (debugAudioStates) Debug.Log("Setting tunnel audio state: " + audioSO.state.Name);
-                    audioSO.state.SetValue();
-                }
-                else
-                {
-                    noAudioSO.state.SetValue();
+                    AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
+                    if (audioSO != null && audioSO.state != null)
+                    {
+                        if (debugAudioStates) Debug.Log("Setting tunnel audio state: " + audioSO.state.Name);
+                        audioSO.state.SetValue();
+                    }
+                    else
+                    {
+                        noAudioSO.state.SetValue();
+                    }
                 }
             }
             isRunning = false;

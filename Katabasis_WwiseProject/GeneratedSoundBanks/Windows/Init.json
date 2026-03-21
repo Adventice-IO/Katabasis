@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{04F480E2-E256-8397-C9C9-00F8B40BD356}",
+    "Hash": "{849B5E2B-8872-21B4-D3E6-B1DED1A5E609}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -47,6 +47,30 @@
        "GUID": "{52A9C5B1-F637-45A1-9942-1831164C0054}",
        "LibName": "Wwise Delay",
        "LibId": "6946819"
+      },
+      {
+       "Id": "828438383",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\SFX\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{2172E1E0-7D0D-4312-9153-DED82727DE28}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
+       "Id": "865612985",
+       "Name": "Brick_Wall_Minus_1dB_Peak_Fast_Release (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\[Effect Slot [0]: (Peak Limiter)]\\Brick_Wall_Minus_1dB_Peak_Fast_Release (Custom)",
+       "GUID": "{ACB54C64-6A1F-4A39-99CC-27F26D25FF23}",
+       "LibName": "Wwise Peak Limiter",
+       "LibId": "7208963"
+      },
+      {
+       "Id": "1029697112",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{845B809B-A98D-4D96-9616-1D56A4BD5FA0}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
       }
      ],
      "ShareSets": [
@@ -63,6 +87,22 @@
        "Name": "Hall_Large",
        "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Halls\\Hall_Large",
        "GUID": "{6D154498-FF6D-4823-96FC-56841B70E079}",
+       "LibName": "Wwise RoomVerb",
+       "LibId": "7733251"
+      },
+      {
+       "Id": "2791153688",
+       "Name": "Hall_Small",
+       "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Halls\\Hall_Small",
+       "GUID": "{D65B5F04-B83B-412C-9434-34A13A477E24}",
+       "LibName": "Wwise RoomVerb",
+       "LibId": "7733251"
+      },
+      {
+       "Id": "3451596814",
+       "Name": "Hall_Medium",
+       "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Halls\\Hall_Medium",
+       "GUID": "{50286348-176A-4235-9E4C-CA5F73D87818}",
        "LibName": "Wwise RoomVerb",
        "LibId": "7733251"
       }
@@ -91,7 +131,14 @@
       "Id": "393239870",
       "Name": "SFX",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\SFX",
-      "GUID": "{232EC043-CFB9-4144-B0E4-D1BF03682891}"
+      "GUID": "{232EC043-CFB9-4144-B0E4-D1BF03682891}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "828438383"
+        }
+       ]
+      }
      },
      {
       "Id": "543694036",
@@ -102,6 +149,19 @@
        "Custom": [
         {
          "Id": "57406059"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "712897226",
+      "Name": "MUS",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS",
+      "GUID": "{E9B4A790-D51D-4C7D-BA5E-B0B7741926A3}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "1029697112"
         }
        ]
       }
@@ -129,7 +189,20 @@
       "Id": "2246998526",
       "Name": "Main Audio Bus",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus",
-      "GUID": "{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}"
+      "GUID": "{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "865612985"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "2822524704",
+      "Name": "SFX_3D",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\SFX\\SFX_3D",
+      "GUID": "{2558D0E1-5FF0-4876-B806-1A0689ACB07F}"
      },
      {
       "Id": "3018450665",
@@ -171,12 +244,6 @@
       }
      },
      {
-      "Id": "223314761",
-      "Name": "DEL_Long",
-      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\DEL_Long",
-      "GUID": "{BE94DD61-BCB9-4190-89EF-9A147B41DECE}"
-     },
-     {
       "Id": "266044713",
       "Name": "REV_Long",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Long",
@@ -193,25 +260,27 @@
       "Id": "618132367",
       "Name": "REV_Mid",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Mid",
-      "GUID": "{7B31E6A4-D56A-427A-B365-4FDB7B7F6DAD}"
-     },
-     {
-      "Id": "2114071087",
-      "Name": "DEL_Mid",
-      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\DEL_Mid",
-      "GUID": "{2C4BF258-5F1D-4FC6-A4AB-8C1857068236}"
+      "GUID": "{7B31E6A4-D56A-427A-B365-4FDB7B7F6DAD}",
+      "PluginRefs": {
+       "ShareSets": [
+        {
+         "Id": "3451596814"
+        }
+       ]
+      }
      },
      {
       "Id": "3475958207",
       "Name": "REV_Short",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Short",
-      "GUID": "{DD8363FB-1ADB-4318-80FB-870CFD5359EF}"
-     },
-     {
-      "Id": "3972424543",
-      "Name": "DEL_Short",
-      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\DEL_Short",
-      "GUID": "{7F8EC602-9857-483D-9BB0-179E8BF3F255}"
+      "GUID": "{DD8363FB-1ADB-4318-80FB-870CFD5359EF}",
+      "PluginRefs": {
+       "ShareSets": [
+        {
+         "Id": "2791153688"
+        }
+       ]
+      }
      }
     ],
     "GameParameters": [
@@ -254,10 +323,118 @@
       "GUID": "{851551F0-CA59-405C-8810-C89C4F9167FE}",
       "States": [
        {
+        "Id": "84696430",
+        "Name": "Q",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\Q",
+        "GUID": "{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"
+       },
+       {
+        "Id": "84696431",
+        "Name": "P",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\P",
+        "GUID": "{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"
+       },
+       {
+        "Id": "84696432",
+        "Name": "O",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\O",
+        "GUID": "{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"
+       },
+       {
+        "Id": "84696433",
+        "Name": "N",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\N",
+        "GUID": "{1B230ECF-4582-4080-B18C-88345FB601DD}"
+       },
+       {
+        "Id": "84696434",
+        "Name": "M",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\M",
+        "GUID": "{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"
+       },
+       {
+        "Id": "84696435",
+        "Name": "L",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\L",
+        "GUID": "{182BD5CB-AA19-4F12-8874-10BC00AB0507}"
+       },
+       {
+        "Id": "84696436",
+        "Name": "K",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\K",
+        "GUID": "{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"
+       },
+       {
+        "Id": "84696437",
+        "Name": "J",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\J",
+        "GUID": "{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"
+       },
+       {
+        "Id": "84696438",
+        "Name": "I",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\I",
+        "GUID": "{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"
+       },
+       {
+        "Id": "84696439",
+        "Name": "H",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\H",
+        "GUID": "{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"
+       },
+       {
+        "Id": "84696440",
+        "Name": "G",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\G",
+        "GUID": "{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"
+       },
+       {
+        "Id": "84696441",
+        "Name": "F",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\F",
+        "GUID": "{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"
+       },
+       {
+        "Id": "84696442",
+        "Name": "E",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\E",
+        "GUID": "{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"
+       },
+       {
+        "Id": "84696443",
+        "Name": "D",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\D",
+        "GUID": "{5719A88C-2C17-41D2-847E-792E43A4ACFF}"
+       },
+       {
+        "Id": "84696444",
+        "Name": "C",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\C",
+        "GUID": "{D243EDA2-8507-4152-BAFA-694FE5A919D4}"
+       },
+       {
+        "Id": "84696445",
+        "Name": "B",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\B",
+        "GUID": "{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"
+       },
+       {
         "Id": "84696446",
         "Name": "A",
         "ObjectPath": "\\States\\Default Work Unit\\State_Map\\A",
         "GUID": "{464A22DA-77B5-498B-A08E-4839CF354037}"
+       },
+       {
+        "Id": "616254008",
+        "Name": "R_Exit",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\R_Exit",
+        "GUID": "{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"
+       },
+       {
+        "Id": "683028902",
+        "Name": "D_Exit",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\D_Exit",
+        "GUID": "{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"
        },
        {
         "Id": "748895195",
@@ -266,16 +443,34 @@
         "GUID": "{12B604DD-B92A-4E89-8686-D1BF3E56A872}"
        },
        {
-        "Id": "2876034013",
-        "Name": "A_to_B",
-        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\A_to_B",
-        "GUID": "{C44E8C40-90AA-4687-A077-BE83D48BD328}"
+        "Id": "3419115107",
+        "Name": "K_Exit",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\K_Exit",
+        "GUID": "{97223D56-4005-4FB5-8E99-3547C3294F0E}"
+       },
+       {
+        "Id": "3583228001",
+        "Name": "E_Exit",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\E_Exit",
+        "GUID": "{9D6AA290-9CA6-4F00-845C-30EC24F15912}"
+       },
+       {
+        "Id": "4082180463",
+        "Name": "O_Exit",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\O_Exit",
+        "GUID": "{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"
+       },
+       {
+        "Id": "4143968025",
+        "Name": "M_Exit",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Map\\M_Exit",
+        "GUID": "{52431833-40A7-4D61-A7D2-A63D9B77EB39}"
        }
       ]
      }
     ]
    }
   ],
-  "FileHash": "{3B99DF6C-53E3-C6D6-21CF-1A417D371CE4}"
+  "FileHash": "{7CD5140B-8309-2633-620D-02F7A27B6535}"
  }
 }

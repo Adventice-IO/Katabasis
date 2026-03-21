@@ -56,7 +56,9 @@ public class Salle : MonoBehaviour
     {
         interviews.ToList().ForEach(itw =>
         {
+            if(itw == null) return;
             Vector3 lookAt = origin.position;
+            if (itw == null) return;
             lookAt.y = itw.transform.position.y;
             itw.transform.parent.LookAt(lookAt, Vector3.up);
         });

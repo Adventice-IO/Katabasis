@@ -6,6 +6,9 @@
         _MaxDistance ("Max Distance", float) = 50
         _DistFade("Distance Fade", float) = 10
         _Reveal("Reveal", Range(0,1)) = 0
+        _BoxMin("Box Min", Vector) = (0,0,0,0)
+        _BoxMax("Box Max", Vector) = (1,1,1,0)
+        _BoxFeather("Box Feather", float) = 1
     }
 
     SubShader
@@ -54,7 +57,10 @@
             float _MaxDistance;
             float _DistFade;
             float _Reveal;
-            
+            float3 _BoxMin;
+            float3 _BoxMax;
+            float _BoxFeather;
+
             // Buffers
             StructuredBuffer<OrientedMaskBox> _MaskBoxes;
             int _MaskCount;
@@ -84,9 +90,9 @@
                 // 3. Distance Cull/Fade
                 // If point is further than MaxDistance, we collapse it immediately
                 if (d > _MaxDistance) {
-                    o.position = float4(0,0,0,0);
-                    o.color = float4(0,0,0,0);
-                    return o;
+                    // o.position = float4(0,0,0,0);
+                    // o.color = float4(0,0,0,0);
+                    // return o;
                 }
                 float distFade = saturate((_MaxDistance - d) / _DistFade);
 
@@ -132,11 +138,25 @@
                     }
 
                     // Optimization: if we're already invisible, stop [cite: 20]
-                    if (maskAlpha <= 0.001) break; 
+                    if (maskAlpha <= 0.001) break;  
                 }
 
+                // box feather around bounds
+                float3 boxCenter = (_BoxMin + _BoxMax) * 0.5;
+                float3 boxSize = abs(_BoxMax - _BoxMin);
+                float3 localPoint = worldPos - boxCenter;
+                float3 halfSize = boxSize * 0.5;
+                float3 distToEdge = halfSize - abs(localPoint);
+                float distToCenter = length(localPoint);
+                float minDist = min(distToEdge.x, distToEdge.z);
+                                        // Debug visualization of feathering (optional)
+                
+                float boxFeatherAlpha =  saturate(minDist / max(0.001, _BoxFeather * boxSize));
+
+
+
                 // 5. Final Visibility Check
-                float visibility = globalAlpha * distFade * maskAlpha;
+                float visibility = globalAlpha * distFade * maskAlpha * boxFeatherAlpha;
                 if (visibility <= 0.001) {
                     o.position = float4(0,0,0,0);
                     o.color = float4(0,0,0,0);

@@ -10,20 +10,39 @@
     "Type": "Bus",
     "GUID": "{DD8363FB-1ADB-4318-80FB-870CFD5359EF}",
     "Language": "SFX",
-    "Hash": "{6EAD6A47-4076-2318-711A-C97171B7A8FC}",
+    "Hash": "{9CFF5390-0666-19B0-FF1C-1EC2C860E6B9}",
     "ObjectPath": "REV_Short",
     "ShortName": "REV_Short",
     "Path": "Bus/REV_Short.bnk",
+    "Plugins": {
+     "ShareSets": [
+      {
+       "Id": "2791153688",
+       "Name": "Hall_Small",
+       "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Halls\\Hall_Small",
+       "GUID": "{D65B5F04-B83B-412C-9434-34A13A477E24}",
+       "LibName": "Wwise RoomVerb",
+       "LibId": "7733251"
+      }
+     ]
+    },
     "AuxBusses": [
      {
       "Id": "3475958207",
       "Name": "REV_Short",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Short",
-      "GUID": "{DD8363FB-1ADB-4318-80FB-870CFD5359EF}"
+      "GUID": "{DD8363FB-1ADB-4318-80FB-870CFD5359EF}",
+      "PluginRefs": {
+       "ShareSets": [
+        {
+         "Id": "2791153688"
+        }
+       ]
+      }
      }
     ]
    }
   ],
-  "FileHash": "{5D60EBBA-236F-B098-8708-8BB2DB9BF986}"
+  "FileHash": "{9ECC7C19-2C89-7473-9F32-93ADFF16FD78}"
  }
 }

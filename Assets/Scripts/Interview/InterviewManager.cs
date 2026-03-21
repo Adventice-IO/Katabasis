@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using System.Globalization; // Required for CultureInfo
 
 [ExecuteAlways]
 public class InterviewManager : MonoBehaviour
@@ -532,6 +533,7 @@ public class InterviewManager : MonoBehaviour
         return stats.Value.introInterview;
     }
 
+
     void LoadInterviewData()
     {
         interviewDataList.Clear();
@@ -568,9 +570,11 @@ public class InterviewManager : MonoBehaviour
                 continue;
             }
 
+            Debug.Log(line);
             List<string> offsets = SplitMultiValueField(GetField(fields, 6));
-            Vector3 offset = new Vector3(float.Parse(offsets[0]), 0, float.Parse(offsets[1]));
-            float angleOffset = float.Parse(offsets[2]);
+            Vector3 offset = new Vector3(getFloatValue(offsets[0]), 0, getFloatValue(offsets[1]));
+            float angleOffset = getFloatValue(offsets[2]);
+
 
 
             InterviewData data = new InterviewData
@@ -587,6 +591,7 @@ public class InterviewManager : MonoBehaviour
                 cutTimes = SplitMultiValueField(GetField(fields, 7)).Select(
                     s =>
                     {
+                        Debug.Log("Checking time" + s);
                         //Format HH:MM:SS:FF where FF is frames at 30fps
                         string[] timeParts = s.Split(':');
                         if (timeParts.Length != 4)
@@ -594,10 +599,10 @@ public class InterviewManager : MonoBehaviour
                             Debug.LogWarning("Invalid cut time format: " + s);
                             return 0f;
                         }
-                        int hours = int.Parse(timeParts[0]);
-                        int minutes = int.Parse(timeParts[1]);
-                        int seconds = int.Parse(timeParts[2]);
-                        int frames = int.Parse(timeParts[3]);
+                        int hours = getIntValue(timeParts[0]);
+                        int minutes = getIntValue(timeParts[1]);
+                        int seconds = getIntValue(timeParts[2]);
+                        int frames = getIntValue(timeParts[3]);
                         float totalSeconds = hours * 3600 + minutes * 60 + seconds + frames / 30f;
                         return totalSeconds;
                     }
@@ -605,6 +610,8 @@ public class InterviewManager : MonoBehaviour
                 visited = false,
                 proposed = false
             };
+
+
 
             data.mediaPath = CombineInterviewFolder(data.person.Replace(" ", "_"), data.filename);
             data.depthkitPath = CombineInterviewFolder(data.person.Replace(" ", "_"), data.depthkitId);
@@ -622,6 +629,23 @@ public class InterviewManager : MonoBehaviour
         RebuildPersonStats();
 
         logAssignments();
+    }
+
+
+    float getFloatValue(string s)
+    {
+        if (float.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out float result))
+        {
+            return result;
+        }
+
+        Debug.LogError("Failed to parse float. Check your input string format : " + s);
+        return 0f;
+    }
+
+    int getIntValue(string s)
+    {
+        return int.Parse(s);
     }
 
     void RebuildPersonStats()

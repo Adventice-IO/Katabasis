@@ -2,9 +2,30 @@ State Group	ID	Name			Wwise Object Path	Notes
 	188982067	State_Map			\Default Work Unit\State_Map	
 
 State	ID	Name	State Group			Notes
+	84696430	Q	State_Map			
+	84696431	P	State_Map			
+	84696432	O	State_Map			
+	84696433	N	State_Map			
+	84696434	M	State_Map			
+	84696435	L	State_Map			
+	84696436	K	State_Map			
+	84696437	J	State_Map			
+	84696438	I	State_Map			
+	84696439	H	State_Map			
+	84696440	G	State_Map			
+	84696441	F	State_Map			
+	84696442	E	State_Map			
+	84696443	D	State_Map			
+	84696444	C	State_Map			
+	84696445	B	State_Map			
 	84696446	A	State_Map			
+	616254008	R_Exit	State_Map			
+	683028902	D_Exit	State_Map			
 	748895195	None	State_Map			
-	2876034013	A_to_B	State_Map			
+	3419115107	K_Exit	State_Map			
+	3583228001	E_Exit	State_Map			
+	4082180463	O_Exit	State_Map			
+	4143968025	M_Exit	State_Map			
 
 Game Parameter	ID	Name			Wwise Object Path	Notes
 	598118289	RTPC_VOX_Meter_B4			\Default Work Unit\RTPC_VOX_Meter_B4	
@@ -14,20 +35,19 @@ Game Parameter	ID	Name			Wwise Object Path	Notes
 Audio Bus	ID	Name			Wwise Object Path	Notes
 	393239870	SFX			\Default Work Unit\Main Audio Bus\SFX	
 	543694036	VOX			\Default Work Unit\Main Audio Bus\VOX	
+	712897226	MUS			\Default Work Unit\Main Audio Bus\MUS	
 	1117531639	AMB			\Default Work Unit\Main Audio Bus\AMB	
 	2182414867	AMB_3D			\Default Work Unit\Main Audio Bus\AMB\AMB_3D	
 	2246998526	Main Audio Bus			\Default Work Unit\Main Audio Bus	
+	2822524704	SFX_3D			\Default Work Unit\Main Audio Bus\SFX\SFX_3D	
 	3018450665	SFX_Test			\Default Work Unit\Main Audio Bus\SFX\SFX_Test	
 	3537656764	AMBI			\Default Work Unit\Main Audio Bus\AMB\AMBI	
 
 Auxiliary Bus	ID	Name			Wwise Object Path	Notes
 	152793239	REV_DEL_Outdoor			\Default Work Unit\Main Audio Bus\REV_DEL_Outdoor	
-	223314761	DEL_Long			\Default Work Unit\Main Audio Bus\DEL_Long	
 	266044713	REV_Long			\Default Work Unit\Main Audio Bus\REV_Long	
 	618132367	REV_Mid			\Default Work Unit\Main Audio Bus\REV_Mid	
-	2114071087	DEL_Mid			\Default Work Unit\Main Audio Bus\DEL_Mid	
 	3475958207	REV_Short			\Default Work Unit\Main Audio Bus\REV_Short	
-	3972424543	DEL_Short			\Default Work Unit\Main Audio Bus\DEL_Short	
 
 Effect plug-ins	ID	Name	Type				Notes
 	48620415	Have_U_Ever_Been_Outside	Wwise RoomVerb			
@@ -35,7 +55,12 @@ Effect plug-ins	ID	Name	Type				Notes
 	206879750	Resonance Audio Renderer (Custom)	Resonance Audio Renderer			
 	320538764	Parametric EQ (Custom)	Wwise Parametric EQ			
 	622950439	Delay (Custom)	Wwise Delay			
+	828438383	Parametric EQ (Custom)	Wwise Parametric EQ			
+	865612985	Brick_Wall_Minus_1dB_Peak_Fast_Release (Custom)	Wwise Peak Limiter			
+	1029697112	Parametric EQ (Custom)	Wwise Parametric EQ			
 	2513915904	Hall_Large	Wwise RoomVerb			
+	2791153688	Hall_Small	Wwise RoomVerb			
+	3451596814	Hall_Medium	Wwise RoomVerb			
 
 Audio Devices	ID	Name	Type				Notes
 	2317455096	No_Output	No Output			
