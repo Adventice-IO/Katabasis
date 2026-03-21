@@ -10,20 +10,39 @@
     "Type": "Bus",
     "GUID": "{7B31E6A4-D56A-427A-B365-4FDB7B7F6DAD}",
     "Language": "SFX",
-    "Hash": "{EFC687B5-2002-B0FC-6276-47D30C7D6B97}",
+    "Hash": "{36A3645F-BEB2-5A5D-2148-6A4FC7B90967}",
     "ObjectPath": "REV_Mid",
     "ShortName": "REV_Mid",
     "Path": "Bus/REV_Mid.bnk",
+    "Plugins": {
+     "ShareSets": [
+      {
+       "Id": "3451596814",
+       "Name": "Hall_Medium",
+       "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Halls\\Hall_Medium",
+       "GUID": "{50286348-176A-4235-9E4C-CA5F73D87818}",
+       "LibName": "Wwise RoomVerb",
+       "LibId": "7733251"
+      }
+     ]
+    },
     "AuxBusses": [
      {
       "Id": "618132367",
       "Name": "REV_Mid",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Mid",
-      "GUID": "{7B31E6A4-D56A-427A-B365-4FDB7B7F6DAD}"
+      "GUID": "{7B31E6A4-D56A-427A-B365-4FDB7B7F6DAD}",
+      "PluginRefs": {
+       "ShareSets": [
+        {
+         "Id": "3451596814"
+        }
+       ]
+      }
      }
     ]
    }
   ],
-  "FileHash": "{F2E7C35E-82E3-237C-FA72-7153A7A32C2D}"
+  "FileHash": "{1E5BF88A-6731-1C6E-2BDF-45F64130F1A4}"
  }
 }
