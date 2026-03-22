@@ -802,10 +802,13 @@ public class GameMenu : MonoBehaviour
             return;
         }
 
-        VisualEffect vfx = targetObject.GetComponentInChildren<VisualEffect>(true);
-        if (vfx != null)
+        if (targetObject != selectedObject)
         {
-            vfx.SetFloat("Evaporate", value);
+            VisualEffect vfx = targetObject.GetComponentInChildren<VisualEffect>(true);
+            if (vfx != null)
+            {
+                vfx.SetFloat("Evaporate", value);
+            }
         }
 
         SetTitleAlpha(targetObject, 1f - Mathf.Clamp01(value));

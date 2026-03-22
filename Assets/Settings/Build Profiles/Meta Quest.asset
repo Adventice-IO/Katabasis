@@ -189,15 +189,7 @@ MonoBehaviour:
     - line: '|   visionOSBundleVersion: 1.0'
     - line: '|   tvOSBundleVersion: 1.0'
     - line: '|   bundleVersion: 9.2.1'
-    - line: '|   preloadedAssets:'
-    - line: '|   - {fileID: 9030113687040111788, guid: 4b3de149e50ea0c4f8ad04c79b9f12ec,
-        type: 2}'
-    - line: '|   - {fileID: 11400000, guid: 3e9797126f5bc174e9952a42cd2d4975, type:
-        2}'
-    - line: '|   - {fileID: 8775450446106690992, guid: b716680a41c7a094fa3b7fb9a8024a67,
-        type: 2}'
-    - line: '|   - {fileID: 11400000, guid: 908d62378b8205449861e5838a18a596, type:
-        2}'
+    - line: '|   preloadedAssets: []'
     - line: '|   metroInputSource: 0'
     - line: '|   wsaTransparentSwapchain: 0'
     - line: '|   m_HolographicPauseOnTrackingLoss: 1'
@@ -245,7 +237,7 @@ MonoBehaviour:
     - line: '|   keepLoadedShadersAlive: 0'
     - line: '|   StripUnusedMeshComponents: 0'
     - line: '|   strictShaderVariantMatching: 0'
-    - line: '|   VertexChannelCompressionMask: 4054'
+    - line: '|   VertexChannelCompressionMask: 0'
     - line: '|   iPhoneSdkVersion: 988'
     - line: '|   iOSSimulatorArchitecture: 0'
     - line: '|   iOSTargetOSVersionString: 15.0'
@@ -1094,7 +1086,7 @@ MonoBehaviour:
     - rid: 4289656020420264006
       type: {class: AndroidPlatformBuildSettings, ns: UnityEditor.Android, asm: UnityEditor.Android.Extensions}
       data:
-        m_Development: 1
+        m_Development: 0
         m_ConnectProfiler: 0
         m_BuildWithDeepProfilingSupport: 0
         m_AllowDebugging: 1
@@ -1114,7 +1106,7 @@ MonoBehaviour:
         m_DebugSymbolLevel: 1
         m_DebugSymbolFormat: 5
         m_CurrentDeploymentTargetId: __builtin__target_default
-        m_BuildType: 1
+        m_BuildType: 2
         m_LinkTimeOptimization: 1
         m_BuildAppBundle: 0
         m_IPAddressToConnect: 

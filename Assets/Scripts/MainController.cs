@@ -708,7 +708,7 @@ public class MainController : MonoBehaviour
     {
         if (!isInASalle()) return new List<Tunnel>();
         List<Tunnel> outTunnels = new List<Tunnel>();
-        if (allTunnels == null)
+        if (allTunnels == null || allTunnels.Length == 0)
         {
             allTunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
         }
