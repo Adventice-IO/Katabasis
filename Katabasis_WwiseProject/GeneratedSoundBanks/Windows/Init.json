@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{FA523D9C-408B-A790-592D-0E693D90482B}",
+    "Hash": "{4ACABC53-6D25-183C-6D41-5DACB38DB3C1}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -43,7 +43,7 @@
       {
        "Id": "622950439",
        "Name": "Delay (Custom)",
-       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_DEL_Outdoor\\[Effect Slot [1]: (Delay)]\\Delay (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_DEL_Ext\\[Effect Slot [1]: (Delay)]\\Delay (Custom)",
        "GUID": "{52A9C5B1-F637-45A1-9942-1831164C0054}",
        "LibName": "Wwise Delay",
        "LibId": "6946819"
@@ -81,6 +81,14 @@
        "GUID": "{FE29AE8D-FD86-4652-A95D-68D32F5760EC}",
        "LibName": "Wwise RoomVerb",
        "LibId": "7733251"
+      },
+      {
+       "Id": "1232017842",
+       "Name": "LR_Slap_with_CrossFeed",
+       "ObjectPath": "\\Effects\\Factory Effects\\Stereo Delay\\LR_Slap_with_CrossFeed",
+       "GUID": "{30319A92-C5AC-437A-9864-430059762933}",
+       "LibName": "Wwise Stereo Delay",
+       "LibId": "8847363"
       },
       {
        "Id": "2513915904",
@@ -226,24 +234,6 @@
     ],
     "AuxBusses": [
      {
-      "Id": "152793239",
-      "Name": "REV_DEL_Outdoor",
-      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_DEL_Outdoor",
-      "GUID": "{58FB9EAA-AFC0-4C4A-B598-0A3D596993A8}",
-      "PluginRefs": {
-       "Custom": [
-        {
-         "Id": "622950439"
-        }
-       ],
-       "ShareSets": [
-        {
-         "Id": "48620415"
-        }
-       ]
-      }
-     },
-     {
       "Id": "266044713",
       "Name": "REV_Long",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Long",
@@ -270,6 +260,19 @@
       }
      },
      {
+      "Id": "3342787159",
+      "Name": "DEL_Under",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\DEL_Under",
+      "GUID": "{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}",
+      "PluginRefs": {
+       "ShareSets": [
+        {
+         "Id": "1232017842"
+        }
+       ]
+      }
+     },
+     {
       "Id": "3475958207",
       "Name": "REV_Short",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Short",
@@ -278,6 +281,24 @@
        "ShareSets": [
         {
          "Id": "2791153688"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "3577192126",
+      "Name": "REV_DEL_Ext",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_DEL_Ext",
+      "GUID": "{58FB9EAA-AFC0-4C4A-B598-0A3D596993A8}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "622950439"
+        }
+       ],
+       "ShareSets": [
+        {
+         "Id": "48620415"
         }
        ]
       }
@@ -471,6 +492,6 @@
     ]
    }
   ],
-  "FileHash": "{5F26B9AE-D214-1660-7411-E27A1D8E3F6E}"
+  "FileHash": "{515A2EEE-2205-E159-8D4C-C6504465BBD6}"
  }
 }

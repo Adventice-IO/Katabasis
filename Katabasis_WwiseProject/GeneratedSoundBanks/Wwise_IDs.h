@@ -77,6 +77,15 @@ namespace AK
         static const AkUniqueID ROB_1_EVERYDAYLIFE = 3792984946U;
         static const AkUniqueID ROB_2_METROMAN = 3556172709U;
         static const AkUniqueID ROB_3_LENFER_TROM = 3798978392U;
+        static const AkUniqueID SFX_AIRPRESSURE_A = 3370058106U;
+        static const AkUniqueID SFX_AIRPRESSURE_B = 3370058105U;
+        static const AkUniqueID SFX_AIRPRESSURE_C = 3370058104U;
+        static const AkUniqueID SFX_AIRPRESSURE_D = 3370058111U;
+        static const AkUniqueID SFX_AIRPRESSURE_E = 3370058110U;
+        static const AkUniqueID SFX_AIRPRESSURE_F = 3370058109U;
+        static const AkUniqueID SFX_AIRPRESSURE_G = 3370058108U;
+        static const AkUniqueID SFX_AIRPRESSURE_H = 3370058099U;
+        static const AkUniqueID SFX_AIRPRESSURE_I = 3370058098U;
         static const AkUniqueID SFX_ELEC_A = 3373651682U;
         static const AkUniqueID SFX_ELEC_D = 3373651687U;
         static const AkUniqueID SFX_ELEC_E = 3373651686U;
@@ -85,6 +94,28 @@ namespace AK
         static const AkUniqueID SFX_ELEC_H = 3373651691U;
         static const AkUniqueID SFX_PORTAL_ACTIVATE = 4131803333U;
         static const AkUniqueID SFX_PORTAL_VALIDATE = 1155651648U;
+        static const AkUniqueID SFX_SEWERS_A_DRIPS = 3799102629U;
+        static const AkUniqueID SFX_SEWERS_B_PIPE = 4245633758U;
+        static const AkUniqueID SFX_SEWERS_C_PIPE = 260636857U;
+        static const AkUniqueID SFX_SEWERS_D_DRIPS = 3079966932U;
+        static const AkUniqueID SFX_SEWERS_E_PIPE = 2549190315U;
+        static const AkUniqueID SFX_SEWERS_F_PIPE = 4233225522U;
+        static const AkUniqueID SFX_SEWERS_G_DRIPS = 1280951783U;
+        static const AkUniqueID SFX_SEWERS_H_DRIPS = 2946085520U;
+        static const AkUniqueID SFX_SEWERS_I_WATER = 754790596U;
+        static const AkUniqueID SFX_SEWERS_J_WATER = 230377275U;
+        static const AkUniqueID SFX_SEWERS_K_WATER = 522077354U;
+        static const AkUniqueID SFX_SEWERS_L_WATER = 3886424281U;
+        static const AkUniqueID SFX_SUBWAY_A = 1224719534U;
+        static const AkUniqueID SFX_SUBWAY_B_INT = 3184577795U;
+        static const AkUniqueID SFX_SUBWAY_C_INT = 1275499414U;
+        static const AkUniqueID SFX_SUBWAY_D_INT = 4144213825U;
+        static const AkUniqueID SFX_SUBWAY_E = 1224719530U;
+        static const AkUniqueID SFX_SUBWAY_F = 1224719529U;
+        static const AkUniqueID SFX_SUBWAY_G_INT = 1030555722U;
+        static const AkUniqueID SFX_SUBWAY_H_INT = 2952482469U;
+        static const AkUniqueID SFX_SUBWAY_I_INT = 65382472U;
+        static const AkUniqueID SFX_SUBWAY_J_BYS = 2782204094U;
         static const AkUniqueID SFX_TONE_TEST = 3501277368U;
         static const AkUniqueID SPIDERMAN_0_INTRO = 838969532U;
         static const AkUniqueID SPIDERMAN_1_FAMILY_PROBLEMS = 2288458896U;
@@ -182,7 +213,8 @@ namespace AK
 
     namespace AUX_BUSSES
     {
-        static const AkUniqueID REV_DEL_OUTDOOR = 152793239U;
+        static const AkUniqueID DEL_UNDER = 3342787159U;
+        static const AkUniqueID REV_DEL_EXT = 3577192126U;
         static const AkUniqueID REV_LONG = 266044713U;
         static const AkUniqueID REV_MID = 618132367U;
         static const AkUniqueID REV_SHORT = 3475958207U;

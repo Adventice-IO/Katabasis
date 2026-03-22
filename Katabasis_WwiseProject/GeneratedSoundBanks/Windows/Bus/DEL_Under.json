@@ -1,0 +1,48 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "172",
+  "SoundBanks": [
+   {
+    "Id": "3342787159",
+    "Type": "Bus",
+    "GUID": "{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}",
+    "Language": "SFX",
+    "Hash": "{47E0FB97-12EA-FB39-7199-006876782289}",
+    "ObjectPath": "DEL_Under",
+    "ShortName": "DEL_Under",
+    "Path": "Bus/DEL_Under.bnk",
+    "Plugins": {
+     "ShareSets": [
+      {
+       "Id": "1232017842",
+       "Name": "LR_Slap_with_CrossFeed",
+       "ObjectPath": "\\Effects\\Factory Effects\\Stereo Delay\\LR_Slap_with_CrossFeed",
+       "GUID": "{30319A92-C5AC-437A-9864-430059762933}",
+       "LibName": "Wwise Stereo Delay",
+       "LibId": "8847363"
+      }
+     ]
+    },
+    "AuxBusses": [
+     {
+      "Id": "3342787159",
+      "Name": "DEL_Under",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\DEL_Under",
+      "GUID": "{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}",
+      "PluginRefs": {
+       "ShareSets": [
+        {
+         "Id": "1232017842"
+        }
+       ]
+      }
+     }
+    ]
+   }
+  ],
+  "FileHash": "{C1143A2D-0498-31BF-7A8A-444335E339EC}"
+ }
+}

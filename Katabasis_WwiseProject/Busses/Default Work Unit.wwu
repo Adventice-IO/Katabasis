@@ -368,7 +368,7 @@
 								</ObjectList>
 							</ObjectLists>
 						</AuxBus>
-						<AuxBus Name="REV_DEL_Outdoor" ID="{58FB9EAA-AFC0-4C4A-B598-0A3D596993A8}">
+						<AuxBus Name="REV_DEL_Ext" ID="{58FB9EAA-AFC0-4C4A-B598-0A3D596993A8}">
 							<ObjectLists>
 								<ObjectList Name="Effects">
 									<EffectSlot Name="" ID="{8EAF27F6-CB21-448A-AB66-E95509839FF0}" ShortID="833027995">
@@ -520,6 +520,19 @@
 								</ObjectList>
 							</ObjectLists>
 						</Bus>
+						<AuxBus Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}">
+							<ObjectLists>
+								<ObjectList Name="Effects">
+									<EffectSlot Name="" ID="{2FD31AE0-3A6A-4519-BC35-9598A63C1EE3}" ShortID="613426746">
+										<ReferenceList>
+											<Reference Name="Effect" PluginName="Wwise Stereo Delay" CompanyID="0" PluginID="135" PluginType="3">
+												<ObjectRef Name="LR_Slap_with_CrossFeed" ID="{30319A92-C5AC-437A-9864-430059762933}" WorkUnitID="{E8613F7D-BAD3-45CD-A3ED-505576F31277}"/>
+											</Reference>
+										</ReferenceList>
+									</EffectSlot>
+								</ObjectList>
+							</ObjectLists>
+						</AuxBus>
 					</ChildrenList>
 					<ObjectLists>
 						<ObjectList Name="Effects">
