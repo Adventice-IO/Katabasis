@@ -1,4 +1,4 @@
-﻿Shader "Point Cloud/Optimized_Masked"
+﻿Shader "Point Cloud/Optimized_Masked_VR"
 {
     Properties
     {
@@ -23,8 +23,9 @@
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // Use shader model 4.5+ for StructuredBuffer support
-            #pragma target 4.5 
+            #pragma target 4.5
+            // Explicitly force the compiler to validate structured buffers for the target API
+            #pragma require structuredbuffer 
 
             #include "UnityCG.cginc"
 
@@ -44,12 +45,12 @@
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
+            // Hardware-aligned struct (96 bytes total stride)
             struct OrientedMaskBox {
                 float4x4 worldToLocal;
                 float3 extents;
                 float alpha;
-                float feather;
-                float soloWhenInside;
+                float4 settings; // x: feather, y: soloWhenInside, zw: padding
             };
 
             // Uniforms
@@ -71,9 +72,6 @@
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-                o.position = UnityObjectToClipPos(v.position);
-                o.uv = v.uv;
-
                 // 1. Quick Global Exit
                 float globalAlpha = _Alpha * _Reveal;
                 if (globalAlpha <= 0.0) {
@@ -87,96 +85,89 @@
                 float d = distance(_WorldSpaceCameraPos, worldPos);
                 
                 // 3. Distance Cull/Fade
-                // If point is further than MaxDistance, we collapse it immediately
                 if (d > _MaxDistance) {
-                    // o.position = float4(0,0,0,0);
-                    // o.color = float4(0,0,0,0);
-                    // return o;
+                    o.position = float4(0,0,0,0);
+                    o.color = float4(0,0,0,0);
+                    return o;
                 }
                 float distFade = saturate((_MaxDistance - d) / _DistFade);
 
                 // 4. Masking Logic
                 float maskAlpha = 1.0;
-                [loop] // Keep register count low for Unity 6.3 
+                
+                [loop] // Keep register count low for mobile [cite: 18]
                 for (int j = 0; j < _MaskCount; j++) {
-                    // Transform world position to the box's local space [cite: 19]
-                    float3 localPos = mul(_MaskBoxes[j].worldToLocal, float4(worldPos, 1.0)).xyz;
-                    float3 d = abs(localPos);
+                    OrientedMaskBox mask = _MaskBoxes[j]; // Cache locally to reduce buffer lookups
+                    
+                    float3 localPos = mul(mask.worldToLocal, float4(worldPos, 1.0)).xyz;
+                    float3 localD = abs(localPos);
     
-                    // Calculate distance to the box edge (extents) [cite: 8, 19]
-                    // Positive result = inside the box
-                    float3 distToEdge = _MaskBoxes[j].extents - d;
+                    float3 distToEdge = mask.extents - localD;
                     float boxSDF = min(distToEdge.x, min(distToEdge.y, distToEdge.z));
 
-                    // If boxSDF > 0, we are inside. 
-                    // We calculate a 0-1 gradient based on the feather distance.
-                    float featherFactor = saturate(boxSDF / max(0.001,_MaskBoxes[j].feather ));
-    
-                    // If the box is intended to hide points (alpha < 1):
-                    // We blend the point's current visibility with the box's alpha.
-                    // If featherFactor is 1 (deep inside), we use the box's alpha.
-                    // If featherFactor is 0 (outside), we keep current visibility.
-                    float boxEffect = lerp(1.0, _MaskBoxes[j].alpha, featherFactor);
+                    // Extract packed settings
+                    float feather = max(0.001, mask.settings.x);
+                    float soloSignal = mask.settings.y;
+
+                    float featherFactor = saturate(boxSDF / feather);
+                    float boxEffect = lerp(1.0, mask.alpha, featherFactor);
     
                     maskAlpha *= boxEffect;
-                    
-                    if (_MaskBoxes[j].soloWhenInside > 0.5) {
-                        //if solo, use boxsdf outside the box to hide everything else smoothly
 
-                        float3 camLocalPos = mul(_MaskBoxes[j].worldToLocal, float4(_WorldSpaceCameraPos, 1.0)).xyz;
+                    if (soloSignal > 0.5) {
+                        float3 camLocalPos = mul(mask.worldToLocal, float4(_WorldSpaceCameraPos, 1.0)).xyz;
                         float3 camD = abs(camLocalPos);
-                        float3 camDistToEdge = _MaskBoxes[j].extents - camD;
+                        float3 camDistToEdge = mask.extents - camD;
                         float camBoxSDF = min(camDistToEdge.x, min(camDistToEdge.y, camDistToEdge.z));
+                        
                         bool isInside = boxSDF > 0;
                         if (!isInside) {
-                            // If the point is outside, we want to hide it based on how close it is to the box edge.
-                            // We can use the same featherFactor logic, but inverted (1 at edge, 0 far away).
-                           float camFeatherFactor = 1.0 - saturate(camBoxSDF / max(0.001, _MaskBoxes[j].feather));
+                           float camFeatherFactor = 1.0 - saturate(camBoxSDF / feather);
                            maskAlpha *= camFeatherFactor;
                         }   
                     }
 
-                    // Optimization: if we're already invisible, stop [cite: 20]
-                    if (maskAlpha <= 0.001) break;  
+                    // Optimization: if we're already invisible, stop [cite: 30]
+                    if (maskAlpha <= 0.001) break;
                 }
 
-                // box feather around bounds
+                // Box feather around bounds
                 float3 boxCenter = (_BoxMin + _BoxMax) * 0.5;
                 float3 boxSize = abs(_BoxMax - _BoxMin);
                 float3 localPoint = worldPos - boxCenter;
                 float3 halfSize = boxSize * 0.5;
-                float3 distToEdge = halfSize - abs(localPoint);
-                float distToCenter = length(localPoint);
-                float minDist = min(distToEdge.x, distToEdge.z);
-                                        // Debug visualization of feathering (optional)
                 
-                float boxFeatherAlpha =  saturate(minDist / max(0.001, _BoxFeather * boxSize));
-
-
+                float3 boundsDistToEdge = halfSize - abs(localPoint);
+                float minDist = min(boundsDistToEdge.x, boundsDistToEdge.z);
+                
+                // Fixed implicit cast warning by using length() for scalar division
+                float boxFeatherAlpha = saturate(minDist / max(0.001, _BoxFeather * length(boxSize)));
 
                 // 5. Final Visibility Check
                 float visibility = globalAlpha * distFade * maskAlpha * boxFeatherAlpha;
+
+                // Move heavy clip space math to AFTER visibility check
+                // This saves massive overhead on culled points
                 if (visibility <= 0.001) {
                     o.position = float4(0,0,0,0);
                     o.color = float4(0,0,0,0);
                     return o;
                 }
 
-                //Color pass : compensate dark points so they remain visible
-                // Brighten dark colors smoothly
+                o.position = UnityObjectToClipPos(v.position);
+                o.uv = v.uv;
+
+                // Color pass: compensate dark points
                 float brightness = dot(v.color.rgb, float3(0.299, 0.587, 0.114));
                 float darknessThreshold = 0.1;
                 float brightnessFactor = smoothstep(0.0, darknessThreshold, brightness);
-                
-                // Brighten dark colors
+
                 float3 brightened = lerp(v.color.rgb * 10, v.color.rgb, brightnessFactor);
-                
-                // Desaturate as they get darker
                 float3 gray = float3(brightness, brightness, brightness);
                 brightened = lerp(gray, brightened, brightnessFactor);
 
-
-                o.color = v.color * visibility;
+                // Fixed: Apply the brightened color that was calculated but never used
+                o.color = float4(brightened, v.color.a) * visibility;
                 
                 return o;
             }
@@ -185,7 +176,7 @@
             {
                 // Simple circular point shape
                 float d = dot(i.uv, i.uv);
-                if (d > 0.25) discard; // Hard circle crop (0.5 radius squared)
+                if (d > 0.25) discard; // Hard circle crop [cite: 43]
                 
                 return i.color;
             }

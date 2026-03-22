@@ -1041,7 +1041,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8135023674665499069, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8518324294302271954, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2883,58 +2883,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 638221236218943314, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: minNodeSize
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 638221236218943314, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: pointBudget
-      value: 500000
-      objectReference: {fileID: 0}
-    - target: {fileID: 638221236218943314, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: cacheSizeInPoints
-      value: 100000
-      objectReference: {fileID: 0}
-    - target: {fileID: 803344138802285276, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: animateTime
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 803344138802285276, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: soloWhenInside
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3818919819974312888, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 88.59756
-      objectReference: {fileID: 0}
-    - target: {fileID: 3818919819974312888, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 33.098686
-      objectReference: {fileID: 0}
-    - target: {fileID: 3818919819974312888, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 24.626461
-      objectReference: {fileID: 0}
-    - target: {fileID: 3818919819974312888, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 180.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3818919819974312888, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 126.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3818919819974312888, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 39.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4231897301788856306, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: feather
-      value: 0.114
-      objectReference: {fileID: 0}
-    - target: {fileID: 4231897301788856306, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: maxDistance
-      value: 23.9
-      objectReference: {fileID: 0}
     - target: {fileID: 6746142246407683067, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
       propertyPath: renderCamera
       value: 
@@ -2942,10 +2890,6 @@ PrefabInstance:
     - target: {fileID: 7531940741206054172, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
       propertyPath: m_Name
       value: PointCloud Set
-      objectReference: {fileID: 0}
-    - target: {fileID: 8827983277586179834, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 55.98
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21852,9 +21796,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 916687913}
     - target: {fileID: 2647586264852317331, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: playingSO
+      propertyPath: language
       value: 
-      objectReference: {fileID: 11400000, guid: 96605a58e1e7b8c4ea06be01268982d7, type: 2}
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647586264852317331, guid: 2970b78058aa32545a2db93823e98422, type: 3}
+      propertyPath: gameState
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2647586264852317331, guid: 2970b78058aa32545a2db93823e98422, type: 3}
       propertyPath: initialSalle
       value: 
