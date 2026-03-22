@@ -206,11 +206,11 @@ MonoBehaviour:
   moveCenterToTransformPosition: 0
   showBoundingBox: 1
   meshConfiguration: {fileID: 6746142246407683067}
-  pointBudget: 1000000
-  minNodeSize: 10
+  pointBudget: 500000
+  minNodeSize: 20
   nodesLoadedPerFrame: 15
   nodesGOsPerFrame: 30
-  cacheSizeInPoints: 1000000
+  cacheSizeInPoints: 100000
   userCamera: {fileID: 0}
 --- !u!1 &8048221943487401939
 GameObject:
@@ -256,17 +256,37 @@ PrefabInstance:
       propertyPath: m_Name
       value: VisionZone
       objectReference: {fileID: 0}
+    - target: {fileID: 3619130669793110851, guid: 2cc74364069d8154a9d7d214ca7a207d, type: 3}
+      propertyPath: feather
+      value: 0.114
+      objectReference: {fileID: 0}
+    - target: {fileID: 3619130669793110851, guid: 2cc74364069d8154a9d7d214ca7a207d, type: 3}
+      propertyPath: maxDistance
+      value: 23.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4358502920232560393, guid: 2cc74364069d8154a9d7d214ca7a207d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 88.59756
+      objectReference: {fileID: 0}
+    - target: {fileID: 4358502920232560393, guid: 2cc74364069d8154a9d7d214ca7a207d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 33.098686
+      objectReference: {fileID: 0}
+    - target: {fileID: 4358502920232560393, guid: 2cc74364069d8154a9d7d214ca7a207d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 24.626461
+      objectReference: {fileID: 0}
     - target: {fileID: 4358502920232560393, guid: 2cc74364069d8154a9d7d214ca7a207d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 209.2
+      value: 180.5
       objectReference: {fileID: 0}
     - target: {fileID: 4358502920232560393, guid: 2cc74364069d8154a9d7d214ca7a207d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 92.4
+      value: 126.6
       objectReference: {fileID: 0}
     - target: {fileID: 4358502920232560393, guid: 2cc74364069d8154a9d7d214ca7a207d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0
+      value: 39.5
       objectReference: {fileID: 0}
     - target: {fileID: 4358502920232560393, guid: 2cc74364069d8154a9d7d214ca7a207d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -323,6 +343,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 266640040929139062, guid: 6157845f55ee11c438c379af5cc22c44, type: 3}
+      propertyPath: animateTime
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 266640040929139062, guid: 6157845f55ee11c438c379af5cc22c44, type: 3}
+      propertyPath: soloWhenInside
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 266640040929139062, guid: 6157845f55ee11c438c379af5cc22c44, type: 3}
       propertyPath: visibleInSalles.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -364,7 +392,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8220769766698464592, guid: 6157845f55ee11c438c379af5cc22c44, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 57.5
+      value: 55.98
       objectReference: {fileID: 0}
     - target: {fileID: 8220769766698464592, guid: 6157845f55ee11c438c379af5cc22c44, type: 3}
       propertyPath: m_LocalRotation.w
@@ -909,6 +937,10 @@ PrefabInstance:
     - target: {fileID: 266640040929139062, guid: 6157845f55ee11c438c379af5cc22c44, type: 3}
       propertyPath: alpha
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 266640040929139062, guid: 6157845f55ee11c438c379af5cc22c44, type: 3}
+      propertyPath: feather
+      value: 0.06
       objectReference: {fileID: 0}
     - target: {fileID: 266640040929139062, guid: 6157845f55ee11c438c379af5cc22c44, type: 3}
       propertyPath: rawAlpha
