@@ -148,6 +148,20 @@ namespace AK
 
     namespace STATES
     {
+        namespace STATE_GAME
+        {
+            static const AkUniqueID GROUP = 1203368309U;
+
+            namespace STATE
+            {
+                static const AkUniqueID END = 529726532U;
+                static const AkUniqueID INTRO = 1125500713U;
+                static const AkUniqueID MENU = 2607556080U;
+                static const AkUniqueID NONE = 748895195U;
+                static const AkUniqueID OUTRO = 4184794294U;
+            } // namespace STATE
+        } // namespace STATE_GAME
+
         namespace STATE_MAP
         {
             static const AkUniqueID GROUP = 188982067U;
