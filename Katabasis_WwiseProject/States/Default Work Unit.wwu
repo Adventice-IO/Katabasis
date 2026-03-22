@@ -34,6 +34,15 @@
 						<State Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
 					</ChildrenList>
 				</StateGroup>
+				<StateGroup Name="State_Game" ID="{14855AE6-A0D9-47AA-AE19-6FD8B9D55DE0}">
+					<ChildrenList>
+						<State Name="None" ID="{25D2BE65-E18F-444A-A38A-C5FA568D76C7}"/>
+						<State Name="Menu" ID="{450D271D-C510-4F22-9ACB-210DDC500722}"/>
+						<State Name="Intro" ID="{36AABFA5-335C-4179-9A09-9ACD878C4A8F}"/>
+						<State Name="Outro" ID="{6FBAADB7-4C86-4769-98A8-13F59CD0F605}"/>
+						<State Name="End" ID="{74D521A2-E950-469B-AE5D-2CD4DF7B09C2}"/>
+					</ChildrenList>
+				</StateGroup>
 			</ChildrenList>
 		</WorkUnit>
 	</States>

@@ -1732,12 +1732,15 @@
 						<Effect Name="LR_Slap_with_CrossFeed" ID="{30319A92-C5AC-437A-9864-430059762933}" PluginName="Wwise Stereo Delay" CompanyID="0" PluginID="135" PluginType="3">
 							<PropertyList>
 								<Property Name="EnableCrossFeed" Type="bool" Value="True"/>
+								<Property Name="EnableFeedback" Type="bool" Value="True"/>
 								<Property Name="FilterFrequency" Type="Real32" Value="261"/>
 								<Property Name="FilterGain" Type="Real32" Value="10.5"/>
 								<Property Name="LeftCrossfeed" Type="Real32" Value="-20"/>
 								<Property Name="LeftDelayTime" Type="Real32" Value="0.29"/>
+								<Property Name="LeftFeedback" Type="Real32" Value="-9"/>
 								<Property Name="RightCrossfeed" Type="Real32" Value="-20"/>
 								<Property Name="RightDelayTime" Type="Real32" Value="0.43"/>
+								<Property Name="RightFeedback" Type="Real32" Value="-9"/>
 								<Property Name="WetLevel" Type="Real32" Value="-6"/>
 							</PropertyList>
 						</Effect>

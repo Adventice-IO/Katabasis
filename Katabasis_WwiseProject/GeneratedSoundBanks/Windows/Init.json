@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{849B5E2B-8872-21B4-D3E6-B1DED1A5E609}",
+    "Hash": "{747D6E02-47ED-E4FD-F8BD-B734153E3051}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -43,7 +43,7 @@
       {
        "Id": "622950439",
        "Name": "Delay (Custom)",
-       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_DEL_Outdoor\\[Effect Slot [1]: (Delay)]\\Delay (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_DEL_Ext\\[Effect Slot [1]: (Delay)]\\Delay (Custom)",
        "GUID": "{52A9C5B1-F637-45A1-9942-1831164C0054}",
        "LibName": "Wwise Delay",
        "LibId": "6946819"
@@ -81,6 +81,14 @@
        "GUID": "{FE29AE8D-FD86-4652-A95D-68D32F5760EC}",
        "LibName": "Wwise RoomVerb",
        "LibId": "7733251"
+      },
+      {
+       "Id": "1232017842",
+       "Name": "LR_Slap_with_CrossFeed",
+       "ObjectPath": "\\Effects\\Factory Effects\\Stereo Delay\\LR_Slap_with_CrossFeed",
+       "GUID": "{30319A92-C5AC-437A-9864-430059762933}",
+       "LibName": "Wwise Stereo Delay",
+       "LibId": "8847363"
       },
       {
        "Id": "2513915904",
@@ -226,24 +234,6 @@
     ],
     "AuxBusses": [
      {
-      "Id": "152793239",
-      "Name": "REV_DEL_Outdoor",
-      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_DEL_Outdoor",
-      "GUID": "{58FB9EAA-AFC0-4C4A-B598-0A3D596993A8}",
-      "PluginRefs": {
-       "Custom": [
-        {
-         "Id": "622950439"
-        }
-       ],
-       "ShareSets": [
-        {
-         "Id": "48620415"
-        }
-       ]
-      }
-     },
-     {
       "Id": "266044713",
       "Name": "REV_Long",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Long",
@@ -270,6 +260,19 @@
       }
      },
      {
+      "Id": "3342787159",
+      "Name": "DEL_Under",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\DEL_Under",
+      "GUID": "{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}",
+      "PluginRefs": {
+       "ShareSets": [
+        {
+         "Id": "1232017842"
+        }
+       ]
+      }
+     },
+     {
       "Id": "3475958207",
       "Name": "REV_Short",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_Short",
@@ -278,6 +281,24 @@
        "ShareSets": [
         {
          "Id": "2791153688"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "3577192126",
+      "Name": "REV_DEL_Ext",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_DEL_Ext",
+      "GUID": "{58FB9EAA-AFC0-4C4A-B598-0A3D596993A8}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "622950439"
+        }
+       ],
+       "ShareSets": [
+        {
+         "Id": "48620415"
         }
        ]
       }
@@ -467,10 +488,48 @@
         "GUID": "{52431833-40A7-4D61-A7D2-A63D9B77EB39}"
        }
       ]
+     },
+     {
+      "Id": "1203368309",
+      "Name": "State_Game",
+      "ObjectPath": "\\States\\Default Work Unit\\State_Game",
+      "GUID": "{14855AE6-A0D9-47AA-AE19-6FD8B9D55DE0}",
+      "States": [
+       {
+        "Id": "529726532",
+        "Name": "End",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Game\\End",
+        "GUID": "{74D521A2-E950-469B-AE5D-2CD4DF7B09C2}"
+       },
+       {
+        "Id": "748895195",
+        "Name": "None",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Game\\None",
+        "GUID": "{25D2BE65-E18F-444A-A38A-C5FA568D76C7}"
+       },
+       {
+        "Id": "1125500713",
+        "Name": "Intro",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Game\\Intro",
+        "GUID": "{36AABFA5-335C-4179-9A09-9ACD878C4A8F}"
+       },
+       {
+        "Id": "2607556080",
+        "Name": "Menu",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Game\\Menu",
+        "GUID": "{450D271D-C510-4F22-9ACB-210DDC500722}"
+       },
+       {
+        "Id": "4184794294",
+        "Name": "Outro",
+        "ObjectPath": "\\States\\Default Work Unit\\State_Game\\Outro",
+        "GUID": "{6FBAADB7-4C86-4769-98A8-13F59CD0F605}"
+       }
+      ]
      }
     ]
    }
   ],
-  "FileHash": "{7CD5140B-8309-2633-620D-02F7A27B6535}"
+  "FileHash": "{063D3ED6-E525-FDA5-8A3A-5EFDDCA851C5}"
  }
 }
