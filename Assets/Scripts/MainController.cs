@@ -85,6 +85,8 @@ public class MainController : MonoBehaviour
     float editSmoothSpeed = 0f;
 
     public bool freeMotion;
+    public bool followPathOrientation;
+
     public ContinuousMoveProvider moveProvider;
     [SerializeField] private InputActionProperty verticalMoveAction;
     [SerializeField] private InputActionProperty joystickAction;
@@ -541,7 +543,7 @@ public class MainController : MonoBehaviour
                     AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
                     if (audioSO != null && audioSO.state != null)
                     {
-                        Debug.Log("Setting tunnel audio state: " + audioSO.state.Name + " at track position: " + trackPosition);
+                        //Debug.Log("Setting tunnel audio state: " + audioSO.state.Name + " at track position: " + trackPosition);
                         audioSO.state.SetValue();
                     }
                     else
@@ -758,6 +760,16 @@ public class MainController : MonoBehaviour
     public void setPosition(float position)
     {
         trackPosition = Mathf.Clamp01(position);
+        if(isRunning && followPathOrientation && splineContainer != null)
+        {
+            float actualTrackPosition = isReversed ? (1f - trackPosition) : trackPosition;
+            Vector3 forward = splineContainer.EvaluateTangent(actualTrackPosition);
+            Vector3 up = Vector3.up;
+            if (forward != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(forward, up);
+            }
+        }
     }
 
     public void Reset()

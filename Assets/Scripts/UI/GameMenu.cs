@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Unity.Serialization.Json;
 using UnityEngine.VFX;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class GameMenu : MonoBehaviour
 {
-    readonly Dictionary<string, Dictionary<string, string>> localeEntries = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
     readonly Dictionary<GameObject, string> languageByObject = new Dictionary<GameObject, string>();
     readonly Dictionary<XRSimpleInteractable, GameObject> objectByInteractable = new Dictionary<XRSimpleInteractable, GameObject>();
     readonly Dictionary<GameObject, Transform> titleByObject = new Dictionary<GameObject, Transform>();
@@ -266,8 +264,6 @@ public class GameMenu : MonoBehaviour
         selectedLanguage = "";
         selectedObject = null;
         ReleaseLanguageTextures();
-        LoadLocale();
-        Debug.Log("GameMenu refresh - locale keys: " + localeEntries.Count, this);
         startTransitionRunning = false;
         startSelected = false;
         EnsureLanguageButtons();
@@ -416,13 +412,19 @@ public class GameMenu : MonoBehaviour
     {
         HashSet<string> languages = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        if (localeEntries.TryGetValue("languages", out Dictionary<string, string> languagesEntry) && languagesEntry != null)
+        if (dataManager != null)
         {
-            foreach (string language in languagesEntry.Keys)
+            string menuFolderPath = dataManager.GetFolderPath(DataManager.DataFolder.Menu);
+            if (!string.IsNullOrWhiteSpace(menuFolderPath) && Directory.Exists(menuFolderPath))
             {
-                if (!string.IsNullOrWhiteSpace(language))
+                string[] textureFiles = Directory.GetFiles(menuFolderPath, "*.png", SearchOption.TopDirectoryOnly);
+                for (int i = 0; i < textureFiles.Length; i++)
                 {
-                    languages.Add(language);
+                    string fileName = Path.GetFileNameWithoutExtension(textureFiles[i]);
+                    if (!string.IsNullOrWhiteSpace(fileName))
+                    {
+                        languages.Add(fileName);
+                    }
                 }
             }
         }
@@ -718,24 +720,6 @@ public class GameMenu : MonoBehaviour
         {
             vfx.SetFloat("Progression", Mathf.Clamp01(progression));
         }
-    }
-
-    string GetLocalizedText(string key, string language)
-    {
-        if (localeEntries.TryGetValue(key, out Dictionary<string, string> entry) && entry != null)
-        {
-            if (entry.TryGetValue(language, out string value) && !string.IsNullOrWhiteSpace(value))
-            {
-                return value;
-            }
-
-            if (entry.TryGetValue("en", out value) && !string.IsNullOrWhiteSpace(value))
-            {
-                return value;
-            }
-        }
-
-        return key;
     }
 
     void OnStartClicked()
@@ -1132,90 +1116,6 @@ public class GameMenu : MonoBehaviour
             ReferenceEquals(currentHoverInteractor, args.interactorObject))
         {
             ClearHoveredObject(langObject);
-        }
-    }
-
-    void LoadLocale()
-    {
-        localeEntries.Clear();
-
-        string localePath = dataManager.GetFilePath(DataManager.DataFolder.Menu, "locale.json");
-        if (string.IsNullOrWhiteSpace(localePath) || !File.Exists(localePath))
-        {
-            return;
-        }
-
-        try
-        {
-            DeserializeLocaleEntries(File.ReadAllText(localePath));
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("Failed to load locale.json: " + ex.Message, this);
-        }
-    }
-
-    void DeserializeLocaleEntries(string json)
-    {
-        if (string.IsNullOrWhiteSpace(json))
-        {
-            return;
-        }
-
-        try
-        {
-            JsonObject root = JsonSerialization.FromJson<JsonObject>(json);
-            if (root == null)
-            {
-                return;
-            }
-
-            Dictionary<string, string> languages = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            if (root.TryGetValue("languages", out object languagesValue) && languagesValue is JsonArray languagesArray)
-            {
-                for (int i = 0; i < languagesArray.Count; i++)
-                {
-                    if (!(languagesArray[i] is JsonObject languageObject))
-                    {
-                        continue;
-                    }
-
-                    string code = languageObject.TryGetValue("code", out object codeValue) ? Convert.ToString(codeValue) : string.Empty;
-                    string name = languageObject.TryGetValue("name", out object nameValue) ? Convert.ToString(nameValue) : string.Empty;
-
-                    if (!string.IsNullOrWhiteSpace(code))
-                    {
-                        languages[code] = string.IsNullOrWhiteSpace(name) ? code.ToUpperInvariant() : name;
-                    }
-                }
-            }
-
-            if (languages.Count > 0)
-            {
-                localeEntries["languages"] = languages;
-            }
-
-            if (root.TryGetValue("start", out object startValue) && startValue is JsonObject startObject)
-            {
-                Dictionary<string, string> startEntries = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                foreach (KeyValuePair<string, object> entry in startObject)
-                {
-                    string key = entry.Key;
-                    string value = Convert.ToString(entry.Value);
-                    if (!string.IsNullOrWhiteSpace(key))
-                    {
-                        startEntries[key] = value;
-                    }
-                }
-
-                if (startEntries.Count > 0)
-                {
-                    localeEntries["start"] = startEntries;
-                }
-            }
-        }
-        catch
-        {
         }
     }
 
