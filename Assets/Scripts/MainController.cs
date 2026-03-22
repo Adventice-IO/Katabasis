@@ -26,6 +26,7 @@ public class MainController : MonoBehaviour
     public bool debugAudioStates = false;
     public AudioStateRefSO menuRefSO;
     public AudioStateRefSO introRefSO;
+    public AudioStateRefSO playingSO;
     public AudioStateRefSO outroRefSO;
     public AudioStateRefSO endRefSO;
 
@@ -604,6 +605,7 @@ public class MainController : MonoBehaviour
                 break;
 
             case GameState.Playing:
+                playingSO?.state.SetValue();
                 Reset();
                 break;
 
