@@ -1,4 +1,5 @@
 using Depthkit;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -8,16 +9,22 @@ using UnityEngine.Video;
 [ExecuteAlways]
 public class Interview : MonoBehaviour
 {
+    static readonly Dictionary<string, string> metadataCache = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+    static readonly Dictionary<string, byte[]> posterCache = new Dictionary<string, byte[]>(StringComparer.OrdinalIgnoreCase);
+
     Clip clip;
     VideoPlayer videoPlayer;
     Texture2D posterTex;
     VisualEffect vfx;
     bool loopPointReachedSubscribed;
+    bool previewLoadQueued;
     InterviewManager.InterviewData[] playbackSequence;
     int playbackIndex = -1;
     bool isResolvedPlayback;
     bool isTransitioningSequence;
     bool resourcesReleased;
+    string loadedPreviewBasePath;
+    string loadedInterviewId;
 
     public string itwName;
     public string interviewId;
@@ -39,6 +46,10 @@ public class Interview : MonoBehaviour
     public float evaporateProg;
     [Range(0, 1)]
     public float glitchFactor;
+
+    [Header("Preview Reveal")]
+    public float revealTime = 2f;
+    float revealStartTime = -1f;
 
     [Header("Glitch Settings")]
     public float glitchTimeAroundCut = 1f;
@@ -140,12 +151,54 @@ public class Interview : MonoBehaviour
         evaporate();
     }
 
+    public bool MatchesPreviewAssignment(InterviewManager.InterviewData data)
+    {
+        return string.Equals(itwName, data.depthkitPath, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(interviewId, data.mediaPath, StringComparison.OrdinalIgnoreCase);
+    }
+
+    public bool IsPreviewLoadedForCurrentAssignment()
+    {
+        return state == State.Loaded
+            && string.Equals(loadedPreviewBasePath, previewBasePath, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(loadedInterviewId, interviewId, StringComparison.OrdinalIgnoreCase);
+    }
+
+    public void SetPreviewLoadQueued(bool queued)
+    {
+        previewLoadQueued = queued;
+    }
+
+    static string LoadMetadataCached(string path)
+    {
+        if (!metadataCache.TryGetValue(path, out string cached))
+        {
+            cached = File.ReadAllText(path);
+            metadataCache[path] = cached;
+        }
+
+        return cached;
+    }
+
+    static byte[] LoadPosterCached(string path)
+    {
+        if (!posterCache.TryGetValue(path, out byte[] cached))
+        {
+            cached = File.ReadAllBytes(path);
+            posterCache[path] = cached;
+        }
+
+        return cached;
+    }
+
 
     void resetPlaybackState()
     {
         progression = 0;
         evaporateProg = 0;
         shouldEvaporate = false;
+        previewLoadQueued = false;
+        revealStartTime = -1f;
         playbackSequence = null;
         playbackIndex = -1;
         isResolvedPlayback = false;
@@ -270,9 +323,16 @@ public class Interview : MonoBehaviour
 
         glitchFactor = glitchIntensity * glitchCurve.Evaluate(Mathf.Max(glitchCutF, glitchActivateF));
 
+        float spawnRate = 1f;
+        if (state == State.Loaded && revealStartTime >= 0f)
+        {
+            spawnRate = Mathf.Clamp01((Time.time - revealStartTime) / Mathf.Max(0.01f, revealTime));
+        }
+
         vfx.SetFloat("Progression", progression);
         vfx.SetFloat("Evaporate", evaporateProg);
         vfx.SetFloat("GlitchFactor", glitchFactor);
+        vfx.SetFloat("SpawnRate", spawnRate);
     }
 
     void show(bool shouldShow)
@@ -281,7 +341,10 @@ public class Interview : MonoBehaviour
         vfx.enabled = shouldShow;
         if (shouldShow)
         {
-            load();
+            if (!previewLoadQueued)
+            {
+                load();
+            }
         }
         else
         {
@@ -345,6 +408,13 @@ public class Interview : MonoBehaviour
 
     public void load()
     {
+        previewLoadQueued = false;
+
+        if (IsPreviewLoadedForCurrentAssignment())
+        {
+            return;
+        }
+
         ReleasePosterTexture();
         clip.metadataFile = null;
         clip.poster = null;
@@ -358,31 +428,35 @@ public class Interview : MonoBehaviour
 
         LogDebug("Loading preview assets from '" + previewBasePath + "'");
 
-        if (!File.Exists(previewBasePath + ".txt"))
+        string metadataPath = previewBasePath + ".txt";
+        if (!File.Exists(metadataPath))
         {
-            Debug.LogWarning("Metadata doesn't exist for " + previewBasePath + ".txt");
+            Debug.LogWarning("Metadata doesn't exist for " + metadataPath);
             return;
         }
-        ;
 
-        string metaData = File.ReadAllText(previewBasePath + ".txt");
+        string metaData = LoadMetadataCached(metadataPath);
         bool result = clip.LoadMetadata(metaData);
 
-        if (File.Exists(previewBasePath + ".png"))
+        string posterPath = previewBasePath + ".png";
+        if (File.Exists(posterPath))
         {
             posterTex = new Texture2D(2, 2);
-            byte[] pngData = File.ReadAllBytes(previewBasePath + ".png");
+            byte[] pngData = LoadPosterCached(posterPath);
             posterTex.LoadImage(pngData);
             clip.poster = posterTex;
         }
         else
         {
-            Debug.LogWarning("Poster doesn't exist for " + previewBasePath + ".png");
+            Debug.LogWarning("Poster doesn't exist for " + posterPath);
         }
 
         Debug.Log("Meta data load result " + result);
         LogDebug("Loaded metadata/poster. Poster assigned=" + (clip.poster != null) + ", videoPrepared=" + (videoPlayer != null && videoPlayer.isPrepared) + ", clipSetup=" + (clip != null && clip.isSetup));
 
+        revealStartTime = Time.time;
+        loadedPreviewBasePath = previewBasePath;
+        loadedInterviewId = interviewId;
         state = State.Loaded;
     }
 
@@ -392,6 +466,9 @@ public class Interview : MonoBehaviour
         OnInterviewStarted?.Invoke(this);
         InterviewManager manager = FindAnyObjectByType<InterviewManager>();
         manager?.NotifyInterviewStarted(this);
+
+        revealStartTime = -1f;
+        vfx.SetFloat("SpawnRate", 1f);
         
         stopWwiseVideoEvent();
         Debug.Log("Start Wwise Event from play");
@@ -651,6 +728,8 @@ public class Interview : MonoBehaviour
             clip.poster = null;
             clip.metadataFile = null;
             clip.metadataFilePath = string.Empty;
+            loadedPreviewBasePath = null;
+            loadedInterviewId = null;
         }
 
         if (clearDepthkitAssets)

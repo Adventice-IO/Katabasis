@@ -25,7 +25,7 @@
             #pragma fragment frag
             #pragma target 4.5
             // Explicitly force the compiler to validate structured buffers for the target API
-            // #pragma require structuredbuffer 
+            #pragma require structuredbuffer 
 
             #include "UnityCG.cginc"
 
@@ -164,7 +164,8 @@
 
                 float3 brightened = lerp(v.color.rgb * 10, v.color.rgb, brightnessFactor);
                 float3 gray = float3(brightness, brightness, brightness);
-                brightened = lerp(gray, brightened, brightnessFactor);
+                float saturationFactor = lerp(0.1, 1.0, brightnessFactor);
+                brightened = lerp(gray, brightened, saturationFactor);
 
                 // Fixed: Apply the brightened color that was calculated but never used
                 o.color = float4(brightened, v.color.a) * visibility;

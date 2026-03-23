@@ -119,7 +119,7 @@ namespace Depthkit
 
         public override void StartVideoLoad()
         {
-            
+            videoLoaded = false;
             StartCoroutine(Load());
         }
 
@@ -161,6 +161,7 @@ namespace Depthkit
         }
         public override void Stop()
         {
+            videoLoaded = false;
             m_mediaPlayer.Stop();
             events.OnClipPlaybackStopped();
         }

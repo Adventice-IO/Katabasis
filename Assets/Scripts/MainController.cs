@@ -659,7 +659,7 @@ public class MainController : MonoBehaviour
             InterviewManager manager = FindAnyObjectByType<InterviewManager>();
             if (manager != null)
             {
-                manager.RefreshAssignmentsForSalle(targetSalle);
+                manager.PrepareAssignmentsForSalle(targetSalle);
             }
         }
 

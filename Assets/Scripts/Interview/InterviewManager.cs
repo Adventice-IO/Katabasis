@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Collections;
 using UnityEngine;
 using System.Globalization; // Required for CultureInfo
 
@@ -63,6 +64,8 @@ public class InterviewManager : MonoBehaviour
     readonly HashSet<Interview> consumedSlots = new HashSet<Interview>();
     Interview activePlayingSlot;
     Salle lastAssignedSalle;
+    Salle preparedSalle;
+    Coroutine loadAssignmentsRoutine;
 
     System.Random assignmentRandom;
 
@@ -88,9 +91,12 @@ public class InterviewManager : MonoBehaviour
         Salle currentSalle = mainController != null ? mainController.salle : null;
         if (currentSalle != lastAssignedSalle)
         {
-            consumedSlots.Clear();
-            roomAssignments.Clear();
-            RefreshAssignmentsForCurrentSalle();
+            if (!(currentSalle == null && preparedSalle != null))
+            {
+                consumedSlots.Clear();
+                roomAssignments.Clear();
+                RefreshAssignmentsForCurrentSalle();
+            }
         }
 
         if (generateAssignment)
@@ -229,6 +235,41 @@ public class InterviewManager : MonoBehaviour
         }
     }
 
+    public void NotifyInterviewReleased(Interview slot)
+    {
+        if (slot == null)
+        {
+            return;
+        }
+
+        if (activePlayingSlot == slot)
+        {
+            activePlayingSlot = null;
+        }
+
+        activeAssignmentsBySlot.Remove(slot);
+        resolvedPlaybackBySlot.Remove(slot);
+        consumedSlots.Remove(slot);
+        roomAssignments.RemoveAll(assignment => assignment.interviewSlot == slot);
+    }
+
+    public void PrepareAssignmentsForSalle(Salle salle)
+    {
+        if (salle == null || salle.isExit)
+        {
+            return;
+        }
+
+        consumedSlots.Clear();
+        resolvedPlaybackBySlot.Clear();
+        ClearProposedFlags();
+        roomAssignments.Clear();
+        roomAssignments.AddRange(BuildAssignmentsForSalle(salle, consumedSlots));
+        ApplyAssignmentsToScene(roomAssignments);
+        preparedSalle = salle;
+        lastAssignedSalle = salle;
+    }
+
     public void AssignPersonsToRooms(int? seed = null)
     {
         if (seed.HasValue)
@@ -256,8 +297,10 @@ public class InterviewManager : MonoBehaviour
 
         if (salle == null || salle.isExit)
         {
+            StopLoadAssignmentsRoutine();
             roomAssignments.Clear();
             activeAssignmentsBySlot.Clear();
+            preparedSalle = null;
             lastAssignedSalle = salle;
             return;
         }
@@ -269,6 +312,7 @@ public class InterviewManager : MonoBehaviour
         }
 
         ApplyAssignmentsToScene(roomAssignments);
+        preparedSalle = salle;
         lastAssignedSalle = salle;
         logAssignments();
     }
@@ -277,11 +321,14 @@ public class InterviewManager : MonoBehaviour
     {
         activeAssignmentsBySlot.Clear();
         resolvedPlaybackBySlot.Clear();
+        StopLoadAssignmentsRoutine();
 
         if (assignments == null)
         {
             return;
         }
+
+        List<Interview> interviewsToLoad = new List<Interview>();
 
         for (int i = 0; i < assignments.Count; i++)
         {
@@ -294,12 +341,68 @@ public class InterviewManager : MonoBehaviour
             InterviewData? selectedInterview = GetPreviewInterviewForAssignment(assignment);
             if (selectedInterview.HasValue && !string.IsNullOrWhiteSpace(selectedInterview.Value.depthkitPath))
             {
-                assignment.interviewSlot.ResetForPreviewAssignment();
-                if (selectedInterview.HasValue) assignment.interviewSlot.set(selectedInterview.Value);
-                assignment.interviewSlot.load();
+                if (!assignment.interviewSlot.MatchesPreviewAssignment(selectedInterview.Value))
+                {
+                    assignment.interviewSlot.ResetForPreviewAssignment();
+                    assignment.interviewSlot.set(selectedInterview.Value);
+                }
+
+                if (!assignment.interviewSlot.IsPreviewLoadedForCurrentAssignment())
+                {
+                    assignment.interviewSlot.SetPreviewLoadQueued(true);
+                    interviewsToLoad.Add(assignment.interviewSlot);
+                }
+
                 activeAssignmentsBySlot[assignment.interviewSlot] = assignment;
             }
         }
+
+        if (interviewsToLoad.Count == 0)
+        {
+            return;
+        }
+
+        if (!Application.isPlaying)
+        {
+            for (int i = 0; i < interviewsToLoad.Count; i++)
+            {
+                interviewsToLoad[i].SetPreviewLoadQueued(false);
+                interviewsToLoad[i].load();
+            }
+
+            return;
+        }
+
+        loadAssignmentsRoutine = StartCoroutine(LoadAssignmentsSequentially(interviewsToLoad));
+    }
+
+    void StopLoadAssignmentsRoutine()
+    {
+        if (loadAssignmentsRoutine == null)
+        {
+            return;
+        }
+
+        StopCoroutine(loadAssignmentsRoutine);
+        loadAssignmentsRoutine = null;
+    }
+
+    IEnumerator LoadAssignmentsSequentially(List<Interview> interviewsToLoad)
+    {
+        for (int i = 0; i < interviewsToLoad.Count; i++)
+        {
+            Interview interview = interviewsToLoad[i];
+            if (interview == null)
+            {
+                continue;
+            }
+
+            interview.SetPreviewLoadQueued(false);
+            interview.load();
+            yield return null;
+        }
+
+        loadAssignmentsRoutine = null;
     }
 
     public bool TryResolvePlaybackForSlot(Interview slot, out ResolvedInterviewPlayback playback)
