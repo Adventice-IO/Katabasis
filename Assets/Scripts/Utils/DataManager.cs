@@ -7,6 +7,7 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 #if UNITY_ANDROID && !UNITY_EDITOR
 using UnityEngine.Android;
@@ -554,6 +555,10 @@ public class DataManager : MonoBehaviour
         {
             ShowInfo("Extracting " + displayName + "...", 1f);
             yield return null;
+            HideDownloadInfo();
+            onCompleted?.Invoke(true);
+            SoftRestart();
+            yield break;
         }
         else if (!string.IsNullOrWhiteSpace(extractionState.ErrorMessage))
         {
@@ -561,7 +566,7 @@ public class DataManager : MonoBehaviour
         }
 
         HideDownloadInfo();
-        onCompleted?.Invoke(extractionState.Succeeded);
+        onCompleted?.Invoke(false);
     }
 
     string ResolveExistingBasePath(DataFolder folder)
@@ -682,7 +687,7 @@ public class DataManager : MonoBehaviour
         return root.Replace("\\", "/");
     }
 
-    void ExtractZipWithProgress(string zipPath, string destinationRoot, string displayName)
+    void ExtractZipWithProgress(string zipPath, string destinationRoot, string displayName, ExtractionState extractionState)
     {
         using (ZipArchive archive = ZipFile.OpenRead(zipPath))
         {
@@ -691,7 +696,7 @@ public class DataManager : MonoBehaviour
 
             if (totalEntries == 0)
             {
-                UpdateExtractionStatus("Extracting " + displayName + "...", 1f);
+                UpdateExtractionStatus(extractionState, "Extracting " + displayName + "...", 1f);
                 return;
             }
 
@@ -722,62 +727,86 @@ public class DataManager : MonoBehaviour
 
                 processedEntries++;
                 float progress = Mathf.Clamp01((float)processedEntries / totalEntries);
-                UpdateExtractionStatus("Extracting " + displayName + "...", progress);
+                UpdateExtractionStatus(extractionState, "Extracting " + displayName + "...", progress);
             }
         }
     }
 
-    void BeginExtraction(string displayName)
+    ExtractionState BeginExtraction(string displayName, ExtractionState extractionState)
     {
-        lock (extractionProgressLock)
+        lock (extractionState.SyncRoot)
         {
-            extractionInProgress = true;
-            extractionCompleted = false;
-            extractionSucceeded = false;
-            extractionProgress = 0f;
-            extractionStatusText = "Extracting " + displayName + "...";
-            extractionErrorMessage = string.Empty;
+            extractionState.Completed = false;
+            extractionState.Succeeded = false;
+            extractionState.Progress = 0f;
+            extractionState.StatusText = "Extracting " + displayName + "...";
+            extractionState.ErrorMessage = string.Empty;
+        }
+
+        return extractionState;
+    }
+
+    void UpdateExtractionStatus(ExtractionState extractionState, string statusText, float progress)
+    {
+        lock (extractionState.SyncRoot)
+        {
+            extractionState.StatusText = statusText;
+            extractionState.Progress = Mathf.Clamp01(progress);
         }
     }
 
-    void UpdateExtractionStatus(string statusText, float progress)
+    void CompleteExtraction(ExtractionState extractionState, bool succeeded, string errorMessage)
     {
-        lock (extractionProgressLock)
+        lock (extractionState.SyncRoot)
         {
-            extractionStatusText = statusText;
-            extractionProgress = Mathf.Clamp01(progress);
+            extractionState.Succeeded = succeeded;
+            extractionState.Completed = true;
+            extractionState.Progress = succeeded ? 1f : extractionState.Progress;
+            extractionState.ErrorMessage = errorMessage;
         }
     }
 
-    void CompleteExtraction(bool succeeded, string errorMessage)
+    bool IsExtractionCompleted(ExtractionState extractionState)
     {
-        lock (extractionProgressLock)
+        lock (extractionState.SyncRoot)
         {
-            extractionSucceeded = succeeded;
-            extractionCompleted = true;
-            extractionInProgress = false;
-            extractionProgress = succeeded ? 1f : extractionProgress;
-            extractionErrorMessage = errorMessage;
+            return extractionState.Completed;
         }
     }
 
-    float GetExtractionProgress()
+    bool DidExtractionSucceed(ExtractionState extractionState)
     {
-        lock (extractionProgressLock)
+        lock (extractionState.SyncRoot)
         {
-            return extractionProgress;
+            return extractionState.Succeeded;
         }
     }
 
-    string GetExtractionStatusText()
+    float GetExtractionProgress(ExtractionState extractionState)
     {
-        lock (extractionProgressLock)
+        lock (extractionState.SyncRoot)
         {
-            return extractionStatusText;
+            return extractionState.Progress;
         }
     }
 
-    void ShowDownloadInfo(string folderName, float progress)
+    string GetExtractionStatusText(ExtractionState extractionState)
+    {
+        lock (extractionState.SyncRoot)
+        {
+            return extractionState.StatusText;
+        }
+    }
+
+    string GetExtractionErrorMessage(ExtractionState extractionState)
+    {
+        lock (extractionState.SyncRoot)
+        {
+            return extractionState.ErrorMessage;
+        }
+    }
+
+    void ShowInfo(string statusText, float progress)
     {
         if (infoTM == null)
         {
@@ -789,7 +818,7 @@ public class DataManager : MonoBehaviour
             infoTM.gameObject.SetActive(true);
         }
 
-        infoTM.text = folderName + " " + Mathf.RoundToInt(Mathf.Clamp01(progress) * 100f) + "%";
+        infoTM.text = statusText + " " + Mathf.RoundToInt(Mathf.Clamp01(progress) * 100f) + "%";
     }
 
     void HideDownloadInfo()
@@ -798,6 +827,12 @@ public class DataManager : MonoBehaviour
         {
             infoTM.gameObject.SetActive(false);
         }
+    }
+
+    public void SoftRestart()
+    {
+        // Clear your own singletons/static state first if needed
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
 }
