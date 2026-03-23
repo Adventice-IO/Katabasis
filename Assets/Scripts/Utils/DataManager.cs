@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -59,9 +60,23 @@ public class DataManager : MonoBehaviour
     readonly Dictionary<DataFolder, Coroutine> archiveDownloadCoroutines = new Dictionary<DataFolder, Coroutine>();
     readonly Dictionary<DataFolder, bool> archiveDownloadResults = new Dictionary<DataFolder, bool>();
 
+    class ExtractionState
+    {
+        public readonly object SyncRoot = new object();
+        public bool Completed;
+        public bool Succeeded;
+        public float Progress;
+        public string StatusText = string.Empty;
+        public string ErrorMessage = string.Empty;
+    }
+
     void Awake()
     {
 
+        if(infoTM != null)
+        {
+            infoTM.gameObject.SetActive(false);
+        }
 
         if (preloadOnStart && Application.isPlaying)
         {
@@ -95,16 +110,7 @@ public class DataManager : MonoBehaviour
             if (File.Exists(folderZip))
             {
                 Debug.Log("Found zip folder, attempting extraction to: " + Application.persistentDataPath);
-                try
-                {
-                    ZipFile.ExtractToDirectory(folderZip, Application.persistentDataPath);
-                    Debug.Log("Extraction successful, deleting zip file");
-                    File.Delete(folderZip);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError("Failed to extract data archive: " + ex.Message);
-                }
+                StartCoroutine(ExtractArchiveCoroutine(folderZip, Application.persistentDataPath, "KataData", true));
             }
             else
             {
@@ -299,7 +305,7 @@ public class DataManager : MonoBehaviour
         string normalizedRelativePath = relativePath.Replace("\\", "/").TrimStart('/');
 
         string externalPath = Path.Combine(GetExternalDataRoot(), "KataData", normalizedRelativePath);
-        Debug.Log("Looking for root file at custom path : " + externalPath);
+        //Debug.Log("Looking for root file at custom path : " + externalPath);
         if (File.Exists(externalPath))
         {
             return externalPath.Replace("\\", "/");
@@ -313,7 +319,7 @@ public class DataManager : MonoBehaviour
         }
 
         string streamingPath = Path.Combine(Application.streamingAssetsPath, normalizedRelativePath);
-        Debug.Log("Looking for root file at streamingassets: " + streamingPath);
+        //Debug.Log("Looking for root file at streamingassets: " + streamingPath);
         if (File.Exists(streamingPath))
         {
             return streamingPath.Replace("\\", "/");
@@ -325,13 +331,13 @@ public class DataManager : MonoBehaviour
             execPath = Path.GetDirectoryName(execPath);
         }
         string executablePath = Path.Combine(execPath, "KataData", normalizedRelativePath);
-        Debug.Log("Looking for root file at executable path: " + executablePath);
+        //Debug.Log("Looking for root file at executable path: " + executablePath);
         if (File.Exists(executablePath))
         {
             return executablePath.Replace("\\", "/");
         }
 
-        Debug.LogWarning("Root file not found at: " + streamingPath + " or " + externalPath);
+        //Debug.LogWarning("Root file not found at: " + streamingPath + " or " + externalPath);
 
         return string.Empty;
     }
@@ -473,7 +479,7 @@ public class DataManager : MonoBehaviour
         string folderName = GetFolderName(folder);
         string zipPath = Path.Combine(externalRoot, folderName + ".zip");
 
-        ShowDownloadInfo(folderName, 0f);
+        ShowInfo("Downloading " + folderName + "...", 0f);
 
         using (UnityWebRequest request = UnityWebRequest.Get(downloadUrl))
         {
@@ -481,46 +487,81 @@ public class DataManager : MonoBehaviour
             UnityWebRequestAsyncOperation operation = request.SendWebRequest();
             while (!operation.isDone)
             {
-                ShowDownloadInfo(folderName, request.downloadProgress);
+                ShowInfo("Downloading " + folderName + "...", request.downloadProgress);
                 yield return null;
             }
 
-            ShowDownloadInfo(folderName, 1f);
+            ShowInfo("Downloading " + folderName + "...", 1f);
 
             if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("Failed to download data archive for " + folderName + ": " + request.error);
+                //Debug.LogError("Failed to download data archive for " + folderName + ": " + request.error);
                 HideDownloadInfo();
                 archiveDownloadCoroutines[folder] = null;
                 yield break;
             }
         }
 
-        try
+        yield return ExtractArchiveCoroutine(zipPath, externalRoot, folderName, true, GetLocalStorageFolderPathInternal(folder), success =>
         {
-            string folderPath = GetLocalStorageFolderPathInternal(folder);
-            if (Directory.Exists(folderPath))
-            {
-                Directory.Delete(folderPath, true);
-            }
+            archiveDownloadResults[folder] = success;
+        });
 
-            ZipFile.ExtractToDirectory(zipPath, externalRoot);
-            if (File.Exists(zipPath))
-            {
-                File.Delete(zipPath);
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("Failed to extract data archive for " + folderName + ": " + ex.Message);
-            HideDownloadInfo();
-            archiveDownloadCoroutines[folder] = null;
-            yield break;
-        }
-
-        archiveDownloadResults[folder] = true;
-        HideDownloadInfo();
         archiveDownloadCoroutines[folder] = null;
+    }
+
+    IEnumerator ExtractArchiveCoroutine(string zipPath, string destinationRoot, string displayName, bool deleteArchiveWhenDone, string folderToDeleteBeforeExtract = null, Action<bool> onCompleted = null)
+    {
+        ExtractionState extractionState = new ExtractionState();
+        BeginExtraction(displayName, extractionState);
+
+        Thread extractionThread = new Thread(() =>
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(folderToDeleteBeforeExtract) && Directory.Exists(folderToDeleteBeforeExtract))
+                {
+                    UpdateExtractionStatus(extractionState, "Preparing " + displayName + "...", 0.05f);
+                    Directory.Delete(folderToDeleteBeforeExtract, true);
+                }
+
+                ExtractZipWithProgress(zipPath, destinationRoot, displayName, extractionState);
+
+                if (deleteArchiveWhenDone && File.Exists(zipPath))
+                {
+                    UpdateExtractionStatus(extractionState, "Cleaning up " + displayName + "...", 0.98f);
+                    File.Delete(zipPath);
+                }
+
+                CompleteExtraction(extractionState, true, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                CompleteExtraction(extractionState, false, ex.Message);
+            }
+        });
+
+        extractionThread.IsBackground = true;
+        extractionThread.Start();
+
+        while (!extractionState.Completed)
+        {
+            ShowInfo(GetExtractionStatusText(extractionState), GetExtractionProgress(extractionState));
+            yield return null;
+        }
+
+        if (extractionState.Succeeded)
+        {
+            ShowInfo("Extracting " + displayName + "...", 1f);
+            yield return null;
+        }
+        else if (!string.IsNullOrWhiteSpace(extractionState.ErrorMessage))
+        {
+            Debug.LogError("Failed to extract data archive for " + displayName + ": " + extractionState.ErrorMessage);
+        }
+
+        HideDownloadInfo();
+        onCompleted?.Invoke(extractionState.Succeeded);
     }
 
     string ResolveExistingBasePath(DataFolder folder)
@@ -641,6 +682,101 @@ public class DataManager : MonoBehaviour
         return root.Replace("\\", "/");
     }
 
+    void ExtractZipWithProgress(string zipPath, string destinationRoot, string displayName)
+    {
+        using (ZipArchive archive = ZipFile.OpenRead(zipPath))
+        {
+            int totalEntries = archive.Entries.Count;
+            int processedEntries = 0;
+
+            if (totalEntries == 0)
+            {
+                UpdateExtractionStatus("Extracting " + displayName + "...", 1f);
+                return;
+            }
+
+            foreach (ZipArchiveEntry entry in archive.Entries)
+            {
+                string fullPath = Path.GetFullPath(Path.Combine(destinationRoot, entry.FullName));
+                string normalizedDestinationRoot = Path.GetFullPath(destinationRoot);
+
+                if (!fullPath.StartsWith(normalizedDestinationRoot, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new IOException("Entry is outside the target dir: " + entry.FullName);
+                }
+
+                if (string.IsNullOrEmpty(entry.Name))
+                {
+                    Directory.CreateDirectory(fullPath);
+                }
+                else
+                {
+                    string directoryPath = Path.GetDirectoryName(fullPath);
+                    if (!string.IsNullOrWhiteSpace(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+
+                    entry.ExtractToFile(fullPath, true);
+                }
+
+                processedEntries++;
+                float progress = Mathf.Clamp01((float)processedEntries / totalEntries);
+                UpdateExtractionStatus("Extracting " + displayName + "...", progress);
+            }
+        }
+    }
+
+    void BeginExtraction(string displayName)
+    {
+        lock (extractionProgressLock)
+        {
+            extractionInProgress = true;
+            extractionCompleted = false;
+            extractionSucceeded = false;
+            extractionProgress = 0f;
+            extractionStatusText = "Extracting " + displayName + "...";
+            extractionErrorMessage = string.Empty;
+        }
+    }
+
+    void UpdateExtractionStatus(string statusText, float progress)
+    {
+        lock (extractionProgressLock)
+        {
+            extractionStatusText = statusText;
+            extractionProgress = Mathf.Clamp01(progress);
+        }
+    }
+
+    void CompleteExtraction(bool succeeded, string errorMessage)
+    {
+        lock (extractionProgressLock)
+        {
+            extractionSucceeded = succeeded;
+            extractionCompleted = true;
+            extractionInProgress = false;
+            extractionProgress = succeeded ? 1f : extractionProgress;
+            extractionErrorMessage = errorMessage;
+        }
+    }
+
+    float GetExtractionProgress()
+    {
+        lock (extractionProgressLock)
+        {
+            return extractionProgress;
+        }
+    }
+
+    string GetExtractionStatusText()
+    {
+        lock (extractionProgressLock)
+        {
+            return extractionStatusText;
+        }
+    }
+
     void ShowDownloadInfo(string folderName, float progress)
     {
         if (infoTM == null)
@@ -653,7 +789,7 @@ public class DataManager : MonoBehaviour
             infoTM.gameObject.SetActive(true);
         }
 
-        infoTM.text = "Downloading " + folderName + "... " + Mathf.RoundToInt(Mathf.Clamp01(progress) * 100f) + "%";
+        infoTM.text = folderName + " " + Mathf.RoundToInt(Mathf.Clamp01(progress) * 100f) + "%";
     }
 
     void HideDownloadInfo()
