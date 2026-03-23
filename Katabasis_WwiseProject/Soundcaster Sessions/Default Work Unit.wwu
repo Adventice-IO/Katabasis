@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{80767051-1970-4EA2-8C48-2905A074E8D6}" SchemaVersion="133">
 	<SoundcasterSessions>
-		<WorkUnit Name="Default Work Unit" ID="{80767051-1970-4EA2-8C48-2905A074E8D6}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{80767051-1970-4EA2-8C48-2905A074E8D6}" PersistMode="Standalone">
+			<ChildrenList>
+				<SoundcasterSession Name="New Soundcaster Session" ID="{2BEBE6A4-1D76-4335-95FB-DF8F2E5BB684}">
+					<ModuleList>
+						<Module>
+							<ObjectRef Name="MUS_C" ID="{44720FF1-0428-46DB-BA9A-1051B9CA4647}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+							<Position X="0" Y="0"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="MUS_I" ID="{27B01D8C-1926-425E-92D1-8BB4D40A2547}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+							<Position X="0" Y="1"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="MUS_D" ID="{64B237AA-5E55-4D20-9815-53F02917292E}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+							<Position X="1" Y="0"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="MUS_E" ID="{D8480CE7-4552-427B-ADE1-DE703D39A43A}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+							<Position X="1" Y="1"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="MUS_F_H" ID="{3A71E080-720C-4D4C-8BD1-241EA7AAE371}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+							<Position X="2" Y="0"/>
+						</Module>
+						<Module>
+							<ObjectRef Name="MUS_G_K_O" ID="{F21A3FD6-5ECA-47E9-962F-1B66ABE47259}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+							<Position X="3" Y="0"/>
+						</Module>
+					</ModuleList>
+				</SoundcasterSession>
+			</ChildrenList>
+		</WorkUnit>
 	</SoundcasterSessions>
 </WwiseDocument>

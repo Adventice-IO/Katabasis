@@ -69,6 +69,7 @@ namespace AK
         static const AkUniqueID MUS_D = 4159718935U;
         static const AkUniqueID MUS_E = 4159718934U;
         static const AkUniqueID MUS_F = 4159718933U;
+        static const AkUniqueID MUS_I = 4159718938U;
         static const AkUniqueID OMILIO_0_INTRO = 581233776U;
         static const AkUniqueID OMILIO_1_SANTE = 3617820752U;
         static const AkUniqueID OMILIO_2_PASSENGERS = 2376804707U;
