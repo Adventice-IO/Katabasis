@@ -116,13 +116,13 @@ public class GameEnd : MonoBehaviour
 
         cartons.Clear();
 
-        string introPath = dataManager.GetBasePath(DataManager.DataFolder.Intro);
-        if (!Directory.Exists(introPath))
+        string endPath = dataManager.GetBasePath(DataManager.DataFolder.End);
+        if (!Directory.Exists(endPath))
         {
             return;
         }
 
-        string[] pngFiles = Directory.GetFiles(introPath, "*.png")
+        string[] pngFiles = Directory.GetFiles(endPath, "*.png")
             .OrderBy(path => path, System.StringComparer.OrdinalIgnoreCase)
             .ToArray();
 
@@ -161,7 +161,7 @@ public class GameEnd : MonoBehaviour
         }
 
         currentCartonObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        currentCartonObject.name = "IntroCarton_" + index;
+        currentCartonObject.name = "EndCarton_" + index;
         Destroy(currentCartonObject.GetComponent<Collider>());
 
         Vector3 spawnPosition = targetCamera.transform.position + (targetCamera.transform.forward * spawnDistance);
