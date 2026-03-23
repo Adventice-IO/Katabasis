@@ -61,6 +61,7 @@ MonoBehaviour:
   progression: 0
   evaporateProg: 0
   glitchFactor: 0
+  revealTime: 3
   glitchTimeAroundCut: 1
   glitchTimeBeforeActivate: 1
   glitchIntensity: 1
@@ -93,9 +94,9 @@ MonoBehaviour:
   shouldEvaporate: 0
   loadingEvent: {fileID: 0}
   validateEvent: {fileID: 0}
-  videoEvent: {fileID: 0}
   evaporateEvent: {fileID: 0}
   progRTPC: {fileID: 0}
+  videoStopFade: 1
   state: 0
 --- !u!114 &8510473340861075205
 MonoBehaviour:
@@ -291,6 +292,9 @@ VisualEffect:
         m_Overridden: 1
       - m_Value: 0
         m_Name: Evaporate
+        m_Overridden: 1
+      - m_Value: 1
+        m_Name: SpawnRate
         m_Overridden: 1
     m_Vector2f:
       m_Array: []
