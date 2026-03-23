@@ -68,6 +68,7 @@ public class MainController : MonoBehaviour
     [Header("Read Only")]
     [SerializeField] private float currentSpeed = 0f;
     [SerializeField] private float targetSpeed = 0f;
+    private AudioStateRefSO _lastTunnelAudioSO;
     [SerializeField] public bool isRunning = false;
     [SerializeField] private bool isReversed = false;
     private SplineContainer splineContainer;
@@ -541,15 +542,19 @@ public class MainController : MonoBehaviour
                 }
                 else
                 {
-                    AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
-                    if (audioSO != null && audioSO.state != null)
+                    AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(actualTrackPosition);
+                    if (audioSO != _lastTunnelAudioSO)
                     {
-                        //Debug.Log("Setting tunnel audio state: " + audioSO.state.Name + " at track position: " + trackPosition);
-                        audioSO.state.SetValue();
-                    }
-                    else
-                    {
-                        noAudioSO.state.SetValue();
+                        _lastTunnelAudioSO = audioSO;
+                        if (audioSO != null && audioSO.state != null)
+                        {
+                            if (debugAudioStates) Debug.Log("Setting tunnel audio state: " + audioSO.state.Name + " at " + actualTrackPosition);
+                            audioSO.state.SetValue();
+                        }
+                        else
+                        {
+                            noAudioSO.state.SetValue();
+                        }
                     }
                 }
             }
@@ -679,6 +684,7 @@ public class MainController : MonoBehaviour
         freeMotion = true;
         comingFromTunnel = tunnel;
         tunnel = null;
+        _lastTunnelAudioSO = null;
         if (salle != null) salle.setActive(false);
         salle = targetSalle;
         timeAtArrived = Time.time;
