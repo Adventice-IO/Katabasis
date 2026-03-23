@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{747D6E02-47ED-E4FD-F8BD-B734153E3051}",
+    "Hash": "{8B6167C2-BF74-58A0-F47E-F4B4BC562FF6}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -41,6 +41,14 @@
        "LibId": "6881283"
       },
       {
+       "Id": "592673904",
+       "Name": "Gain (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\[Effect Slot [0]: (Gain)]\\Gain (Custom)",
+       "GUID": "{E103F636-7739-420E-ABDF-33DBE6D9AAC8}",
+       "LibName": "Wwise Gain",
+       "LibId": "9109507"
+      },
+      {
        "Id": "622950439",
        "Name": "Delay (Custom)",
        "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_DEL_Ext\\[Effect Slot [1]: (Delay)]\\Delay (Custom)",
@@ -59,7 +67,7 @@
       {
        "Id": "865612985",
        "Name": "Brick_Wall_Minus_1dB_Peak_Fast_Release (Custom)",
-       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\[Effect Slot [0]: (Peak Limiter)]\\Brick_Wall_Minus_1dB_Peak_Fast_Release (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\[Effect Slot [1]: (Peak Limiter)]\\Brick_Wall_Minus_1dB_Peak_Fast_Release (Custom)",
        "GUID": "{ACB54C64-6A1F-4A39-99CC-27F26D25FF23}",
        "LibName": "Wwise Peak Limiter",
        "LibId": "7208963"
@@ -200,6 +208,9 @@
       "GUID": "{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}",
       "PluginRefs": {
        "Custom": [
+        {
+         "Id": "592673904"
+        },
         {
          "Id": "865612985"
         }
@@ -530,6 +541,6 @@
     ]
    }
   ],
-  "FileHash": "{063D3ED6-E525-FDA5-8A3A-5EFDDCA851C5}"
+  "FileHash": "{D5ACEDDA-A924-5696-551A-F347BB782D02}"
  }
 }

@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{7E734BBA-16C9-46F8-8CBD-B94EE4B45669}",
     "Language": "SFX",
-    "Hash": "{7E30C270-DE32-A4B4-41E1-E759C2D4A5A4}",
+    "Hash": "{A1CA8055-1DD6-3D00-E003-7BF4A4DC62DA}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\MAIN",
     "ShortName": "MAIN",
     "Path": "MAIN.bnk",
@@ -557,7 +557,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "AMB\\AMB_City\\AMB_City_D_Trumpet\\AMB_City_D_Trumpet_01.wav",
-      "CachePath": "99/{9999EEF3-8C0D-EF1C-7845-7E4EB9C8A051}.wem"
+      "CachePath": "9F/{9F03D07D-4AA6-5642-D79C-EC44C71CE49B}.wem"
      },
      {
       "Id": "401434766",
@@ -1891,6 +1891,14 @@
        "LibId": "6881283"
       },
       {
+       "Id": "388305985",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Containers\\Default Work Unit\\AMB\\AMB_3D\\AMB_City\\AMB_City_D_Trumpet\\AMB_City_D_Trumpet_01\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{E7853572-F17C-4FEA-AFF0-EB858C8C0611}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
        "Id": "422418030",
        "Name": "Silence",
        "ObjectPath": "\\Containers\\Default Work Unit\\SFX\\SFX_3D\\SFX_Subway\\SFX_Subway_C_Int\\New Silence\\Silence",
@@ -2603,6 +2611,13 @@
         "Id": "399546684"
        }
       ],
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "388305985"
+        }
+       ]
+      },
       "AuxBusRefs": [
        {
         "Id": "3577192126",
@@ -6472,6 +6487,6 @@
     ]
    }
   ],
-  "FileHash": "{30083BA6-AD32-65A8-269E-7888FA4BB489}"
+  "FileHash": "{91EEE3D3-B027-E05D-61AD-45F0E67960AC}"
  }
 }

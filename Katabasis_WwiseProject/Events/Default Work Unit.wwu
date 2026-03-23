@@ -887,6 +887,29 @@
 												</Reference>
 											</ReferenceList>
 										</Action>
+										<Action Name="" ID="{C89BCA07-442A-4CD4-A20A-46BAE8D7716C}" ShortID="490031224">
+											<PropertyList>
+												<Property Name="ActionType" Type="int16" Value="36"/>
+												<Property Name="Scope" Type="int16" Value="1"/>
+												<Property Name="SeekPercent" Type="Real64">
+													<ModifierList>
+														<ModifierInfo>
+															<Modifier Name="" ID="{F319158A-D591-4459-B201-F865FA8E6C65}">
+																<PropertyList>
+																	<Property Name="Enabled" Type="bool" Value="True"/>
+																	<Property Name="Max" Type="Real64" Value="80"/>
+																</PropertyList>
+															</Modifier>
+														</ModifierInfo>
+													</ModifierList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="AMB_Ambi_Ext_Street_03" ID="{46B1B498-BBB4-4D8D-B0F9-B7507B8E9EC0}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
 									</ChildrenList>
 								</Event>
 							</ChildrenList>
