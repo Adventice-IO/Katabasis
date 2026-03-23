@@ -19,6 +19,10 @@ public class PointCloudBlock : MonoBehaviour
     int masksCount = 0;
 
     MainController mainController;
+    MeshFilter meshFilter;
+    bool hasLocalBounds;
+    Vector3 localMin;
+    Vector3 localMax;
 
     Vector3 boxMin;
     Vector3 boxMax;
@@ -33,6 +37,14 @@ public class PointCloudBlock : MonoBehaviour
         mainController = GameObject.FindAnyObjectByType<MainController>();
         block = new MaterialPropertyBlock();
         render = GetComponent<Renderer>();
+        meshFilter = GetComponent<MeshFilter>();
+        if (meshFilter != null && meshFilter.sharedMesh != null)
+        {
+            Bounds bounds = meshFilter.sharedMesh.bounds;
+            localMin = bounds.min;
+            localMax = bounds.max;
+            hasLocalBounds = true;
+        }
         timeAtStart = Time.time;
 
 
@@ -57,8 +69,10 @@ public class PointCloudBlock : MonoBehaviour
 
 
         //Get world space bounding box of the block
-        Vector3 localMin = GetComponent<MeshFilter>().mesh.bounds.min;
-        Vector3 localMax = GetComponent<MeshFilter>().mesh.bounds.max;
+        if (!hasLocalBounds)
+        {
+            return;
+        }
 
         boxMin = transform.TransformPoint(localMin);
         boxMax = transform.TransformPoint(localMax);
@@ -89,7 +103,16 @@ public class PointCloudBlock : MonoBehaviour
 
     public void kill()
     {
-        timeAtKill = Time.time;
+        if (timeAtKill < 0f)
+        {
+            timeAtKill = Time.time;
+        }
+    }
+
+    public void forceKillImmediate()
+    {
+        timeAtKill = 0f;
+        onKill?.Invoke();
     }
 
     public void updateMasks(GraphicsBuffer maskBuffer, int count)

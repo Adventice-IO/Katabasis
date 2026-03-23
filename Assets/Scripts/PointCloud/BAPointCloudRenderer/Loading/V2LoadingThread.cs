@@ -2,6 +2,7 @@
 using BAPointCloudRenderer.DataStructures;
 using BAPointCloudRenderer.CloudData;
 using System.Threading;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BAPointCloudRenderer.Loading {
@@ -14,6 +15,9 @@ namespace BAPointCloudRenderer.Loading {
         private ThreadSafeQueue<Node> loadingQueue;
         private bool running = true;
         private V2Cache cache;
+        private readonly HashSet<Node> scheduledNodes = new HashSet<Node>();
+        private readonly object scheduledNodesLock = new object();
+        private Thread thread;
         
         public V2LoadingThread(V2Cache cache) {
             loadingQueue = new ThreadSafeQueue<Node>();
@@ -22,7 +26,9 @@ namespace BAPointCloudRenderer.Loading {
 
         public void Start() {
             running = true;
-            new Thread(Run).Start();
+            thread = new Thread(Run);
+            thread.IsBackground = true;
+            thread.Start();
         }
 
         private void Run() {
@@ -30,6 +36,9 @@ namespace BAPointCloudRenderer.Loading {
                 while (running) {
                     Node n;
                     if (loadingQueue.TryDequeue(out n)) {
+                        lock (scheduledNodesLock) {
+                            scheduledNodes.Remove(n);
+                        }
                         Monitor.Enter(n);
                         if (!n.HasPointsToRender() && !n.HasGameObjects()) {
                             Monitor.Exit(n);
@@ -38,6 +47,8 @@ namespace BAPointCloudRenderer.Loading {
                         } else {
                             Monitor.Exit(n);
                         }
+                    } else {
+                        Thread.Sleep(1);
                     }
                 }
             } catch (Exception ex) {
@@ -47,6 +58,14 @@ namespace BAPointCloudRenderer.Loading {
 
         public void Stop() {
             running = false;
+            if (thread != null) {
+                thread.Join();
+                thread = null;
+            }
+            loadingQueue.Clear();
+            lock (scheduledNodesLock) {
+                scheduledNodes.Clear();
+            }
         }
 
         /// <summary>
@@ -54,6 +73,11 @@ namespace BAPointCloudRenderer.Loading {
         /// </summary>
         /// <param name="node">not null</param>
         public void ScheduleForLoading(Node node) {
+            lock (scheduledNodesLock) {
+                if (!scheduledNodes.Add(node)) {
+                    return;
+                }
+            }
             loadingQueue.Enqueue(node);
         }
 

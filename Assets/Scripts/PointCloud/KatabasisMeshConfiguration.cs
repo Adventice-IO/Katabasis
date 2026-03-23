@@ -42,13 +42,16 @@ public class KatabasisMeshConfiguration : MeshConfiguration
 
         masks = GetComponentsInChildren<PointCloudMask>();
         _boxes = new MaskBox[masks.Length];
-        const int maskBoxSize = 96; // Size of MaskBox struct in bytes (16-byte aligned)
-        _maskBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, _boxes.Length, maskBoxSize);
+        if (_boxes.Length > 0)
+        {
+            const int maskBoxSize = 96; // Size of MaskBox struct in bytes (16-byte aligned)
+            _maskBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, _boxes.Length, maskBoxSize);
+        }
     }
 
     public void Update()
     {
-       if(masks == null || _boxes == null || _maskBuffer == null)
+       if(masks == null || _boxes == null)
         {
             return;
         }
@@ -67,8 +70,11 @@ public class KatabasisMeshConfiguration : MeshConfiguration
             PointCloudMask mask = masks[i];
             _boxes[i] = mask.maskBox;
         }
-        
-        _maskBuffer.SetData(_boxes);
+
+        if (_maskBuffer != null)
+        {
+            _maskBuffer.SetData(_boxes);
+        }
 
         foreach (PointCloudBlock go in gameObjectCollection)
         {
@@ -122,10 +128,14 @@ public class KatabasisMeshConfiguration : MeshConfiguration
 
         PointCloudBlock pointCloudBlock = gameObject.AddComponent<PointCloudBlock>();
         pointCloudBlock.init(profile);
-        pointCloudBlock.GetComponent<MeshRenderer>().material = material;
+        pointCloudBlock.GetComponent<MeshRenderer>().sharedMaterial = material;
         pointCloudBlock.onKill += () =>
         {
             gameObjectCollection?.Remove(pointCloudBlock);
+            if (filter != null && filter.sharedMesh != null)
+            {
+                Destroy(filter.sharedMesh);
+            }
             Destroy(gameObject);
         };
 
@@ -146,5 +156,26 @@ public class KatabasisMeshConfiguration : MeshConfiguration
     public override void RemoveGameObject(GameObject gameObject)
     {
         gameObject.GetComponent<PointCloudBlock>()?.kill();
+    }
+
+    private void OnDisable()
+    {
+        if (gameObjectCollection != null)
+        {
+            foreach (PointCloudBlock block in new List<PointCloudBlock>(gameObjectCollection))
+            {
+                if (block != null)
+                {
+                    block.forceKillImmediate();
+                }
+            }
+            gameObjectCollection.Clear();
+        }
+
+        if (_maskBuffer != null)
+        {
+            _maskBuffer.Release();
+            _maskBuffer = null;
+        }
     }
 }
