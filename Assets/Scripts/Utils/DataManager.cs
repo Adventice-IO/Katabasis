@@ -59,9 +59,34 @@ public class DataManager : MonoBehaviour
     readonly Dictionary<DataFolder, Coroutine> archiveDownloadCoroutines = new Dictionary<DataFolder, Coroutine>();
     readonly Dictionary<DataFolder, bool> archiveDownloadResults = new Dictionary<DataFolder, bool>();
 
+    public void CheckStoragePermission()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+    using (var buildVersion = new AndroidJavaClass("android.os.Build$VERSION")) {
+        if (buildVersion.GetStatic<int>("SDK_INT") >= 30) { // Android 11+
+            var environment = new AndroidJavaClass("android.os.Environment");
+            if (!environment.CallStatic<bool>("isExternalStorageManager")) {
+                var intent = new AndroidJavaClass("android.content.Intent");
+                var settings = new AndroidJavaClass("android.provider.Settings");
+                var uri = new AndroidJavaClass("android.net.Uri");
+                
+                var intentObj = new AndroidJavaObject("android.content.Intent", 
+                    settings.GetStatic<string>("ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION"));
+                
+                using (var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer")) {
+                    var currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+                    currentActivity.Call("startActivity", intentObj);
+                }
+            }
+        }
+    }
+#endif
+    }
     void Awake()
     {
-        //RequestAllFilesAccess();
+
+        CheckStoragePermission();
+
         if (preloadOnStart && Application.isPlaying)
         {
             PreloadAll();
