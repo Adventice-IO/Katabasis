@@ -73,6 +73,8 @@ public class InterviewManager : MonoBehaviour
     public bool simulateGameplay;
     [Range(0f, 1f)]
     public float simulatedCuriosity = 0.5f;
+    [Min(0f)]
+    public float previewLoadStagger = 1f;
 
     MainController mainController;
 
@@ -367,7 +369,7 @@ public class InterviewManager : MonoBehaviour
             for (int i = 0; i < interviewsToLoad.Count; i++)
             {
                 interviewsToLoad[i].SetPreviewLoadQueued(false);
-                interviewsToLoad[i].load();
+                interviewsToLoad[i].BeginPreviewLoad();
             }
 
             return;
@@ -398,8 +400,16 @@ public class InterviewManager : MonoBehaviour
             }
 
             interview.SetPreviewLoadQueued(false);
-            interview.load();
-            yield return null;
+            interview.BeginPreviewLoad();
+            while (interview != null && interview.IsPreviewBusy())
+            {
+                yield return null;
+            }
+
+            if (previewLoadStagger > 0f && i < interviewsToLoad.Count - 1)
+            {
+                yield return new WaitForSeconds(previewLoadStagger);
+            }
         }
 
         loadAssignmentsRoutine = null;

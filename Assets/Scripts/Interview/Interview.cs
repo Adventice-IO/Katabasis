@@ -2,6 +2,7 @@ using Depthkit;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.VFX;
 using UnityEngine.Video;
@@ -18,6 +19,7 @@ public class Interview : MonoBehaviour
     VisualEffect vfx;
     bool loopPointReachedSubscribed;
     bool previewLoadQueued;
+    bool previewLoadInProgress;
     InterviewManager.InterviewData[] playbackSequence;
     int playbackIndex = -1;
     bool isResolvedPlayback;
@@ -25,6 +27,9 @@ public class Interview : MonoBehaviour
     bool resourcesReleased;
     string loadedPreviewBasePath;
     string loadedInterviewId;
+    Coroutine previewLoadCoroutine;
+    Task<string> metadataLoadTask;
+    Task<byte[]> posterLoadTask;
 
     public string itwName;
     public string interviewId;
@@ -180,6 +185,11 @@ public class Interview : MonoBehaviour
         return cached;
     }
 
+    static string LoadMetadataNoCache(string path)
+    {
+        return File.ReadAllText(path);
+    }
+
     static byte[] LoadPosterCached(string path)
     {
         if (!posterCache.TryGetValue(path, out byte[] cached))
@@ -191,6 +201,11 @@ public class Interview : MonoBehaviour
         return cached;
     }
 
+    static byte[] LoadPosterNoCache(string path)
+    {
+        return File.ReadAllBytes(path);
+    }
+
 
     void resetPlaybackState()
     {
@@ -198,6 +213,7 @@ public class Interview : MonoBehaviour
         evaporateProg = 0;
         shouldEvaporate = false;
         previewLoadQueued = false;
+        previewLoadInProgress = false;
         revealStartTime = -1f;
         playbackSequence = null;
         playbackIndex = -1;
@@ -220,6 +236,31 @@ public class Interview : MonoBehaviour
     public void ResetForPreviewAssignment()
     {
         prepareForNextAssignment();
+    }
+
+    public bool IsPreviewBusy()
+    {
+        return previewLoadQueued || previewLoadInProgress;
+    }
+
+    void WarmPreviewDataAsync()
+    {
+        if (string.IsNullOrWhiteSpace(previewBasePath))
+        {
+            return;
+        }
+
+        string metadataPath = previewBasePath + ".txt";
+        if (metadataLoadTask == null && File.Exists(metadataPath))
+        {
+            metadataLoadTask = Task.Run(() => LoadMetadataNoCache(metadataPath));
+        }
+
+        string posterPath = previewBasePath + ".png";
+        if (posterLoadTask == null && File.Exists(posterPath))
+        {
+            posterLoadTask = Task.Run(() => LoadPosterNoCache(posterPath));
+        }
     }
 
     // Update is called once per frame
@@ -341,9 +382,9 @@ public class Interview : MonoBehaviour
         vfx.enabled = shouldShow;
         if (shouldShow)
         {
-            if (!previewLoadQueued)
+            if (!previewLoadQueued && !previewLoadInProgress)
             {
-                load();
+                BeginPreviewLoad();
             }
         }
         else
@@ -379,6 +420,9 @@ public class Interview : MonoBehaviour
         basePath = BuildMediaBasePath(itwName);
         previewBasePath = BuildPreviewBasePath(itwName);
         videoPlayer.url = BuildVideoUrl(interviewId);
+        metadataLoadTask = null;
+        posterLoadTask = null;
+        WarmPreviewDataAsync();
 
         cutTimes = data.cutTimes != null ? new List<float>(data.cutTimes) : new List<float>();
 
@@ -408,7 +452,14 @@ public class Interview : MonoBehaviour
 
     public void load()
     {
+        if (previewLoadCoroutine != null)
+        {
+            StopCoroutine(previewLoadCoroutine);
+            previewLoadCoroutine = null;
+        }
+
         previewLoadQueued = false;
+        previewLoadInProgress = false;
 
         if (IsPreviewLoadedForCurrentAssignment())
         {
@@ -458,6 +509,108 @@ public class Interview : MonoBehaviour
         loadedPreviewBasePath = previewBasePath;
         loadedInterviewId = interviewId;
         state = State.Loaded;
+    }
+
+    public void BeginPreviewLoad()
+    {
+        if (!Application.isPlaying)
+        {
+            load();
+            return;
+        }
+
+        if (previewLoadInProgress || IsPreviewLoadedForCurrentAssignment())
+        {
+            return;
+        }
+
+        if (previewLoadCoroutine != null)
+        {
+            StopCoroutine(previewLoadCoroutine);
+        }
+
+        previewLoadCoroutine = StartCoroutine(loadPreviewAsync());
+    }
+
+    System.Collections.IEnumerator loadPreviewAsync()
+    {
+        previewLoadQueued = false;
+        previewLoadInProgress = true;
+
+        if (IsPreviewLoadedForCurrentAssignment())
+        {
+            previewLoadInProgress = false;
+            previewLoadCoroutine = null;
+            yield break;
+        }
+
+        ReleasePosterTexture();
+        clip.metadataFile = null;
+        clip.poster = null;
+        if (videoPlayer != null)
+        {
+            stopWwiseVideoEvent();
+            videoPlayer.Stop();
+            videoPlayer.playOnAwake = false;
+            videoPlayer.waitForFirstFrame = true;
+        }
+
+        LogDebug("Async loading preview assets from '" + previewBasePath + "'");
+
+        string metadataPath = previewBasePath + ".txt";
+        if (!File.Exists(metadataPath))
+        {
+            Debug.LogWarning("Metadata doesn't exist for " + metadataPath);
+            previewLoadInProgress = false;
+            previewLoadCoroutine = null;
+            yield break;
+        }
+
+        WarmPreviewDataAsync();
+        while (metadataLoadTask != null && !metadataLoadTask.IsCompleted)
+        {
+            yield return null;
+        }
+
+        string metaData = metadataLoadTask != null && metadataLoadTask.Status == TaskStatus.RanToCompletion
+            ? metadataLoadTask.Result
+            : LoadMetadataCached(metadataPath);
+        metadataCache[metadataPath] = metaData;
+
+        bool result = clip.LoadMetadata(metaData);
+        yield return null;
+
+        string posterPath = previewBasePath + ".png";
+        if (File.Exists(posterPath))
+        {
+            while (posterLoadTask != null && !posterLoadTask.IsCompleted)
+            {
+                yield return null;
+            }
+
+            byte[] pngData = posterLoadTask != null && posterLoadTask.Status == TaskStatus.RanToCompletion
+                ? posterLoadTask.Result
+                : LoadPosterCached(posterPath);
+            posterCache[posterPath] = pngData;
+
+            posterTex = new Texture2D(2, 2);
+            posterTex.LoadImage(pngData);
+            clip.poster = posterTex;
+        }
+        else
+        {
+            Debug.LogWarning("Poster doesn't exist for " + posterPath);
+        }
+
+        Debug.Log("Meta data load result " + result);
+        LogDebug("Loaded metadata/poster. Poster assigned=" + (clip.poster != null) + ", videoPrepared=" + (videoPlayer != null && videoPlayer.isPrepared) + ", clipSetup=" + (clip != null && clip.isSetup));
+
+        revealStartTime = Time.time;
+        loadedPreviewBasePath = previewBasePath;
+        loadedInterviewId = interviewId;
+        state = State.Loaded;
+        previewLoadInProgress = false;
+        previewLoadCoroutine = null;
     }
 
     public void play()
@@ -730,6 +883,13 @@ public class Interview : MonoBehaviour
             clip.metadataFilePath = string.Empty;
             loadedPreviewBasePath = null;
             loadedInterviewId = null;
+        }
+
+        if (clearDepthkitAssets && previewLoadCoroutine != null)
+        {
+            StopCoroutine(previewLoadCoroutine);
+            previewLoadCoroutine = null;
+            previewLoadInProgress = false;
         }
 
         if (clearDepthkitAssets)

@@ -207,16 +207,22 @@ public class GameOutro : MonoBehaviour
 
     float GetCartonAngle(int index)
     {
-        if (index <= 0)
+        if (cartons == null || cartons.Count == 0)
         {
             return 0f;
         }
 
-        int sideIndex = ((index - 1) / 2) + 1;
-        bool isLeft = index % 2 == 1;
         float step = GetResolvedAngleStep();
-        float signedStep = sideIndex * step;
-        return isLeft ? -signedStep : signedStep;
+        int count = cartons.Count;
+
+        if (count % 2 == 1)
+        {
+            int centeredIndex = index - (count / 2);
+            return centeredIndex * step;
+        }
+
+        float centeredOffset = index - ((count - 1) * 0.5f);
+        return centeredOffset * step;
     }
 
     float GetResolvedAngleStep()
