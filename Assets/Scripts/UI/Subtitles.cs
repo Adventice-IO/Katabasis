@@ -15,7 +15,7 @@ public class Subtitles : MonoBehaviour
     bool lastPlaying = false;
 
     public Vector3 offset = new Vector3(0, -.17f, .5f);
-    [Range(0, 5)]
+    [Range(0, 10)]
     public float smooth = 3f;
 
     UIDocument uiDocument;
@@ -131,6 +131,11 @@ public class Subtitles : MonoBehaviour
 
     public void play(string relativeSubtitlePath)
     {
+        play(relativeSubtitlePath, 0f);
+    }
+
+    public void play(string relativeSubtitlePath, float startTime)
+    {
         if (!dataManager.IsFolderReady(DataManager.DataFolder.Interviews))
         {
             dataManager.PreloadFolder(DataManager.DataFolder.Interviews, (success, path) =>
@@ -143,12 +148,13 @@ public class Subtitles : MonoBehaviour
                 }
 
                 subs = LoadSubtitleAsset(relativeSubtitlePath);
+                timeAtPlay = Time.time - Mathf.Max(0f, startTime);
                 isPlaying = subs != null;
             });
             return;
         }
 
-        timeAtPlay = 0;
+        timeAtPlay = Time.time - Mathf.Max(0f, startTime);
         subs = LoadSubtitleAsset(relativeSubtitlePath);
         if (subs != null)
         {

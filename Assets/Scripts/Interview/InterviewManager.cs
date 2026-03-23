@@ -62,6 +62,7 @@ public class InterviewManager : MonoBehaviour
     readonly Dictionary<Interview, RoomPersonAssignment> activeAssignmentsBySlot = new Dictionary<Interview, RoomPersonAssignment>();
     readonly Dictionary<Interview, InterviewData[]> resolvedPlaybackBySlot = new Dictionary<Interview, InterviewData[]>();
     readonly HashSet<Interview> consumedSlots = new HashSet<Interview>();
+    readonly HashSet<string> startedIntroPersons = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     Interview activePlayingSlot;
     Salle lastAssignedSalle;
     Salle preparedSalle;
@@ -130,6 +131,7 @@ public class InterviewManager : MonoBehaviour
         playedPersonsSinceAssignment.Clear();
         playedThemesHistory.Clear();
         consumedSlots.Clear();
+        startedIntroPersons.Clear();
         RebuildPersonStats();
     }
 
@@ -237,6 +239,30 @@ public class InterviewManager : MonoBehaviour
         }
     }
 
+    public void NotifyPlaybackEntryStarted(Interview slot, InterviewData entry)
+    {
+        if (entry.isIntro)
+        {
+            MarkIntroStarted(entry.person);
+
+            if (slot != null && resolvedPlaybackBySlot.TryGetValue(slot, out InterviewData[] sequence) && sequence != null && sequence.Length > 0)
+            {
+                InterviewData[] remainingSequence = sequence
+                    .Where(data => !data.isIntro)
+                    .ToArray();
+
+                if (remainingSequence.Length > 0)
+                {
+                    resolvedPlaybackBySlot[slot] = remainingSequence;
+                }
+                else
+                {
+                    resolvedPlaybackBySlot.Remove(slot);
+                }
+            }
+        }
+    }
+
     public void NotifyInterviewReleased(Interview slot)
     {
         if (slot == null)
@@ -265,6 +291,7 @@ public class InterviewManager : MonoBehaviour
         consumedSlots.Clear();
         resolvedPlaybackBySlot.Clear();
         ClearProposedFlags();
+        startedIntroPersons.Clear();
         roomAssignments.Clear();
         roomAssignments.AddRange(BuildAssignmentsForSalle(salle, consumedSlots));
         ApplyAssignmentsToScene(roomAssignments);
@@ -296,6 +323,7 @@ public class InterviewManager : MonoBehaviour
         consumedSlots.Clear();
         resolvedPlaybackBySlot.Clear();
         ClearProposedFlags();
+        startedIntroPersons.Clear();
 
         if (salle == null || salle.isExit)
         {
@@ -486,7 +514,7 @@ public class InterviewManager : MonoBehaviour
         }
 
         int salleLevel = assignment.salle != null ? assignment.salle.niveau : 0;
-        bool hasPlayedBefore = playedPersonsSinceAssignment.Contains(assignment.person) || HasVisitedAnyInterview(stats.Value);
+        bool hasPlayedBefore = playedPersonsSinceAssignment.Contains(assignment.person) || HasVisitedAnyInterview(stats.Value) || HasIntroStarted(assignment.person);
 
         if (!hasPlayedBefore && !string.IsNullOrWhiteSpace(stats.Value.introInterview.depthkitId))
         {
@@ -521,7 +549,7 @@ public class InterviewManager : MonoBehaviour
         }
 
         List<InterviewData> result = new List<InterviewData>();
-        bool hasPlayedBefore = playedPersons.Contains(person) || HasVisitedAnyInterview(stats.Value);
+        bool hasPlayedBefore = playedPersons.Contains(person) || HasVisitedAnyInterview(stats.Value) || HasIntroStarted(person);
 
         if (!hasPlayedBefore && !string.IsNullOrEmpty(stats.Value.introInterview.filename))
         {
@@ -601,7 +629,7 @@ public class InterviewManager : MonoBehaviour
 
         List<InterviewData> result = new List<InterviewData>();
         PersonInterviewStats? pickedStats = GetPersonStats(picked.person);
-        if (pickedStats.HasValue && !HasVisitedAnyInterview(pickedStats.Value))
+        if (pickedStats.HasValue && !HasVisitedAnyInterview(pickedStats.Value) && !HasIntroStarted(picked.person))
         {
             InterviewData? intro = GetIntroForPerson(picked.person);
             if (intro.HasValue)
@@ -622,7 +650,8 @@ public class InterviewManager : MonoBehaviour
             return false;
         }
 
-        return !string.IsNullOrEmpty(stats.Value.introInterview.filename) && stats.Value.introInterview.visited;
+        return HasIntroStarted(person)
+            || (!string.IsNullOrEmpty(stats.Value.introInterview.filename) && stats.Value.introInterview.visited);
     }
 
     public bool HasIntroBeenPlayed(InterviewData data)
@@ -644,6 +673,21 @@ public class InterviewManager : MonoBehaviour
         }
 
         return stats.Value.introInterview;
+    }
+
+    public void MarkIntroStarted(string person)
+    {
+        if (string.IsNullOrWhiteSpace(person))
+        {
+            return;
+        }
+
+        startedIntroPersons.Add(person);
+    }
+
+    public bool HasIntroStarted(string person)
+    {
+        return !string.IsNullOrWhiteSpace(person) && startedIntroPersons.Contains(person);
     }
 
 

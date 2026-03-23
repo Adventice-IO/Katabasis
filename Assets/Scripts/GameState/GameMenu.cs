@@ -120,13 +120,13 @@ public class GameMenu : MonoBehaviour
 
             //rotate around this object
             float bSpacing = autoButtonSpacing ? 360f / visibleCount : buttonSpacing;
-            float totalAngle =  visibleCount * bSpacing;
-            float angle = visibleIndex * bSpacing - (totalAngle * 0.5f) + (bSpacing * 0.5f);
+            float angle = visibleIndex * bSpacing;
 
             float radians = angle * Mathf.Deg2Rad;
-            float x = Mathf.Sin(radians) * buttonRadius;
-            float z = Mathf.Cos(radians) * buttonRadius;
-            langObject.transform.localPosition = new Vector3(x, 0f, z);
+            Vector3 worldOffset = new Vector3(Mathf.Sin(radians), 0f, Mathf.Cos(radians)) * buttonRadius;
+            Transform parentTransform = langObject.transform.parent;
+            Vector3 localOffset = parentTransform != null ? parentTransform.InverseTransformDirection(worldOffset) : worldOffset;
+            langObject.transform.localPosition = localOffset;
             langObject.transform.localScale = Vector3.one * buttonScaling;
 
             if (lookAtCamera && mainCamera != null)

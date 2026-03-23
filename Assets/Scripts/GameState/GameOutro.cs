@@ -213,16 +213,14 @@ public class GameOutro : MonoBehaviour
         }
 
         float step = GetResolvedAngleStep();
-        int count = cartons.Count;
-
-        if (count % 2 == 1)
+        if (index == 0)
         {
-            int centeredIndex = index - (count / 2);
-            return centeredIndex * step;
+            return 0f;
         }
 
-        float centeredOffset = index - ((count - 1) * 0.5f);
-        return centeredOffset * step;
+        int sideIndex = (index + 1) / 2;
+        float direction = index % 2 == 1 ? 1f : -1f;
+        return sideIndex * step * direction;
     }
 
     float GetResolvedAngleStep()
@@ -232,13 +230,14 @@ public class GameOutro : MonoBehaviour
             return angleStep;
         }
 
-        int sideCount = cartons != null && cartons.Count > 1 ? ((cartons.Count - 1) + 1) / 2 : 0;
+        int count = cartons != null ? cartons.Count : 0;
+        int sideCount = count > 1 ? count / 2 : 0;
         if (sideCount <= 0)
         {
             return angleStep;
         }
 
-        return 180f / (sideCount + 1);
+        return count % 2 == 0 ? 180f / sideCount : 180f / (sideCount + 1f);
     }
 
     void UpdateCartonLayout()

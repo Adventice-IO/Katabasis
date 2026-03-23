@@ -12,12 +12,14 @@ public class Interview : MonoBehaviour
 {
     static readonly Dictionary<string, string> metadataCache = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
     static readonly Dictionary<string, byte[]> posterCache = new Dictionary<string, byte[]>(StringComparer.OrdinalIgnoreCase);
+    static readonly Dictionary<string, double> videoLengthCache = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
 
     Clip clip;
     VideoPlayer videoPlayer;
     Texture2D posterTex;
     VisualEffect vfx;
     bool loopPointReachedSubscribed;
+    bool prepareCompletedSubscribed;
     bool previewLoadQueued;
     bool previewLoadInProgress;
     InterviewManager.InterviewData[] playbackSequence;
@@ -25,6 +27,7 @@ public class Interview : MonoBehaviour
     bool isResolvedPlayback;
     bool isTransitioningSequence;
     bool resourcesReleased;
+    bool currentEntryIsIntro;
     string loadedPreviewBasePath;
     string loadedInterviewId;
     Coroutine previewLoadCoroutine;
@@ -36,6 +39,13 @@ public class Interview : MonoBehaviour
     List<float> cutTimes;
 
     string wwiseEventName;
+    string currentPerson;
+    float resumeTimeSeconds;
+    bool hasResumeTime;
+    bool suppressStopWwiseEvent;
+    bool leaveRequestedWhileListening;
+
+    const float ResumeLeadSeconds = 5f;
 
     [Range(0, 4)]
     public int level;
@@ -77,6 +87,7 @@ public class Interview : MonoBehaviour
     public AudioEventRefSO validateEvent;
     // public AudioEventRefSO videoEvent;
     public AudioEventRefSO evaporateEvent;
+    public AudioEventRefSO leaveWithInterviewEvent;
     public AudioRTPCRefSO progRTPC;
 
     public float videoStopFade = 1f;
@@ -114,12 +125,19 @@ public class Interview : MonoBehaviour
 
     void OnDisable()
     {
+        stopWwiseVideoEvent(true);
         ReleasePlaybackResources(true);
 
         if (videoPlayer != null && loopPointReachedSubscribed)
         {
             videoPlayer.loopPointReached -= OnVideoFinished;
             loopPointReachedSubscribed = false;
+        }
+
+        if (videoPlayer != null && prepareCompletedSubscribed)
+        {
+            videoPlayer.prepareCompleted -= OnVideoPrepared;
+            prepareCompletedSubscribed = false;
         }
     }
 
@@ -142,6 +160,9 @@ public class Interview : MonoBehaviour
             videoPlayer.loopPointReached -= OnVideoFinished;
             videoPlayer.loopPointReached += OnVideoFinished;
             loopPointReachedSubscribed = true;
+            videoPlayer.prepareCompleted -= OnVideoPrepared;
+            videoPlayer.prepareCompleted += OnVideoPrepared;
+            prepareCompletedSubscribed = true;
             Debug.Log("loop point reached subscribed");
         }
 
@@ -153,6 +174,7 @@ public class Interview : MonoBehaviour
 
     public void cleanup()
     {
+        HandleSalleExitWhileListening();
         evaporate();
     }
 
@@ -219,6 +241,8 @@ public class Interview : MonoBehaviour
         playbackIndex = -1;
         isResolvedPlayback = false;
         isTransitioningSequence = false;
+        currentEntryIsIntro = false;
+        currentPerson = null;
         resourcesReleased = false;
         state = State.Idle;
     }
@@ -226,6 +250,8 @@ public class Interview : MonoBehaviour
     void prepareForNextAssignment()
     {
         LogDebug("Resetting slot state for next assignment");
+        stopWwiseVideoEvent(true);
+        ClearResumeState();
         resetPlaybackState();
         ReleasePlaybackResources(true);
 
@@ -236,6 +262,12 @@ public class Interview : MonoBehaviour
     public void ResetForPreviewAssignment()
     {
         prepareForNextAssignment();
+    }
+
+    public void ClearResumeState()
+    {
+        resumeTimeSeconds = 0f;
+        hasResumeTime = false;
     }
 
     public bool IsPreviewBusy()
@@ -389,8 +421,19 @@ public class Interview : MonoBehaviour
         }
         else
         {
-            ReleasePlaybackResources(true);
-            resetPlaybackState();
+            HandleSalleExitWhileListening();
+            if (leaveRequestedWhileListening)
+            {
+                state = State.Ending;
+                progression = 0;
+                shouldEvaporate = true;
+            }
+            else
+            {
+                ClearResumeState();
+                ReleasePlaybackResources(true);
+                resetPlaybackState();
+            }
         }
 
     }
@@ -403,6 +446,8 @@ public class Interview : MonoBehaviour
         }
         this.itwName = data.depthkitPath;
         this.interviewId = data.mediaPath;
+        this.currentPerson = data.person;
+        this.currentEntryIsIntro = data.isIntro;
         this.level = data.level;
         vfx.SetVector3("Offset", data.offset);
         vfx.SetFloat("OffsetAngle", data.angle);
@@ -450,6 +495,47 @@ public class Interview : MonoBehaviour
         return BuildMediaBasePath(depthkitPath);
     }
 
+    double GetKnownVideoLength()
+    {
+        if (videoPlayer != null && videoPlayer.length > 0d)
+        {
+            if (!string.IsNullOrWhiteSpace(interviewId))
+            {
+                videoLengthCache[interviewId] = videoPlayer.length;
+            }
+
+            return videoPlayer.length;
+        }
+
+        if (!string.IsNullOrWhiteSpace(interviewId) && videoLengthCache.TryGetValue(interviewId, out double cachedLength))
+        {
+            return cachedLength;
+        }
+
+        return 0d;
+    }
+
+    void CacheCurrentVideoLength()
+    {
+        GetKnownVideoLength();
+    }
+
+    void PrepareVideoMetadata()
+    {
+        if (videoPlayer == null || string.IsNullOrWhiteSpace(interviewId) || string.IsNullOrWhiteSpace(videoPlayer.url))
+        {
+            return;
+        }
+
+        if (videoLengthCache.ContainsKey(interviewId) || videoPlayer.isPrepared)
+        {
+            CacheCurrentVideoLength();
+            return;
+        }
+
+        videoPlayer.Prepare();
+    }
+
     public void load()
     {
         if (previewLoadCoroutine != null)
@@ -471,7 +557,7 @@ public class Interview : MonoBehaviour
         clip.poster = null;
         if (videoPlayer != null)
         {
-            stopWwiseVideoEvent(); 
+            stopWwiseVideoEvent(true);
             videoPlayer.Stop();
             videoPlayer.playOnAwake = false;
             videoPlayer.waitForFirstFrame = true;
@@ -524,6 +610,12 @@ public class Interview : MonoBehaviour
             return;
         }
 
+        if (!isActiveAndEnabled)
+        {
+            load();
+            return;
+        }
+
         if (previewLoadCoroutine != null)
         {
             StopCoroutine(previewLoadCoroutine);
@@ -549,7 +641,7 @@ public class Interview : MonoBehaviour
         clip.poster = null;
         if (videoPlayer != null)
         {
-            stopWwiseVideoEvent();
+            stopWwiseVideoEvent(true);
             videoPlayer.Stop();
             videoPlayer.playOnAwake = false;
             videoPlayer.waitForFirstFrame = true;
@@ -616,26 +708,68 @@ public class Interview : MonoBehaviour
     public void play()
     {
         LogDebug("Starting playback for mediaPath='" + interviewId + "' depthkitPath='" + itwName + "'");
+        leaveRequestedWhileListening = false;
+        suppressStopWwiseEvent = false;
         OnInterviewStarted?.Invoke(this);
         InterviewManager manager = FindAnyObjectByType<InterviewManager>();
         manager?.NotifyInterviewStarted(this);
+
+        InterviewManager.InterviewData? activeEntry = GetCurrentPlaybackEntry();
+        bool isIntroEntry = activeEntry.HasValue && activeEntry.Value.isIntro;
+        if (activeEntry.HasValue)
+        {
+            manager?.NotifyPlaybackEntryStarted(this, activeEntry.Value);
+        }
+        else if (!string.IsNullOrWhiteSpace(currentPerson))
+        {
+            isIntroEntry = manager != null && !manager.HasIntroStarted(currentPerson);
+            if (isIntroEntry)
+            {
+                manager?.MarkIntroStarted(currentPerson);
+            }
+        }
+
+        currentEntryIsIntro = isIntroEntry;
 
         revealStartTime = -1f;
         vfx.SetFloat("SpawnRate", 1f);
         
         stopWwiseVideoEvent();
         Debug.Log("Start Wwise Event from play");
-        AkUnitySoundEngine.PostEvent(wwiseEventName, gameObject);
+        videoEventID = AkUnitySoundEngine.PostEvent(wwiseEventName, gameObject);
         
 
         videoPlayer.Play();
+
+        double knownVideoLength = GetKnownVideoLength();
+
+        float startTime = 0f;
+        bool applyResume = !isIntroEntry && hasResumeTime;
+        if (applyResume)
+        {
+            float maxResumeTime = knownVideoLength > 0d
+                ? Mathf.Max(0f, (float)knownVideoLength - 0.01f)
+                : Mathf.Max(0f, resumeTimeSeconds);
+            startTime = Mathf.Clamp(resumeTimeSeconds, 0f, maxResumeTime);
+            if (startTime > 0f)
+            {
+                Debug.Log("Resuming video at " + startTime + " seconds");
+                videoPlayer.time = startTime;
+                if (videoEventID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID)
+                {
+                    Debug.Log("Seeking Wwise Event to " + startTime + " seconds");
+                    AkUnitySoundEngine.SeekOnEvent(wwiseEventName, gameObject, Mathf.RoundToInt(startTime * 1000f));
+                }
+            }
+        }
+
         state = State.Playing;
 
         if (subtitles != null)
         {
             string languageSuffix = mainController != null ? mainController.getLanguageSuffix() : "";
             string subtitlePath = interviewId + languageSuffix + ".srt";
-            subtitles.play(subtitlePath);
+            subtitles.play(subtitlePath, startTime);
         }
     }
 
@@ -646,13 +780,15 @@ public class Interview : MonoBehaviour
             init();
         }
 
-        if (videoPlayer == null || !videoPlayer.isPlaying)
+        if ((videoPlayer == null || !videoPlayer.isPlaying)
+            && videoEventID == AkUnitySoundEngine.AK_INVALID_PLAYING_ID)
         {
             return;
         }
 
         LogDebug("Stopping playback because another interview started");
-        stopWwiseVideoEvent();
+        CaptureResumeTimeForCurrentEntry();
+        stopWwiseVideoEvent(true);
         ReleasePlaybackResources(false);
         shouldEvaporate = false;
         evaporateProg = 0;
@@ -677,8 +813,11 @@ public class Interview : MonoBehaviour
 
         LogDebug("Evaporating interview '" + interviewId + "'");
         shouldEvaporate = true;
-        
-        stopWwiseVideoEvent();
+
+        if (!leaveRequestedWhileListening)
+        {
+            stopWwiseVideoEvent();
+        }
 
         evaporateEvent?.evt.Post(gameObject);
         state = State.Ending;
@@ -687,18 +826,25 @@ public class Interview : MonoBehaviour
         Invoke(nameof(endEvaporate), evaporateTime + 5f);
     }
 
-    void stopWwiseVideoEvent()
+    void stopWwiseVideoEvent(bool forceStop = false)
      //Stop video
     {
+        if ((!forceStop && suppressStopWwiseEvent) || string.IsNullOrWhiteSpace(wwiseEventName))
+        {
+            return;
+        }
+
         Debug.Log("Stop Wwise Event " + videoEventID);
             // Stop the specific instance
             // AkCurveInterpolation defines the fade curve (e.g., Linear, Sine)
             AkUnitySoundEngine.ExecuteActionOnEvent(wwiseEventName, AkActionOnEventType.AkActionOnEventType_Stop,
                                                 gameObject,
-                                                (int)videoStopFade*1000,
+                                                Mathf.RoundToInt(videoStopFade * 1000f),
                                                 AkCurveInterpolation.AkCurveInterpolation_Linear);
 
-            videoEventID = AkUnitySoundEngine.AK_INVALID_PLAYING_ID;
+        videoEventID = AkUnitySoundEngine.AK_INVALID_PLAYING_ID;
+        suppressStopWwiseEvent = false;
+        leaveRequestedWhileListening = false;
 
     }
 
@@ -706,7 +852,7 @@ public class Interview : MonoBehaviour
     void endEvaporate()
     {
         if (videoPlayer != null) videoPlayer.Stop();
-        stopWwiseVideoEvent();
+        stopWwiseVideoEvent(true);
         ReleasePlaybackResources(true);
         gameObject.SetActive(false);
     }
@@ -721,8 +867,12 @@ public class Interview : MonoBehaviour
                 playbackSequence = playback.sequence;
                 playbackIndex = 0;
                 isResolvedPlayback = true;
-                LogDebug("Resolved sequence length=" + playbackSequence.Length + ", first mediaPath='" + playbackSequence[0].mediaPath + "'");
-                loadPlaybackEntry(playbackSequence[playbackIndex]);
+                SkipStartedIntroAtSequenceStart();
+                if (playbackSequence != null && playbackSequence.Length > 0 && playbackIndex >= 0 && playbackIndex < playbackSequence.Length)
+                {
+                    LogDebug("Resolved sequence length=" + playbackSequence.Length + ", first mediaPath='" + playbackSequence[playbackIndex].mediaPath + "'");
+                    loadPlaybackEntry(playbackSequence[playbackIndex]);
+                }
             }
         }
 
@@ -767,12 +917,96 @@ public class Interview : MonoBehaviour
         return true;
     }
 
+    void SkipStartedIntroAtSequenceStart()
+    {
+        if (playbackSequence == null || playbackSequence.Length == 0)
+        {
+            return;
+        }
+
+        InterviewManager manager = FindAnyObjectByType<InterviewManager>();
+        while (playbackIndex >= 0 && playbackIndex < playbackSequence.Length)
+        {
+            InterviewManager.InterviewData data = playbackSequence[playbackIndex];
+            if (!data.isIntro || manager == null || !manager.HasIntroStarted(data.person))
+            {
+                break;
+            }
+
+            playbackIndex++;
+        }
+
+        if (playbackIndex >= playbackSequence.Length)
+        {
+            playbackSequence = null;
+            playbackIndex = -1;
+            isResolvedPlayback = false;
+            currentEntryIsIntro = false;
+        }
+    }
+
+    InterviewManager.InterviewData? GetCurrentPlaybackEntry()
+    {
+        if (playbackSequence != null && playbackIndex >= 0 && playbackIndex < playbackSequence.Length)
+        {
+            return playbackSequence[playbackIndex];
+        }
+
+        return null;
+    }
+
+    void CaptureResumeTimeForCurrentEntry()
+    {
+        if (currentEntryIsIntro || videoPlayer == null)
+        {
+            return;
+        }
+
+        double currentTime = videoPlayer.time;
+        if (currentTime <= 0d)
+        {
+            return;
+        }
+
+        resumeTimeSeconds = Mathf.Max(0f, (float)currentTime - ResumeLeadSeconds);
+        hasResumeTime = true;
+    }
+
+    bool IsActivelyListening()
+    {
+        return state == State.Playing
+            && ((videoPlayer != null && videoPlayer.isPlaying)
+                || videoEventID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID);
+    }
+
+    void HandleSalleExitWhileListening()
+    {
+        if (!IsActivelyListening())
+        {
+            leaveRequestedWhileListening = false;
+            return;
+        }
+
+        CaptureResumeTimeForCurrentEntry();
+        leaveRequestedWhileListening = true;
+        suppressStopWwiseEvent = true;
+        loadingEvent?.evt.Stop(gameObject);
+        subtitles?.stop();
+        if (videoPlayer != null)
+        {
+            videoPlayer.Stop();
+        }
+        leaveWithInterviewEvent?.evt.Post(gameObject);
+    }
+
 
     void OnVideoFinished(VideoPlayer vp)
     {
         LogDebug("Video finished for mediaPath='" + interviewId + "'");
+        GetKnownVideoLength();
         string previousInterviewId = interviewId;
         InterviewManager.InterviewData[] completedSequence = playbackSequence;
+        ClearResumeState();
 
         if (tryAdvanceSequence())
         {
@@ -785,7 +1019,7 @@ public class Interview : MonoBehaviour
         if (videoPlayer != null)
         {
             videoPlayer.Stop();
-        stopWwiseVideoEvent();
+            stopWwiseVideoEvent(true);
 
         }
 
@@ -815,12 +1049,19 @@ public class Interview : MonoBehaviour
         }
     }
 
+    void OnVideoPrepared(VideoPlayer vp)
+    {
+        CacheCurrentVideoLength();
+    }
+
     float getDiffToClosestCut()
     {
         if (!videoPlayer.isPlaying)
         {
             return -1;
         }
+
+        double knownVideoLength = GetKnownVideoLength();
         float t = (float)videoPlayer.time;
         float minDiff = float.MaxValue;
         float closestCut = -1;
@@ -834,13 +1075,13 @@ public class Interview : MonoBehaviour
             }
         }
 
-        if (videoPlayer.length > 0)
+        if (knownVideoLength > 0d)
         {
-            float finalDiff = Mathf.Abs((float)videoPlayer.length - (float)t);
+            float finalDiff = Mathf.Abs((float)knownVideoLength - t);
             if (finalDiff < minDiff)
             {
                 minDiff = finalDiff;
-                closestCut = (float)videoPlayer.length;
+                closestCut = (float)knownVideoLength;
             }
         }
 
@@ -860,6 +1101,8 @@ public class Interview : MonoBehaviour
 
     void ReleasePlaybackResources(bool clearDepthkitAssets)
     {
+        bool preserveStopSuppression = suppressStopWwiseEvent || leaveRequestedWhileListening;
+
         if (videoPlayer != null)
         {
             videoPlayer.Stop();
@@ -873,7 +1116,11 @@ public class Interview : MonoBehaviour
 
         subtitles?.stop();
         loadingEvent?.evt.Stop(gameObject);
-         stopWwiseVideoEvent();
+        if (preserveStopSuppression)
+        {
+            suppressStopWwiseEvent = true;
+        }
+        stopWwiseVideoEvent();
 
 
         if (clearDepthkitAssets && clip != null)

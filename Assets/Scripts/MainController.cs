@@ -150,6 +150,7 @@ public class MainController : MonoBehaviour
 
     GameObject sallesGO;
     GameObject tunnelsGO;
+    bool wasUserPresent;
 
     private void Start()
     {
@@ -168,6 +169,8 @@ public class MainController : MonoBehaviour
 
         sallesGO = GameObject.Find("Salles");
         tunnelsGO = GameObject.Find("Tunnels");
+
+        wasUserPresent = IsUserPresent();
 
         gameStateUpdate();
     }
@@ -366,7 +369,10 @@ public class MainController : MonoBehaviour
             allTunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
         }
 
-        Camera.main.farClipPlane = getAverageVisionZoneMaxDistance();
+        if (Camera.main != null)
+        {
+            Camera.main.farClipPlane = getAverageVisionZoneMaxDistance();
+        }
 
 #if UNITY_EDITOR
         if (lockInfoPlane != null)
@@ -391,6 +397,8 @@ public class MainController : MonoBehaviour
 
         if (Application.isPlaying)
         {
+            HandleHeadsetPresence();
+
             if (gameState != lastGameState)
             {
                 gameStateUpdate();
@@ -474,6 +482,53 @@ public class MainController : MonoBehaviour
             teleportationLoco.SetActive(freeMotion);
             turnLoco.SetActive(freeMotion);
         }
+    }
+
+    void HandleHeadsetPresence()
+    {
+        bool isUserPresent = IsUserPresent();
+        if (!wasUserPresent && isUserPresent)
+        {
+            ResetViewForward();
+        }
+
+        wasUserPresent = isUserPresent;
+    }
+
+    bool IsUserPresent()
+    {
+        UnityEngine.XR.InputDevice headDevice = UnityEngine.XR.InputDevices.GetDeviceAtXRNode(UnityEngine.XR.XRNode.Head);
+        if (!headDevice.isValid)
+        {
+            return true;
+        }
+
+        if (headDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.userPresence, out bool userPresent))
+        {
+            return userPresent;
+        }
+
+        return true;
+    }
+
+    void ResetViewForward()
+    {
+        Camera mainCam = Camera.main;
+        if (mainCam == null)
+        {
+            return;
+        }
+
+        Vector3 cameraForward = mainCam.transform.forward;
+        cameraForward.y = 0f;
+
+        if (cameraForward.sqrMagnitude < 0.0001f)
+        {
+            return;
+        }
+
+        float yawToWorldForward = Vector3.SignedAngle(cameraForward.normalized, Vector3.forward, Vector3.up);
+        transform.RotateAround(mainCam.transform.position, Vector3.up, yawToWorldForward);
     }
 
     private void Tick(float deltaTime)
