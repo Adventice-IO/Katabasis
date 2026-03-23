@@ -22,6 +22,7 @@ public class DataManager : MonoBehaviour
         Interviews,
         Intro,
         Outro,
+        End,
         Potree,
         Menu
     }
@@ -52,7 +53,8 @@ public class DataManager : MonoBehaviour
         { DataFolder.Intro, "intro" },
         { DataFolder.Outro, "outro" },
         { DataFolder.Potree, "potree" },
-        { DataFolder.Menu, "menu" }
+        { DataFolder.Menu, "menu" },
+        { DataFolder.End, "end" }
     };
 
     readonly Dictionary<DataFolder, string> cachedBasePaths = new Dictionary<DataFolder, string>();

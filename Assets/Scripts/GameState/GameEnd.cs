@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class GameIntro : MonoBehaviour
+public class GameEnd : MonoBehaviour
 {
     bool isActive = false;
     float timeOnActiveChange = 0f;
 
     public float cartonTime = 2f;
     public float cartonFadeTime = 1f;
-    public float spawnDistance = 2f;
-    public Vector2 cartonSize = new Vector2(1.6f, 0.9f);
+    public float spawnDistance = 5f;
+    public float cartonScale = 1f;
 
     public List<Texture2D> cartons = new List<Texture2D>();
 
@@ -19,7 +19,7 @@ public class GameIntro : MonoBehaviour
     MeshRenderer currentCartonRenderer;
     Material currentCartonMaterial;
     int currentCartonIndex = -1;
-    bool introFinished = false;
+    bool endFinished = false;
     bool waitingForCartons;
 
     MainController mainController;
@@ -43,7 +43,7 @@ public class GameIntro : MonoBehaviour
 
         if (cartons == null || cartons.Count == 0 || cartonDuration <= 0f)
         {
-            FinishIntro();
+            FinishEnd();
             return;
         }
 
@@ -51,7 +51,7 @@ public class GameIntro : MonoBehaviour
         if (newCartonIndex >= cartons.Count)
         {
             HideCurrentCarton();
-            FinishIntro();
+            FinishEnd();
             return;
         }
 
@@ -72,13 +72,13 @@ public class GameIntro : MonoBehaviour
         if (active)
         {
             LoadCartons();
-            introFinished = false;
+            endFinished = false;
             currentCartonIndex = -1;
             HideCurrentCarton();
         }
         else
         {
-            introFinished = false;
+            endFinished = false;
             currentCartonIndex = -1;
             HideCurrentCarton();
         }
@@ -86,12 +86,12 @@ public class GameIntro : MonoBehaviour
 
     void LoadCartons()
     {
-        if (!dataManager.IsFolderReady(DataManager.DataFolder.Intro))
+        if (!dataManager.IsFolderReady(DataManager.DataFolder.End))
         {
             if (!waitingForCartons)
             {
                 waitingForCartons = true;
-                dataManager.PreloadFolder(DataManager.DataFolder.Intro, (success, path) =>
+                dataManager.PreloadFolder(DataManager.DataFolder.End, (success, path) =>
                 {
                     waitingForCartons = false;
                     if (success)
@@ -168,13 +168,7 @@ public class GameIntro : MonoBehaviour
         currentCartonObject.transform.position = new Vector3(spawnPosition.x, targetCamera.transform.position.y, spawnPosition.z);
         currentCartonObject.transform.rotation = Quaternion.LookRotation(currentCartonObject.transform.position - targetCamera.transform.position, Vector3.up);
 
-        float width = cartonSize.x;
-        float height = cartonSize.y;
-        if (texture.height > 0)
-        {
-            height = width * ((float)texture.height / texture.width);
-        }
-        currentCartonObject.transform.localScale = new Vector3(width, height, 1f);
+        currentCartonObject.transform.localScale = Vector3.one * cartonScale;
 
         currentCartonRenderer = currentCartonObject.GetComponent<MeshRenderer>();
         Shader unlitTransparent = Shader.Find("Sprites/Default");
@@ -254,15 +248,15 @@ public class GameIntro : MonoBehaviour
         currentCartonMaterial = null;
     }
 
-    void FinishIntro()
+    void FinishEnd()
     {
-        if (introFinished)
+        if (endFinished)
         {
             return;
         }
 
-        introFinished = true;
+        endFinished = true;
         isActive = false;
-        mainController.gameState = MainController.GameState.Playing;
+        mainController.ResetGame();
     }
 }

@@ -47,7 +47,6 @@ public class MainController : MonoBehaviour
     public string language = "en";
     public Salle salle;
     public Tunnel tunnel;
-    public float endAutoNextTime = 3f;
 
     [Header("Controls")]
     public bool animateRotation = false;
@@ -118,6 +117,7 @@ public class MainController : MonoBehaviour
     public GameMenu menu;
     public GameIntro intro;
     public GameOutro outro;
+    public GameEnd end;
     public GameObject lockInfoPlane;
     public GameObject speedInfo;
     public GameObject teleportationLoco;
@@ -403,11 +403,6 @@ public class MainController : MonoBehaviour
                 pointCloudViewDistanceMultiplier = Mathf.Clamp01(pointCloudViewDistanceMultiplier + viewOffset);
             }
             
-            if (gameState == GameState.End && Time.time - timeAtStateChange > endAutoNextTime)
-            {
-                ResetGame();
-            }
-
             if (editMode != _lastEditMode)
             {
                 _lastEditMode = editMode;
@@ -606,6 +601,7 @@ public class MainController : MonoBehaviour
         menu.setActive(gameState == GameState.Menu);
         intro.setActive(gameState == GameState.Intro);
         outro.setActive(gameState == GameState.Outro);
+        end.setActive(gameState == GameState.End);
 
 
         sallesGO.SetActive(gameState != GameState.Menu);
