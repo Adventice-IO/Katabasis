@@ -410,21 +410,40 @@ public class GameMenu : MonoBehaviour
 
     List<string> GetAvailableLanguages()
     {
-        HashSet<string> languages = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        List<string> languages = new List<string>();
 
         if (dataManager != null)
         {
             string menuFolderPath = dataManager.GetFolderPath(DataManager.DataFolder.Menu);
             if (!string.IsNullOrWhiteSpace(menuFolderPath) && Directory.Exists(menuFolderPath))
             {
-                string[] textureFiles = Directory.GetFiles(menuFolderPath, "*.png", SearchOption.TopDirectoryOnly);
-                for (int i = 0; i < textureFiles.Length; i++)
+                string languagesFilePath = Path.Combine(menuFolderPath, "languages.txt");
+                if (File.Exists(languagesFilePath))
                 {
-                    string fileName = Path.GetFileNameWithoutExtension(textureFiles[i]);
-                    if (!string.IsNullOrWhiteSpace(fileName))
+                    string[] lines = File.ReadAllLines(languagesFilePath);
+                    for (int i = 0; i < lines.Length; i++)
                     {
-                        languages.Add(fileName);
+                        string language = lines[i].Trim();
+                        if (!string.IsNullOrWhiteSpace(language))
+                        {
+                            languages.Add(language);
+                        }
                     }
+                }
+                else
+                {
+                    // Fallback to old method if file doesn't exist
+                    HashSet<string> fallbackLanguages = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    string[] textureFiles = Directory.GetFiles(menuFolderPath, "*.png", SearchOption.TopDirectoryOnly);
+                    for (int i = 0; i < textureFiles.Length; i++)
+                    {
+                        string fileName = Path.GetFileNameWithoutExtension(textureFiles[i]);
+                        if (!string.IsNullOrWhiteSpace(fileName))
+                        {
+                            fallbackLanguages.Add(fileName);
+                        }
+                    }
+                    languages = new List<string>(fallbackLanguages);
                 }
             }
         }
@@ -439,7 +458,7 @@ public class GameMenu : MonoBehaviour
             languages.Add("en");
         }
 
-        return new List<string>(languages);
+        return languages;
     }
 
     void RegisterLanguageButton(GameObject langObject, string language)
