@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{7E734BBA-16C9-46F8-8CBD-B94EE4B45669}",
     "Language": "SFX",
-    "Hash": "{BBA986AC-F610-C14E-74F3-B8FD48F9F706}",
+    "Hash": "{2CC52228-6028-A219-582A-5BB6C6E434FA}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\MAIN",
     "ShortName": "MAIN",
     "Path": "MAIN.bnk",
@@ -480,11 +480,11 @@
       "CachePath": "BF/{BF62B303-0003-85C8-54D2-DF1C4A807035}.wem"
      },
      {
-      "Id": "335659140",
+      "Id": "335659142",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "MUS\\MUS_E\\MUS_E_03.wav",
+      "ShortName": "MUS\\MUS_G\\MUS_G_03.wav",
       "CachePath": "7F/{7FB50B42-8EE1-3D9E-5834-D9973A0035B0}.wem"
      },
      {
@@ -557,7 +557,7 @@
       "Streaming": "false",
       "Location": "Memory",
       "ShortName": "AMB\\AMB_City\\AMB_City_D_Trumpet\\AMB_City_D_Trumpet_01.wav",
-      "CachePath": "E9/{E94AF464-1D50-A99B-88E7-CEB7C093B1AA}.wem"
+      "CachePath": "3A/{3A578DB8-20D7-1F91-D72E-40617E6ED478}.wem"
      },
      {
       "Id": "401434766",
@@ -768,11 +768,11 @@
       "CachePath": "FA/{FAFB7EB9-A1F1-8BD4-A8C4-704B88D6796E}.wem"
      },
      {
-      "Id": "529843155",
+      "Id": "529843157",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "MUS\\MUS_E\\MUS_E_01.wav",
+      "ShortName": "MUS\\MUS_G\\MUS_G_01.wav",
       "CachePath": "1C/{1C0C666B-03F6-9A83-9845-A88EB95587C2}.wem"
      },
      {
@@ -1192,6 +1192,14 @@
       "CachePath": "73/{73FEA50D-B208-1ECD-516F-EB69191F8252}.wem"
      },
      {
+      "Id": "772425010",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "MUS\\MUS_I\\MUS_I.wav",
+      "CachePath": "7C/{7C50748D-6F5E-2E59-19C6-88D39663FB3E}.wem"
+     },
+     {
       "Id": "776192475",
       "Language": "SFX",
       "Streaming": "false",
@@ -1216,11 +1224,11 @@
       "CachePath": "24/{24065859-AC21-8C93-BDF2-2A3A17C22A05}.wem"
      },
      {
-      "Id": "793818858",
+      "Id": "793818860",
       "Language": "SFX",
       "Streaming": "false",
       "Location": "Memory",
-      "ShortName": "MUS\\MUS_E\\MUS_E_02.wav",
+      "ShortName": "MUS\\MUS_G\\MUS_G_02.wav",
       "CachePath": "CD/{CD3D0C25-D8DB-9192-A693-16EB42B16F58}.wem"
      },
      {
@@ -1819,6 +1827,14 @@
        "LibId": "6619138"
       },
       {
+       "Id": "175368992",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Containers\\Default Work Unit\\AMB\\AMB_Ambi\\AMB_Ambi_Ext\\AMB_Ambi_Ext_Park_Kids_01\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{EB77E214-B722-492F-BF8D-1584A1EDF585}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
        "Id": "180682991",
        "Name": "Silence",
        "ObjectPath": "\\Containers\\Default Work Unit\\SFX\\SFX_3D\\SFX_AirPressure\\SFX_AirPressure_A\\New Silence\\Silence",
@@ -2400,7 +2416,14 @@
        {
         "Id": "203089093"
        }
-      ]
+      ],
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "175368992"
+        }
+       ]
+      }
      },
      {
       "Id": "3388850435",
@@ -3744,13 +3767,13 @@
       "DurationType": "Infinite",
       "MediaRefs": [
        {
-        "Id": "335659140"
+        "Id": "335659142"
        },
        {
-        "Id": "529843155"
+        "Id": "529843157"
        },
        {
-        "Id": "793818858"
+        "Id": "793818860"
        }
       ]
      },
@@ -3766,6 +3789,18 @@
        },
        {
         "Id": "558939912"
+       }
+      ]
+     },
+     {
+      "Id": "4159718938",
+      "Name": "MUS_I",
+      "ObjectPath": "\\Events\\Default Work Unit\\MUS\\MUS_I",
+      "GUID": "{55FEE38D-90E5-4CF5-BDE6-5008EC207469}",
+      "DurationType": "Infinite",
+      "MediaRefs": [
+       {
+        "Id": "772425010"
        }
       ]
      },
@@ -6479,6 +6514,6 @@
     ]
    }
   ],
-  "FileHash": "{D89C54F9-7110-DFEF-2835-B36454D5C197}"
+  "FileHash": "{5EE78A48-3389-46C9-8B1F-0A0FAFE692F0}"
  }
 }

@@ -17983,6 +17983,7 @@
 										<Sound Name="AMB_Ambi_Ext_Park_Kids_01" ID="{E909911A-B827-4D13-80D2-79D8DDF299ED}" ShortID="377627997">
 											<PropertyList>
 												<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+												<Property Name="OverrideEffect" Type="bool" Value="True"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
 														<Value>-15</Value>
@@ -18211,6 +18212,128 @@
 													</CustomState>
 												</CustomStateList>
 											</StateInfo>
+											<ObjectLists>
+												<ObjectList Name="Effects">
+													<EffectSlot Name="" ID="{9C2C89AD-2607-4D3D-A5BE-2B769DEF5737}" ShortID="292510727">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Parametric EQ (Custom)" ID="{EB77E214-B722-492F-BF8D-1584A1EDF585}" ShortID="175368992" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
+																		<PropertyList>
+																			<Property Name="DynamicsEnableBand3" Type="bool" Value="True"/>
+																			<Property Name="FrequencyBand3" Type="Real32" Value="3079"/>
+																			<Property Name="OnOffBand3" Type="bool" Value="True"/>
+																			<Property Name="QFactorBand3" Type="Real32" Value="0.5"/>
+																			<Property Name="RangeBand3" Type="Real32" Value="-30"/>
+																			<Property Name="ThresholdBand3" Type="Real32" Value="-28.9"/>
+																		</PropertyList>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+														<StateInfo>
+															<CustomStateList>
+																<CustomState>
+																	<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+																	<CustomState Name="" ID="{9809C48F-925A-4A7E-A79F-8EAA05848715}" ShortID="417219761"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+																	<CustomState Name="" ID="{EB68B9BD-93FD-4A9E-AE5B-DE9470D1EB8C}" ShortID="614436658"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+																	<CustomState Name="" ID="{F44E5BFD-DBC1-48CB-BF82-3B793404CFA6}" ShortID="985530160"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+																	<CustomState Name="" ID="{E22EAE3C-D476-437B-A6DB-BF70F224F47F}" ShortID="351239144"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+																	<CustomState Name="" ID="{2A4B6368-761F-4CCA-ACE8-15BAF3C92E8A}" ShortID="355933463"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+																	<CustomState Name="" ID="{D099C158-C89C-45EE-8C33-D68C466469BD}" ShortID="1028236297"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+																	<CustomState Name="" ID="{DF3CB83D-A78D-408D-A377-C562082EB07F}" ShortID="188452684"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+																	<CustomState Name="" ID="{1DA1D11E-CC63-4A37-8217-53D28DBB22F1}" ShortID="638486934"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+																	<CustomState Name="" ID="{1754156E-8F79-4103-9A62-0AB940EAE86C}" ShortID="1044441417"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+																	<CustomState Name="" ID="{51509D52-2A19-446D-939F-71F96EB4633A}" ShortID="951879708"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+																	<CustomState Name="" ID="{2A0AB4DD-D513-47D3-95E6-AAEF76945864}" ShortID="397518344"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+																	<CustomState Name="" ID="{8F90C075-973F-4364-B784-4CB95477A2C6}" ShortID="304632444"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+																	<CustomState Name="" ID="{DCC7A488-2123-4342-ABBA-76CE5A9DB41A}" ShortID="952297951"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+																	<CustomState Name="" ID="{6AE74791-2BAC-4176-A00E-92DE81E40E8A}" ShortID="718696870"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+																	<CustomState Name="" ID="{91701F85-C46B-41E7-9126-1BF7AC3DE69D}" ShortID="473382550"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+																	<CustomState Name="" ID="{13EB1C35-B154-4C3C-988E-F3B7F75F1145}" ShortID="992658760"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+																	<CustomState Name="" ID="{E7338CE1-D8FA-41C4-980F-35454901F9AF}" ShortID="436701424"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+																	<CustomState Name="" ID="{E079C63D-0353-419E-9F58-12E509A01D85}" ShortID="715293287"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+																	<CustomState Name="" ID="{7ECA28C0-F529-4523-8CD1-FAE519C90529}" ShortID="699564343"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+																	<CustomState Name="" ID="{B3270072-44D2-4E91-9C31-F958FC378E72}" ShortID="950283412"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+																	<CustomState Name="" ID="{76C7A1AD-754F-4916-99A5-611E7A54AE04}" ShortID="311251010"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+																	<CustomState Name="" ID="{DD4AE382-784A-4546-846E-1FBC4B7E5EB4}" ShortID="98191269"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+																	<CustomState Name="" ID="{A2CB8DCD-76C3-4C84-BAD0-168154514A29}" ShortID="513636731"/>
+																</CustomState>
+																<CustomState>
+																	<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+																	<CustomState Name="" ID="{C84A1C5B-A3CE-4EE3-92E7-9AC316373040}" ShortID="994732680"/>
+																</CustomState>
+															</CustomStateList>
+														</StateInfo>
+													</EffectSlot>
+												</ObjectList>
+											</ObjectLists>
 											<ActiveSourceList>
 												<ActiveSource Name="AMB_Ambi_Ext_Park_Kids_01" ID="{BC2D02AA-A897-4A64-AE48-C55C179E1C00}" Platform="Linked"/>
 											</ActiveSourceList>
@@ -23711,6 +23834,10 @@
 					</ReferenceList>
 					<ChildrenList>
 						<BlendContainer Name="MUS_C" ID="{44720FF1-0428-46DB-BA9A-1051B9CA4647}" ShortID="405554633">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="17"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
@@ -23971,6 +24098,10 @@
 							</StateInfo>
 						</BlendContainer>
 						<BlendContainer Name="MUS_D" ID="{64B237AA-5E55-4D20-9815-53F02917292E}" ShortID="330962442">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="17"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
@@ -24205,7 +24336,11 @@
 								</CustomStateList>
 							</StateInfo>
 						</BlendContainer>
-						<BlendContainer Name="MUS_E_G_K" ID="{F21A3FD6-5ECA-47E9-962F-1B66ABE47259}" ShortID="636948597">
+						<BlendContainer Name="MUS_G_K_O" ID="{F21A3FD6-5ECA-47E9-962F-1B66ABE47259}" ShortID="636948597">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="17"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
@@ -24228,16 +24363,16 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="MUS_E_01" ID="{2FB265DA-15F7-4C01-A5D4-01235EEA3D50}">
+										<AudioFileSource Name="MUS_G_01" ID="{2FB265DA-15F7-4C01-A5D4-01235EEA3D50}">
 											<Language>SFX</Language>
-											<AudioFile>MUS\MUS_E\MUS_E_01.wav</AudioFile>
+											<AudioFile>MUS\MUS_G\MUS_G_01.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="529843155"/>
+												<MediaID ID="529843157"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="MUS_E_01" ID="{2FB265DA-15F7-4C01-A5D4-01235EEA3D50}" Platform="Linked"/>
+										<ActiveSource Name="MUS_G_01" ID="{2FB265DA-15F7-4C01-A5D4-01235EEA3D50}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="MUS_E_02" ID="{C9F61198-C3FE-43A4-831D-A8EACBA70B9B}" ShortID="70298752">
@@ -24253,16 +24388,16 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="MUS_E_02" ID="{CCB906AC-A64B-4534-9E44-9A7B51381B3C}">
+										<AudioFileSource Name="MUS_G_02" ID="{CCB906AC-A64B-4534-9E44-9A7B51381B3C}">
 											<Language>SFX</Language>
-											<AudioFile>MUS\MUS_E\MUS_E_02.wav</AudioFile>
+											<AudioFile>MUS\MUS_G\MUS_G_02.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="793818858"/>
+												<MediaID ID="793818860"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="MUS_E_02" ID="{CCB906AC-A64B-4534-9E44-9A7B51381B3C}" Platform="Linked"/>
+										<ActiveSource Name="MUS_G_02" ID="{CCB906AC-A64B-4534-9E44-9A7B51381B3C}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="MUS_E_03" ID="{2736262D-1FFE-47F1-AEEF-0A635A5B0E4C}" ShortID="346242226">
@@ -24278,16 +24413,16 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="MUS_E_03" ID="{D0CADB56-35A1-4517-97C5-876ABB4CC949}">
+										<AudioFileSource Name="MUS_G_03" ID="{D0CADB56-35A1-4517-97C5-876ABB4CC949}">
 											<Language>SFX</Language>
-											<AudioFile>MUS\MUS_E\MUS_E_03.wav</AudioFile>
+											<AudioFile>MUS\MUS_G\MUS_G_03.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="335659140"/>
+												<MediaID ID="335659142"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="MUS_E_03" ID="{D0CADB56-35A1-4517-97C5-876ABB4CC949}" Platform="Linked"/>
+										<ActiveSource Name="MUS_G_03" ID="{D0CADB56-35A1-4517-97C5-876ABB4CC949}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
@@ -24317,11 +24452,7 @@
 									</CustomState>
 									<CustomState>
 										<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
-										<CustomState Name="" ID="{9C9393A6-7F91-40EE-9A92-A27A0B6CF8F1}" ShortID="425091945">
-											<PropertyList>
-												<Property Name="Volume" Type="Real64" Value="-108"/>
-											</PropertyList>
-										</CustomState>
+										<CustomState Name="" ID="{9C9393A6-7F91-40EE-9A92-A27A0B6CF8F1}" ShortID="425091945"/>
 									</CustomState>
 									<CustomState>
 										<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
@@ -24445,7 +24576,11 @@
 									</CustomState>
 									<CustomState>
 										<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
-										<CustomState Name="" ID="{481F6B2A-FCD7-449D-8436-24C108967BFB}" ShortID="34540036"/>
+										<CustomState Name="" ID="{481F6B2A-FCD7-449D-8436-24C108967BFB}" ShortID="34540036">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
 									</CustomState>
 									<CustomState>
 										<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
@@ -24483,6 +24618,10 @@
 							</StateInfo>
 						</BlendContainer>
 						<BlendContainer Name="MUS_F_H" ID="{3A71E080-720C-4D4C-8BD1-241EA7AAE371}" ShortID="116699560">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="17"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
@@ -24730,6 +24869,663 @@
 									<CustomState>
 										<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
 										<CustomState Name="" ID="{A3DD6070-17F2-4F8E-A9E5-8D990046141C}" ShortID="579389533">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+								</CustomStateList>
+							</StateInfo>
+						</BlendContainer>
+						<BlendContainer Name="MUS_I" ID="{27B01D8C-1926-425E-92D1-8BB4D40A2547}" ShortID="166926476">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="10"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-14</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="MUS_I" ID="{EA64EA07-D62D-4D31-A28D-2ADF04F263B5}" ShortID="416497125">
+									<PropertyList>
+										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="MUS_I" ID="{59A11026-05DA-4DF4-A408-4C14248EAB2B}">
+											<Language>SFX</Language>
+											<AudioFile>MUS\MUS_I\MUS_I.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="772425010"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="MUS_I" ID="{59A11026-05DA-4DF4-A408-4C14248EAB2B}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+							<StateInfo>
+								<StateGroupList>
+									<StateGroupInfo>
+										<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+										<StateGroupInfo Name="" ID="{0DC1B706-E4A7-4341-8024-593D660E9653}" ShortID="467801969"/>
+									</StateGroupInfo>
+								</StateGroupList>
+								<CustomStateList>
+									<CustomState>
+										<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+										<CustomState Name="" ID="{B6CD467A-BFA4-4EE5-A2ED-9C3483A4AD83}" ShortID="477212253">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+										<CustomState Name="" ID="{969CA04C-DCE0-437D-8084-0E1C2552F86B}" ShortID="18814036">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+										<CustomState Name="" ID="{CCE73207-1CB7-4CEF-8B29-78EE44CD9B00}" ShortID="366733422">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+										<CustomState Name="" ID="{015B4E12-730B-40AA-8F4C-9F1BC6A7CADB}" ShortID="317774723">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+										<CustomState Name="" ID="{565E4FE9-DC8C-4309-9796-2214C6868F67}" ShortID="666872005">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+										<CustomState Name="" ID="{5EE19F83-0C68-47B0-ADB7-7F097AAF019E}" ShortID="627690525">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+										<CustomState Name="" ID="{F43FDD4C-5D93-4858-8E7E-E74A28A67DFE}" ShortID="407625425"/>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+										<CustomState Name="" ID="{494073DF-F5AE-49D8-A948-51FE6FED9DD0}" ShortID="282661132">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+										<CustomState Name="" ID="{F8B369DB-7B6A-4BDE-9FD7-2E4E48FA669F}" ShortID="475865575">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+										<CustomState Name="" ID="{5DC8D825-45F4-4A63-887E-E0F5D792E9E7}" ShortID="729732428">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+										<CustomState Name="" ID="{8FB12205-C70E-4871-B8F1-66B12128E57D}" ShortID="580301485">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+										<CustomState Name="" ID="{502BE9C0-CF79-4CF9-A5F4-F43443F7672F}" ShortID="973400409">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+										<CustomState Name="" ID="{B8AD6983-CA5B-4BC8-AEC5-FC6F6D73A42E}" ShortID="1069637461">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+										<CustomState Name="" ID="{AC58CFD1-9CE6-4DEC-8B15-379F962821E5}" ShortID="620910319">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+										<CustomState Name="" ID="{73295FBC-B9AF-4772-B04E-5BAF0FC8F199}" ShortID="347387164">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+										<CustomState Name="" ID="{81A777C6-C9B9-4D51-A685-BB6C4154998F}" ShortID="184617767">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+										<CustomState Name="" ID="{82E1B970-E8E1-4088-8DF2-2EBAC99F52C4}" ShortID="449547212">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+										<CustomState Name="" ID="{E059B5C3-E2EE-490B-BA7F-89E1C0DC778C}" ShortID="690494375">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+										<CustomState Name="" ID="{28392D66-ACB8-4CFB-A8E6-0D22B1914698}" ShortID="494940042">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+										<CustomState Name="" ID="{E5F58096-383B-4FDE-8604-6894DC93D58D}" ShortID="7248636">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+										<CustomState Name="" ID="{FA3AB001-6800-4EBB-A89D-40EA1406BB78}" ShortID="662050337">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+										<CustomState Name="" ID="{3526B4E8-6E20-4232-96FB-B0CE00943842}" ShortID="741755418">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+										<CustomState Name="" ID="{82DC0AD9-814E-458D-8D8F-E48FB52F1AB5}" ShortID="12918746">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+										<CustomState Name="" ID="{55C76E4D-28EE-4E01-9F66-56B61580BF6C}" ShortID="548646929">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+								</CustomStateList>
+							</StateInfo>
+						</BlendContainer>
+						<BlendContainer Name="MUS_E" ID="{D8480CE7-4552-427B-ADE1-DE703D39A43A}" ShortID="171743189">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="10"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="MUS_E_01" ID="{B41CF801-EECF-4C06-8899-6BFDF5EA45B2}" ShortID="732847674">
+									<PropertyList>
+										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="MUS_E_01" ID="{405F0F6D-CAF7-4603-AA10-31B29129DF86}">
+											<Language>SFX</Language>
+											<AudioFile>MUS\MUS_E\MUS_E_01.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="529843155"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="MUS_E_01" ID="{405F0F6D-CAF7-4603-AA10-31B29129DF86}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="MUS_E_02" ID="{DE699784-9A2C-48AA-AF9C-EDDAEB1010A7}" ShortID="702890605">
+									<PropertyList>
+										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+										<Property Name="OverrideEffect" Type="bool" Value="True"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="MUS_E_02" ID="{73156E88-A8B1-4681-B016-1C17F1CC4DAE}">
+											<Language>SFX</Language>
+											<AudioFile>MUS\MUS_E\MUS_E_02.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="793818858"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="Effects">
+											<EffectSlot Name="" ID="{FC967F33-ECA5-4252-83C4-DB3A0F188FA6}" ShortID="468378498">
+												<ReferenceList>
+													<Reference Name="Effect">
+														<Custom>
+															<Effect Name="Parametric EQ (Custom)" ID="{3111E161-089D-4F05-ACD1-96B1A9F38D30}" ShortID="25366683" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
+																<PropertyList>
+																	<Property Name="FilterTypeBand3" Type="int32" Value="0"/>
+																	<Property Name="FrequencyBand3" Type="Real32" Value="12504.03"/>
+																	<Property Name="OnOffBand3" Type="bool" Value="True"/>
+																</PropertyList>
+																<ObjectLists>
+																	<ObjectList Name="RTPC">
+																		<RTPC Name="" ID="{0B0E8F31-8D10-43C8-91F8-693BEE14A973}" ShortID="329917814">
+																			<PropertyList>
+																				<Property Name="PropertyName" Type="string" Value="FrequencyBand3"/>
+																			</PropertyList>
+																			<ReferenceList>
+																				<Reference Name="ControlInput">
+																					<Custom>
+																						<ModulatorLfo Name="Modulator LFO (Custom)" ID="{79390C58-1FF3-42FB-90CB-6FB9CE77403F}" ShortID="66985863">
+																							<PropertyList>
+																								<Property Name="LfoFrequency" Type="Real64" Value="0.01"/>
+																								<Property Name="LfoSmoothing" Type="Real64" Value="100"/>
+																							</PropertyList>
+																						</ModulatorLfo>
+																					</Custom>
+																				</Reference>
+																				<Reference Name="Curve">
+																					<Custom>
+																						<Curve Name="" ID="{E02BA365-9A01-4B2A-8BA4-2E78FA72EF7F}">
+																							<PropertyList>
+																								<Property Name="Flags" Type="int32" Value="5"/>
+																							</PropertyList>
+																							<PointList>
+																								<Point>
+																									<XPos>0</XPos>
+																									<YPos>569.47121</YPos>
+																									<Flags>21</Flags>
+																								</Point>
+																								<Point>
+																									<XPos>1</XPos>
+																									<YPos>20000</YPos>
+																									<Flags>53</Flags>
+																								</Point>
+																							</PointList>
+																						</Curve>
+																					</Custom>
+																				</Reference>
+																			</ReferenceList>
+																		</RTPC>
+																	</ObjectList>
+																</ObjectLists>
+															</Effect>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</EffectSlot>
+										</ObjectList>
+									</ObjectLists>
+									<ActiveSourceList>
+										<ActiveSource Name="MUS_E_02" ID="{73156E88-A8B1-4681-B016-1C17F1CC4DAE}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="MUS_E_03" ID="{C2520ECD-1448-45F3-AD83-21F988ECC0AD}" ShortID="12266347">
+									<PropertyList>
+										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+										<Property Name="OverrideEffect" Type="bool" Value="True"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="MUS_E_03" ID="{3B3F0E40-D7B4-482E-9B22-ABABAADB8C3F}">
+											<Language>SFX</Language>
+											<AudioFile>MUS\MUS_E\MUS_E_03.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="335659140"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="Effects">
+											<EffectSlot Name="" ID="{E351AB82-B1EF-45D7-95BC-1276E1F6001F}" ShortID="884489078">
+												<ReferenceList>
+													<Reference Name="Effect">
+														<Custom>
+															<Effect Name="Parametric EQ (Custom)" ID="{22214720-2684-4654-A805-7573EEB6EB1F}" ShortID="1064711407" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
+																<PropertyList>
+																	<Property Name="FilterTypeBand3" Type="int32" Value="0"/>
+																	<Property Name="FrequencyBand3" Type="Real32" Value="12504.03"/>
+																	<Property Name="OnOffBand3" Type="bool" Value="True"/>
+																</PropertyList>
+																<ObjectLists>
+																	<ObjectList Name="RTPC">
+																		<RTPC Name="" ID="{4B407E3B-E859-4313-AAA2-0E277FCF15C7}" ShortID="313405243">
+																			<PropertyList>
+																				<Property Name="PropertyName" Type="string" Value="FrequencyBand3"/>
+																			</PropertyList>
+																			<ReferenceList>
+																				<Reference Name="ControlInput">
+																					<Custom>
+																						<ModulatorLfo Name="Modulator LFO (Custom)" ID="{B9DAD4C4-31F2-46F4-AAF1-2A4F8F1E9616}" ShortID="936996918">
+																							<PropertyList>
+																								<Property Name="LfoFrequency" Type="Real64" Value="0.02"/>
+																								<Property Name="LfoSmoothing" Type="Real64" Value="100"/>
+																							</PropertyList>
+																						</ModulatorLfo>
+																					</Custom>
+																				</Reference>
+																				<Reference Name="Curve">
+																					<Custom>
+																						<Curve Name="" ID="{87A641B8-9F0C-4EEC-9A81-6CBE5047EC2C}">
+																							<PropertyList>
+																								<Property Name="Flags" Type="int32" Value="5"/>
+																							</PropertyList>
+																							<PointList>
+																								<Point>
+																									<XPos>0</XPos>
+																									<YPos>656.64016</YPos>
+																									<Flags>21</Flags>
+																								</Point>
+																								<Point>
+																									<XPos>1</XPos>
+																									<YPos>20000</YPos>
+																									<Flags>53</Flags>
+																								</Point>
+																							</PointList>
+																						</Curve>
+																					</Custom>
+																				</Reference>
+																			</ReferenceList>
+																		</RTPC>
+																	</ObjectList>
+																</ObjectLists>
+															</Effect>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</EffectSlot>
+										</ObjectList>
+									</ObjectLists>
+									<ActiveSourceList>
+										<ActiveSource Name="MUS_E_03" ID="{3B3F0E40-D7B4-482E-9B22-ABABAADB8C3F}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+							<StateInfo>
+								<StateGroupList>
+									<StateGroupInfo>
+										<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+										<StateGroupInfo Name="" ID="{D5759226-57FC-419F-8C28-B7D400813989}" ShortID="615303086"/>
+									</StateGroupInfo>
+								</StateGroupList>
+								<CustomStateList>
+									<CustomState>
+										<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+										<CustomState Name="" ID="{C342C248-DB4D-4EE3-81B0-6292D46A308B}" ShortID="371338216">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+										<CustomState Name="" ID="{E52DAB32-67FE-4137-B3A3-832FAC6A2698}" ShortID="448103633">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+										<CustomState Name="" ID="{AD4DF759-D90D-4E65-BB6C-A2E858BAF756}" ShortID="93147261">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+										<CustomState Name="" ID="{E5D2EF53-8AE6-4596-9EF2-6810F4913EF8}" ShortID="817379664">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+										<CustomState Name="" ID="{A2591F58-0624-4A7A-9491-9DF4AFD04055}" ShortID="399048759">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+										<CustomState Name="" ID="{AB7C7A8C-E939-4E8D-808D-F858B8B0DADA}" ShortID="475655162">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+										<CustomState Name="" ID="{78F9DBDC-D604-4A77-A672-080C50679CE8}" ShortID="964253504">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+										<CustomState Name="" ID="{C82BF7FE-11CF-4F48-9372-FCCCCAF16357}" ShortID="46582626">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+										<CustomState Name="" ID="{FF66A13F-F860-4D81-86EA-876E7F60F3BE}" ShortID="791971315">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+										<CustomState Name="" ID="{16B7B405-947B-4525-9995-B64D6E105F16}" ShortID="962015081">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+										<CustomState Name="" ID="{309E6CD2-359B-4B0B-B277-993E33BB0EE1}" ShortID="633365780">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+										<CustomState Name="" ID="{9C956BC6-4010-4BCE-870C-9BBD0B16B462}" ShortID="110649348">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+										<CustomState Name="" ID="{3F8DBD77-BD5F-44EE-8BDE-3200DC234D75}" ShortID="965496445">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+										<CustomState Name="" ID="{32D962A8-F89D-4435-8986-75822A91955C}" ShortID="682913095">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+										<CustomState Name="" ID="{A4316D5F-B658-4E42-9818-B71D4801AA54}" ShortID="1005526908">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+										<CustomState Name="" ID="{EDD9C6BD-2F05-4391-A037-D37A545420BB}" ShortID="688473929">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+										<CustomState Name="" ID="{CB966233-FC99-49ED-89D7-A59D75F226B2}" ShortID="672156410">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+										<CustomState Name="" ID="{BDB25DEF-E37E-41EF-83FF-85F6D0E6AE8C}" ShortID="40530607">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+										<CustomState Name="" ID="{5E688932-1E70-4265-B6DB-B5E818E71E17}" ShortID="1047295329">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+										<CustomState Name="" ID="{F8983B3A-8FB0-4E1D-99E2-26915E6C5008}" ShortID="666662021"/>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+										<CustomState Name="" ID="{43895484-6E64-4016-932E-D48F939BF10B}" ShortID="700944809">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+										<CustomState Name="" ID="{683892AC-1191-4B36-9E68-10C06ACC91B0}" ShortID="895659492">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+										<CustomState Name="" ID="{C4D8A774-A8A0-48F1-9A4C-82796DA7A9FE}" ShortID="676009764">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+										<CustomState Name="" ID="{05844861-098C-4C55-834A-D743A1A4EA59}" ShortID="991133270">
 											<PropertyList>
 												<Property Name="Volume" Type="Real64" Value="-108"/>
 											</PropertyList>
