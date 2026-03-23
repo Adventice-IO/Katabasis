@@ -703,7 +703,7 @@ public class Tunnel : MonoBehaviour
 
         if (mainController == null)
         {
-            mainController = mainController;
+            mainController = GameObject.FindAnyObjectByType<MainController>();
             if (mainController == null)
             {
                 Debug.LogWarning("Tunnel: MainController instance not found, cannot compute heatmap.");

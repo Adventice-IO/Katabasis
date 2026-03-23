@@ -8,6 +8,8 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using TMPro;
 using Unity.XR.CompositionLayers.UIInteraction;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
+using UnityEngine.Rendering;
+
 
 
 #if UNITY_EDITOR
@@ -151,6 +153,19 @@ public class MainController : MonoBehaviour
 
     private void Start()
     {
+        int q = QualitySettings.GetQualityLevel();
+        string qName = (q >= 0 && q < QualitySettings.names.Length) ? QualitySettings.names[q] : "unknown";
+        string rp = GraphicsSettings.currentRenderPipeline != null
+            ? GraphicsSettings.currentRenderPipeline.name
+            : "Built-in";
+
+        Debug.Log(
+            $"DebugBuild={Debug.isDebugBuild} | " +
+            $"Quality={q}:{qName} | " +
+            $"API={SystemInfo.graphicsDeviceType} | " +
+            $"RP={rp}"
+        );
+
         sallesGO = GameObject.Find("Salles");
         tunnelsGO = GameObject.Find("Tunnels");
 

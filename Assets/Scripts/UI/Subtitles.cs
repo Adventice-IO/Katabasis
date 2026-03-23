@@ -14,6 +14,9 @@ public class Subtitles : MonoBehaviour
     public bool isPlaying = false;
     bool lastPlaying = false;
 
+    public Vector3 offset = new Vector3(0, -.17f, .5f);
+    [Range(0, 5)]
+    public float smooth = 3f;
 
     UIDocument uiDocument;
     Label subtitleLabel;
@@ -21,6 +24,7 @@ public class Subtitles : MonoBehaviour
     SubtitleLine curLine;
 
     DataManager dataManager;
+
 
     void OnEnable()
     {
@@ -77,6 +81,13 @@ public class Subtitles : MonoBehaviour
             //Debug.LogError("No subtitle label found in UIDocument");
             return;
         }
+
+
+        Vector3 targetPosition = Camera.main.transform.TransformPoint(offset);
+        Quaternion targetRotation = Quaternion.LookRotation(targetPosition - Camera.main.transform.position);
+
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * smooth);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smooth);
 
         if (isPlaying && subs != null && timeAtPlay > 0)
         {

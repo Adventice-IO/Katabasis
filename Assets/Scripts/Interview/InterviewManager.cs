@@ -570,7 +570,7 @@ public class InterviewManager : MonoBehaviour
                 continue;
             }
 
-            Debug.Log(line);
+            //Debug.Log(line);
             List<string> offsets = SplitMultiValueField(GetField(fields, 6));
             Vector3 offset = new Vector3(getFloatValue(offsets[0]), 0, getFloatValue(offsets[1]));
             float angleOffset = getFloatValue(offsets[2]);
@@ -591,7 +591,7 @@ public class InterviewManager : MonoBehaviour
                 cutTimes = SplitMultiValueField(GetField(fields, 7)).Select(
                     s =>
                     {
-                        Debug.Log("Checking time" + s);
+                        //Debug.Log("Checking time" + s);
                         //Format HH:MM:SS:FF where FF is frames at 30fps
                         string[] timeParts = s.Split(':');
                         if (timeParts.Length != 4)

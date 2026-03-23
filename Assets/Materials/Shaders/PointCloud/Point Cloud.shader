@@ -25,7 +25,7 @@
             #pragma fragment frag
             #pragma target 4.5
             // Explicitly force the compiler to validate structured buffers for the target API
-            #pragma require structuredbuffer 
+            // #pragma require structuredbuffer 
 
             #include "UnityCG.cginc"
 
