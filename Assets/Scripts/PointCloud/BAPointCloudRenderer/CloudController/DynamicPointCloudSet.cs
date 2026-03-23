@@ -33,13 +33,17 @@ namespace BAPointCloudRenderer.CloudController {
         /// Camera to use. If none is specified, Camera.main is used
         /// </summary>
         public Camera userCamera;
+        /// <summary>
+        /// If enabled, nodes are loaded in all directions based only on camera position and far clip plane.
+        /// </summary>
+        public bool render360 = false;
 
         // Use this for initialization
         protected override void Initialize() {
             if (userCamera == null) {
                 userCamera = Camera.main;
             }
-            PointRenderer = new V2Renderer(this, minNodeSize, pointBudget, nodesLoadedPerFrame, nodesGOsPerFrame, userCamera, meshConfiguration, cacheSizeInPoints);
+            PointRenderer = new V2Renderer(this, minNodeSize, pointBudget, nodesLoadedPerFrame, nodesGOsPerFrame, userCamera, meshConfiguration, cacheSizeInPoints, render360);
         }
 
 

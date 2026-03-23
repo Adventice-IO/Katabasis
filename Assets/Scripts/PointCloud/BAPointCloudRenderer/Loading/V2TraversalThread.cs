@@ -19,12 +19,14 @@ namespace BAPointCloudRenderer.Loading {
         private uint pointBudget;   //Point Budget
         private uint nodesLoadedPerFrame;
         private uint nodesGOsPerFrame;
+        private bool render360;
         private bool running = true;
 
         //Camera Data
         Vector3 cameraPosition;
         float screenHeight;
         float fieldOfView;
+        float farClipPlane;
         Plane[] frustum;
         Vector3 camForward;
 
@@ -41,13 +43,14 @@ namespace BAPointCloudRenderer.Loading {
         /// <summary>
         /// Creates the object, but does not start the thread yet
         /// </summary>
-        public V2TraversalThread(GameObject parent, V2Renderer mainThread, V2LoadingThread loadingThread, List<Node> rootNodes, double minNodeSize, uint pointBudget, uint nodesLoadedPerFrame, uint nodesGOsPerFrame, V2Cache cache) {
+        public V2TraversalThread(GameObject parent, V2Renderer mainThread, V2LoadingThread loadingThread, List<Node> rootNodes, double minNodeSize, uint pointBudget, uint nodesLoadedPerFrame, uint nodesGOsPerFrame, V2Cache cache, bool render360) {
             this.parent = parent;
             this.mainThread = mainThread;
             this.loadingThread = loadingThread;
             this.rootNodes = rootNodes;
             this.minNodeSize = minNodeSize;
             this.pointBudget = pointBudget;
+            this.render360 = render360;
             visibleNodes = new HashSet<Node>();
             this.cache = cache;
             this.nodesLoadedPerFrame = nodesLoadedPerFrame;
@@ -89,14 +92,59 @@ namespace BAPointCloudRenderer.Loading {
         /// <param name="frustum">View Frustum</param>
         /// <param name="screenHeight">Screen Height</param>
         /// <param name="fieldOfView">Field of View</param>
-        public void SetNextCameraData(Vector3 cameraPosition, Vector3 camForward, Plane[] frustum, float screenHeight, float fieldOfView) {
+        /// <param name="farClipPlane">Far Clip Plane</param>
+        public void SetNextCameraData(Vector3 cameraPosition, Vector3 camForward, Plane[] frustum, float screenHeight, float fieldOfView, float farClipPlane) {
             lock (locker) {
                 this.cameraPosition = parent.transform.InverseTransformPoint(cameraPosition);
                 this.camForward = parent.transform.InverseTransformDirection(camForward);
                 this.frustum = frustum;
                 this.screenHeight = screenHeight;
                 this.fieldOfView = fieldOfView;
+                this.farClipPlane = farClipPlane;
             }
+        }
+
+        private bool TryGetNodePriority(Node node, Vector3 cameraPosition, Vector3 camForward, float screenHeight, float fieldOfView, float farClipPlane, out double priority) {
+            Vector3 center = node.BoundingBox.GetBoundsObject().center;
+            double radius = node.BoundingBox.Radius();
+            double distance = Math.Max((center - cameraPosition).magnitude, 0.0001f);
+
+            if (render360) {
+                double nearestDistance = Math.Max(0.0, distance - radius);
+                if (nearestDistance > farClipPlane) {
+                    priority = 0;
+                    return false;
+                }
+
+                priority = farClipPlane - nearestDistance;
+                return true;
+            }
+
+            double slope = Math.Tan(fieldOfView / 2 * Mathf.Deg2Rad);
+            double projectedSize = (screenHeight / 2.0) * radius / (slope * distance);
+            if (projectedSize <= minNodeSize) {
+                priority = 0;
+                return false;
+            }
+
+            Vector3 camToNodeCenterDir = (center - cameraPosition).normalized;
+            double dot = camForward.x * camToNodeCenterDir.x + camForward.y * camToNodeCenterDir.y + camForward.z * camToNodeCenterDir.z;
+            dot = Math.Max(-1.0, Math.Min(1.0, dot));
+            double angle = Math.Acos(dot);
+            double angleWeight = Math.Abs(angle) + 1.0;
+            priority = projectedSize / angleWeight;
+            return true;
+        }
+
+        private bool IsNodeVisible(Node node, Vector3 cameraPosition, Plane[] frustum, float farClipPlane) {
+            if (render360) {
+                Vector3 center = node.BoundingBox.GetBoundsObject().center;
+                double distance = (center - cameraPosition).magnitude;
+                double nearestDistance = Math.Max(0.0, distance - node.BoundingBox.Radius());
+                return nearestDistance <= farClipPlane;
+            }
+
+            return Util.InsideFrustum(node.BoundingBox, frustum);
         }
 
         private uint TraverseAndBuildRenderingQueue() {
@@ -106,11 +154,15 @@ namespace BAPointCloudRenderer.Loading {
             Plane[] frustum;
             float screenHeight;
             float fieldOfView;
+            float farClipPlane;
 
             PriorityQueue<double, Node> toProcess = new HeapPriorityQueue<double, Node>();
 
             lock (locker) {
-                if (this.frustum == null) {
+                if (!render360 && this.frustum == null) {
+                    return 0;
+                }
+                if (render360 && this.farClipPlane <= 0) {
                     return 0;
                 }
                 cameraPosition = this.cameraPosition;
@@ -118,6 +170,7 @@ namespace BAPointCloudRenderer.Loading {
                 frustum = this.frustum;
                 screenHeight = this.screenHeight;
                 fieldOfView = this.fieldOfView;
+                farClipPlane = this.farClipPlane;
             }
             //Clearing Queues
             uint renderingpointcount = 0;
@@ -126,15 +179,8 @@ namespace BAPointCloudRenderer.Loading {
             HashSet<Node> newVisibleNodes = new HashSet<Node>();
 
             foreach (Node rootNode in rootNodes) {
-                Vector3 center = rootNode.BoundingBox.GetBoundsObject().center;
-                double distance = (center - cameraPosition).magnitude;
-                double slope = Math.Tan(fieldOfView / 2 * Mathf.Deg2Rad);
-                double projectedSize = (screenHeight / 2.0) * rootNode.BoundingBox.Radius() / (slope * distance);
-                if (projectedSize > minNodeSize) {
-                    Vector3 camToNodeCenterDir = (center - cameraPosition).normalized;
-                    double angle = Math.Acos(camForward.x * camToNodeCenterDir.x + camForward.y * camToNodeCenterDir.y + camForward.z * camToNodeCenterDir.z);
-                    double angleWeight = Math.Abs(angle) + 1.0; //+1, to prevent divsion by zero
-                    double priority = projectedSize / angleWeight;
+                double priority;
+                if (TryGetNodePriority(rootNode, cameraPosition, camForward, screenHeight, fieldOfView, farClipPlane, out priority)) {
                     toProcess.Enqueue(rootNode, priority);
                 } else {
                     DeleteNode(rootNode);
@@ -145,7 +191,7 @@ namespace BAPointCloudRenderer.Loading {
                 Node n = toProcess.Dequeue(); //Min Node Size was already checked
 
                 //Is Node inside frustum?
-                if (Util.InsideFrustum(n.BoundingBox, frustum)) {
+                if (IsNodeVisible(n, cameraPosition, frustum, farClipPlane)) {
 
                     bool loadchildren = false;
                     lock (n) {
@@ -190,15 +236,8 @@ namespace BAPointCloudRenderer.Loading {
 
                     if (loadchildren) {
                         foreach (Node child in n) {
-                            Vector3 center = child.BoundingBox.GetBoundsObject().center;
-                            double distance = (center - cameraPosition).magnitude;
-                            double slope = Math.Tan(fieldOfView / 2 * Mathf.Deg2Rad);
-                            double projectedSize = (screenHeight / 2.0) * child.BoundingBox.Radius() / (slope * distance);
-                            if (projectedSize > minNodeSize) {
-                                Vector3 camToNodeCenterDir = (center - cameraPosition).normalized;
-                                double angle = Math.Acos(camForward.x * camToNodeCenterDir.x + camForward.y * camToNodeCenterDir.y + camForward.z * camToNodeCenterDir.z);
-                                double angleWeight = Math.Abs(angle) + 1.0; //+1, to prevent divsion by zero
-                                double priority = projectedSize / angleWeight;
+                            double priority;
+                            if (TryGetNodePriority(child, cameraPosition, camForward, screenHeight, fieldOfView, farClipPlane, out priority)) {
                                 toProcess.Enqueue(child, priority);
                             } else {
                                 DeleteNode(child);

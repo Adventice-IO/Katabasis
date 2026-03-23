@@ -26,6 +26,7 @@ namespace BAPointCloudRenderer.Loading {
 
         //Camera Info
         private Camera camera;
+        private bool render360;
 
         private object locker = new object();
         private Queue<Node> toRender;
@@ -42,15 +43,17 @@ namespace BAPointCloudRenderer.Loading {
         /// <param name="camera">User Camera</param>
         /// <param name="config">MeshConfiguration, defining how the points should be rendered</param>
         /// <param name="cacheSize">Size of cache in points</param>
-        public V2Renderer(AbstractPointCloudSet pcset, int minNodeSize, uint pointBudget, uint nodesLoadedPerFrame, uint nodesGOsperFrame, Camera camera, MeshConfiguration config, uint cacheSize) {
+        /// <param name="render360">If true, loading is based on camera position and far clip plane in all directions</param>
+        public V2Renderer(AbstractPointCloudSet pcset, int minNodeSize, uint pointBudget, uint nodesLoadedPerFrame, uint nodesGOsperFrame, Camera camera, MeshConfiguration config, uint cacheSize, bool render360) {
             this.pcset = pcset;
             rootNodes = new List<Node>();
             this.camera = camera;
             this.config = config;
+            this.render360 = render360;
             cache = new V2Cache(cacheSize);
             loadingThread = new V2LoadingThread(cache);
             loadingThread.Start();
-            traversalThread = new V2TraversalThread(pcset.gameObject, this, loadingThread, rootNodes, minNodeSize, pointBudget, nodesLoadedPerFrame, nodesGOsperFrame, cache);
+            traversalThread = new V2TraversalThread(pcset.gameObject, this, loadingThread, rootNodes, minNodeSize, pointBudget, nodesLoadedPerFrame, nodesGOsperFrame, cache, render360);
             traversalThread.Start();
             toDeleteExternal = new Queue<Node>();
         }
@@ -97,7 +100,7 @@ namespace BAPointCloudRenderer.Loading {
             unityThread = Thread.CurrentThread;
             if (paused) return;
             //Set new Camera Data
-            traversalThread.SetNextCameraData(camera.transform.position, camera.transform.forward, GeometryUtility.CalculateFrustumPlanes(camera.projectionMatrix * camera.worldToCameraMatrix * pcset.transform.localToWorldMatrix), camera.pixelRect.height, camera.fieldOfView);
+            traversalThread.SetNextCameraData(camera.transform.position, camera.transform.forward, GeometryUtility.CalculateFrustumPlanes(camera.projectionMatrix * camera.worldToCameraMatrix * pcset.transform.localToWorldMatrix), camera.pixelRect.height, camera.fieldOfView, camera.farClipPlane);
             
             //Update GameObjects
             Queue<Node> toRender;
