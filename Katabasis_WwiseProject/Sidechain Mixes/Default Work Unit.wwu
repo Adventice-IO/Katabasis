@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{C0C70797-2E5D-412D-834B-DB39AEE7C750}" SchemaVersion="133">
 	<SidechainMixes>
-		<WorkUnit Name="Default Work Unit" ID="{C0C70797-2E5D-412D-834B-DB39AEE7C750}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{C0C70797-2E5D-412D-834B-DB39AEE7C750}" PersistMode="Standalone">
+			<ChildrenList>
+				<SidechainMix Name="VOX" ID="{B330E8EC-B4C7-4833-B217-951547B5C658}"/>
+			</ChildrenList>
+		</WorkUnit>
 	</SidechainMixes>
 </WwiseDocument>

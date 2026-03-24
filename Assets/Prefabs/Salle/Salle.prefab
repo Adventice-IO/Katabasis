@@ -51,9 +51,14 @@ MonoBehaviour:
   color: {r: 0, g: 1, b: 0, a: 1}
   size: {x: 6.25, y: 3.66, z: 6.26}
   isExit: 0
+  outroRevealTime: 0
   niveau: 0
   maxPlayedInterview: 1
   audioSO: {fileID: 0}
+  interviews:
+  - {fileID: 1471902938035271170}
+  - {fileID: 8885883962197193044}
+  - {fileID: 6527989752520876}
 --- !u!1001 &464620083185348517
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80,7 +85,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.90780693
+      value: 0.90780705
       objectReference: {fileID: 0}
     - target: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.x
@@ -88,7 +93,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.41938838
+      value: 0.41938803
       objectReference: {fileID: 0}
     - target: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.z
@@ -107,14 +112,29 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6763991299227352759, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.81649655
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763991299227352759, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7071068
+      value: 0.57735026
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
+--- !u!114 &6527989752520876 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 460942405865934601, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
+  m_PrefabInstance: {fileID: 464620083185348517}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 623386ffd6dc54946a7acc30f822ba06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interview
 --- !u!4 &6544920080996375909 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
@@ -154,7 +174,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8855227
+      value: 0.8855246
       objectReference: {fileID: 0}
     - target: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.x
@@ -162,7 +182,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.46459615
+      value: -0.46459252
       objectReference: {fileID: 0}
     - target: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.z
@@ -181,14 +201,29 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6763991299227352759, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.81649655
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763991299227352759, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7071068
+      value: 0.57735026
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
+--- !u!114 &1471902938035271170 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 460942405865934601, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
+  m_PrefabInstance: {fileID: 1299472392241789195}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 623386ffd6dc54946a7acc30f822ba06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interview
 --- !u!4 &5669527132148452299 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
@@ -347,7 +382,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9952107
+      value: 0.9952106
       objectReference: {fileID: 0}
     - target: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.x
@@ -355,7 +390,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.09775336
+      value: -0.09775412
       objectReference: {fileID: 0}
     - target: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.z
@@ -374,8 +409,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6763991299227352759, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.81649655
+      objectReference: {fileID: 0}
+    - target: {fileID: 6763991299227352759, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7071068
+      value: 0.57735026
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -387,3 +426,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6676185822067847872, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
   m_PrefabInstance: {fileID: 9022003969724464733}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8885883962197193044 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 460942405865934601, guid: 41c5ebfbe0a09114f9e57b2c844520ba, type: 3}
+  m_PrefabInstance: {fileID: 9022003969724464733}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 623386ffd6dc54946a7acc30f822ba06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interview

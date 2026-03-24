@@ -60,6 +60,14 @@ public class GameMenu : MonoBehaviour
     public Vector3 titleSelectionPosition = new Vector3(0f, 0.25f, 0f);
 
 
+    [Header("Audio")]
+    public AudioEventRefSO langHoverSO;
+    public AudioRTPCRefSO langProgressionSO;
+    public AudioEventRefSO langSelectSO;
+    public AudioEventRefSO startHoverSO;
+    public AudioRTPCRefSO startProgressionSO;
+    public AudioEventRefSO startSelectSO;
+
     DataManager dataManager;
     void OnEnable()
     {
@@ -182,6 +190,7 @@ public class GameMenu : MonoBehaviour
         UnregisterStartButton();
         UnregisterLanguageButtons();
         ReleaseLanguageTextures();
+        ResetAudioProgression();
     }
 
     public void setActive(bool active)
@@ -205,6 +214,7 @@ public class GameMenu : MonoBehaviour
         if (!isActive)
         {
             ClearCurrentHover();
+            ResetAudioProgression();
             return;
         }
 
@@ -270,6 +280,7 @@ public class GameMenu : MonoBehaviour
         UpdateLanguageVisualState();
         UpdateStartButton();
         ResetAllVisuals();
+        ResetAudioProgression();
         ApplyLayout();
     }
 
@@ -557,6 +568,41 @@ public class GameMenu : MonoBehaviour
         }
     }
 
+    void UpdateAudioProgressionState()
+    {
+        float langProgression = 0f;
+        float startProgression = 0f;
+
+        if (hoveredObject != null && !hoveredSelected)
+        {
+            float hoverProgress = GetCurrentHoverProgress();
+
+            if (hoveredObject == startBTObject && !string.IsNullOrWhiteSpace(selectedLanguage))
+            {
+                startProgression = hoverProgress;
+            }
+            else if (languageByObject.TryGetValue(hoveredObject, out string hoveredLanguage))
+            {
+                langProgression = hoverProgress;
+            }
+        }
+        
+        SetAudioRtpc(langProgressionSO, langProgression);
+        SetAudioRtpc(startProgressionSO, startProgression);
+    }
+
+    float GetCurrentHoverProgress()
+    {
+        if (hoveredObject == null)
+        {
+            return 0f;
+        }
+
+        float hoverDuration = Time.time - hoveredSince;
+        float targetHoverTime = hoveredObject == startBTObject ? startHoverTime : hoverSelectTime;
+        return targetHoverTime > 0f ? Mathf.Clamp01(hoverDuration / targetHoverTime) : 1f;
+    }
+
     void ActivateHoveredObject()
     {
         if (hoveredObject == null)
@@ -591,6 +637,15 @@ public class GameMenu : MonoBehaviour
         hoveredSince = Time.time;
         hoveredSelected = false;
         hoveredOriginalScale = hoveredObject != null ? hoveredObject.transform.localScale : Vector3.one;
+
+        if (hoveredObject == startBTObject)
+        {
+            PostAudioEvent(startHoverSO);
+        }
+        else if (hoveredObject != null && languageByObject.ContainsKey(hoveredObject))
+        {
+            PostAudioEvent(langHoverSO);
+        }
     }
 
     void ClearHoveredObject(GameObject targetObject)
@@ -648,6 +703,8 @@ public class GameMenu : MonoBehaviour
     {
         SelectLanguage(language);
         UpdateStartButton();
+        SetAudioRtpc(langProgressionSO, 0f);
+        PostAudioEvent(langSelectSO);
     }
 
     void SelectLanguage(string language)
@@ -759,6 +816,8 @@ public class GameMenu : MonoBehaviour
         hoveredSelected = true;
 
         SetStartButtonProgression(1f);
+        SetAudioRtpc(startProgressionSO, 0f);
+        PostAudioEvent(startSelectSO);
 
         SetAllEvaporate(0f);
     }
@@ -1147,5 +1206,47 @@ public class GameMenu : MonoBehaviour
 
     public void GazeExit(HoverExitEventArgs args)
     {
+    }
+
+    void LateUpdate()
+    {
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        if (!isActive)
+        {
+            ResetAudioProgression();
+            return;
+        }
+
+        UpdateAudioProgressionState();
+    }
+
+    void ResetAudioProgression()
+    {
+        SetAudioRtpc(langProgressionSO, 0f);
+        SetAudioRtpc(startProgressionSO, 0f);
+    }
+
+    void SetAudioRtpc(AudioRTPCRefSO rtpcRef, float value)
+    {
+        if (rtpcRef == null || rtpcRef.rtpc == null)
+        {
+            return;
+        }
+
+        rtpcRef.rtpc.SetValue(gameObject, Mathf.Clamp01(value));
+    }
+
+    void PostAudioEvent(AudioEventRefSO eventRef)
+    {
+        if (eventRef == null || eventRef.evt == null)
+        {
+            return;
+        }
+
+        eventRef.evt.Post(gameObject);
     }
 }

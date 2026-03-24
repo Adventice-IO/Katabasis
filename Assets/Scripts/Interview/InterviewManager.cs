@@ -67,6 +67,12 @@ public class InterviewManager : MonoBehaviour
     Salle lastAssignedSalle;
     Salle preparedSalle;
     Coroutine loadAssignmentsRoutine;
+    float interviewLeaveValue;
+    string lastActiveInterviewDebug;
+    bool isInterviewLeaveAnimating;
+    float interviewLeaveAnimationStartTime;
+    float interviewLeaveAnimationStartValue;
+    float interviewLeaveAnimationTargetValue;
 
     System.Random assignmentRandom;
 
@@ -77,8 +83,10 @@ public class InterviewManager : MonoBehaviour
     [Min(0f)]
     public float previewLoadStagger = 1f;
 
-    MainController mainController;
+    public AudioRTPCRefSO interviewLeaveSO;
+    public float interviewLeaveTime = 5f;
 
+    MainController mainController;
     DataManager dataManager;
 
     void Start()
@@ -87,13 +95,19 @@ public class InterviewManager : MonoBehaviour
         mainController = GameObject.FindAnyObjectByType<MainController>();
         assignmentRandom = new System.Random(Environment.TickCount);
         LoadInterviewData();
+        SetInterviewLeaveRtpcValue(0f);
     }
 
     void Update()
     {
+        UpdateInterviewLeaveRtpcAnimation();
+        LogCurrentInterviewDebug();
+
         Salle currentSalle = mainController != null ? mainController.salle : null;
         if (currentSalle != lastAssignedSalle)
         {
+            HandleSalleTransition(lastAssignedSalle, currentSalle);
+
             if (!(currentSalle == null && preparedSalle != null))
             {
                 consumedSlots.Clear();
@@ -223,12 +237,15 @@ public class InterviewManager : MonoBehaviour
             return;
         }
 
+        ResetInterviewLeaveRtpc();
+
         if (activePlayingSlot != null && activePlayingSlot != slot)
         {
-            activePlayingSlot.StopPlaybackForAnotherInterview();
+            activePlayingSlot.StopPlaybackForInterviewChange(true);
         }
 
         activePlayingSlot = slot;
+        LogCurrentInterviewDebug(true);
     }
 
     public void NotifyInterviewStopped(Interview slot)
@@ -236,6 +253,7 @@ public class InterviewManager : MonoBehaviour
         if (activePlayingSlot == slot)
         {
             activePlayingSlot = null;
+            LogCurrentInterviewDebug(true);
         }
     }
 
@@ -279,6 +297,13 @@ public class InterviewManager : MonoBehaviour
         resolvedPlaybackBySlot.Remove(slot);
         consumedSlots.Remove(slot);
         roomAssignments.RemoveAll(assignment => assignment.interviewSlot == slot);
+
+        if (activePlayingSlot == null)
+        {
+            ResetInterviewLeaveRtpc();
+        }
+
+        LogCurrentInterviewDebug(true);
     }
 
     public void PrepareAssignmentsForSalle(Salle salle)
@@ -320,6 +345,8 @@ public class InterviewManager : MonoBehaviour
 
     public void RefreshAssignmentsForSalle(Salle salle)
     {
+        HandleSalleTransition(lastAssignedSalle, salle);
+
         consumedSlots.Clear();
         resolvedPlaybackBySlot.Clear();
         ClearProposedFlags();
@@ -415,6 +442,123 @@ public class InterviewManager : MonoBehaviour
 
         StopCoroutine(loadAssignmentsRoutine);
         loadAssignmentsRoutine = null;
+    }
+
+    void HandleSalleTransition(Salle previousSalle, Salle nextSalle)
+    {
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        if (previousSalle != null
+            && nextSalle == null
+            && activePlayingSlot != null)
+        {
+            Debug.Log("Leaving room '" + previousSalle.name + "' with active interview, starting interviewLeave RTPC fade.", this);
+            StartInterviewLeaveRtpc();
+        }
+    }
+
+    void StartInterviewLeaveRtpc()
+    {
+        if (activePlayingSlot == null)
+        {
+            Debug.Log("Skipping interviewLeave RTPC fade because there is no active interview.", this);
+            return;
+        }
+
+        if (Mathf.Approximately(interviewLeaveValue, 1f) || isInterviewLeaveAnimating)
+        {
+            return;
+        }
+
+        if (!Application.isPlaying)
+        {
+            SetInterviewLeaveRtpcValue(1f);
+            return;
+        }
+
+        Debug.Log("Animating interviewLeave RTPC from " + interviewLeaveValue + " to 1 over " + interviewLeaveTime + "s.", this);
+        isInterviewLeaveAnimating = true;
+        interviewLeaveAnimationStartTime = Time.time;
+        interviewLeaveAnimationStartValue = interviewLeaveValue;
+        interviewLeaveAnimationTargetValue = 1f;
+    }
+
+    void ResetInterviewLeaveRtpc()
+    {
+        isInterviewLeaveAnimating = false;
+        SetInterviewLeaveRtpcValue(0f);
+    }
+
+    void UpdateInterviewLeaveRtpcAnimation()
+    {
+        if (!isInterviewLeaveAnimating)
+        {
+            return;
+        }
+
+        float duration = Mathf.Max(0f, interviewLeaveTime);
+
+        if (Mathf.Approximately(duration, 0f))
+        {
+            SetInterviewLeaveRtpcValue(interviewLeaveAnimationTargetValue);
+            isInterviewLeaveAnimating = false;
+            return;
+        }
+
+        float elapsed = Time.time - interviewLeaveAnimationStartTime;
+        float t = Mathf.Clamp01(elapsed / duration);
+        SetInterviewLeaveRtpcValue(Mathf.Lerp(interviewLeaveAnimationStartValue, interviewLeaveAnimationTargetValue, t));
+
+        if (t >= 1f)
+        {
+            isInterviewLeaveAnimating = false;
+        }
+    }
+
+    void SetInterviewLeaveRtpcValue(float value)
+    {
+        float clampedValue = Mathf.Clamp01(value);
+        if (Mathf.Abs(interviewLeaveValue - clampedValue) < 0.0001f)
+        {
+            interviewLeaveValue = clampedValue;
+            return;
+        }
+
+        interviewLeaveValue = clampedValue;
+        if (interviewLeaveSO != null && interviewLeaveSO.rtpc != null)
+        {
+            Debug.Log("Setting interview leave RTPC to " + interviewLeaveValue);
+            interviewLeaveSO.rtpc.SetGlobalValue(interviewLeaveValue);
+        }
+    }
+
+    void LogCurrentInterviewDebug(bool force = false)
+    {
+        string currentDebug = GetCurrentInterviewDebug();
+        if (!force && string.Equals(lastActiveInterviewDebug, currentDebug, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        lastActiveInterviewDebug = currentDebug;
+        Debug.Log("Current active interview: " + currentDebug, this);
+    }
+
+    string GetCurrentInterviewDebug()
+    {
+        if (activePlayingSlot == null)
+        {
+            return "None";
+        }
+
+        string slotName = activePlayingSlot.name;
+        string interviewId = string.IsNullOrWhiteSpace(activePlayingSlot.interviewId) ? "None" : activePlayingSlot.interviewId;
+        string depthkitPath = string.IsNullOrWhiteSpace(activePlayingSlot.itwName) ? "None" : activePlayingSlot.itwName;
+
+        return $"slot={slotName}, media={interviewId}, depthkit={depthkitPath}";
     }
 
     IEnumerator LoadAssignmentsSequentially(List<Interview> interviewsToLoad)

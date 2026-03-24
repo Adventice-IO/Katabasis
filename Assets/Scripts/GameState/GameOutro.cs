@@ -8,7 +8,7 @@ public class GameOutro : MonoBehaviour
     bool isActive = false;
     float timeOnActiveChange = 0f;
 
-    public float totalRevealTime = 4f;
+    public float totalRevealTime = 15f;
     public float cartonRevealTime = 1f;
     public float firstCartonExtraTime = 1f;
     public float finishFadeOutTime = 1f;
@@ -20,6 +20,9 @@ public class GameOutro : MonoBehaviour
     public float nextDelay = 2f;
     public bool fadePointCloud = false;
     public float pointCloudFadeTime = 2f;
+
+
+    float salleTotalRevealTime = 0;
 
     public List<Texture2D> cartons = new List<Texture2D>();
     public List<GameObject> cartonObjects = new List<GameObject>();
@@ -40,17 +43,20 @@ public class GameOutro : MonoBehaviour
 
     void Update()
     {
-        UpdateCartonLayout();
-
         if (mainController == null)
         {
             mainController = GameObject.FindAnyObjectByType<MainController>();
         }
 
+        UpdateCartonLayout();
+
         if (!isActive)
         {
             return;
         }
+
+        salleTotalRevealTime = mainController.salle != null ? mainController.salle.outroRevealTime : 0f;
+        if(salleTotalRevealTime == 0f) salleTotalRevealTime = totalRevealTime;
 
         float timeSinceActiveChange = Time.time - timeOnActiveChange;
 
@@ -63,7 +69,7 @@ public class GameOutro : MonoBehaviour
         UpdateCartonReveal(timeSinceActiveChange);
         UpdatePointCloudFade(timeSinceActiveChange);
 
-        float totalOutroDuration = totalRevealTime + finishFadeOutTime + nextDelay;
+        float totalOutroDuration = salleTotalRevealTime + finishFadeOutTime + nextDelay;
         if (timeSinceActiveChange >= totalOutroDuration)
         {
             FinishOutro();
@@ -293,7 +299,7 @@ public class GameOutro : MonoBehaviour
             return 0f;
         }
 
-        float remainingTime = Mathf.Max(0f, totalRevealTime - firstCartonExtraTime - cartonRevealTime);
+        float remainingTime = Mathf.Max(0f, salleTotalRevealTime - firstCartonExtraTime - cartonRevealTime);
         return remainingTime <= 0f ? 0f : remainingTime / (cartons.Count - 1);
     }
 
@@ -309,7 +315,7 @@ public class GameOutro : MonoBehaviour
 
     float GetRevealEndTime()
     {
-        return Mathf.Max(0f, totalRevealTime);
+        return Mathf.Max(0f, salleTotalRevealTime);
     }
 
     void UpdateCartonReveal(float elapsed)
@@ -354,8 +360,8 @@ public class GameOutro : MonoBehaviour
             return;
         }
 
-        float fadeDuration = pointCloudFadeTime <= 0f ? totalRevealTime : pointCloudFadeTime;
-        float fadeStart = Mathf.Max(0f, totalRevealTime - fadeDuration);
+        float fadeDuration = pointCloudFadeTime <= 0f ? salleTotalRevealTime : pointCloudFadeTime;
+        float fadeStart = Mathf.Max(0f, salleTotalRevealTime - fadeDuration);
         float progress = fadeDuration <= 0f ? 1f : Mathf.Clamp01((elapsed - fadeStart) / fadeDuration);
         mainController.pointCloudViewDistanceMultiplier = Mathf.Lerp(1f, 0f, progress);
     }

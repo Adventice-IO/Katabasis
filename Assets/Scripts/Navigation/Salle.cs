@@ -13,6 +13,7 @@ public class Salle : MonoBehaviour
 
     public Vector3 size = Vector3.one * 10;
     public bool isExit = false;
+    public float outroRevealTime = 0;
     [Range(0, 4)]
     public int niveau = 0;
     public int maxPlayedInterview = 1;
@@ -41,6 +42,7 @@ public class Salle : MonoBehaviour
         {
             foreach (var i in interviews)
             {
+                if(i == null) continue;
                 i.cleanup();
             }
         }
