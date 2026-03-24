@@ -26,6 +26,7 @@ namespace AK
         static const AkUniqueID AMB_AMBI_EXT_STREET_01 = 3388850435U;
         static const AkUniqueID AMB_AMBI_EXT_STREET_02 = 3388850432U;
         static const AkUniqueID AMB_AMBI_EXT_STREET_03 = 3388850433U;
+        static const AkUniqueID AMB_AMBI_J = 2687390220U;
         static const AkUniqueID AMB_CITY_A_PEOPLE_CARS = 1305479495U;
         static const AkUniqueID AMB_CITY_ALARMS_A = 2335628432U;
         static const AkUniqueID AMB_CITY_ALARMS_B = 2335628435U;
@@ -70,6 +71,7 @@ namespace AK
         static const AkUniqueID MUS_E = 4159718934U;
         static const AkUniqueID MUS_F = 4159718933U;
         static const AkUniqueID MUS_I = 4159718938U;
+        static const AkUniqueID MUS_J = 4159718937U;
         static const AkUniqueID OMILIO_0_INTRO = 581233776U;
         static const AkUniqueID OMILIO_1_SANTE = 3617820752U;
         static const AkUniqueID OMILIO_2_PASSENGERS = 2376804707U;
@@ -93,6 +95,7 @@ namespace AK
         static const AkUniqueID SFX_ELEC_F = 3373651685U;
         static const AkUniqueID SFX_ELEC_G = 3373651684U;
         static const AkUniqueID SFX_ELEC_H = 3373651691U;
+        static const AkUniqueID SFX_MTA_ANNOUNCEMENTS = 923212790U;
         static const AkUniqueID SFX_PORTAL_ACTIVATE = 4131803333U;
         static const AkUniqueID SFX_PORTAL_VALIDATE = 1155651648U;
         static const AkUniqueID SFX_SEWERS_A_DRIPS = 3799102629U;
@@ -117,6 +120,7 @@ namespace AK
         static const AkUniqueID SFX_SUBWAY_H_INT = 2952482469U;
         static const AkUniqueID SFX_SUBWAY_I_INT = 65382472U;
         static const AkUniqueID SFX_SUBWAY_J_BYS = 2782204094U;
+        static const AkUniqueID SFX_SUBWAY_K_NYC_BYS_JM = 3569433076U;
         static const AkUniqueID SFX_TONE_TEST = 3501277368U;
         static const AkUniqueID SPIDERMAN_0_INTRO = 838969532U;
         static const AkUniqueID SPIDERMAN_1_FAMILY_PROBLEMS = 2288458896U;
@@ -144,6 +148,7 @@ namespace AK
         static const AkUniqueID TOMMY_3_EXIT_SIGN = 3565901682U;
         static const AkUniqueID TOMMY_4_NO_SERVICE = 312400974U;
         static const AkUniqueID TOMMY_5_HYPERSENSITIVE = 3145206958U;
+        static const AkUniqueID VOX_ITW_LEAVE = 3686257867U;
         static const AkUniqueID VOX_TEST_STEVE = 2108038015U;
     } // namespace EVENTS
 
@@ -201,6 +206,7 @@ namespace AK
     namespace GAME_PARAMETERS
     {
         static const AkUniqueID RTCP_DISTANCE = 1540479560U;
+        static const AkUniqueID RTPC_INTERVIEW_LEAVE = 1610769452U;
         static const AkUniqueID RTPC_PROGRESSION = 2942853976U;
         static const AkUniqueID RTPC_VOX_METER_B2 = 598118295U;
         static const AkUniqueID RTPC_VOX_METER_B3 = 598118294U;
