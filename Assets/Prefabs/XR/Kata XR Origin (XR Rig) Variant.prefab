@@ -1490,6 +1490,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: globalSpeedMultiplier
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: speedCurve.m_Curve.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -1777,6 +1781,8 @@ MonoBehaviour:
   simulateGameplay: 0
   simulatedCuriosity: 0.5
   previewLoadStagger: 1
+  interviewLeaveSO: {fileID: 11400000, guid: a6e47d41aba4fea43803baee0dfd01d5, type: 2}
+  interviewLeaveTime: 1
 --- !u!4 &332919419242661547 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2218496723442559053, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
@@ -1928,9 +1934,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1760379740530819598, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
+      propertyPath: langHoverSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 559eb092136cb734499daca2be745ea9, type: 2}
+    - target: {fileID: 1760379740530819598, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
       propertyPath: buttonRadius
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 1760379740530819598, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
+      propertyPath: langSelectSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 0d969d9346c1d5c478f1d906b1e3831f, type: 2}
+    - target: {fileID: 1760379740530819598, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
+      propertyPath: startHoverSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 88f4129088d0e53489080eb9f376a793, type: 2}
     - target: {fileID: 1760379740530819598, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
       propertyPath: buttonScaling
       value: 1
@@ -1947,6 +1965,10 @@ PrefabInstance:
       propertyPath: nextMenuDelay
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1760379740530819598, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
+      propertyPath: startSelectSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 8c6ea355afd999a4491e6007e56ba4a6, type: 2}
     - target: {fileID: 1760379740530819598, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
       propertyPath: selectAnimTime
       value: 2
@@ -1969,8 +1991,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1760379740530819598, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
       propertyPath: liveUpdateLayout
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1760379740530819598, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
+      propertyPath: langProgressionSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 24474dcd683a34e4eac33dba0f81a9cf, type: 2}
+    - target: {fileID: 1760379740530819598, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
+      propertyPath: startProgressionSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 6f0db6664dbc676499d59d2c86dab79b, type: 2}
     - target: {fileID: 1760379740530819598, guid: 07a7eac5d61f34a4eb086ba7da1a8c11, type: 3}
       propertyPath: idleHighlightColor.b
       value: 0.735849
