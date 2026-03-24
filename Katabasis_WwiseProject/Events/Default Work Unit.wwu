@@ -828,6 +828,21 @@
 								</Event>
 							</ChildrenList>
 						</Folder>
+						<Event Name="VOX_ITW_Leave" ID="{FEEB1B10-73B7-45F6-9ECE-FE459E34AAA7}">
+							<ChildrenList>
+								<Action Name="" ID="{3D733CD6-5C29-4939-ACD8-08F575A6CF23}" ShortID="1029687681">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="38"/>
+										<Property Name="GameParameterValue" Type="Real64" Value="100"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="RTPC_Interview_Leave" ID="{D4FFB957-FF6D-418D-8A70-19BD260E6A80}" WorkUnitID="{CD87D003-6EB8-45E4-BEC9-3829C2568A1E}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="AMB" ID="{99813B28-F2CD-409D-A7A7-53147129EEFF}" ShortID="961410658">

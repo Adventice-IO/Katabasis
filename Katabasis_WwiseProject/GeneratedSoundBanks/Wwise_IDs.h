@@ -144,6 +144,7 @@ namespace AK
         static const AkUniqueID TOMMY_3_EXIT_SIGN = 3565901682U;
         static const AkUniqueID TOMMY_4_NO_SERVICE = 312400974U;
         static const AkUniqueID TOMMY_5_HYPERSENSITIVE = 3145206958U;
+        static const AkUniqueID VOX_ITW_LEAVE = 3686257867U;
         static const AkUniqueID VOX_TEST_STEVE = 2108038015U;
     } // namespace EVENTS
 
@@ -201,6 +202,7 @@ namespace AK
     namespace GAME_PARAMETERS
     {
         static const AkUniqueID RTCP_DISTANCE = 1540479560U;
+        static const AkUniqueID RTPC_INTERVIEW_LEAVE = 1610769452U;
         static const AkUniqueID RTPC_PROGRESSION = 2942853976U;
         static const AkUniqueID RTPC_VOX_METER_B2 = 598118295U;
         static const AkUniqueID RTPC_VOX_METER_B3 = 598118294U;

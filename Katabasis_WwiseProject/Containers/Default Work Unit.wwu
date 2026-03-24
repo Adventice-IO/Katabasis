@@ -21908,6 +21908,11 @@
 								<Property Name="OverrideConversion" Type="bool" Value="True"/>
 								<Property Name="OverridePositioning" Type="bool" Value="True"/>
 								<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-6</Value>
+									</ValueList>
+								</Property>
 							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
@@ -23759,17 +23764,17 @@
 							</StateInfo>
 							<ObjectLists>
 								<ObjectList Name="RTPC">
-									<RTPC Name="" ID="{ADEEC476-1D69-4A81-B14E-11B99E4D4ECD}" ShortID="782553392">
+									<RTPC Name="" ID="{CF1F6B6A-7062-440F-AC9A-1BCD43CB59C3}" ShortID="961004351">
 										<PropertyList>
 											<Property Name="PropertyName" Type="string" Value="SpeakerPanning3DSpatializationMix"/>
 										</PropertyList>
 										<ReferenceList>
 											<Reference Name="ControlInput">
-												<ObjectRef Name="RTCP_Distance" ID="{EF377E40-8E9B-4D70-8BE2-BC7BB1F8B571}" WorkUnitID="{CD87D003-6EB8-45E4-BEC9-3829C2568A1E}"/>
+												<ObjectRef Name="RTPC_Interview_Leave" ID="{D4FFB957-FF6D-418D-8A70-19BD260E6A80}" WorkUnitID="{CD87D003-6EB8-45E4-BEC9-3829C2568A1E}"/>
 											</Reference>
 											<Reference Name="Curve">
 												<Custom>
-													<Curve Name="" ID="{FF88F8C2-4941-43CA-B60C-03D65916FDB1}">
+													<Curve Name="" ID="{7464772D-EE7C-4BFE-A4C3-43C14BA29EE1}">
 														<PropertyList>
 															<Property Name="Flags" Type="int32" Value="65537"/>
 														</PropertyList>
@@ -23778,11 +23783,6 @@
 																<XPos>0</XPos>
 																<YPos>100</YPos>
 																<Flags>5</Flags>
-															</Point>
-															<Point>
-																<XPos>30.17751</XPos>
-																<YPos>0</YPos>
-																<Flags>0</Flags>
 															</Point>
 															<Point>
 																<XPos>100</XPos>
@@ -24101,6 +24101,11 @@
 							<PropertyList>
 								<Property Name="Color" Type="int16" Value="17"/>
 								<Property Name="OverrideColor" Type="bool" Value="True"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-9</Value>
+									</ValueList>
+								</Property>
 							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
