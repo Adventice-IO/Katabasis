@@ -833,7 +833,7 @@
 								<Action Name="" ID="{3D733CD6-5C29-4939-ACD8-08F575A6CF23}" ShortID="1029687681">
 									<PropertyList>
 										<Property Name="ActionType" Type="int16" Value="38"/>
-										<Property Name="GameParameterValue" Type="Real64" Value="100"/>
+										<Property Name="GameParameterValue" Type="Real64" Value="1"/>
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Target">
@@ -1062,6 +1062,21 @@
 											<ReferenceList>
 												<Reference Name="Target">
 													<ObjectRef Name="AMB_Ambi_D" ID="{F80591F6-61A2-4726-B3D2-08AECCD43E16}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="AMB_Ambi_J" ID="{420D7FEE-2A74-44A5-B5E5-2641041BA90B}">
+									<PropertyList>
+										<Property Name="Color" Type="int16" Value="10"/>
+										<Property Name="OverrideColor" Type="bool" Value="True"/>
+									</PropertyList>
+									<ChildrenList>
+										<Action Name="" ID="{3110081B-CC71-49FA-86B8-C640E80EE69C}" ShortID="810070790">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="AMB_Ambi_J" ID="{C824F119-EED4-46F5-B77E-DD6E880ACB3D}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -1494,8 +1509,38 @@
 										</Action>
 									</ChildrenList>
 								</Event>
+								<Event Name="SFX_Subway_K_NYC_Bys_JM" ID="{316E98A2-4FFE-4B99-8E9E-0975735E58CC}">
+									<PropertyList>
+										<Property Name="Color" Type="int16" Value="10"/>
+										<Property Name="OverrideColor" Type="bool" Value="True"/>
+									</PropertyList>
+									<ChildrenList>
+										<Action Name="" ID="{6D31687F-65D3-4777-B34F-13D9CD3FD243}" ShortID="899225369">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="SFX_Subway_K_NYC_Bys_JM" ID="{4843E7A7-967B-4523-9478-5535D3A83322}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
 							</ChildrenList>
 						</Folder>
+						<Event Name="SFX_MTA_Announcements" ID="{D50AAF81-4C9D-4FED-B16A-CB1380B0F0B8}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="10"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{36F8A955-C73D-4224-953F-0F6A7F488FE4}" ShortID="706181534">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SFX_MTA_Announcements" ID="{7CB5A789-42CA-4320-81E6-AC2048B5B8F2}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="MUS" ID="{51D934EE-62D9-4AE2-8D56-5DF1E49F47A4}" ShortID="636917796">
@@ -1534,6 +1579,10 @@
 							</ChildrenList>
 						</Event>
 						<Event Name="MUS_E" ID="{1CC15C1A-5013-403A-905D-EF6724EA9F6D}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="10"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
 							<ChildrenList>
 								<Action Name="" ID="{EBE92EC2-645D-4BD9-8566-94AF7C38D33B}" ShortID="1039844796">
 									<ReferenceList>
@@ -1545,11 +1594,30 @@
 							</ChildrenList>
 						</Event>
 						<Event Name="MUS_I" ID="{55FEE38D-90E5-4CF5-BDE6-5008EC207469}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="10"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
 							<ChildrenList>
 								<Action Name="" ID="{5E7CF6A3-9FE5-4119-AA85-934AF82275E9}" ShortID="574724607">
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="MUS_I" ID="{27B01D8C-1926-425E-92D1-8BB4D40A2547}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="MUS_J" ID="{91C752A5-568E-44B3-9090-E37372BAA990}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="10"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{2EE94C46-1570-4471-8D41-7AAA81671342}" ShortID="263085740">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="MUS_J" ID="{E61418B5-B3AE-48EF-B8FE-E29B1A831442}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
