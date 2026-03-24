@@ -63,6 +63,7 @@ public class MainController : MonoBehaviour
     public float maxAcceleration = 5f; // km/h/s
     public float playFullSpeedTime = 2f; // seconds after which we ignore acceleration and just set the speed to the target speed
     float timeAtPlay;
+    public float globalSpeedMultiplier = 1f;
 
     public AnimationCurve speedCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
@@ -591,6 +592,8 @@ public class MainController : MonoBehaviour
                 float speedFactor = speedCurve.Evaluate((Time.time - timeAtPlay) / playFullSpeedTime);
                 multipliedSpeed *= speedFactor;
             }
+
+            multipliedSpeed *= globalSpeedMultiplier;
 
             if (pathLength > 0)
             {
