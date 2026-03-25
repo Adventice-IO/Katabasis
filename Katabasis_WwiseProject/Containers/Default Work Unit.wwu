@@ -13450,6 +13450,7 @@
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
 												<Property Name="OverridePositioning" Type="bool" Value="True"/>
+												<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -13671,6 +13672,234 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<StateInfo>
+												<StatePropertyList>
+													<Property Name="Highpass"/>
+													<Property Name="Lowpass"/>
+													<Property Name="MakeUpGain"/>
+													<Property Name="Pitch"/>
+													<Property Name="UserAuxSendVolume0"/>
+													<Property Name="UserAuxSendVolume1"/>
+													<Property Name="UserAuxSendVolume2"/>
+													<Property Name="Volume"/>
+												</StatePropertyList>
+												<StateGroupList>
+													<StateGroupInfo>
+														<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+														<StateGroupInfo Name="" ID="{F90EA049-499D-42AF-9AB5-0DF45FA016A3}" ShortID="204668193"/>
+													</StateGroupInfo>
+												</StateGroupList>
+												<CustomStateList>
+													<CustomState>
+														<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+														<CustomState Name="" ID="{D3C1CA4A-F95D-478D-8E77-97D16BF2267B}" ShortID="820699313">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+														<CustomState Name="" ID="{1E66F7AD-5628-465C-9545-CD784889BCBA}" ShortID="730717712">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+														<CustomState Name="" ID="{9799558A-E638-424C-A996-1786D747186D}" ShortID="1017824569">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+														<CustomState Name="" ID="{2B686B5F-89C4-4199-AB3F-21EEC886A1AA}" ShortID="726428699">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+														<CustomState Name="" ID="{7C6A5895-032C-45A9-A1C5-DFC335BF3273}" ShortID="807573714">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+														<CustomState Name="" ID="{F2B65964-8ECD-4EAF-B366-D16F60F40597}" ShortID="31440952">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+														<CustomState Name="" ID="{DAE543C5-1731-42B1-94F3-77ACE3DCC537}" ShortID="518665524">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+														<CustomState Name="" ID="{F2A5CE53-3F79-4F72-903E-C90FFF33B05D}" ShortID="975213434">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+														<CustomState Name="" ID="{EA5489F5-0341-44C2-A29B-D70436D82FBF}" ShortID="684400683">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+														<CustomState Name="" ID="{53928CEE-F9CA-4675-8546-0DBE0F462AD6}" ShortID="619997373">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+														<CustomState Name="" ID="{E1165666-6A42-4F7E-8699-70A2B172A4B4}" ShortID="890317665">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+														<CustomState Name="" ID="{02CA2170-9861-497F-88C9-58216819BECF}" ShortID="401546629">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+														<CustomState Name="" ID="{5D18FE81-835C-414F-961B-EFC2EE958890}" ShortID="343480339">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+														<CustomState Name="" ID="{D6085327-453F-485A-9215-134C44E5D84B}" ShortID="891781534">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+														<CustomState Name="" ID="{90F00466-6E7A-45A6-A18E-6A7C8985B7B9}" ShortID="133264672">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+														<CustomState Name="" ID="{129D67D1-B4DC-46AE-9A1F-A303F9F68CC9}" ShortID="594389274">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+														<CustomState Name="" ID="{55E4C52C-1F5D-4CA9-88E8-AE5EA9A733F9}" ShortID="433444753">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+														<CustomState Name="" ID="{8A4533FD-434C-44C7-B43E-9FEA12EA0495}" ShortID="965403018">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+														<CustomState Name="" ID="{905DDB60-B184-461A-8CEA-809CCFECD087}" ShortID="161633226">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+														<CustomState Name="" ID="{95F02350-D639-42CA-B1CC-97EECD1A369C}" ShortID="459424082">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+														<CustomState Name="" ID="{9709CC8F-678F-4B85-8149-BAE881432E32}" ShortID="112152030">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+														<CustomState Name="" ID="{E8E6F419-5C43-4EAC-936E-E534C79FF622}" ShortID="945139427">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+														<CustomState Name="" ID="{ED617A72-DD88-4C92-957F-79C56F738C28}" ShortID="508232755">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+														<CustomState Name="" ID="{48A9F1D2-F84A-4714-91B6-B3B447FC00FE}" ShortID="938803509">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+												</CustomStateList>
+											</StateInfo>
 											<ObjectLists>
 												<ObjectList Name="RTPC">
 													<RTPC Name="" ID="{41CD8840-E752-4DA8-8FF5-37B5E2717FDB}" ShortID="545502914">
@@ -13723,6 +13952,7 @@
 										<RandomSequenceContainer Name="SFX_Subway_B_Int" ID="{13F994E3-2C83-4CC3-9B3B-62E854555052}" ShortID="670158236">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -13874,6 +14104,12 @@
 												<Reference Name="OutputBus">
 													<ObjectRef Name="SFX" ID="{232EC043-CFB9-4144-B0E4-D1BF03682891}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 												</Reference>
+												<Reference Name="UserAuxSend0">
+													<ObjectRef Name="REV_Long" ID="{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend1">
+													<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
 											</ReferenceList>
 											<ChildrenList>
 												<Sound Name="SFX_Subway_B_Int_01" ID="{49F01149-A7AD-4130-97DE-9214ED353080}" ShortID="89427342">
@@ -13927,10 +14163,239 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<StateInfo>
+												<StatePropertyList>
+													<Property Name="Highpass"/>
+													<Property Name="Lowpass"/>
+													<Property Name="MakeUpGain"/>
+													<Property Name="Pitch"/>
+													<Property Name="UserAuxSendVolume0"/>
+													<Property Name="UserAuxSendVolume1"/>
+													<Property Name="UserAuxSendVolume2"/>
+													<Property Name="Volume"/>
+												</StatePropertyList>
+												<StateGroupList>
+													<StateGroupInfo>
+														<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+														<StateGroupInfo Name="" ID="{40FC0E21-EC2E-4AAF-8DDF-6D71091CCFF3}" ShortID="416566698"/>
+													</StateGroupInfo>
+												</StateGroupList>
+												<CustomStateList>
+													<CustomState>
+														<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+														<CustomState Name="" ID="{5B042DAD-2D5F-43BF-BE4F-9F141499920F}" ShortID="223208769">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+														<CustomState Name="" ID="{B9EB1353-8F0E-4A14-B129-71EC716EDB95}" ShortID="367283848">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+														<CustomState Name="" ID="{D698E86B-AFAF-4395-AE99-376229A3366F}" ShortID="819236303">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+														<CustomState Name="" ID="{9E358BC2-4400-4CD8-8E92-F4E774D081F1}" ShortID="169481329">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+														<CustomState Name="" ID="{9A447C41-8CAA-4C0F-8104-49DEBF3EFCC3}" ShortID="702045617">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+														<CustomState Name="" ID="{2790097C-0921-4B57-96D5-332C33462DE5}" ShortID="446007119">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+														<CustomState Name="" ID="{133C22C4-86E7-42CD-8BEE-D5DC0CD599BC}" ShortID="392539265">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+														<CustomState Name="" ID="{7E9BC80A-458F-449E-A89E-D388D9FC0598}" ShortID="72318796">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+														<CustomState Name="" ID="{6956112E-E3F7-4783-9FDC-3E66F2B13DD6}" ShortID="265308836">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+														<CustomState Name="" ID="{6D319511-79E7-4871-B806-25893FEE58C8}" ShortID="652134429">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+														<CustomState Name="" ID="{D887F117-3E5F-42C4-9BFC-1A457BF6FEEA}" ShortID="399774">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+														<CustomState Name="" ID="{BC58FDDD-0039-4E14-8597-CE72790F7BDF}" ShortID="944637265">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+														<CustomState Name="" ID="{3A72B807-AAEA-4A20-98B9-CA05CD840057}" ShortID="613398186">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+														<CustomState Name="" ID="{362E691A-4773-4C91-B351-A085DD4E9425}" ShortID="547970682">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+														<CustomState Name="" ID="{D2C4D2C7-1838-4E87-A2F2-D4E7CD938F98}" ShortID="672370533">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+														<CustomState Name="" ID="{2E29E74A-0819-45E7-8452-2EB89F1B1B7E}" ShortID="742438380">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+														<CustomState Name="" ID="{EF53DC9A-0CE0-48BC-A491-1872BEA473E3}" ShortID="352152770">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+														<CustomState Name="" ID="{77D50C46-331F-4BB8-9C15-224FF999F1D8}" ShortID="71215087">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+														<CustomState Name="" ID="{14C0D948-298B-43FC-84CC-27841D0F70F8}" ShortID="49302524">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+														<CustomState Name="" ID="{91A17DBC-07CA-451A-A59D-2CA85F42F7A1}" ShortID="368758521">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+														<CustomState Name="" ID="{057DB5E4-AB55-4F09-AE6D-41F49C33FAAF}" ShortID="93728467">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+														<CustomState Name="" ID="{526116C1-6E23-48BB-9F15-07DF0F925B4A}" ShortID="101624079">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+														<CustomState Name="" ID="{D7AE5F97-E192-4B4F-A879-4EECB20819F7}" ShortID="311644901">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+														<CustomState Name="" ID="{16A4D38E-E2A2-4619-AAAB-524D06EF7245}" ShortID="466251894">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+												</CustomStateList>
+											</StateInfo>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Subway_C_Int" ID="{3ED2F9BE-51BB-40ED-AC3F-4A67AF8A98A5}" ShortID="44652033">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -14082,6 +14547,12 @@
 												<Reference Name="OutputBus">
 													<ObjectRef Name="SFX" ID="{232EC043-CFB9-4144-B0E4-D1BF03682891}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 												</Reference>
+												<Reference Name="UserAuxSend0">
+													<ObjectRef Name="REV_Long" ID="{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend1">
+													<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
 											</ReferenceList>
 											<ChildrenList>
 												<Sound Name="SFX_Subway_C_Int_01" ID="{A4B59DA8-BC71-4FB8-8B98-571212CBED1F}" ShortID="23817431">
@@ -14135,10 +14606,239 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<StateInfo>
+												<StatePropertyList>
+													<Property Name="Highpass"/>
+													<Property Name="Lowpass"/>
+													<Property Name="MakeUpGain"/>
+													<Property Name="Pitch"/>
+													<Property Name="UserAuxSendVolume0"/>
+													<Property Name="UserAuxSendVolume1"/>
+													<Property Name="UserAuxSendVolume2"/>
+													<Property Name="Volume"/>
+												</StatePropertyList>
+												<StateGroupList>
+													<StateGroupInfo>
+														<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+														<StateGroupInfo Name="" ID="{AAFB4FDF-D6E6-478E-BC6D-BAAEB9AECEB0}" ShortID="559020713"/>
+													</StateGroupInfo>
+												</StateGroupList>
+												<CustomStateList>
+													<CustomState>
+														<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+														<CustomState Name="" ID="{D70EB76D-D1B9-4142-8683-7D7FCA46CA05}" ShortID="392049555">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+														<CustomState Name="" ID="{45161012-DE05-46A0-BB42-2787A88119FA}" ShortID="18833365">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+														<CustomState Name="" ID="{9D5EEAD3-3DB8-405C-8364-4E49EAFAE5AF}" ShortID="109629304">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+														<CustomState Name="" ID="{CF133E57-2C8B-4895-B93F-7E6F1936172E}" ShortID="872653335">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+														<CustomState Name="" ID="{C2BA2E46-5602-40AF-9620-494CB3B28839}" ShortID="334739375">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+														<CustomState Name="" ID="{BBB10442-BAC8-416B-830A-779EFAFAC73A}" ShortID="509185536">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+														<CustomState Name="" ID="{9F57B464-D558-41C7-ABA6-FDF2FEF82B1D}" ShortID="1049635042">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+														<CustomState Name="" ID="{3816B5C4-638B-4EA7-8A08-64D2BDDF19BD}" ShortID="246358379">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+														<CustomState Name="" ID="{9447EC1C-DFD9-4842-BB40-4866FC77668D}" ShortID="474089522">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+														<CustomState Name="" ID="{9E24D6CF-3A7A-487B-9457-C516A0BA1C09}" ShortID="618394018">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+														<CustomState Name="" ID="{D6E58DE8-F0D8-4821-BCED-FAF97403299C}" ShortID="81031135">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+														<CustomState Name="" ID="{9764A1F4-C5D4-457A-9584-5F2138E0ACF2}" ShortID="732079771">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+														<CustomState Name="" ID="{C6733CBF-0CA1-48EF-BF87-D57A988BFAEB}" ShortID="310813646">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+														<CustomState Name="" ID="{F7994297-1102-4BE7-9984-F46028E69427}" ShortID="140388686">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+														<CustomState Name="" ID="{9B4D8679-DAA3-4EA1-820D-7838C32FCCE0}" ShortID="653701102">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+														<CustomState Name="" ID="{883FA577-945E-4EB5-92EB-0EEB087F3E7E}" ShortID="495520553">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+														<CustomState Name="" ID="{D7B86A5E-3914-476D-8F8D-4090A51C26F2}" ShortID="303765310">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+														<CustomState Name="" ID="{9D8F1BA3-03D8-41B1-9899-FBC3DE4380FD}" ShortID="733287686">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+														<CustomState Name="" ID="{24683656-1D7D-4D9C-B929-E7CC0176C371}" ShortID="888555555">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+														<CustomState Name="" ID="{8446AB71-F45D-4CE1-AB90-8F9A7D1193CB}" ShortID="1000893759">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+														<CustomState Name="" ID="{CC1E193C-18F6-4D43-834F-C12924620825}" ShortID="449621346">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+														<CustomState Name="" ID="{62D7798E-CB6C-420F-B801-44FD77E5E65E}" ShortID="1032623620">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+														<CustomState Name="" ID="{525A2986-DFD8-4F6D-9BDB-24AA9A856CD8}" ShortID="895691714">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+														<CustomState Name="" ID="{6898CE1B-38B3-4D22-94B4-82F82D1437A7}" ShortID="988681624">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+												</CustomStateList>
+											</StateInfo>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Subway_D_Int" ID="{FA8156E7-E8ED-49D4-84DB-A1C826498101}" ShortID="1033446938">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -14290,6 +14990,12 @@
 												<Reference Name="OutputBus">
 													<ObjectRef Name="SFX" ID="{232EC043-CFB9-4144-B0E4-D1BF03682891}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 												</Reference>
+												<Reference Name="UserAuxSend0">
+													<ObjectRef Name="REV_Long" ID="{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend1">
+													<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
 											</ReferenceList>
 											<ChildrenList>
 												<Sound Name="SFX_Subway_D_Int_01" ID="{A98EB5AC-5211-4282-A2A5-9064C9A746AD}" ShortID="271320332">
@@ -14343,10 +15049,239 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<StateInfo>
+												<StatePropertyList>
+													<Property Name="Highpass"/>
+													<Property Name="Lowpass"/>
+													<Property Name="MakeUpGain"/>
+													<Property Name="Pitch"/>
+													<Property Name="UserAuxSendVolume0"/>
+													<Property Name="UserAuxSendVolume1"/>
+													<Property Name="UserAuxSendVolume2"/>
+													<Property Name="Volume"/>
+												</StatePropertyList>
+												<StateGroupList>
+													<StateGroupInfo>
+														<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+														<StateGroupInfo Name="" ID="{876C3490-280C-42D1-AB50-302410B4E0CC}" ShortID="913203249"/>
+													</StateGroupInfo>
+												</StateGroupList>
+												<CustomStateList>
+													<CustomState>
+														<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+														<CustomState Name="" ID="{18386B00-DD5D-4398-BA64-59308D33B5CE}" ShortID="522093461">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+														<CustomState Name="" ID="{25C63C67-EF66-4EC9-8F14-563FA2EEE6C3}" ShortID="1054414553">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+														<CustomState Name="" ID="{DDBE79E8-596F-4F15-B0E7-CA85F1B89F22}" ShortID="871786003">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+														<CustomState Name="" ID="{AE2D2AF6-30ED-401A-BC8B-F8A6D04552A9}" ShortID="884651759">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+														<CustomState Name="" ID="{DC08EF0B-3996-42EC-A155-8210810FD61B}" ShortID="495599147">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+														<CustomState Name="" ID="{5F513994-FB52-4E7D-8F5C-3B55AC42C5CD}" ShortID="583405518">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+														<CustomState Name="" ID="{35970D86-F1A6-458C-B9AD-A7636A82CF68}" ShortID="491002639">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+														<CustomState Name="" ID="{7D8F6867-1308-49DC-A5D9-9D0DE30EC6A0}" ShortID="182451432">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+														<CustomState Name="" ID="{70D781B9-A204-429A-9E39-AC2708231C9A}" ShortID="445422415">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+														<CustomState Name="" ID="{E61171F8-3C35-4ACF-BBF2-E651E0718BFC}" ShortID="743903186">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+														<CustomState Name="" ID="{879B26F6-E628-44E0-9116-4D4D3A5EFCFC}" ShortID="895340618">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+														<CustomState Name="" ID="{323DFE9B-05E8-4AA8-AAC4-058BCD937B88}" ShortID="1072372209">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+														<CustomState Name="" ID="{F53EBF88-E7AD-4F31-A038-E4A7E560CB6A}" ShortID="830830481">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+														<CustomState Name="" ID="{FE541129-15A4-4499-A36A-4D915775B22C}" ShortID="931873955">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+														<CustomState Name="" ID="{F041FDF7-5686-4180-A6BC-9ED332CA2E1B}" ShortID="191296077">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+														<CustomState Name="" ID="{AA02FA43-0155-405B-BAA6-0356D9313C79}" ShortID="836591395">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+														<CustomState Name="" ID="{FF08887B-FF1B-4BBA-B7BE-4874AE48F6E5}" ShortID="946210304">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+														<CustomState Name="" ID="{FCBE4DAF-208F-493C-A015-E6F3C01AE7FE}" ShortID="894026494">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+														<CustomState Name="" ID="{0819429E-5594-40AC-A780-19940A7446D6}" ShortID="138328828">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+														<CustomState Name="" ID="{5573003D-6615-4C58-9ED8-D8C3871DAFD0}" ShortID="893371789">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+														<CustomState Name="" ID="{8261CEA5-7A02-4B0B-B232-D393FDFB3B4D}" ShortID="194991307">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+														<CustomState Name="" ID="{0A901808-61D5-4CEC-8990-6E5C5177EC1B}" ShortID="497502032">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+														<CustomState Name="" ID="{AF18E77D-121E-452B-BE0E-6C7AC195DE77}" ShortID="228740308">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+														<CustomState Name="" ID="{968EC1AD-7432-4FC0-99BD-6807C07C533C}" ShortID="565178797">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+												</CustomStateList>
+											</StateInfo>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Subway_E" ID="{EFC80ABF-11B2-4973-B76C-06DEE16924E7}" ShortID="487138173">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -14498,6 +15433,12 @@
 												<Reference Name="OutputBus">
 													<ObjectRef Name="SFX" ID="{232EC043-CFB9-4144-B0E4-D1BF03682891}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 												</Reference>
+												<Reference Name="UserAuxSend0">
+													<ObjectRef Name="REV_Long" ID="{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend1">
+													<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
 											</ReferenceList>
 											<ChildrenList>
 												<Sound Name="SFX_Subway_E_01" ID="{FF8DE7EE-DBBF-4379-AFF3-0CAAC9EDD05A}" ShortID="842872272">
@@ -14551,11 +15492,240 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<StateInfo>
+												<StatePropertyList>
+													<Property Name="Highpass"/>
+													<Property Name="Lowpass"/>
+													<Property Name="MakeUpGain"/>
+													<Property Name="Pitch"/>
+													<Property Name="UserAuxSendVolume0"/>
+													<Property Name="UserAuxSendVolume1"/>
+													<Property Name="UserAuxSendVolume2"/>
+													<Property Name="Volume"/>
+												</StatePropertyList>
+												<StateGroupList>
+													<StateGroupInfo>
+														<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+														<StateGroupInfo Name="" ID="{563398AE-6B03-430A-A0C5-C7D87267E556}" ShortID="1029501392"/>
+													</StateGroupInfo>
+												</StateGroupList>
+												<CustomStateList>
+													<CustomState>
+														<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+														<CustomState Name="" ID="{9391D5D0-3A6C-40CE-A2F0-99F7DFD60337}" ShortID="831496969">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+														<CustomState Name="" ID="{4CB70C85-2E76-4195-B50D-4AB89C61BC10}" ShortID="432569341">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+														<CustomState Name="" ID="{10B32299-1D90-4D9B-A38F-D1843088B1C0}" ShortID="240680224">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+														<CustomState Name="" ID="{EB81C6CD-73AE-46FC-A37A-2EE1912BE1EE}" ShortID="343265419">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+														<CustomState Name="" ID="{F3EF0010-8E9F-4FFC-9EC5-65A547DCCE4C}" ShortID="824458008">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+														<CustomState Name="" ID="{7A529470-932E-4362-95A2-B09A3FB5C012}" ShortID="523549967">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+														<CustomState Name="" ID="{D31617E0-F5A7-48E1-945F-349B85EC0D43}" ShortID="521901845">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+														<CustomState Name="" ID="{0BB23C90-78F1-44B6-809F-392559E337EB}" ShortID="610803387">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+														<CustomState Name="" ID="{4AF2D9AD-7E85-46EC-A612-BDE619DCC868}" ShortID="572991158">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+														<CustomState Name="" ID="{A665087F-F5E0-4898-8DD1-DC089D6F7204}" ShortID="727185219">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+														<CustomState Name="" ID="{8EF6221E-A076-4E8A-A31B-1D5D3DC4F9D4}" ShortID="605894341">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+														<CustomState Name="" ID="{E0279659-C45C-4571-8F13-2A6F032C3A90}" ShortID="251000481">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+														<CustomState Name="" ID="{DCB6AC68-CC10-40DE-9325-5F789598CDCA}" ShortID="852997922">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+														<CustomState Name="" ID="{F34E30DA-B579-4380-B2B2-7112F7C96E29}" ShortID="533836944">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+														<CustomState Name="" ID="{6F481472-E5A9-4095-A664-AB57996BE3FE}" ShortID="778706616">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+														<CustomState Name="" ID="{7148DFE2-043E-4B01-A1E3-AAEE2BFDDB7E}" ShortID="131278557">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+														<CustomState Name="" ID="{5C0A1812-60AF-4430-8B96-334BCA56B356}" ShortID="103147993">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+														<CustomState Name="" ID="{0C058DF2-2D35-4795-ADC1-F75A61259E7F}" ShortID="1064589413">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+														<CustomState Name="" ID="{5A67DA6A-F71D-4847-A1AF-208450B6E504}" ShortID="485926726">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+														<CustomState Name="" ID="{83C06B3A-3FB1-4EBF-AA52-831344FBB579}" ShortID="859899503">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+														<CustomState Name="" ID="{347A1244-05F5-468D-9CA3-965DC0DBE71C}" ShortID="347326143">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+														<CustomState Name="" ID="{4108B0D9-2453-4F02-9C7B-38793545D70D}" ShortID="745547917">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+														<CustomState Name="" ID="{C84B8692-3E9B-4DFF-9D50-0314F3FD8C6F}" ShortID="668980070">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+														<CustomState Name="" ID="{F5ED219E-B1DD-4804-BDA1-5179CD513531}" ShortID="323969016">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+												</CustomStateList>
+											</StateInfo>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Subway_F" ID="{B41293E5-87B1-4F6D-B2B2-0EEC9910D5E4}" ShortID="174071828">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
 												<Property Name="OverridePositioning" Type="bool" Value="True"/>
+												<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -14707,6 +15877,12 @@
 												<Reference Name="OutputBus">
 													<ObjectRef Name="SFX" ID="{232EC043-CFB9-4144-B0E4-D1BF03682891}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 												</Reference>
+												<Reference Name="UserAuxSend0">
+													<ObjectRef Name="REV_Long" ID="{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend1">
+													<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
 											</ReferenceList>
 											<ChildrenList>
 												<Sound Name="SFX_Subway_F_01" ID="{7F94A92B-6DD5-431E-B4DE-6BDDF7A81EC6}" ShortID="181852100">
@@ -14765,6 +15941,234 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<StateInfo>
+												<StatePropertyList>
+													<Property Name="Highpass"/>
+													<Property Name="Lowpass"/>
+													<Property Name="MakeUpGain"/>
+													<Property Name="Pitch"/>
+													<Property Name="UserAuxSendVolume0"/>
+													<Property Name="UserAuxSendVolume1"/>
+													<Property Name="UserAuxSendVolume2"/>
+													<Property Name="Volume"/>
+												</StatePropertyList>
+												<StateGroupList>
+													<StateGroupInfo>
+														<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+														<StateGroupInfo Name="" ID="{936D51C4-1925-4976-9CC2-4593324F1575}" ShortID="569380984"/>
+													</StateGroupInfo>
+												</StateGroupList>
+												<CustomStateList>
+													<CustomState>
+														<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+														<CustomState Name="" ID="{4B626B1E-6EC0-4C23-8098-A0FA62BB7E21}" ShortID="283779210">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+														<CustomState Name="" ID="{90368938-515F-461A-A1DD-A642CAF71EE2}" ShortID="212977120">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+														<CustomState Name="" ID="{B7C23344-B282-4F96-98E4-D69A9A94140D}" ShortID="487537135">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+														<CustomState Name="" ID="{4F9E1763-350D-4B8F-8615-126658FAA143}" ShortID="709463864">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+														<CustomState Name="" ID="{4299AE72-EA50-4D7B-A883-6FA395B12EED}" ShortID="1036885404">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+														<CustomState Name="" ID="{0C88D817-6785-47E5-8348-32641059874A}" ShortID="162175689">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+														<CustomState Name="" ID="{6E4A983D-D236-459F-8DF9-6DC8C21E8FEE}" ShortID="325333958">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+														<CustomState Name="" ID="{9972EC2C-882E-4453-9C6F-5B983CB78C07}" ShortID="159867151">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+														<CustomState Name="" ID="{4AD71574-6252-455D-A414-A2E4FE26BA4A}" ShortID="69808756">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+														<CustomState Name="" ID="{97BAB693-CE01-430C-ABD1-8676CBEC1F04}" ShortID="681611270">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+														<CustomState Name="" ID="{99305804-6CC9-42DD-9318-E00B4574C1E8}" ShortID="541197806">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+														<CustomState Name="" ID="{C17C08A9-A7FB-46B7-A915-DA321D54B223}" ShortID="444867347">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+														<CustomState Name="" ID="{E0F29EF7-9C48-4FB2-A708-6488A8F8C430}" ShortID="778324073">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+														<CustomState Name="" ID="{8007293C-8E87-4C68-B1B8-969D34325F45}" ShortID="937580593">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+														<CustomState Name="" ID="{08242026-90A7-48BC-8F6E-4103656C9ADE}" ShortID="116001910">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+														<CustomState Name="" ID="{D31FE9FE-758D-4485-B26C-928033F7689F}" ShortID="351176601">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+														<CustomState Name="" ID="{C47CC69F-C485-4ABD-A8A2-4E4418878F55}" ShortID="306764311">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+														<CustomState Name="" ID="{0F3702C5-55A7-4B2D-891E-50C23532AB8D}" ShortID="155574612">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+														<CustomState Name="" ID="{40BD7A29-64EF-4A2E-ACBE-FEEEC7A3FAF5}" ShortID="414586272">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+														<CustomState Name="" ID="{CA616E20-A6D5-46EF-979E-608E2CBB9667}" ShortID="401638652">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+														<CustomState Name="" ID="{E3173A59-7064-478A-AD67-C2396BA394D9}" ShortID="279048695">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+														<CustomState Name="" ID="{CC2BD50F-0FE6-45C2-AD3A-9FFA15CB69E4}" ShortID="154231409">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+														<CustomState Name="" ID="{9BCC0EDD-7B37-415B-A9F9-A837FE4921F1}" ShortID="343553932">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+														<CustomState Name="" ID="{F3663755-1493-4EAE-ACAB-2398152AB5CD}" ShortID="118896731">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+												</CustomStateList>
+											</StateInfo>
 											<ObjectLists>
 												<ObjectList Name="RTPC">
 													<RTPC Name="" ID="{D4F32E9F-779C-4234-A0F1-357D2F191720}" ShortID="18959538">
@@ -14817,6 +16221,7 @@
 										<RandomSequenceContainer Name="SFX_Subway_G_Int" ID="{67238053-78CC-429D-89D5-72B25CE633B1}" ShortID="1004215253">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -14968,6 +16373,12 @@
 												<Reference Name="OutputBus">
 													<ObjectRef Name="SFX" ID="{232EC043-CFB9-4144-B0E4-D1BF03682891}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 												</Reference>
+												<Reference Name="UserAuxSend0">
+													<ObjectRef Name="REV_Long" ID="{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend1">
+													<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
 											</ReferenceList>
 											<ChildrenList>
 												<Sound Name="SFX_Subway_G_Int_01" ID="{08151A59-FD21-4B0F-9B4B-BF734E0E29AD}" ShortID="658876305">
@@ -15021,9 +16432,238 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<StateInfo>
+												<StatePropertyList>
+													<Property Name="Highpass"/>
+													<Property Name="Lowpass"/>
+													<Property Name="MakeUpGain"/>
+													<Property Name="Pitch"/>
+													<Property Name="UserAuxSendVolume0"/>
+													<Property Name="UserAuxSendVolume1"/>
+													<Property Name="UserAuxSendVolume2"/>
+													<Property Name="Volume"/>
+												</StatePropertyList>
+												<StateGroupList>
+													<StateGroupInfo>
+														<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+														<StateGroupInfo Name="" ID="{96C554F1-5C14-4DF3-BB3C-48AC4AB4BA49}" ShortID="975742443"/>
+													</StateGroupInfo>
+												</StateGroupList>
+												<CustomStateList>
+													<CustomState>
+														<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+														<CustomState Name="" ID="{E6749E9B-85A4-4FD3-8E41-56C76DA7B140}" ShortID="1005244039">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+														<CustomState Name="" ID="{665B4322-4A44-4448-96BC-2163370DC222}" ShortID="613609174">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+														<CustomState Name="" ID="{AB3E8A1B-1319-4E4A-A998-FC884C8D3F0A}" ShortID="419676985">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+														<CustomState Name="" ID="{90B5C740-9AF7-4ACC-BD09-B793CAD7B620}" ShortID="622958488">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+														<CustomState Name="" ID="{4D79E8D7-1E93-437D-8A30-5760BF1CF5FF}" ShortID="706517441">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+														<CustomState Name="" ID="{414FDBF3-1199-4347-874C-D73BE41C5AB9}" ShortID="482605152">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+														<CustomState Name="" ID="{A86D4EA9-B7AA-487C-828E-03101313E992}" ShortID="795461375">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+														<CustomState Name="" ID="{AAC2919E-9C79-46F2-8765-5C6F0869146B}" ShortID="593569468">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+														<CustomState Name="" ID="{6D454BE5-EF6C-46B5-9046-9EE3BB58FD14}" ShortID="80428965">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+														<CustomState Name="" ID="{011F0148-37E3-4433-B532-E22111D9EC2B}" ShortID="346071263">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+														<CustomState Name="" ID="{BBBB304C-E9C5-4E26-B909-276523457DCE}" ShortID="669226229">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+														<CustomState Name="" ID="{2F023144-2415-4DBA-B8A6-D647A5EE6926}" ShortID="908589267">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+														<CustomState Name="" ID="{45660583-70EF-4897-8907-F2A23A88B96C}" ShortID="1005185334">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+														<CustomState Name="" ID="{CCBBE8AA-0DAD-4020-87C4-B49D4CEB0681}" ShortID="171067690">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+														<CustomState Name="" ID="{BC5151DE-9C08-4DAD-AAD6-DEA858519D37}" ShortID="676989306">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+														<CustomState Name="" ID="{9504BF57-C92E-45E6-B8A5-706DEA0F64DE}" ShortID="1042549652">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+														<CustomState Name="" ID="{D2404A59-2149-48EF-9878-C47DB6187745}" ShortID="118550815">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+														<CustomState Name="" ID="{02B7C02A-0323-4F9C-A69F-B5BC5EB363C3}" ShortID="222052348">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+														<CustomState Name="" ID="{78263A57-63D3-4F44-9716-66679C693BD8}" ShortID="58280526">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+														<CustomState Name="" ID="{8E2EF295-54AB-41CF-BC64-0CEF88E59A5A}" ShortID="808655269">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+														<CustomState Name="" ID="{E588871D-ED07-4EF8-A010-33B46E6B654C}" ShortID="157750528">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+														<CustomState Name="" ID="{719169F0-742F-4250-81C7-80F18D528304}" ShortID="702804049">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+														<CustomState Name="" ID="{8951D414-5E28-4474-AB8B-23A9A9338F59}" ShortID="808288953">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+														<CustomState Name="" ID="{CD828F2C-EA3A-4C79-8A8F-27E5D82A992C}" ShortID="437020488">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+												</CustomStateList>
+											</StateInfo>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Subway_H_Int" ID="{E2EE73EB-50FD-43EC-BDF7-EFB0CB24115E}" ShortID="728091036">
 											<PropertyList>
+												<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="30">
@@ -15047,6 +16687,12 @@
 												</Reference>
 												<Reference Name="OutputBus">
 													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend0">
+													<ObjectRef Name="REV_Long" ID="{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend1">
+													<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 												</Reference>
 											</ReferenceList>
 											<ChildrenList>
@@ -15101,6 +16747,234 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<StateInfo>
+												<StatePropertyList>
+													<Property Name="Highpass"/>
+													<Property Name="Lowpass"/>
+													<Property Name="MakeUpGain"/>
+													<Property Name="Pitch"/>
+													<Property Name="UserAuxSendVolume0"/>
+													<Property Name="UserAuxSendVolume1"/>
+													<Property Name="UserAuxSendVolume2"/>
+													<Property Name="Volume"/>
+												</StatePropertyList>
+												<StateGroupList>
+													<StateGroupInfo>
+														<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+														<StateGroupInfo Name="" ID="{86D8862C-17F2-4FE5-9A1A-1D2E3072DA8C}" ShortID="781612423"/>
+													</StateGroupInfo>
+												</StateGroupList>
+												<CustomStateList>
+													<CustomState>
+														<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+														<CustomState Name="" ID="{0B8B903F-B71C-4EDB-967A-1A75DEA7FCF4}" ShortID="669748974">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+														<CustomState Name="" ID="{BF91D341-CE2B-4426-939D-47DE1772EBD6}" ShortID="606039283">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+														<CustomState Name="" ID="{BD25B94A-35F4-4423-8305-787E44EC4611}" ShortID="85962623">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+														<CustomState Name="" ID="{D75A051F-4B9A-4963-AD21-BF0BB4E95B56}" ShortID="115207582">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+														<CustomState Name="" ID="{CE066640-3B5F-46A3-B771-BFDEAF90A5F8}" ShortID="930248433">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+														<CustomState Name="" ID="{D5E53AE2-38FB-41BC-878A-BB3D8B596E32}" ShortID="998308501">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+														<CustomState Name="" ID="{93A6D82F-A332-4F4A-A6CE-B4C6F749AF95}" ShortID="600308494">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+														<CustomState Name="" ID="{1DCEB70D-D57B-48A0-B82D-DB0366CE8FEA}" ShortID="994322325">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+														<CustomState Name="" ID="{AE8E78FC-366F-48CA-A378-1655A9D9D0C9}" ShortID="179227465">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+														<CustomState Name="" ID="{E82CB89F-5219-473B-919B-4F067B78B5B7}" ShortID="598804864">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+														<CustomState Name="" ID="{56A8A842-8388-4420-BF0C-2D4EBA2EDABE}" ShortID="882843616">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+														<CustomState Name="" ID="{BC9CE7F8-942A-44BD-BF0E-3D999275AD70}" ShortID="734845490">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+														<CustomState Name="" ID="{32C181C2-6C7B-44EB-8A85-275749431F0F}" ShortID="359372671">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+														<CustomState Name="" ID="{1E8E71C0-D61D-48CF-8902-74E2D9C6D64D}" ShortID="1039796658">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+														<CustomState Name="" ID="{3B7EE7D1-4D47-4E57-8631-B923F7F01AD1}" ShortID="471318106">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+														<CustomState Name="" ID="{F0BC1B85-ED58-4554-8696-9D2F910F207E}" ShortID="920742262">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+														<CustomState Name="" ID="{99887143-E7F6-4A61-BD07-8AFECEC5CAFA}" ShortID="36166321">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+														<CustomState Name="" ID="{7922588E-5E09-4308-8EF2-8D62926C003E}" ShortID="16144676">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+														<CustomState Name="" ID="{8676F7D2-9E83-46AA-8062-B0C745DED416}" ShortID="421908830">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+														<CustomState Name="" ID="{EF219F38-9018-431E-9EED-B7A4B8797E40}" ShortID="16510315">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+														<CustomState Name="" ID="{59CE1B73-62B2-4526-A000-D18AADCBD82F}" ShortID="1008283167">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+														<CustomState Name="" ID="{B5272BFA-DCB8-4BDA-8DA0-E4C93BD47CBE}" ShortID="488945754">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+														<CustomState Name="" ID="{2AE52ED2-77F6-4878-B44F-AE1E989174AB}" ShortID="262393551">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+														<CustomState Name="" ID="{C737905C-5586-4501-8DD2-81594CCB5B1B}" ShortID="825088653">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+												</CustomStateList>
+											</StateInfo>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Subway_I_Int" ID="{279145B4-7C3A-4450-AC5F-A0BE06E1CBDD}" ShortID="972694323">
 											<PropertyList>
@@ -15116,6 +16990,7 @@
 														</ModifierInfo>
 													</ModifierList>
 												</Property>
+												<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -15266,6 +17141,12 @@
 												</Reference>
 												<Reference Name="OutputBus">
 													<ObjectRef Name="SFX" ID="{232EC043-CFB9-4144-B0E4-D1BF03682891}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend0">
+													<ObjectRef Name="REV_Long" ID="{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend1">
+													<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 												</Reference>
 											</ReferenceList>
 											<ChildrenList>
@@ -16074,9 +17955,238 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<StateInfo>
+												<StatePropertyList>
+													<Property Name="Highpass"/>
+													<Property Name="Lowpass"/>
+													<Property Name="MakeUpGain"/>
+													<Property Name="Pitch"/>
+													<Property Name="UserAuxSendVolume0"/>
+													<Property Name="UserAuxSendVolume1"/>
+													<Property Name="UserAuxSendVolume2"/>
+													<Property Name="Volume"/>
+												</StatePropertyList>
+												<StateGroupList>
+													<StateGroupInfo>
+														<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+														<StateGroupInfo Name="" ID="{0F30E075-5930-4F69-A37A-ADC9901EBBF3}" ShortID="515612200"/>
+													</StateGroupInfo>
+												</StateGroupList>
+												<CustomStateList>
+													<CustomState>
+														<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+														<CustomState Name="" ID="{E682EFAF-061D-4551-91FD-24CFD9922CBC}" ShortID="370283723">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+														<CustomState Name="" ID="{649105B6-F25F-490B-B6E4-7DE74A89DC3C}" ShortID="862127045">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+														<CustomState Name="" ID="{C80ED314-F4E1-4C7A-8DFE-D3E8197AAAA6}" ShortID="599410881">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+														<CustomState Name="" ID="{0C9FD8C1-DB90-44D3-A283-DB37C8EDC72A}" ShortID="304726088">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+														<CustomState Name="" ID="{FAD6FB97-357B-44EB-B81F-F731687CA2DD}" ShortID="675336573">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+														<CustomState Name="" ID="{042B8A92-5755-4B4A-B29F-966D244E6AD0}" ShortID="473737964">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+														<CustomState Name="" ID="{42148031-8C98-46D6-9FE1-79413DD1A55B}" ShortID="1002452684">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+														<CustomState Name="" ID="{ED5460A2-CE93-40D0-A71A-7A30CF8A7831}" ShortID="555780795">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+														<CustomState Name="" ID="{4BB352BD-8701-4D9B-B6CA-EDBCEED70AA5}" ShortID="186014048">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+														<CustomState Name="" ID="{CF9D525F-757E-4338-B29A-A07C86139327}" ShortID="658495498">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+														<CustomState Name="" ID="{67AA6072-EED3-4A21-837C-3E8C98134DE3}" ShortID="418502381">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+														<CustomState Name="" ID="{2D7682A3-6A62-4739-A22F-D7C635EA9E21}" ShortID="473727832">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+														<CustomState Name="" ID="{C00775A8-01B8-42AB-BDDE-39F4DC301EA0}" ShortID="953354271">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+														<CustomState Name="" ID="{C226A92B-5ABC-4C8F-9772-579B4367D98A}" ShortID="211897136">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+														<CustomState Name="" ID="{487EEC56-5EDC-4CA3-BFDA-001FB48B6711}" ShortID="618157902">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+														<CustomState Name="" ID="{58E05F5B-6D17-451C-8646-5968749FE626}" ShortID="538259105">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+														<CustomState Name="" ID="{3ED305DF-AD50-4C34-8AA5-209C203CF7FC}" ShortID="432180011">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+														<CustomState Name="" ID="{50F20B62-465A-4B1C-93E8-787309DFE418}" ShortID="862292839">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+														<CustomState Name="" ID="{B22F1783-5CBE-44CF-BDF8-6C67E48FFA56}" ShortID="765017887">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+														<CustomState Name="" ID="{F9050375-EE24-4089-9383-A3ABA21153FD}" ShortID="559485143">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+														<CustomState Name="" ID="{7710865F-3695-44B5-9750-6ADDD43C214E}" ShortID="1034474054">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+														<CustomState Name="" ID="{ED692F13-4004-47E2-B82D-48B085B138B3}" ShortID="223171347">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+														<CustomState Name="" ID="{6E3DFB7E-4B6A-4053-B2D9-FD93CA10BD9D}" ShortID="627730974">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+														<CustomState Name="" ID="{AB255D66-13BB-40CD-A0EB-9EF2B873C05D}" ShortID="417387928">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+												</CustomStateList>
+											</StateInfo>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Subway_J_Bys" ID="{8656552F-4BA4-4B93-A095-F7CC691646C4}" ShortID="636626247">
 											<PropertyList>
+												<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="3"/>
@@ -16106,6 +18216,12 @@
 												</Reference>
 												<Reference Name="OutputBus">
 													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend0">
+													<ObjectRef Name="REV_Long" ID="{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend1">
+													<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 												</Reference>
 											</ReferenceList>
 											<ChildrenList>
@@ -17234,6 +19350,234 @@
 													</ChildrenList>
 												</RandomSequenceContainer>
 											</ChildrenList>
+											<StateInfo>
+												<StatePropertyList>
+													<Property Name="Highpass"/>
+													<Property Name="Lowpass"/>
+													<Property Name="MakeUpGain"/>
+													<Property Name="Pitch"/>
+													<Property Name="UserAuxSendVolume0"/>
+													<Property Name="UserAuxSendVolume1"/>
+													<Property Name="UserAuxSendVolume2"/>
+													<Property Name="Volume"/>
+												</StatePropertyList>
+												<StateGroupList>
+													<StateGroupInfo>
+														<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+														<StateGroupInfo Name="" ID="{5DE41B0C-1C0E-4E81-BF42-366D2CCEEF24}" ShortID="68326552"/>
+													</StateGroupInfo>
+												</StateGroupList>
+												<CustomStateList>
+													<CustomState>
+														<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+														<CustomState Name="" ID="{61F16A85-E1B7-42BB-AC8D-777F659A90DD}" ShortID="634250124">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+														<CustomState Name="" ID="{956AF577-1702-49F5-9FBC-5B739BF1F449}" ShortID="657183820">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+														<CustomState Name="" ID="{BFC1F610-1FF4-4CED-A991-E9B44D4A0B31}" ShortID="426240817">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+														<CustomState Name="" ID="{4BEADB86-6C7A-4638-B066-7BA84BDD6A6F}" ShortID="986344855">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+														<CustomState Name="" ID="{53CAA615-E446-42CD-AA9B-8DD2E63CAD94}" ShortID="959743500">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+														<CustomState Name="" ID="{6B47D977-F744-454C-B948-514294986144}" ShortID="228537231">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+														<CustomState Name="" ID="{A53FF27D-37B3-4D95-A7DB-C309A5CA2A24}" ShortID="514326490">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+														<CustomState Name="" ID="{7C795D53-29D5-4F06-AB86-5A428480E031}" ShortID="877547691">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+														<CustomState Name="" ID="{AD31E8A5-BB6E-4F48-AD76-174D9BB3C1E1}" ShortID="1026264305">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+														<CustomState Name="" ID="{2F617617-D807-4BB5-BCAC-5AB476E371F7}" ShortID="41949238">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+														<CustomState Name="" ID="{EA21919A-DA9E-484A-9F22-ED1FC7018378}" ShortID="2171306">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+														<CustomState Name="" ID="{85E59706-210A-4BD8-98CE-19A496E05710}" ShortID="514071083">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+														<CustomState Name="" ID="{EC8A46F3-E0EF-49F6-B6CA-EC69B1F70B0F}" ShortID="444427547">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+														<CustomState Name="" ID="{A7AA9CB7-DC18-4E6F-95D3-F306CE6BF136}" ShortID="383323642">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+														<CustomState Name="" ID="{C57EF579-CA13-4805-8212-078D39C96B0B}" ShortID="778639410">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+														<CustomState Name="" ID="{52404F65-D006-4780-848B-9A0C4B019ABF}" ShortID="463407235">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+														<CustomState Name="" ID="{47BF101B-E367-457B-BD5E-2F3AAC6469AE}" ShortID="41694222">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+														<CustomState Name="" ID="{9F065B17-94DB-4158-BEFD-10207DA10D29}" ShortID="1016666008">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+														<CustomState Name="" ID="{665E4EDD-7659-4D38-8078-B4CE1CF090C7}" ShortID="837367381">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+														<CustomState Name="" ID="{49AE2B89-45D8-44E4-B570-5F043F172202}" ShortID="205213127">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+														<CustomState Name="" ID="{46477A34-23E3-40DE-A1E3-B8BCDCD5787D}" ShortID="64644150">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+														<CustomState Name="" ID="{AB9DE3E9-4085-413C-8F2F-59C052DB431A}" ShortID="354103454">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+														<CustomState Name="" ID="{CB91B5BF-406B-4249-884E-B05265674D18}" ShortID="26072153">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+														<CustomState Name="" ID="{DA72AE95-8AFD-4C64-9DDA-AE431DC20D1D}" ShortID="442684498">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+												</CustomStateList>
+											</StateInfo>
 											<ObjectLists>
 												<ObjectList Name="RTPC">
 													<RTPC Name="" ID="{48D48C12-5FF0-4586-AD70-835656B25698}" ShortID="156415997">
@@ -17286,9 +19630,9 @@
 										<RandomSequenceContainer Name="SFX_Subway_K_NYC_Bys_JM" ID="{4843E7A7-967B-4523-9478-5535D3A83322}" ShortID="91891135">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
-												<Property Name="Color" Type="int16" Value="10"/>
-												<Property Name="OverrideColor" Type="bool" Value="True"/>
+												<Property Name="Color" Type="int16" Value="4"/>
 												<Property Name="OverridePositioning" Type="bool" Value="True"/>
+												<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="1"/>
@@ -17317,7 +19661,7 @@
 													<Custom>
 														<Attenuation Name="Attenuation (Custom)" ID="{F273C3A7-4481-4018-9D84-89EA4FD09A2A}" ShortID="870464659">
 															<PropertyList>
-																<Property Name="RadiusMax" Type="Real64" Value="150"/>
+																<Property Name="RadiusMax" Type="Real64" Value="30"/>
 															</PropertyList>
 															<CurveUsageInfoList>
 																<VolumeDryUsage>
@@ -17331,10 +19675,10 @@
 																					<XPos>0</XPos>
 																					<YPos>0</YPos>
 																					<Flags>5</Flags>
-																					<SegmentShape>Log1</SegmentShape>
+																					<SegmentShape>Log2</SegmentShape>
 																				</Point>
 																				<Point>
-																					<XPos>150</XPos>
+																					<XPos>30</XPos>
 																					<YPos>-200</YPos>
 																					<Flags>37</Flags>
 																				</Point>
@@ -17371,19 +19715,19 @@
 																					<SegmentShape>Log1</SegmentShape>
 																				</Point>
 																				<Point>
-																					<XPos>20</XPos>
+																					<XPos>4</XPos>
 																					<YPos>100</YPos>
 																					<Flags>0</Flags>
 																					<SegmentShape>Log2</SegmentShape>
 																				</Point>
 																				<Point>
-																					<XPos>49.94012</XPos>
-																					<YPos>-0</YPos>
+																					<XPos>9.988024</XPos>
+																					<YPos>0</YPos>
 																					<Flags>0</Flags>
 																					<SegmentShape>Log2</SegmentShape>
 																				</Point>
 																				<Point>
-																					<XPos>150</XPos>
+																					<XPos>30</XPos>
 																					<YPos>0</YPos>
 																					<Flags>37</Flags>
 																				</Point>
@@ -17451,6 +19795,12 @@
 												</Reference>
 												<Reference Name="OutputBus">
 													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend0">
+													<ObjectRef Name="REV_Long" ID="{5DCDE823-A8B0-4B9A-9C08-BE2E31F14DF6}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+												<Reference Name="UserAuxSend1">
+													<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 												</Reference>
 											</ReferenceList>
 											<ChildrenList>
@@ -17761,6 +20111,265 @@
 													</ChildrenList>
 												</RandomSequenceContainer>
 											</ChildrenList>
+											<StateInfo>
+												<StatePropertyList>
+													<Property Name="Highpass"/>
+													<Property Name="Lowpass"/>
+													<Property Name="MakeUpGain"/>
+													<Property Name="Pitch"/>
+													<Property Name="UserAuxSendVolume0"/>
+													<Property Name="UserAuxSendVolume1"/>
+													<Property Name="UserAuxSendVolume2"/>
+													<Property Name="Volume"/>
+												</StatePropertyList>
+												<StateGroupList>
+													<StateGroupInfo>
+														<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+														<StateGroupInfo Name="" ID="{2A5F2BC7-3D45-4F0D-B2BD-7C23B100271F}" ShortID="844086982"/>
+													</StateGroupInfo>
+												</StateGroupList>
+												<CustomStateList>
+													<CustomState>
+														<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+														<CustomState Name="" ID="{5EBE9734-60F0-439C-B4A0-0525761F71DC}" ShortID="312992918">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+														<CustomState Name="" ID="{7AFFD74F-FE19-4056-9D7C-9BDA5AAFE9B4}" ShortID="516281786">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+														<CustomState Name="" ID="{CCD94696-7946-4B09-9179-51F4F434A3B7}" ShortID="993855758">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+														<CustomState Name="" ID="{48257893-7AC5-4AEC-8C13-9C87657487D5}" ShortID="187175491">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+														<CustomState Name="" ID="{A2A07DEC-1FEF-45F5-A5EB-1033488932DD}" ShortID="821953202">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+														<CustomState Name="" ID="{D5DDD740-3F08-43CE-BDF4-6E262BF5DD78}" ShortID="740283159">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+														<CustomState Name="" ID="{3C239800-184F-4A65-A337-4A3979A8297F}" ShortID="645415616">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+														<CustomState Name="" ID="{FD72C7BD-2882-451A-8429-591473A2E1B1}" ShortID="845594089">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+														<CustomState Name="" ID="{E9E137EC-7C14-4274-AE28-66DF7B7C718D}" ShortID="1050771122">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+														<CustomState Name="" ID="{02D8F70F-5F02-4CE3-8789-ABB0F81F8A40}" ShortID="179105532">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+														<CustomState Name="" ID="{D94AB28E-B117-4D36-A1B4-D1CF90C76046}" ShortID="1054713149">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+														<CustomState Name="" ID="{79693516-6B34-490A-B522-CBC400EDD62B}" ShortID="604802540">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+														<CustomState Name="" ID="{2D52F29D-97F1-4ECF-B1BE-0451A4B280A1}" ShortID="191366112">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+														<CustomState Name="" ID="{FEC6F56D-48D1-4543-B3D9-24C02C66B537}" ShortID="946177006">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+														<CustomState Name="" ID="{D2B141C3-3B06-471F-BF49-691D0C1C0C2C}" ShortID="44964759">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+														<CustomState Name="" ID="{256E90D7-8E12-45F5-BCA2-470C642CF11E}" ShortID="742813832">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-19"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+														<CustomState Name="" ID="{9FE9648A-3FB8-4A2E-AE96-FA64A6F46617}" ShortID="480160031">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+														<CustomState Name="" ID="{76B1128C-9EB2-459F-9E7D-670E6AACF0E9}" ShortID="355720869">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+														<CustomState Name="" ID="{52C0C387-D2FB-4514-9658-FA534B54E796}" ShortID="808658123">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+														<CustomState Name="" ID="{FBC232AA-FB10-461A-952C-D25C7BC02AC4}" ShortID="1044502009">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+														<CustomState Name="" ID="{38A2726C-494B-495B-A2B8-794DDB642642}" ShortID="758332297">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+														<CustomState Name="" ID="{8D2BCCF9-4763-4FBF-A7E3-4E7797569093}" ShortID="413497067">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+														<CustomState Name="" ID="{6189B98D-4E2C-45CC-87FB-61E3B19DF860}" ShortID="20228273">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+														<CustomState Name="" ID="{5AE0AF23-AE12-4327-9BFE-037E379F736D}" ShortID="141212501">
+															<PropertyList>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+												</CustomStateList>
+											</StateInfo>
 											<ObjectLists>
 												<ObjectList Name="RTPC">
 													<RTPC Name="" ID="{D1713B4D-C6AC-47EC-83BF-78B950498B05}" ShortID="611528950">
@@ -17822,228 +20431,13 @@
 											<Property Name="UserAuxSendVolume2"/>
 											<Property Name="Volume"/>
 										</StatePropertyList>
-										<StateGroupList>
-											<StateGroupInfo>
-												<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
-												<StateGroupInfo Name="" ID="{B43A53CE-A7F4-42E8-9B07-7C74F24AFADC}" ShortID="423000797"/>
-											</StateGroupInfo>
-										</StateGroupList>
-										<CustomStateList>
-											<CustomState>
-												<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
-												<CustomState Name="" ID="{1A2E4199-F617-4824-ACBF-87632D63E9BB}" ShortID="7626218">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
-												<CustomState Name="" ID="{85574C98-9EBD-4553-A4BA-CE108AEEAE6F}" ShortID="907013657">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
-												<CustomState Name="" ID="{E75D090A-3BB1-400E-88D1-34459B89F0BF}" ShortID="507420779">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
-												<CustomState Name="" ID="{B69B8C82-24CB-47B7-9E10-E496F9CCBFB0}" ShortID="687783331">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
-												<CustomState Name="" ID="{FC3C2345-4F48-45D7-BD24-308405FC4B52}" ShortID="213017445">
-													<PropertyList>
-														<Property Name="Volume" Type="Real64" Value="-108"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
-												<CustomState Name="" ID="{C1EA881A-2B93-4EBC-9EA7-DF5D38475A4D}" ShortID="166107989">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
-												<CustomState Name="" ID="{6C2654F6-1975-440F-A0FF-4AAF784207A2}" ShortID="181999713">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
-												<CustomState Name="" ID="{39EA8F3C-AE8C-4F43-971F-77C3C1A1EA4F}" ShortID="507894456">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
-												<CustomState Name="" ID="{D9647E40-DB98-4FA0-9F47-1498EDE69AF2}" ShortID="803473241">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
-												<CustomState Name="" ID="{12B1AA65-BCD0-4879-925A-3A39C1F36774}" ShortID="570057905">
-													<PropertyList>
-														<Property Name="Volume" Type="Real64" Value="-108"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
-												<CustomState Name="" ID="{F6561F90-361D-4E9B-A419-16E10A213AEF}" ShortID="1015812360">
-													<PropertyList>
-														<Property Name="Volume" Type="Real64" Value="-108"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
-												<CustomState Name="" ID="{C162097A-BF24-4FA9-B36D-45B8F402D684}" ShortID="347080582">
-													<PropertyList>
-														<Property Name="Volume" Type="Real64" Value="-108"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
-												<CustomState Name="" ID="{F5EFE77E-669F-46B0-8DCE-A1EC28232B8D}" ShortID="115612556">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
-												<CustomState Name="" ID="{E6FEAC9D-069A-419D-B394-0BD204045E63}" ShortID="409405801">
-													<PropertyList>
-														<Property Name="Volume" Type="Real64" Value="-108"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
-												<CustomState Name="" ID="{952702C2-8C5E-4E5B-AD71-A214C5F5C98A}" ShortID="897342326">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
-												<CustomState Name="" ID="{76E4EE2E-1C67-4071-AAEB-BAC48BF7DBAF}" ShortID="659096912">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
-												<CustomState Name="" ID="{5D714922-3AE6-4516-8E4A-C6B054541E1E}" ShortID="962364235">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
-												<CustomState Name="" ID="{443C6591-7025-42DF-BB71-F7AC8E50F46B}" ShortID="731522147">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
-												<CustomState Name="" ID="{78FDB56B-470E-49A9-81F0-4B7ABACAFCB8}" ShortID="940640808">
-													<PropertyList>
-														<Property Name="Volume" Type="Real64" Value="-108"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
-												<CustomState Name="" ID="{4C279DC6-6CB9-477F-9C79-7D34A8B0D985}" ShortID="807360349">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-														<Property Name="Volume" Type="Real64" Value="-108"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
-												<CustomState Name="" ID="{FF33BAEB-67F4-4022-A8AA-905B7D4AE6C3}" ShortID="625980861">
-													<PropertyList>
-														<Property Name="Volume" Type="Real64" Value="-108"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
-												<CustomState Name="" ID="{FCBC4790-94A7-4144-B730-3A6FE61B5895}" ShortID="1010680649">
-													<PropertyList>
-														<Property Name="Volume" Type="Real64" Value="-108"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
-												<CustomState Name="" ID="{D4E86325-AEBB-4271-BFA2-515D8BDC4988}" ShortID="43757716">
-													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-											<CustomState>
-												<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
-												<CustomState Name="" ID="{8FF4F96A-4043-44E5-8FFA-F5CD45DF8114}" ShortID="463389099">
-													<PropertyList>
-														<Property Name="Volume" Type="Real64" Value="-108"/>
-													</PropertyList>
-												</CustomState>
-											</CustomState>
-										</CustomStateList>
 									</StateInfo>
 								</BlendContainer>
 								<BlendContainer Name="SFX_MTA_Announcements" ID="{D6B050A2-2367-488A-84B6-013B9C8D68C5}" ShortID="784079529">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Color" Type="int16" Value="10"/>
-										<Property Name="OverrideColor" Type="bool" Value="True"/>
+										<Property Name="OverridePositioning" Type="bool" Value="True"/>
 										<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
@@ -18064,6 +20458,107 @@
 										</Property>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<Custom>
+												<Attenuation Name="Attenuation (Custom)" ID="{9020B6D6-A426-42FC-9EC4-4EBC213074B5}" ShortID="687940140">
+													<PropertyList>
+														<Property Name="RadiusMax" Type="Real64" Value="35"/>
+													</PropertyList>
+													<CurveUsageInfoList>
+														<VolumeDryUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																<Curve Name="VolumeDry" ID="{C707DE2F-8DE8-4C8C-BA7A-D10D7D3EEFE0}">
+																	<PropertyList>
+																		<Property Name="Flags" Type="int32" Value="3"/>
+																	</PropertyList>
+																	<PointList>
+																		<Point>
+																			<XPos>0</XPos>
+																			<YPos>0</YPos>
+																			<Flags>5</Flags>
+																		</Point>
+																		<Point>
+																			<XPos>35</XPos>
+																			<YPos>-200</YPos>
+																			<Flags>37</Flags>
+																		</Point>
+																	</PointList>
+																</Curve>
+															</CurveUsageInfo>
+														</VolumeDryUsage>
+														<VolumeWetGameUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
+														</VolumeWetGameUsage>
+														<VolumeWetUserUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
+														</VolumeWetUserUsage>
+														<LowPassFilterUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+														</LowPassFilterUsage>
+														<HighPassFilterUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+														</HighPassFilterUsage>
+														<DualShelfUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+														</DualShelfUsage>
+														<SpreadUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+														</SpreadUsage>
+														<FocusUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+														</FocusUsage>
+														<ObstructionVolumeUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</ObstructionVolumeUsage>
+														<ObstructionLPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</ObstructionLPFUsage>
+														<ObstructionHPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</ObstructionHPFUsage>
+														<ObstructionDSFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</ObstructionDSFUsage>
+														<OcclusionVolumeUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</OcclusionVolumeUsage>
+														<OcclusionLPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</OcclusionLPFUsage>
+														<OcclusionHPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</OcclusionHPFUsage>
+														<OcclusionDSFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</OcclusionDSFUsage>
+														<DiffractionVolumeUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</DiffractionVolumeUsage>
+														<DiffractionLPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</DiffractionLPFUsage>
+														<DiffractionHPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</DiffractionHPFUsage>
+														<DiffractionDSFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</DiffractionDSFUsage>
+														<TransmissionVolumeUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</TransmissionVolumeUsage>
+														<TransmissionLPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</TransmissionLPFUsage>
+														<TransmissionHPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</TransmissionHPFUsage>
+														<TransmissionDSFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</TransmissionDSFUsage>
+													</CurveUsageInfoList>
+												</Attenuation>
+											</Custom>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
 										</Reference>
@@ -18083,7 +20578,7 @@
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="1"/>
-												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="15">
+												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="11">
 													<ModifierList>
 														<ModifierInfo>
 															<Modifier Name="" ID="{42972EDC-AFF9-424F-8818-ED8FFA3CDE6B}">
@@ -20548,6 +23043,10 @@
 									</ReferenceList>
 									<ChildrenList>
 										<BlendContainer Name="AMB_Ambi_D" ID="{F80591F6-61A2-4726-B3D2-08AECCD43E16}" ShortID="121907216">
+											<PropertyList>
+												<Property Name="Color" Type="int16" Value="10"/>
+												<Property Name="OverrideColor" Type="bool" Value="True"/>
+											</PropertyList>
 											<ReferenceList>
 												<Reference Name="Conversion">
 													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
@@ -20820,7 +23319,7 @@
 										</BlendContainer>
 										<BlendContainer Name="AMB_Ambi_J" ID="{C824F119-EED4-46F5-B77E-DD6E880ACB3D}" ShortID="1005509822">
 											<PropertyList>
-												<Property Name="Color" Type="int16" Value="10"/>
+												<Property Name="Color" Type="int16" Value="4"/>
 												<Property Name="OverrideColor" Type="bool" Value="True"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
@@ -20837,7 +23336,7 @@
 												</Reference>
 											</ReferenceList>
 											<ChildrenList>
-												<Sound Name="AMB_Ambi_J_01" ID="{30D17473-5411-4C44-B880-3ED820FCBE7A}" ShortID="113198082">
+												<Sound Name="AMB_Ambi_J_03" ID="{1C028379-1B94-4668-AA5B-64060A4F3A79}" ShortID="417675104">
 													<PropertyList>
 														<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 													</PropertyList>
@@ -20850,47 +23349,19 @@
 														</Reference>
 													</ReferenceList>
 													<ChildrenList>
-														<AudioFileSource Name="AMB_Ambi_J_01" ID="{E9E3CAC9-20E2-4025-86B9-8490D1F3A986}">
+														<AudioFileSource Name="AMB_Ambi_J_03" ID="{88AE2343-C4C6-4428-9C3E-1CDD9D1032B6}">
 															<PropertyList>
 																<Property Name="ChannelConfigOverride" Type="int64" Value="516"/>
 															</PropertyList>
 															<Language>SFX</Language>
-															<AudioFile>AMB\AMB_Ambi_Under\AMB_Ambi_J\AMB_Ambi_J_01\AMB_Ambi_J_01.wav</AudioFile>
+															<AudioFile>AMB\AMB_Ambi_Under\AMB_Ambi_J\AMB_Ambi_J_03\AMB_Ambi_J_03.wav</AudioFile>
 															<MediaIDList>
-																<MediaID ID="148871547"/>
+																<MediaID ID="936191654"/>
 															</MediaIDList>
 														</AudioFileSource>
 													</ChildrenList>
 													<ActiveSourceList>
-														<ActiveSource Name="AMB_Ambi_J_01" ID="{E9E3CAC9-20E2-4025-86B9-8490D1F3A986}" Platform="Linked"/>
-													</ActiveSourceList>
-												</Sound>
-												<Sound Name="AMB_Ambi_J_02" ID="{1DDD5317-F671-4E37-B556-1D36A0F4CFB0}" ShortID="780224570">
-													<PropertyList>
-														<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
-													</PropertyList>
-													<ReferenceList>
-														<Reference Name="Conversion">
-															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
-														</Reference>
-														<Reference Name="OutputBus">
-															<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
-														</Reference>
-													</ReferenceList>
-													<ChildrenList>
-														<AudioFileSource Name="AMB_Ambi_J_02" ID="{93E1C33C-D68A-4766-ACF3-9FBBA27BEC89}">
-															<PropertyList>
-																<Property Name="ChannelConfigOverride" Type="int64" Value="516"/>
-															</PropertyList>
-															<Language>SFX</Language>
-															<AudioFile>AMB\AMB_Ambi_Under\AMB_Ambi_J\AMB_Ambi_J_02\AMB_Ambi_J_02.wav</AudioFile>
-															<MediaIDList>
-																<MediaID ID="499331571"/>
-															</MediaIDList>
-														</AudioFileSource>
-													</ChildrenList>
-													<ActiveSourceList>
-														<ActiveSource Name="AMB_Ambi_J_02" ID="{93E1C33C-D68A-4766-ACF3-9FBBA27BEC89}" Platform="Linked"/>
+														<ActiveSource Name="AMB_Ambi_J_03" ID="{88AE2343-C4C6-4428-9C3E-1CDD9D1032B6}" Platform="Linked"/>
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
@@ -20928,7 +23399,11 @@
 													</CustomState>
 													<CustomState>
 														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
-														<CustomState Name="" ID="{44E54345-4B49-4FD0-91C0-24366CDCEDC3}" ShortID="969786753"/>
+														<CustomState Name="" ID="{44E54345-4B49-4FD0-91C0-24366CDCEDC3}" ShortID="969786753">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
 													</CustomState>
 													<CustomState>
 														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
@@ -21012,7 +23487,11 @@
 													</CustomState>
 													<CustomState>
 														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
-														<CustomState Name="" ID="{18E20751-360F-422A-9C02-03B07376B607}" ShortID="401299344"/>
+														<CustomState Name="" ID="{18E20751-360F-422A-9C02-03B07376B607}" ShortID="401299344">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-12"/>
+															</PropertyList>
+														</CustomState>
 													</CustomState>
 													<CustomState>
 														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
@@ -21077,6 +23556,291 @@
 													<CustomState>
 														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
 														<CustomState Name="" ID="{CC813935-DE72-41EF-BE6D-BCEF70739A5B}" ShortID="55027451">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+												</CustomStateList>
+											</StateInfo>
+										</BlendContainer>
+										<BlendContainer Name="AMB_Ambi_M" ID="{71809C85-3FD6-455C-8655-3906E0700F96}" ShortID="37699399">
+											<PropertyList>
+												<Property Name="Color" Type="int16" Value="4"/>
+												<Property Name="OverrideColor" Type="bool" Value="True"/>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-9</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<Sound Name="AMB_Ambi_M_01" ID="{5B4CB920-521A-4716-8FC5-E2AE4D85A538}" ShortID="1035323813">
+													<PropertyList>
+														<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+														<Property Name="Pitch" Type="int32">
+															<ValueList>
+																<Value>-970</Value>
+															</ValueList>
+														</Property>
+													</PropertyList>
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="AMB_Ambi_J_01" ID="{4EFBFCE5-B550-49DA-8C6B-C1906E5E29E9}">
+															<PropertyList>
+																<Property Name="ChannelConfigOverride" Type="int64" Value="516"/>
+															</PropertyList>
+															<Language>SFX</Language>
+															<AudioFile>AMB\AMB_Ambi_Under\AMB_Ambi_J\AMB_Ambi_J_01\AMB_Ambi_J_01.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="148871547"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="AMB_Ambi_J_01" ID="{4EFBFCE5-B550-49DA-8C6B-C1906E5E29E9}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="AMB_Ambi_M_02" ID="{255FD3E7-AD32-4AA5-8FED-EC5D7C271522}" ShortID="747907658">
+													<PropertyList>
+														<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+														<Property Name="Pitch" Type="int32">
+															<ValueList>
+																<Value>-430</Value>
+															</ValueList>
+														</Property>
+													</PropertyList>
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="AMB_Ambi_J_02" ID="{60FCEBA6-5983-40E4-8285-D39D2A2A8D1E}">
+															<PropertyList>
+																<Property Name="ChannelConfigOverride" Type="int64" Value="516"/>
+															</PropertyList>
+															<Language>SFX</Language>
+															<AudioFile>AMB\AMB_Ambi_Under\AMB_Ambi_J\AMB_Ambi_J_02\AMB_Ambi_J_02.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="499331571"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="AMB_Ambi_J_02" ID="{60FCEBA6-5983-40E4-8285-D39D2A2A8D1E}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+											</ChildrenList>
+											<StateInfo>
+												<StateGroupList>
+													<StateGroupInfo>
+														<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+														<StateGroupInfo Name="" ID="{6987F10C-1C49-4DD0-B0B0-E0F13A69AAE2}" ShortID="211735697"/>
+													</StateGroupInfo>
+												</StateGroupList>
+												<CustomStateList>
+													<CustomState>
+														<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+														<CustomState Name="" ID="{12E1A967-10D0-4C74-93D1-9FE543E52308}" ShortID="952701643">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+														<CustomState Name="" ID="{AB89D413-0F91-4D6C-BA06-AC71AB51E523}" ShortID="998713145">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+														<CustomState Name="" ID="{6200CFC0-C9FD-4C11-9AEF-64664C8233FA}" ShortID="913328686">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+														<CustomState Name="" ID="{36177BAD-4709-4B27-A718-EB0F58A844B2}" ShortID="556896865">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+														<CustomState Name="" ID="{0D5F30F1-10C1-47CF-ACBD-3F642AFA76E3}" ShortID="173374752">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+														<CustomState Name="" ID="{6F6C197E-910E-466D-9FC3-20AB1D84C545}" ShortID="391243081">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+														<CustomState Name="" ID="{9B056445-28D5-44CD-9F2B-B1B30A480949}" ShortID="215698372">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+														<CustomState Name="" ID="{D92FE02E-D02F-48AF-AB1C-97B6CFB02FE9}" ShortID="703672325">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+														<CustomState Name="" ID="{AE284717-1D60-4311-89DD-03744FFF20F7}" ShortID="336067833">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+														<CustomState Name="" ID="{FB282BC6-C716-401A-8F20-7693A11FEC87}" ShortID="776812240">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+														<CustomState Name="" ID="{A30D797F-98F0-4C4E-9225-B3AF75B37ECA}" ShortID="949306497">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+														<CustomState Name="" ID="{0A8A3BCD-61E4-4115-9CE9-160F500B6819}" ShortID="746382305">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+														<CustomState Name="" ID="{A6814CE1-7D0E-4885-A017-7BC502656A92}" ShortID="592873904">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+														<CustomState Name="" ID="{EFB816C5-5071-4F97-9113-78860B1B2971}" ShortID="849500497">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+														<CustomState Name="" ID="{00BE7CBF-2386-48ED-82E7-74A5F5BB592E}" ShortID="785065938"/>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+														<CustomState Name="" ID="{AC227A31-8421-4B7C-8A2E-D8CC7B50A9EB}" ShortID="989318692">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+														<CustomState Name="" ID="{A54C940D-36CE-46B6-9915-915EEC3034BB}" ShortID="400098710">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+														<CustomState Name="" ID="{1463AC2B-2C18-48EF-9AB0-9B48B8145BF6}" ShortID="159418786">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+														<CustomState Name="" ID="{3FD274FF-953E-4B4F-A673-DD90A33E827E}" ShortID="537820659">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+														<CustomState Name="" ID="{0A19231F-BCFB-461F-86EF-9D5B57E7089B}" ShortID="223102000">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+														<CustomState Name="" ID="{A07E0A5A-41CB-43BD-A565-E0B1D3AA4CF7}" ShortID="465315225">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+														<CustomState Name="" ID="{BCA77F47-0CF5-4A3A-9EAC-0B6FBD887F29}" ShortID="676253735">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+														<CustomState Name="" ID="{FD91B150-326E-42BB-94A3-FB9162729BC0}" ShortID="21627534">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
+													</CustomState>
+													<CustomState>
+														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+														<CustomState Name="" ID="{880C155C-4947-4B18-BD06-10DAFACE8407}" ShortID="308562558">
 															<PropertyList>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
@@ -23602,7 +26366,7 @@
 								<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
-										<Value>-6</Value>
+										<Value>-3</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
@@ -26576,11 +29340,11 @@
 						</BlendContainer>
 						<BlendContainer Name="MUS_I" ID="{27B01D8C-1926-425E-92D1-8BB4D40A2547}" ShortID="166926476">
 							<PropertyList>
-								<Property Name="Color" Type="int16" Value="10"/>
+								<Property Name="Color" Type="int16" Value="4"/>
 								<Property Name="OverrideColor" Type="bool" Value="True"/>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
-										<Value>-14</Value>
+										<Value>-6</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
@@ -26820,7 +29584,7 @@
 						</BlendContainer>
 						<BlendContainer Name="MUS_E" ID="{D8480CE7-4552-427B-ADE1-DE703D39A43A}" ShortID="171743189">
 							<PropertyList>
-								<Property Name="Color" Type="int16" Value="10"/>
+								<Property Name="Color" Type="int16" Value="4"/>
 								<Property Name="OverrideColor" Type="bool" Value="True"/>
 							</PropertyList>
 							<ReferenceList>
@@ -27231,9 +29995,9 @@
 								</CustomStateList>
 							</StateInfo>
 						</BlendContainer>
-						<BlendContainer Name="MUS_J" ID="{E61418B5-B3AE-48EF-B8FE-E29B1A831442}" ShortID="361948557">
+						<BlendContainer Name="MUS_M" ID="{E61418B5-B3AE-48EF-B8FE-E29B1A831442}" ShortID="361948557">
 							<PropertyList>
-								<Property Name="Color" Type="int16" Value="10"/>
+								<Property Name="Color" Type="int16" Value="4"/>
 								<Property Name="OverrideColor" Type="bool" Value="True"/>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
@@ -27250,7 +30014,7 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<Sound Name="MUS_J_01" ID="{F4D56631-33A1-4275-A36F-AC4B7AE28AFC}" ShortID="415301322">
+								<Sound Name="MUS_J_01_V2" ID="{9B47D6A2-F73D-4A7D-93CD-5F992E587153}" ShortID="1070671499">
 									<PropertyList>
 										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 									</PropertyList>
@@ -27263,41 +30027,16 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="MUS_J_01" ID="{B79A99AC-7C66-4295-8B16-A93906E112C5}">
+										<AudioFileSource Name="MUS_J_01_V2" ID="{6FD17CFC-1D9B-4440-9D6D-A300DBA2381E}">
 											<Language>SFX</Language>
-											<AudioFile>MUS\MUS_J\MUS_J_01.wav</AudioFile>
+											<AudioFile>MUS\MUS_J\MUS_J_01_V2.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="94857180"/>
+												<MediaID ID="591640685"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="MUS_J_01" ID="{B79A99AC-7C66-4295-8B16-A93906E112C5}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
-								<Sound Name="MUS_J_02" ID="{0F2F7FB2-1FF8-4434-BE95-2E6A93A68670}" ShortID="289405544">
-									<PropertyList>
-										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
-									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="MUS_J_02" ID="{9DFDDA0C-FEBB-4319-837F-1534B580E19A}">
-											<Language>SFX</Language>
-											<AudioFile>MUS\MUS_J\MUS_J_02.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="1056571301"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="MUS_J_02" ID="{9DFDDA0C-FEBB-4319-837F-1534B580E19A}" Platform="Linked"/>
+										<ActiveSource Name="MUS_J_01_V2" ID="{6FD17CFC-1D9B-4440-9D6D-A300DBA2381E}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
@@ -27423,7 +30162,12 @@
 									</CustomState>
 									<CustomState>
 										<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
-										<CustomState Name="" ID="{53E72028-79C2-4BF6-8ABD-3C057B508AAE}" ShortID="894211616"/>
+										<CustomState Name="" ID="{53E72028-79C2-4BF6-8ABD-3C057B508AAE}" ShortID="894211616">
+											<PropertyList>
+												<Property Name="Pitch" Type="int32" Value="-1200"/>
+												<Property Name="Volume" Type="Real64" Value="-6"/>
+											</PropertyList>
+										</CustomState>
 									</CustomState>
 									<CustomState>
 										<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>

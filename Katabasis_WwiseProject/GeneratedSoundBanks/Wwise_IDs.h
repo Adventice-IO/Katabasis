@@ -27,6 +27,7 @@ namespace AK
         static const AkUniqueID AMB_AMBI_EXT_STREET_02 = 3388850432U;
         static const AkUniqueID AMB_AMBI_EXT_STREET_03 = 3388850433U;
         static const AkUniqueID AMB_AMBI_J = 2687390220U;
+        static const AkUniqueID AMB_AMBI_M = 2687390219U;
         static const AkUniqueID AMB_CITY_A_PEOPLE_CARS = 1305479495U;
         static const AkUniqueID AMB_CITY_ALARMS_A = 2335628432U;
         static const AkUniqueID AMB_CITY_ALARMS_B = 2335628435U;
@@ -70,8 +71,9 @@ namespace AK
         static const AkUniqueID MUS_D = 4159718935U;
         static const AkUniqueID MUS_E = 4159718934U;
         static const AkUniqueID MUS_F = 4159718933U;
+        static const AkUniqueID MUS_G_K_O = 4014691300U;
         static const AkUniqueID MUS_I = 4159718938U;
-        static const AkUniqueID MUS_J = 4159718937U;
+        static const AkUniqueID MUS_M = 4159718942U;
         static const AkUniqueID OMILIO_0_INTRO = 581233776U;
         static const AkUniqueID OMILIO_1_SANTE = 3617820752U;
         static const AkUniqueID OMILIO_2_PASSENGERS = 2376804707U;
@@ -148,7 +150,6 @@ namespace AK
         static const AkUniqueID TOMMY_3_EXIT_SIGN = 3565901682U;
         static const AkUniqueID TOMMY_4_NO_SERVICE = 312400974U;
         static const AkUniqueID TOMMY_5_HYPERSENSITIVE = 3145206958U;
-        static const AkUniqueID VOX_ITW_LEAVE = 3686257867U;
         static const AkUniqueID VOX_TEST_STEVE = 2108038015U;
     } // namespace EVENTS
 
