@@ -13,6 +13,8 @@ public class GameEnd : MonoBehaviour
     public float spawnDistance = 5f;
     public float cartonScale = 1f;
 
+    public float timeBeforeReset = 2f;
+
     public List<Texture2D> cartons = new List<Texture2D>();
 
     GameObject currentCartonObject;
@@ -51,7 +53,10 @@ public class GameEnd : MonoBehaviour
         if (newCartonIndex >= cartons.Count)
         {
             HideCurrentCarton();
-            FinishEnd();
+            if (timeSinceActiveChange >= cartons.Count * cartonDuration + timeBeforeReset)
+            {
+                FinishEnd();
+            }
             return;
         }
 

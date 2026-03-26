@@ -116,7 +116,7 @@ public class GameOutro : MonoBehaviour
         cartons.Clear();
         HideCurrentCartons();
 
-        string outroPath = dataManager.GetBasePath(DataManager.DataFolder.Outro);
+        string outroPath = GetCartonsFolderPath();
         if (!Directory.Exists(outroPath))
         {
             Debug.LogWarning("Outro directory not found: " + outroPath);
@@ -145,6 +145,27 @@ public class GameOutro : MonoBehaviour
         }
 
         CreateCartonObjects();
+    }
+
+    string GetCartonsFolderPath()
+    {
+        string rootOutroPath = dataManager.GetBasePath(DataManager.DataFolder.Outro);
+        if (string.IsNullOrWhiteSpace(rootOutroPath))
+        {
+            return rootOutroPath;
+        }
+
+        string language = mainController != null ? mainController.language : string.Empty;
+        if (!string.IsNullOrWhiteSpace(language))
+        {
+            string languageOutroPath = Path.Combine(rootOutroPath, language);
+            if (Directory.Exists(languageOutroPath))
+            {
+                return languageOutroPath;
+            }
+        }
+
+        return rootOutroPath;
     }
 
     void OnValidate()
