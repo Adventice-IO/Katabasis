@@ -32,6 +32,13 @@
 							</ObjectLists>
 						</Bus>
 						<Bus Name="AMB" ID="{05683D88-4E37-44B7-B210-E36B7D9FD447}">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-3</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<ChildrenList>
 								<Bus Name="AMBI" ID="{DD210BBB-DAB4-4C87-B592-2DC94FAF342F}">
 									<PropertyList>
@@ -59,36 +66,36 @@
 							</ChildrenList>
 							<ObjectLists>
 								<ObjectList Name="Effects">
-									<EffectSlot Name="" ID="{B36D9807-4B40-43E5-BAC1-17B5E2D749D2}" ShortID="223845646">
+									<EffectSlot Name="" ID="{F9759157-02E0-4D87-9B1D-D01097E27FD2}" ShortID="369660722">
 										<ReferenceList>
 											<Reference Name="Effect">
 												<Custom>
-													<Effect Name="Parametric EQ (Custom)" ID="{0F1EC869-E289-41F9-BB42-5A0A95D2578B}" ShortID="201696782" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
+													<Effect Name="Parametric EQ (Custom)" ID="{84BD8286-DF6B-4CFB-BA0E-CAB7A6C67DF4}" ShortID="494544631" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
 														<PropertyList>
 															<Property Name="DynamicsEnableBand1" Type="bool" Value="True"/>
 															<Property Name="DynamicsEnableBand2" Type="bool" Value="True"/>
 															<Property Name="DynamicsEnableBand3" Type="bool" Value="True"/>
 															<Property Name="FilterTypeBand1" Type="int32" Value="6"/>
-															<Property Name="FrequencyBand1" Type="Real32" Value="250"/>
+															<Property Name="FrequencyBand1" Type="Real32" Value="300"/>
 															<Property Name="FrequencyBand2" Type="Real32" Value="800"/>
 															<Property Name="FrequencyBand3" Type="Real32" Value="3131"/>
 															<Property Name="FrequencyBand4" Type="Real32" Value="5000"/>
 															<Property Name="GainBand1" Type="Real32" Value="0.04469274"/>
 															<Property Name="GainBand2" Type="Real32" Value="-0.04469274"/>
 															<Property Name="OnOffBand3" Type="bool" Value="True"/>
-															<Property Name="QFactorBand1" Type="Real32" Value="0.5"/>
+															<Property Name="QFactorBand1" Type="Real32" Value="0.8"/>
 															<Property Name="QFactorBand2" Type="Real32" Value="0.5"/>
 															<Property Name="QFactorBand3" Type="Real32" Value="0.5"/>
 															<Property Name="RangeBand1" Type="Real32" Value="-12"/>
-															<Property Name="RangeBand2" Type="Real32" Value="-12"/>
-															<Property Name="RangeBand3" Type="Real32" Value="-12"/>
-															<Property Name="ReleaseTimeBand1" Type="Real32" Value="0.2"/>
-															<Property Name="ReleaseTimeBand2" Type="Real32" Value="0.2"/>
-															<Property Name="ReleaseTimeBand3" Type="Real32" Value="0.2"/>
+															<Property Name="RangeBand2" Type="Real32" Value="-16"/>
+															<Property Name="RangeBand3" Type="Real32" Value="-16"/>
+															<Property Name="ReleaseTimeBand1" Type="Real32" Value="0.3"/>
+															<Property Name="ReleaseTimeBand2" Type="Real32" Value="0.3"/>
+															<Property Name="ReleaseTimeBand3" Type="Real32" Value="0.3"/>
 															<Property Name="RolloffRateBand2" Type="int32" Value="48"/>
-															<Property Name="ThresholdBand1" Type="Real32" Value="-30"/>
+															<Property Name="ThresholdBand1" Type="Real32" Value="-40"/>
 															<Property Name="ThresholdBand2" Type="Real32" Value="-40"/>
-															<Property Name="ThresholdBand3" Type="Real32" Value="-40"/>
+															<Property Name="ThresholdBand3" Type="Real32" Value="-46"/>
 														</PropertyList>
 														<ReferenceList>
 															<Reference Name="DynamicsSidechainRef">
@@ -104,6 +111,13 @@
 							</ObjectLists>
 						</Bus>
 						<Bus Name="SFX" ID="{232EC043-CFB9-4144-B0E4-D1BF03682891}">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-3</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<ChildrenList>
 								<Bus Name="SFX_Test" ID="{AA943238-36C0-4EB0-900A-2C520D789FA0}"/>
 								<Bus Name="SFX_3D" ID="{2558D0E1-5FF0-4876-B806-1A0689ACB07F}"/>
@@ -120,26 +134,26 @@
 															<Property Name="DynamicsEnableBand2" Type="bool" Value="True"/>
 															<Property Name="DynamicsEnableBand3" Type="bool" Value="True"/>
 															<Property Name="FilterTypeBand1" Type="int32" Value="6"/>
-															<Property Name="FrequencyBand1" Type="Real32" Value="250"/>
+															<Property Name="FrequencyBand1" Type="Real32" Value="300"/>
 															<Property Name="FrequencyBand2" Type="Real32" Value="800"/>
 															<Property Name="FrequencyBand3" Type="Real32" Value="3131"/>
 															<Property Name="FrequencyBand4" Type="Real32" Value="5000"/>
 															<Property Name="GainBand1" Type="Real32" Value="0.04469274"/>
 															<Property Name="GainBand2" Type="Real32" Value="-0.04469274"/>
 															<Property Name="OnOffBand3" Type="bool" Value="True"/>
-															<Property Name="QFactorBand1" Type="Real32" Value="0.5"/>
+															<Property Name="QFactorBand1" Type="Real32" Value="0.8"/>
 															<Property Name="QFactorBand2" Type="Real32" Value="0.5"/>
 															<Property Name="QFactorBand3" Type="Real32" Value="0.5"/>
-															<Property Name="RangeBand1" Type="Real32" Value="-12"/>
-															<Property Name="RangeBand2" Type="Real32" Value="-12"/>
-															<Property Name="RangeBand3" Type="Real32" Value="-12"/>
-															<Property Name="ReleaseTimeBand1" Type="Real32" Value="0.3"/>
-															<Property Name="ReleaseTimeBand2" Type="Real32" Value="0.3"/>
-															<Property Name="ReleaseTimeBand3" Type="Real32" Value="0.31"/>
+															<Property Name="RangeBand1" Type="Real32" Value="-15"/>
+															<Property Name="RangeBand2" Type="Real32" Value="-16"/>
+															<Property Name="RangeBand3" Type="Real32" Value="-16"/>
+															<Property Name="ReleaseTimeBand1" Type="Real32" Value="0.4"/>
+															<Property Name="ReleaseTimeBand2" Type="Real32" Value="0.4"/>
+															<Property Name="ReleaseTimeBand3" Type="Real32" Value="0.4"/>
 															<Property Name="RolloffRateBand2" Type="int32" Value="48"/>
-															<Property Name="ThresholdBand1" Type="Real32" Value="-30"/>
+															<Property Name="ThresholdBand1" Type="Real32" Value="-36"/>
 															<Property Name="ThresholdBand2" Type="Real32" Value="-40"/>
-															<Property Name="ThresholdBand3" Type="Real32" Value="-40"/>
+															<Property Name="ThresholdBand3" Type="Real32" Value="-46"/>
 														</PropertyList>
 														<ReferenceList>
 															<Reference Name="DynamicsSidechainRef">
@@ -222,6 +236,13 @@
 							</ObjectLists>
 						</AuxBus>
 						<Bus Name="MUS" ID="{E9B4A790-D51D-4C7D-BA5E-B0B7741926A3}">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-3</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<ObjectLists>
 								<ObjectList Name="Effects">
 									<EffectSlot Name="" ID="{32F67D26-1ED5-427E-B799-46FF226E7D30}" ShortID="992215821">
@@ -234,26 +255,26 @@
 															<Property Name="DynamicsEnableBand2" Type="bool" Value="True"/>
 															<Property Name="DynamicsEnableBand3" Type="bool" Value="True"/>
 															<Property Name="FilterTypeBand1" Type="int32" Value="6"/>
-															<Property Name="FrequencyBand1" Type="Real32" Value="250"/>
+															<Property Name="FrequencyBand1" Type="Real32" Value="300"/>
 															<Property Name="FrequencyBand2" Type="Real32" Value="800"/>
 															<Property Name="FrequencyBand3" Type="Real32" Value="3131"/>
 															<Property Name="FrequencyBand4" Type="Real32" Value="5000"/>
 															<Property Name="GainBand1" Type="Real32" Value="0.04469274"/>
 															<Property Name="GainBand2" Type="Real32" Value="-0.04469274"/>
 															<Property Name="OnOffBand3" Type="bool" Value="True"/>
-															<Property Name="QFactorBand1" Type="Real32" Value="0.5"/>
+															<Property Name="QFactorBand1" Type="Real32" Value="0.8"/>
 															<Property Name="QFactorBand2" Type="Real32" Value="0.5"/>
 															<Property Name="QFactorBand3" Type="Real32" Value="0.5"/>
 															<Property Name="RangeBand1" Type="Real32" Value="-12"/>
-															<Property Name="RangeBand2" Type="Real32" Value="-12"/>
-															<Property Name="RangeBand3" Type="Real32" Value="-12"/>
-															<Property Name="ReleaseTimeBand1" Type="Real32" Value="0.2"/>
-															<Property Name="ReleaseTimeBand2" Type="Real32" Value="0.2"/>
-															<Property Name="ReleaseTimeBand3" Type="Real32" Value="0.2"/>
+															<Property Name="RangeBand2" Type="Real32" Value="-16"/>
+															<Property Name="RangeBand3" Type="Real32" Value="-16"/>
+															<Property Name="ReleaseTimeBand1" Type="Real32" Value="0.3"/>
+															<Property Name="ReleaseTimeBand2" Type="Real32" Value="0.3"/>
+															<Property Name="ReleaseTimeBand3" Type="Real32" Value="0.3"/>
 															<Property Name="RolloffRateBand2" Type="int32" Value="48"/>
-															<Property Name="ThresholdBand1" Type="Real32" Value="-30"/>
+															<Property Name="ThresholdBand1" Type="Real32" Value="-40"/>
 															<Property Name="ThresholdBand2" Type="Real32" Value="-40"/>
-															<Property Name="ThresholdBand3" Type="Real32" Value="-40"/>
+															<Property Name="ThresholdBand3" Type="Real32" Value="-46"/>
 														</PropertyList>
 														<ReferenceList>
 															<Reference Name="DynamicsSidechainRef">
