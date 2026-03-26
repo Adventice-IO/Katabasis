@@ -26,8 +26,10 @@ namespace AK
         static const AkUniqueID AMB_AMBI_EXT_STREET_01 = 3388850435U;
         static const AkUniqueID AMB_AMBI_EXT_STREET_02 = 3388850432U;
         static const AkUniqueID AMB_AMBI_EXT_STREET_03 = 3388850433U;
+        static const AkUniqueID AMB_AMBI_G_K_O = 2050334025U;
         static const AkUniqueID AMB_AMBI_J = 2687390220U;
         static const AkUniqueID AMB_AMBI_M = 2687390219U;
+        static const AkUniqueID AMB_AMBI_P = 2687390230U;
         static const AkUniqueID AMB_CITY_A_PEOPLE_CARS = 1305479495U;
         static const AkUniqueID AMB_CITY_ALARMS_A = 2335628432U;
         static const AkUniqueID AMB_CITY_ALARMS_B = 2335628435U;
@@ -39,6 +41,7 @@ namespace AK
         static const AkUniqueID AMB_CITY_G_PEOPLE = 2366823393U;
         static const AkUniqueID AMB_CITY_I_CARS_A = 1869628175U;
         static const AkUniqueID AMB_CITY_I_CARS_B = 1869628172U;
+        static const AkUniqueID AMB_EXT_PARK_INSECT_PEOPLE_BYS_01 = 3164979780U;
         static const AkUniqueID CHRIS_2_0_INTRO = 1615727631U;
         static const AkUniqueID CHRIS_2_2_RADIO = 663280590U;
         static const AkUniqueID CHRIS_2_3_DADS_STEPS = 3680887444U;
@@ -74,6 +77,7 @@ namespace AK
         static const AkUniqueID MUS_G_K_O = 4014691300U;
         static const AkUniqueID MUS_I = 4159718938U;
         static const AkUniqueID MUS_M = 4159718942U;
+        static const AkUniqueID MUS_P = 4159718915U;
         static const AkUniqueID OMILIO_0_INTRO = 581233776U;
         static const AkUniqueID OMILIO_1_SANTE = 3617820752U;
         static const AkUniqueID OMILIO_2_PASSENGERS = 2376804707U;
@@ -97,7 +101,8 @@ namespace AK
         static const AkUniqueID SFX_ELEC_F = 3373651685U;
         static const AkUniqueID SFX_ELEC_G = 3373651684U;
         static const AkUniqueID SFX_ELEC_H = 3373651691U;
-        static const AkUniqueID SFX_MTA_ANNOUNCEMENTS = 923212790U;
+        static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MAMDANI = 4259001170U;
+        static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MTA = 3164635487U;
         static const AkUniqueID SFX_PORTAL_ACTIVATE = 4131803333U;
         static const AkUniqueID SFX_PORTAL_VALIDATE = 1155651648U;
         static const AkUniqueID SFX_SEWERS_A_DRIPS = 3799102629U;
@@ -124,6 +129,7 @@ namespace AK
         static const AkUniqueID SFX_SUBWAY_J_BYS = 2782204094U;
         static const AkUniqueID SFX_SUBWAY_K_NYC_BYS_JM = 3569433076U;
         static const AkUniqueID SFX_TONE_TEST = 3501277368U;
+        static const AkUniqueID SFX_TRAIN_FREEDOM = 2950012982U;
         static const AkUniqueID SPIDERMAN_0_INTRO = 838969532U;
         static const AkUniqueID SPIDERMAN_1_FAMILY_PROBLEMS = 2288458896U;
         static const AkUniqueID SPIDERMAN_2_MOUV_MUETTE = 1867442572U;
@@ -238,6 +244,7 @@ namespace AK
         static const AkUniqueID DEL_UNDER = 3342787159U;
         static const AkUniqueID REV_DEL_EXT = 3577192126U;
         static const AkUniqueID REV_LONG = 266044713U;
+        static const AkUniqueID REV_LONGULTRA = 1550993137U;
         static const AkUniqueID REV_MID = 618132367U;
         static const AkUniqueID REV_SHORT = 3475958207U;
     } // namespace AUX_BUSSES

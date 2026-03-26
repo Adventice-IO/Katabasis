@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{50C64055-3A7D-E88A-9DD0-DBAA134C4D3C}",
+    "Hash": "{DABEBB37-5C52-8E99-19DF-6B684E82D4FB}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -23,14 +23,6 @@
        "GUID": "{CF585C31-3EE3-4908-B88F-764D02956C4F}",
        "LibName": "Ak Sidechain Send",
        "LibId": "12648451"
-      },
-      {
-       "Id": "201696782",
-       "Name": "Parametric EQ (Custom)",
-       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\AMB\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
-       "GUID": "{0F1EC869-E289-41F9-BB42-5A0A95D2578B}",
-       "LibName": "Wwise Parametric EQ",
-       "LibId": "6881283"
       },
       {
        "Id": "203344492",
@@ -53,6 +45,22 @@
        "Name": "Parametric EQ (Custom)",
        "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
        "GUID": "{4CE161AD-664E-4FF1-A155-F6D4E35C843A}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
+       "Id": "494544631",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\AMB\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{84BD8286-DF6B-4CFB-BA0E-CAB7A6C67DF4}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
+       "Id": "519127956",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_LongUltra\\[Effect Slot [1]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{534A7052-C9B5-49BE-B1F1-15B61CBB2D7D}",
        "LibName": "Wwise Parametric EQ",
        "LibId": "6881283"
       },
@@ -119,6 +127,14 @@
        "Name": "Hall_Medium",
        "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Halls\\Hall_Medium",
        "GUID": "{50286348-176A-4235-9E4C-CA5F73D87818}",
+       "LibName": "Wwise RoomVerb",
+       "LibId": "7733251"
+      },
+      {
+       "Id": "3900114836",
+       "Name": "Metal_Hangar",
+       "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Huge Spaces\\Metal_Hangar",
+       "GUID": "{C4A4605C-42EF-476A-B53C-E31C7A442C24}",
        "LibName": "Wwise RoomVerb",
        "LibId": "7733251"
       }
@@ -190,7 +206,7 @@
       "PluginRefs": {
        "Custom": [
         {
-         "Id": "201696782"
+         "Id": "494544631"
         }
        ]
       }
@@ -266,6 +282,24 @@
        "ShareSets": [
         {
          "Id": "3451596814"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "1550993137",
+      "Name": "REV_LongUltra",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_LongUltra",
+      "GUID": "{43E67AD9-087F-47C6-82F2-818148AB0A10}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "519127956"
+        }
+       ],
+       "ShareSets": [
+        {
+         "Id": "3900114836"
         }
        ]
       }
@@ -547,6 +581,6 @@
     ]
    }
   ],
-  "FileHash": "{547580E2-EFE2-D7EB-CA82-8FDA8CF62EB4}"
+  "FileHash": "{E3546970-5152-4F5D-94BE-BFFFD22F0B2C}"
  }
 }

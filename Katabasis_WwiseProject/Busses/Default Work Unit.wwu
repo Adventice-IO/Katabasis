@@ -302,6 +302,35 @@
 								</ObjectList>
 							</ObjectLists>
 						</AuxBus>
+						<AuxBus Name="REV_LongUltra" ID="{43E67AD9-087F-47C6-82F2-818148AB0A10}">
+							<ObjectLists>
+								<ObjectList Name="Effects">
+									<EffectSlot Name="" ID="{8B9CA07E-DA3C-4153-8024-ADA803C99764}" ShortID="946022794">
+										<ReferenceList>
+											<Reference Name="Effect" PluginName="Wwise RoomVerb" CompanyID="0" PluginID="118" PluginType="3">
+												<ObjectRef Name="Metal_Hangar" ID="{C4A4605C-42EF-476A-B53C-E31C7A442C24}" WorkUnitID="{E8613F7D-BAD3-45CD-A3ED-505576F31277}"/>
+											</Reference>
+										</ReferenceList>
+									</EffectSlot>
+									<EffectSlot Name="" ID="{F89A8793-0AAD-4F3C-B8B7-BDACF21805E3}" ShortID="130438646">
+										<ReferenceList>
+											<Reference Name="Effect">
+												<Custom>
+													<Effect Name="Parametric EQ (Custom)" ID="{534A7052-C9B5-49BE-B1F1-15B61CBB2D7D}" ShortID="519127956" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
+														<PropertyList>
+															<Property Name="FilterTypeBand1" Type="int32" Value="1"/>
+															<Property Name="FrequencyBand1" Type="Real32" Value="400.9713"/>
+															<Property Name="NumBands" Type="int32" Value="1"/>
+															<Property Name="OnOffBand2" Type="bool" Value="False"/>
+														</PropertyList>
+													</Effect>
+												</Custom>
+											</Reference>
+										</ReferenceList>
+									</EffectSlot>
+								</ObjectList>
+							</ObjectLists>
+						</AuxBus>
 					</ChildrenList>
 					<ObjectLists>
 						<ObjectList Name="Effects">

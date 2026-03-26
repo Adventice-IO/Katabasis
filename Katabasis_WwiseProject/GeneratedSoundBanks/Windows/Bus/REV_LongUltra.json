@@ -1,0 +1,63 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "172",
+  "SoundBanks": [
+   {
+    "Id": "1550993137",
+    "Type": "Bus",
+    "GUID": "{43E67AD9-087F-47C6-82F2-818148AB0A10}",
+    "Language": "SFX",
+    "Hash": "{AD89CD65-CBD1-4407-69C8-E2C2941354CB}",
+    "ObjectPath": "REV_LongUltra",
+    "ShortName": "REV_LongUltra",
+    "Path": "Bus/REV_LongUltra.bnk",
+    "Plugins": {
+     "Custom": [
+      {
+       "Id": "519127956",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_LongUltra\\[Effect Slot [1]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{534A7052-C9B5-49BE-B1F1-15B61CBB2D7D}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      }
+     ],
+     "ShareSets": [
+      {
+       "Id": "3900114836",
+       "Name": "Metal_Hangar",
+       "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Huge Spaces\\Metal_Hangar",
+       "GUID": "{C4A4605C-42EF-476A-B53C-E31C7A442C24}",
+       "LibName": "Wwise RoomVerb",
+       "LibId": "7733251"
+      }
+     ]
+    },
+    "AuxBusses": [
+     {
+      "Id": "1550993137",
+      "Name": "REV_LongUltra",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_LongUltra",
+      "GUID": "{43E67AD9-087F-47C6-82F2-818148AB0A10}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "519127956"
+        }
+       ],
+       "ShareSets": [
+        {
+         "Id": "3900114836"
+        }
+       ]
+      }
+     }
+    ]
+   }
+  ],
+  "FileHash": "{C9E20C16-953F-7027-6E6C-3284B39E9468}"
+ }
+}

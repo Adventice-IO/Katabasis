@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{5447DBB0-8B88-E574-8EFC-2973CD236248}",
+    "Hash": "{07146965-1522-1EEE-A437-CBBF83F04D65}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -53,6 +53,14 @@
        "Name": "Parametric EQ (Custom)",
        "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\AMB\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
        "GUID": "{84BD8286-DF6B-4CFB-BA0E-CAB7A6C67DF4}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
+       "Id": "519127956",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_LongUltra\\[Effect Slot [1]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{534A7052-C9B5-49BE-B1F1-15B61CBB2D7D}",
        "LibName": "Wwise Parametric EQ",
        "LibId": "6881283"
       },
@@ -119,6 +127,14 @@
        "Name": "Hall_Medium",
        "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Halls\\Hall_Medium",
        "GUID": "{50286348-176A-4235-9E4C-CA5F73D87818}",
+       "LibName": "Wwise RoomVerb",
+       "LibId": "7733251"
+      },
+      {
+       "Id": "3900114836",
+       "Name": "Metal_Hangar",
+       "ObjectPath": "\\Effects\\Factory Effects\\RoomVerb\\Huge Spaces\\Metal_Hangar",
+       "GUID": "{C4A4605C-42EF-476A-B53C-E31C7A442C24}",
        "LibName": "Wwise RoomVerb",
        "LibId": "7733251"
       }
@@ -266,6 +282,24 @@
        "ShareSets": [
         {
          "Id": "3451596814"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "1550993137",
+      "Name": "REV_LongUltra",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_LongUltra",
+      "GUID": "{43E67AD9-087F-47C6-82F2-818148AB0A10}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "519127956"
+        }
+       ],
+       "ShareSets": [
+        {
+         "Id": "3900114836"
         }
        ]
       }
@@ -547,6 +581,6 @@
     ]
    }
   ],
-  "FileHash": "{216AAEB8-4852-B753-31C3-36B1BEBB9F32}"
+  "FileHash": "{C4353DFE-82C4-C937-019B-45D16F847B0D}"
  }
 }
