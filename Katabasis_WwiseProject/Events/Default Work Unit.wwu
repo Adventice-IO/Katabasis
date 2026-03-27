@@ -1399,7 +1399,7 @@
 						</Folder>
 						<Folder Name="AMB_Ambi_Under" ID="{04E4ECDB-4370-46A8-AD4E-85CEE620147A}" ShortID="316025826">
 							<ChildrenList>
-								<Event Name="AMB_Ambi_D" ID="{06107A9A-8F1A-4C96-8D57-D6758FC65BE4}">
+								<Event Name="AMB_Ambi_D_01" ID="{06107A9A-8F1A-4C96-8D57-D6758FC65BE4}">
 									<PropertyList>
 										<Property Name="Color" Type="int16" Value="4"/>
 										<Property Name="OverrideColor" Type="bool" Value="True"/>
@@ -1408,7 +1408,7 @@
 										<Action Name="" ID="{2A710552-2C9F-441E-BE8F-8099DBD22489}" ShortID="268459957">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="AMB_Ambi_D" ID="{F80591F6-61A2-4726-B3D2-08AECCD43E16}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+													<ObjectRef Name="AMB_Ambi_D_01" ID="{F80591F6-61A2-4726-B3D2-08AECCD43E16}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -1469,6 +1469,17 @@
 											<ReferenceList>
 												<Reference Name="Target">
 													<ObjectRef Name="AMB_Ambi_P" ID="{0FB57B27-4EB9-439A-89DB-D3EF11A16637}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="AMB_Ambi_D_02" ID="{54A758BB-2FC4-425B-8A37-329FCDD77352}">
+									<ChildrenList>
+										<Action Name="" ID="{19ADEBB7-C777-40BA-BB16-E3F7825C3C20}" ShortID="473975670">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="AMB_Ambi_D_02" ID="{4BA0B476-FB62-4899-898D-7DD697FEB9E8}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>

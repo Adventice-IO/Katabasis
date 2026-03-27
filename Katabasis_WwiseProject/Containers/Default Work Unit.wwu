@@ -7790,9 +7790,173 @@
 								</BlendContainer>
 								<BlendContainer Name="SFX_AirPressure" ID="{40CABC79-0CA9-4542-AABB-E2A750AC2270}" ShortID="330883216">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="OverridePositioning" Type="bool" Value="True"/>
 										<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-6</Value>
+											</ValueList>
+										</Property>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<Custom>
+												<Attenuation Name="Attenuation (Custom)" ID="{6655B9A5-11E7-4BE6-85BD-13AFAFE8CC6E}" ShortID="559506912">
+													<PropertyList>
+														<Property Name="RadiusMax" Type="Real64" Value="30"/>
+													</PropertyList>
+													<CurveUsageInfoList>
+														<VolumeDryUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																<Curve Name="VolumeDry" ID="{B70A069D-F6A7-40CE-8393-14C062FBD6C6}">
+																	<PropertyList>
+																		<Property Name="Flags" Type="int32" Value="3"/>
+																	</PropertyList>
+																	<PointList>
+																		<Point>
+																			<XPos>0</XPos>
+																			<YPos>0</YPos>
+																			<Flags>5</Flags>
+																		</Point>
+																		<Point>
+																			<XPos>30</XPos>
+																			<YPos>-200</YPos>
+																			<Flags>37</Flags>
+																		</Point>
+																	</PointList>
+																</Curve>
+															</CurveUsageInfo>
+														</VolumeDryUsage>
+														<VolumeWetGameUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
+														</VolumeWetGameUsage>
+														<VolumeWetUserUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
+														</VolumeWetUserUsage>
+														<LowPassFilterUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																<Curve Name="LowPassFilter" ID="{EA30E72B-3A59-40CA-938A-A62733408DC1}">
+																	<PropertyList>
+																		<Property Name="Flags" Type="int32" Value="65537"/>
+																	</PropertyList>
+																	<PointList>
+																		<Point>
+																			<XPos>0</XPos>
+																			<YPos>0</YPos>
+																			<Flags>5</Flags>
+																		</Point>
+																		<Point>
+																			<XPos>5.746104</XPos>
+																			<YPos>0</YPos>
+																			<Flags>0</Flags>
+																		</Point>
+																		<Point>
+																			<XPos>30</XPos>
+																			<YPos>60</YPos>
+																			<Flags>37</Flags>
+																		</Point>
+																	</PointList>
+																</Curve>
+															</CurveUsageInfo>
+														</LowPassFilterUsage>
+														<HighPassFilterUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+														</HighPassFilterUsage>
+														<DualShelfUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+														</DualShelfUsage>
+														<SpreadUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																<Curve Name="Spread" ID="{C9A8397C-2D49-45BD-818A-D69F977B3154}">
+																	<PropertyList>
+																		<Property Name="Flags" Type="int32" Value="1"/>
+																	</PropertyList>
+																	<PointList>
+																		<Point>
+																			<XPos>0</XPos>
+																			<YPos>100</YPos>
+																			<Flags>5</Flags>
+																		</Point>
+																		<Point>
+																			<XPos>3.549108</XPos>
+																			<YPos>100</YPos>
+																			<Flags>0</Flags>
+																		</Point>
+																		<Point>
+																			<XPos>8.16964</XPos>
+																			<YPos>100</YPos>
+																			<Flags>0</Flags>
+																		</Point>
+																		<Point>
+																			<XPos>12.38839</XPos>
+																			<YPos>0</YPos>
+																			<Flags>0</Flags>
+																		</Point>
+																		<Point>
+																			<XPos>30</XPos>
+																			<YPos>0</YPos>
+																			<Flags>37</Flags>
+																		</Point>
+																	</PointList>
+																</Curve>
+															</CurveUsageInfo>
+														</SpreadUsage>
+														<FocusUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+														</FocusUsage>
+														<ObstructionVolumeUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</ObstructionVolumeUsage>
+														<ObstructionLPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</ObstructionLPFUsage>
+														<ObstructionHPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</ObstructionHPFUsage>
+														<ObstructionDSFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</ObstructionDSFUsage>
+														<OcclusionVolumeUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</OcclusionVolumeUsage>
+														<OcclusionLPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</OcclusionLPFUsage>
+														<OcclusionHPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</OcclusionHPFUsage>
+														<OcclusionDSFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</OcclusionDSFUsage>
+														<DiffractionVolumeUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</DiffractionVolumeUsage>
+														<DiffractionLPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</DiffractionLPFUsage>
+														<DiffractionHPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</DiffractionHPFUsage>
+														<DiffractionDSFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</DiffractionDSFUsage>
+														<TransmissionVolumeUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</TransmissionVolumeUsage>
+														<TransmissionLPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</TransmissionLPFUsage>
+														<TransmissionHPFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</TransmissionHPFUsage>
+														<TransmissionDSFUsage>
+															<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+														</TransmissionDSFUsage>
+													</CurveUsageInfoList>
+												</Attenuation>
+											</Custom>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
 										</Reference>
@@ -7804,6 +7968,9 @@
 										</Reference>
 										<Reference Name="UserAuxSend1">
 											<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+										<Reference Name="UserAuxSend2">
+											<ObjectRef Name="REV_LongUltra" ID="{43E67AD9-087F-47C6-82F2-818148AB0A10}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
@@ -7824,15 +7991,15 @@
 												</Property>
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
-												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="3"/>
-												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64">
+												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="1"/>
+												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="10">
 													<ModifierList>
 														<ModifierInfo>
 															<Modifier Name="" ID="{562447B3-AA25-4F4A-9599-0793AE4C5B84}">
 																<PropertyList>
 																	<Property Name="Enabled" Type="bool" Value="True"/>
-																	<Property Name="Max" Type="Real64" Value="5"/>
-																	<Property Name="Min" Type="Real64" Value="-3"/>
+																	<Property Name="Max" Type="Real64" Value="15"/>
+																	<Property Name="Min" Type="Real64" Value="-5"/>
 																</PropertyList>
 															</Modifier>
 														</ModifierInfo>
@@ -7883,27 +8050,6 @@
 														<ActiveSource Name="SFX_AirPressure_A_01" ID="{B1DAD0DB-6D20-49A6-8AED-F5AD8071A00B}" Platform="Linked"/>
 													</ActiveSourceList>
 												</Sound>
-												<Sound Name="New Silence" ID="{465742BF-D384-4935-88A9-615CC5AFC40C}" ShortID="288047079">
-													<ReferenceList>
-														<Reference Name="Conversion">
-															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
-														</Reference>
-														<Reference Name="OutputBus">
-															<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
-														</Reference>
-													</ReferenceList>
-													<ChildrenList>
-														<SourcePlugin Name="Silence" ID="{8505E8EC-948C-4449-917D-31B9C16B3291}" ShortID="180682991" PluginName="Wwise Silence" CompanyID="0" PluginID="101">
-															<PropertyList>
-																<Property Name="Length" Type="Real32" Value="5"/>
-															</PropertyList>
-															<Language>SFX</Language>
-														</SourcePlugin>
-													</ChildrenList>
-													<ActiveSourceList>
-														<ActiveSource Name="Silence" ID="{8505E8EC-948C-4449-917D-31B9C16B3291}" Platform="Linked"/>
-													</ActiveSourceList>
-												</Sound>
 											</ChildrenList>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_AirPressure_B" ID="{3AA39FFB-4F2D-48C8-B72F-E7B1D5C5DAB8}" ShortID="250946076">
@@ -7924,15 +8070,15 @@
 												</Property>
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
-												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="3"/>
-												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64">
+												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="1"/>
+												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="10">
 													<ModifierList>
 														<ModifierInfo>
 															<Modifier Name="" ID="{A5FD2FF2-1D9D-4FEF-BC5D-8D773DF14ED0}">
 																<PropertyList>
 																	<Property Name="Enabled" Type="bool" Value="True"/>
-																	<Property Name="Max" Type="Real64" Value="5"/>
-																	<Property Name="Min" Type="Real64" Value="-3"/>
+																	<Property Name="Max" Type="Real64" Value="15"/>
+																	<Property Name="Min" Type="Real64" Value="-5"/>
 																</PropertyList>
 															</Modifier>
 														</ModifierInfo>
@@ -8085,27 +8231,6 @@
 														<ActiveSource Name="SFX_AirPressure_B_01" ID="{6CC28FF0-5EE5-4FE9-80B3-C9C80AD95B45}" Platform="Linked"/>
 													</ActiveSourceList>
 												</Sound>
-												<Sound Name="New Silence" ID="{47344C40-B95B-4E11-9283-639F971D0F82}" ShortID="973249457">
-													<ReferenceList>
-														<Reference Name="Conversion">
-															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
-														</Reference>
-														<Reference Name="OutputBus">
-															<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
-														</Reference>
-													</ReferenceList>
-													<ChildrenList>
-														<SourcePlugin Name="Silence" ID="{26DE984C-EE33-42A9-8121-8D4BB589D41A}" ShortID="90917476" PluginName="Wwise Silence" CompanyID="0" PluginID="101">
-															<PropertyList>
-																<Property Name="Length" Type="Real32" Value="5"/>
-															</PropertyList>
-															<Language>SFX</Language>
-														</SourcePlugin>
-													</ChildrenList>
-													<ActiveSourceList>
-														<ActiveSource Name="Silence" ID="{26DE984C-EE33-42A9-8121-8D4BB589D41A}" Platform="Linked"/>
-													</ActiveSourceList>
-												</Sound>
 											</ChildrenList>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_AirPressure_C" ID="{19783FC7-3952-49DD-9478-865B07D95901}" ShortID="733817391">
@@ -8126,15 +8251,15 @@
 												</Property>
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
-												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="3"/>
-												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64">
+												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="1"/>
+												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="10">
 													<ModifierList>
 														<ModifierInfo>
 															<Modifier Name="" ID="{820A3638-A1B2-4B5C-A38E-97F295A13CFB}">
 																<PropertyList>
 																	<Property Name="Enabled" Type="bool" Value="True"/>
-																	<Property Name="Max" Type="Real64" Value="5"/>
-																	<Property Name="Min" Type="Real64" Value="-3"/>
+																	<Property Name="Max" Type="Real64" Value="15"/>
+																	<Property Name="Min" Type="Real64" Value="-5"/>
 																</PropertyList>
 															</Modifier>
 														</ModifierInfo>
@@ -8287,27 +8412,6 @@
 														<ActiveSource Name="SFX_AirPressure_C_01" ID="{67054363-C813-465E-9B68-4A30CBB3280F}" Platform="Linked"/>
 													</ActiveSourceList>
 												</Sound>
-												<Sound Name="New Silence" ID="{8C42963E-47D3-40E6-8CD7-124C2595F2BE}" ShortID="508446921">
-													<ReferenceList>
-														<Reference Name="Conversion">
-															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
-														</Reference>
-														<Reference Name="OutputBus">
-															<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
-														</Reference>
-													</ReferenceList>
-													<ChildrenList>
-														<SourcePlugin Name="Silence" ID="{0B3F17BD-5FC3-4004-AD5A-F1BDFA4A0A9D}" ShortID="862254483" PluginName="Wwise Silence" CompanyID="0" PluginID="101">
-															<PropertyList>
-																<Property Name="Length" Type="Real32" Value="5"/>
-															</PropertyList>
-															<Language>SFX</Language>
-														</SourcePlugin>
-													</ChildrenList>
-													<ActiveSourceList>
-														<ActiveSource Name="Silence" ID="{0B3F17BD-5FC3-4004-AD5A-F1BDFA4A0A9D}" Platform="Linked"/>
-													</ActiveSourceList>
-												</Sound>
 											</ChildrenList>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_AirPressure_D" ID="{821B832B-CDCA-4549-B200-9C42CFB0A0AC}" ShortID="794313552">
@@ -8328,15 +8432,15 @@
 												</Property>
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
-												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="3"/>
-												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64">
+												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="1"/>
+												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="10">
 													<ModifierList>
 														<ModifierInfo>
 															<Modifier Name="" ID="{4E9E02DF-5183-4FE0-B99F-89C823974AE7}">
 																<PropertyList>
 																	<Property Name="Enabled" Type="bool" Value="True"/>
-																	<Property Name="Max" Type="Real64" Value="5"/>
-																	<Property Name="Min" Type="Real64" Value="-3"/>
+																	<Property Name="Max" Type="Real64" Value="15"/>
+																	<Property Name="Min" Type="Real64" Value="-5"/>
 																</PropertyList>
 															</Modifier>
 														</ModifierInfo>
@@ -8489,27 +8593,6 @@
 														<ActiveSource Name="SFX_AirPressure_D_01" ID="{AD25177A-B4C1-45D7-A50F-6206178BAAA4}" Platform="Linked"/>
 													</ActiveSourceList>
 												</Sound>
-												<Sound Name="New Silence" ID="{2FFA6A17-2187-4CAA-A44F-75FB500763E8}" ShortID="244293802">
-													<ReferenceList>
-														<Reference Name="Conversion">
-															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
-														</Reference>
-														<Reference Name="OutputBus">
-															<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
-														</Reference>
-													</ReferenceList>
-													<ChildrenList>
-														<SourcePlugin Name="Silence" ID="{6BCFC916-90A4-4BA6-A2EB-F52AC78A9308}" ShortID="585083368" PluginName="Wwise Silence" CompanyID="0" PluginID="101">
-															<PropertyList>
-																<Property Name="Length" Type="Real32" Value="5"/>
-															</PropertyList>
-															<Language>SFX</Language>
-														</SourcePlugin>
-													</ChildrenList>
-													<ActiveSourceList>
-														<ActiveSource Name="Silence" ID="{6BCFC916-90A4-4BA6-A2EB-F52AC78A9308}" Platform="Linked"/>
-													</ActiveSourceList>
-												</Sound>
 											</ChildrenList>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_AirPressure_E" ID="{3483D57F-083D-49E1-B477-9BE7F902F6A5}" ShortID="1066349175">
@@ -8530,15 +8613,15 @@
 												</Property>
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
-												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="3"/>
-												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64">
+												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="1"/>
+												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="10">
 													<ModifierList>
 														<ModifierInfo>
 															<Modifier Name="" ID="{814E3929-3581-45D6-9E5C-98C84ACA7019}">
 																<PropertyList>
 																	<Property Name="Enabled" Type="bool" Value="True"/>
-																	<Property Name="Max" Type="Real64" Value="5"/>
-																	<Property Name="Min" Type="Real64" Value="-3"/>
+																	<Property Name="Max" Type="Real64" Value="15"/>
+																	<Property Name="Min" Type="Real64" Value="-5"/>
 																</PropertyList>
 															</Modifier>
 														</ModifierInfo>
@@ -8691,27 +8774,6 @@
 														<ActiveSource Name="SFX_AirPressure_E_01" ID="{5868C12F-36DC-48E2-8AF0-84B0C8A530A8}" Platform="Linked"/>
 													</ActiveSourceList>
 												</Sound>
-												<Sound Name="New Silence" ID="{B3E67DCC-061F-4D95-AC2A-D8682303BAD2}" ShortID="286439239">
-													<ReferenceList>
-														<Reference Name="Conversion">
-															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
-														</Reference>
-														<Reference Name="OutputBus">
-															<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
-														</Reference>
-													</ReferenceList>
-													<ChildrenList>
-														<SourcePlugin Name="Silence" ID="{7BB3D777-C32F-482D-A91B-D97BD31B7B7B}" ShortID="438385839" PluginName="Wwise Silence" CompanyID="0" PluginID="101">
-															<PropertyList>
-																<Property Name="Length" Type="Real32" Value="5"/>
-															</PropertyList>
-															<Language>SFX</Language>
-														</SourcePlugin>
-													</ChildrenList>
-													<ActiveSourceList>
-														<ActiveSource Name="Silence" ID="{7BB3D777-C32F-482D-A91B-D97BD31B7B7B}" Platform="Linked"/>
-													</ActiveSourceList>
-												</Sound>
 											</ChildrenList>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_AirPressure_F" ID="{AA8B6C78-EF55-4E50-86F0-E73CEBA9E9AC}" ShortID="635634519">
@@ -8732,15 +8794,15 @@
 												</Property>
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
-												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="3"/>
-												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64">
+												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="1"/>
+												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="10">
 													<ModifierList>
 														<ModifierInfo>
 															<Modifier Name="" ID="{29DF9C1D-A426-4C9B-8008-C96DDDDC207B}">
 																<PropertyList>
 																	<Property Name="Enabled" Type="bool" Value="True"/>
-																	<Property Name="Max" Type="Real64" Value="5"/>
-																	<Property Name="Min" Type="Real64" Value="-3"/>
+																	<Property Name="Max" Type="Real64" Value="15"/>
+																	<Property Name="Min" Type="Real64" Value="-5"/>
 																</PropertyList>
 															</Modifier>
 														</ModifierInfo>
@@ -8893,27 +8955,6 @@
 														<ActiveSource Name="SFX_AirPressure_F_01" ID="{80DF7CCB-482F-4785-92EB-7B619C10A766}" Platform="Linked"/>
 													</ActiveSourceList>
 												</Sound>
-												<Sound Name="New Silence" ID="{F5A029EF-6BFA-43EF-8608-456406D46515}" ShortID="829963114">
-													<ReferenceList>
-														<Reference Name="Conversion">
-															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
-														</Reference>
-														<Reference Name="OutputBus">
-															<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
-														</Reference>
-													</ReferenceList>
-													<ChildrenList>
-														<SourcePlugin Name="Silence" ID="{0620CCA0-A11B-4B96-9003-F5BBAFA36D33}" ShortID="994930366" PluginName="Wwise Silence" CompanyID="0" PluginID="101">
-															<PropertyList>
-																<Property Name="Length" Type="Real32" Value="5"/>
-															</PropertyList>
-															<Language>SFX</Language>
-														</SourcePlugin>
-													</ChildrenList>
-													<ActiveSourceList>
-														<ActiveSource Name="Silence" ID="{0620CCA0-A11B-4B96-9003-F5BBAFA36D33}" Platform="Linked"/>
-													</ActiveSourceList>
-												</Sound>
 											</ChildrenList>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_AirPressure_G" ID="{931945EE-AA02-4B04-8B76-0D7076F5A20C}" ShortID="335845279">
@@ -8934,15 +8975,15 @@
 												</Property>
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
-												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="3"/>
-												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64">
+												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="1"/>
+												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="10">
 													<ModifierList>
 														<ModifierInfo>
 															<Modifier Name="" ID="{581C90D7-EB62-4C48-B344-6A4C7996B70F}">
 																<PropertyList>
 																	<Property Name="Enabled" Type="bool" Value="True"/>
-																	<Property Name="Max" Type="Real64" Value="5"/>
-																	<Property Name="Min" Type="Real64" Value="-3"/>
+																	<Property Name="Max" Type="Real64" Value="15"/>
+																	<Property Name="Min" Type="Real64" Value="-5"/>
 																</PropertyList>
 															</Modifier>
 														</ModifierInfo>
@@ -9095,27 +9136,6 @@
 														<ActiveSource Name="SFX_AirPressure_G_01" ID="{DE4E60F1-EDA1-4E84-BC36-D53FA7AEBF6F}" Platform="Linked"/>
 													</ActiveSourceList>
 												</Sound>
-												<Sound Name="New Silence" ID="{DD62A84C-0FA5-4A04-983C-A746E639BC8F}" ShortID="179871141">
-													<ReferenceList>
-														<Reference Name="Conversion">
-															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
-														</Reference>
-														<Reference Name="OutputBus">
-															<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
-														</Reference>
-													</ReferenceList>
-													<ChildrenList>
-														<SourcePlugin Name="Silence" ID="{3D51DCA6-DDF6-4112-BBFA-0B760EF76086}" ShortID="8042803" PluginName="Wwise Silence" CompanyID="0" PluginID="101">
-															<PropertyList>
-																<Property Name="Length" Type="Real32" Value="5"/>
-															</PropertyList>
-															<Language>SFX</Language>
-														</SourcePlugin>
-													</ChildrenList>
-													<ActiveSourceList>
-														<ActiveSource Name="Silence" ID="{3D51DCA6-DDF6-4112-BBFA-0B760EF76086}" Platform="Linked"/>
-													</ActiveSourceList>
-												</Sound>
 											</ChildrenList>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_AirPressure_H" ID="{F5748AE0-4193-43D5-AE36-2AB23A3A1C31}" ShortID="14888186">
@@ -9123,7 +9143,7 @@
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="3"/>
-												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64">
+												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="5">
 													<ModifierList>
 														<ModifierInfo>
 															<Modifier Name="" ID="{6894A3A2-B9A2-4AA3-BE33-E20FDEFDD4B7}">
@@ -10182,6 +10202,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10189,8 +10210,9 @@
 												<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
 												<CustomState Name="" ID="{E7CB88E9-9E4C-4302-ADFF-E0654E981502}" ShortID="778003247">
 													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-7"/>
+														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-11"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-6"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10200,6 +10222,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10207,8 +10230,9 @@
 												<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
 												<CustomState Name="" ID="{BA746559-B0DF-4C1F-BEE3-80445B7B5820}" ShortID="599284430">
 													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-7"/>
+														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-11"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10216,6 +10240,7 @@
 												<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
 												<CustomState Name="" ID="{DE06E844-2BFE-4735-858D-5A45A7E84D5A}" ShortID="874837788">
 													<PropertyList>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
@@ -10226,6 +10251,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10235,6 +10261,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10244,6 +10271,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10253,6 +10281,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10260,6 +10289,7 @@
 												<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
 												<CustomState Name="" ID="{8A8EE59A-B3B2-4539-8A76-4B258EDE0EE3}" ShortID="579442495">
 													<PropertyList>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
@@ -10268,6 +10298,7 @@
 												<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
 												<CustomState Name="" ID="{8CEAE764-F243-470F-A451-AD7461E006DD}" ShortID="368433577">
 													<PropertyList>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
@@ -10276,6 +10307,7 @@
 												<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
 												<CustomState Name="" ID="{66E2EFCB-0EF3-4112-8F9E-2442B22A06B4}" ShortID="780669752">
 													<PropertyList>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
@@ -10286,6 +10318,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10293,6 +10326,7 @@
 												<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
 												<CustomState Name="" ID="{B3D455E5-EC9C-4115-B98A-28662DCDB851}" ShortID="520867484">
 													<PropertyList>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
@@ -10303,6 +10337,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10312,6 +10347,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10321,6 +10357,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10330,6 +10367,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10337,6 +10375,7 @@
 												<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
 												<CustomState Name="" ID="{4B1B478A-2E1E-4345-97B3-0B53927E7D0A}" ShortID="667307620">
 													<PropertyList>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
@@ -10347,6 +10386,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10354,6 +10394,7 @@
 												<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
 												<CustomState Name="" ID="{3C433143-7F0F-48AD-9334-421A805C13A1}" ShortID="248452324">
 													<PropertyList>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
@@ -10362,6 +10403,7 @@
 												<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
 												<CustomState Name="" ID="{FF70DD02-51EB-4832-999E-EB3899BA629B}" ShortID="857760643">
 													<PropertyList>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
@@ -10372,6 +10414,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -10379,6 +10422,7 @@
 												<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
 												<CustomState Name="" ID="{4F8E4784-D338-4AE3-8A2E-D02AA607C8B2}" ShortID="885276079">
 													<PropertyList>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
@@ -13466,6 +13510,7 @@
 												</Property>
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
+												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="3"/>
 												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="30">
 													<ModifierList>
 														<ModifierInfo>
@@ -13504,7 +13549,7 @@
 													<Custom>
 														<Attenuation Name="Attenuation (Custom)" ID="{B0ADE402-4534-4BF7-A1D9-66102C23F33F}" ShortID="726596054">
 															<PropertyList>
-																<Property Name="RadiusMax" Type="Real64" Value="150"/>
+																<Property Name="RadiusMax" Type="Real64" Value="60"/>
 															</PropertyList>
 															<CurveUsageInfoList>
 																<VolumeDryUsage>
@@ -13521,7 +13566,7 @@
 																					<SegmentShape>Log1</SegmentShape>
 																				</Point>
 																				<Point>
-																					<XPos>150</XPos>
+																					<XPos>60</XPos>
 																					<YPos>-200</YPos>
 																					<Flags>37</Flags>
 																				</Point>
@@ -13536,7 +13581,32 @@
 																	<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
 																</VolumeWetUserUsage>
 																<LowPassFilterUsage>
-																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																		<Curve Name="LowPassFilter" ID="{62FB7CD0-1F03-43DC-B61E-F339282F96C9}">
+																			<PropertyList>
+																				<Property Name="Flags" Type="int32" Value="65537"/>
+																			</PropertyList>
+																			<PointList>
+																				<Point>
+																					<XPos>0</XPos>
+																					<YPos>0</YPos>
+																					<Flags>5</Flags>
+																					<SegmentShape>Exp1</SegmentShape>
+																				</Point>
+																				<Point>
+																					<XPos>17.8125</XPos>
+																					<YPos>0</YPos>
+																					<Flags>0</Flags>
+																					<SegmentShape>Exp2</SegmentShape>
+																				</Point>
+																				<Point>
+																					<XPos>60</XPos>
+																					<YPos>50</YPos>
+																					<Flags>37</Flags>
+																				</Point>
+																			</PointList>
+																		</Curve>
+																	</CurveUsageInfo>
 																</LowPassFilterUsage>
 																<HighPassFilterUsage>
 																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
@@ -13545,7 +13615,38 @@
 																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
 																</DualShelfUsage>
 																<SpreadUsage>
-																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																		<Curve Name="Spread" ID="{5F8D36F9-8293-4E30-9028-429FF3F2601D}">
+																			<PropertyList>
+																				<Property Name="Flags" Type="int32" Value="1"/>
+																			</PropertyList>
+																			<PointList>
+																				<Point>
+																					<XPos>0</XPos>
+																					<YPos>100</YPos>
+																					<Flags>5</Flags>
+																					<SegmentShape>Log1</SegmentShape>
+																				</Point>
+																				<Point>
+																					<XPos>4</XPos>
+																					<YPos>100</YPos>
+																					<Flags>0</Flags>
+																					<SegmentShape>Log2</SegmentShape>
+																				</Point>
+																				<Point>
+																					<XPos>30.861616</XPos>
+																					<YPos>0</YPos>
+																					<Flags>0</Flags>
+																					<SegmentShape>Exp1</SegmentShape>
+																				</Point>
+																				<Point>
+																					<XPos>60</XPos>
+																					<YPos>0</YPos>
+																					<Flags>37</Flags>
+																				</Point>
+																			</PointList>
+																		</Curve>
+																	</CurveUsageInfo>
 																</SpreadUsage>
 																<FocusUsage>
 																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
@@ -13614,6 +13715,9 @@
 												<Reference Name="UserAuxSend1">
 													<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 												</Reference>
+												<Reference Name="UserAuxSend2">
+													<ObjectRef Name="REV_LongUltra" ID="{43E67AD9-087F-47C6-82F2-818148AB0A10}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
 											</ReferenceList>
 											<ChildrenList>
 												<Sound Name="SFX_Subway_A_01" ID="{8D93BD9E-66F6-44E0-BEB1-777DF71DEAC8}" ShortID="10781421">
@@ -13639,10 +13743,15 @@
 															</MediaIDList>
 														</AudioFileSource>
 														<AudioFileSource Name="SFX_Subway_A_01" ID="{3BB16454-3EFF-4C01-84AE-0B8825FA08E8}">
+															<PropertyList>
+																<Property Name="FadeInDuration" Type="Real64" Value="1.00058707785099"/>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.80046966228079"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>SFX\SFX_Subway\SFX_Subway_A\SFX_Subway_A_01.wav</AudioFile>
 															<MediaIDList>
-																<MediaID ID="217748346"/>
+																<MediaID ID="834280804"/>
 															</MediaIDList>
 														</AudioFileSource>
 													</ChildrenList>
@@ -13696,6 +13805,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13705,6 +13815,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-9"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13714,6 +13825,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13723,6 +13835,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-9"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13730,6 +13843,7 @@
 														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
 														<CustomState Name="" ID="{7C6A5895-032C-45A9-A1C5-DFC335BF3273}" ShortID="807573714">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -13740,6 +13854,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13749,6 +13864,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13758,6 +13874,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13767,6 +13884,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13774,6 +13892,7 @@
 														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
 														<CustomState Name="" ID="{53928CEE-F9CA-4675-8546-0DBE0F462AD6}" ShortID="619997373">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -13782,6 +13901,7 @@
 														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
 														<CustomState Name="" ID="{E1165666-6A42-4F7E-8699-70A2B172A4B4}" ShortID="890317665">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -13790,6 +13910,7 @@
 														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
 														<CustomState Name="" ID="{02CA2170-9861-497F-88C9-58216819BECF}" ShortID="401546629">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -13800,6 +13921,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13807,6 +13929,7 @@
 														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
 														<CustomState Name="" ID="{D6085327-453F-485A-9215-134C44E5D84B}" ShortID="891781534">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -13817,6 +13940,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13826,6 +13950,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13835,6 +13960,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13844,6 +13970,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13851,6 +13978,7 @@
 														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
 														<CustomState Name="" ID="{905DDB60-B184-461A-8CEA-809CCFECD087}" ShortID="161633226">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -13861,6 +13989,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -13869,6 +13998,7 @@
 														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
 														<CustomState Name="" ID="{9709CC8F-678F-4B85-8149-BAE881432E32}" ShortID="112152030">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -13877,6 +14007,7 @@
 														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
 														<CustomState Name="" ID="{E8E6F419-5C43-4EAC-936E-E534C79FF622}" ShortID="945139427">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -13887,6 +14018,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -13894,6 +14026,7 @@
 														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
 														<CustomState Name="" ID="{48A9F1D2-F84A-4714-91B6-B3B447FC00FE}" ShortID="938803509">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -15459,10 +15592,15 @@
 															</MediaIDList>
 														</AudioFileSource>
 														<AudioFileSource Name="SFX_Subway_E_01" ID="{C003DB7F-779D-4659-A9FB-941862288E4B}">
+															<PropertyList>
+																<Property Name="FadeInDuration" Type="Real64" Value="0.731124522838187"/>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.887794063446371"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>SFX\SFX_Subway\SFX_Subway_E\SFX_Subway_E_01.wav</AudioFile>
 															<MediaIDList>
-																<MediaID ID="547362373"/>
+																<MediaID ID="614227026"/>
 															</MediaIDList>
 														</AudioFileSource>
 													</ChildrenList>
@@ -15741,6 +15879,7 @@
 												</Property>
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
+												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="3"/>
 												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="30">
 													<ModifierList>
 														<ModifierInfo>
@@ -15773,7 +15912,7 @@
 													<Custom>
 														<Attenuation Name="Attenuation (Custom)" ID="{63B555DD-6955-44B5-8402-A76B941EC9A9}" ShortID="859289261">
 															<PropertyList>
-																<Property Name="RadiusMax" Type="Real64" Value="150"/>
+																<Property Name="RadiusMax" Type="Real64" Value="60"/>
 															</PropertyList>
 															<CurveUsageInfoList>
 																<VolumeDryUsage>
@@ -15790,7 +15929,7 @@
 																					<SegmentShape>Log1</SegmentShape>
 																				</Point>
 																				<Point>
-																					<XPos>150</XPos>
+																					<XPos>60</XPos>
 																					<YPos>-200</YPos>
 																					<Flags>37</Flags>
 																				</Point>
@@ -15805,7 +15944,32 @@
 																	<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
 																</VolumeWetUserUsage>
 																<LowPassFilterUsage>
-																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																		<Curve Name="LowPassFilter" ID="{E2DBF1EC-096C-46C6-8E8E-737B8130417E}">
+																			<PropertyList>
+																				<Property Name="Flags" Type="int32" Value="65537"/>
+																			</PropertyList>
+																			<PointList>
+																				<Point>
+																					<XPos>0</XPos>
+																					<YPos>0</YPos>
+																					<Flags>5</Flags>
+																					<SegmentShape>Exp2</SegmentShape>
+																				</Point>
+																				<Point>
+																					<XPos>23.437504</XPos>
+																					<YPos>0</YPos>
+																					<Flags>0</Flags>
+																					<SegmentShape>Exp2</SegmentShape>
+																				</Point>
+																				<Point>
+																					<XPos>60</XPos>
+																					<YPos>50</YPos>
+																					<Flags>37</Flags>
+																				</Point>
+																			</PointList>
+																		</Curve>
+																	</CurveUsageInfo>
 																</LowPassFilterUsage>
 																<HighPassFilterUsage>
 																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
@@ -15814,7 +15978,38 @@
 																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
 																</DualShelfUsage>
 																<SpreadUsage>
-																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																		<Curve Name="Spread" ID="{060D690F-54E8-4AA5-AB81-044191E01258}">
+																			<PropertyList>
+																				<Property Name="Flags" Type="int32" Value="1"/>
+																			</PropertyList>
+																			<PointList>
+																				<Point>
+																					<XPos>0</XPos>
+																					<YPos>100</YPos>
+																					<Flags>5</Flags>
+																					<SegmentShape>Log2</SegmentShape>
+																				</Point>
+																				<Point>
+																					<XPos>4</XPos>
+																					<YPos>100</YPos>
+																					<Flags>0</Flags>
+																					<SegmentShape>Log2</SegmentShape>
+																				</Point>
+																				<Point>
+																					<XPos>36.657964</XPos>
+																					<YPos>0</YPos>
+																					<Flags>0</Flags>
+																					<SegmentShape>Exp2</SegmentShape>
+																				</Point>
+																				<Point>
+																					<XPos>60</XPos>
+																					<YPos>0</YPos>
+																					<Flags>37</Flags>
+																				</Point>
+																			</PointList>
+																		</Curve>
+																	</CurveUsageInfo>
 																</SpreadUsage>
 																<FocusUsage>
 																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
@@ -15883,6 +16078,9 @@
 												<Reference Name="UserAuxSend1">
 													<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 												</Reference>
+												<Reference Name="UserAuxSend2">
+													<ObjectRef Name="REV_LongUltra" ID="{43E67AD9-087F-47C6-82F2-818148AB0A10}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
 											</ReferenceList>
 											<ChildrenList>
 												<Sound Name="SFX_Subway_F_01" ID="{7F94A92B-6DD5-431E-B4DE-6BDDF7A81EC6}" ShortID="181852100">
@@ -15908,10 +16106,15 @@
 															</MediaIDList>
 														</AudioFileSource>
 														<AudioFileSource Name="SFX_Subway_F_01" ID="{49104C82-A1E9-4471-AA30-0990EE569614}">
+															<PropertyList>
+																<Property Name="FadeInDuration" Type="Real64" Value="0.275600839168467"/>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.172512328371088"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>SFX\SFX_Subway\SFX_Subway_F\SFX_Subway_F_01.wav</AudioFile>
 															<MediaIDList>
-																<MediaID ID="803786455"/>
+																<MediaID ID="265627591"/>
 															</MediaIDList>
 														</AudioFileSource>
 													</ChildrenList>
@@ -15965,6 +16168,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -15974,6 +16178,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-9"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -15983,6 +16188,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -15992,6 +16198,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-9"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -15999,6 +16206,7 @@
 														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
 														<CustomState Name="" ID="{4299AE72-EA50-4D7B-A883-6FA395B12EED}" ShortID="1036885404">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -16009,6 +16217,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -16018,6 +16227,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -16027,6 +16237,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -16036,6 +16247,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -16043,6 +16255,7 @@
 														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
 														<CustomState Name="" ID="{97BAB693-CE01-430C-ABD1-8676CBEC1F04}" ShortID="681611270">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -16051,6 +16264,7 @@
 														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
 														<CustomState Name="" ID="{99305804-6CC9-42DD-9318-E00B4574C1E8}" ShortID="541197806">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -16059,6 +16273,7 @@
 														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
 														<CustomState Name="" ID="{C17C08A9-A7FB-46B7-A915-DA321D54B223}" ShortID="444867347">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -16069,6 +16284,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -16076,6 +16292,7 @@
 														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
 														<CustomState Name="" ID="{8007293C-8E87-4C68-B1B8-969D34325F45}" ShortID="937580593">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -16086,6 +16303,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -16095,6 +16313,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -16104,6 +16323,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -16113,6 +16333,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -16120,6 +16341,7 @@
 														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
 														<CustomState Name="" ID="{40BD7A29-64EF-4A2E-ACBE-FEEEC7A3FAF5}" ShortID="414586272">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -16130,6 +16352,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -16138,6 +16361,7 @@
 														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
 														<CustomState Name="" ID="{E3173A59-7064-478A-AD67-C2396BA394D9}" ShortID="279048695">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -16146,6 +16370,7 @@
 														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
 														<CustomState Name="" ID="{CC2BD50F-0FE6-45C2-AD3A-9FFA15CB69E4}" ShortID="154231409">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -16156,6 +16381,7 @@
 															<PropertyList>
 																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-12"/>
 																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-15"/>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -16163,6 +16389,7 @@
 														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
 														<CustomState Name="" ID="{F3663755-1493-4EAE-ACAB-2398152AB5CD}" ShortID="118896731">
 															<PropertyList>
+																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
 																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
@@ -21480,7 +21707,7 @@
 												<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitions" Type="bool" Value="True"/>
 												<Property Name="PlayMechanismSpecialTransitionsType" Type="int16" Value="1"/>
-												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="11">
+												<Property Name="PlayMechanismSpecialTransitionsValue" Type="Real64" Value="10">
 													<ModifierList>
 														<ModifierInfo>
 															<Modifier Name="" ID="{42972EDC-AFF9-424F-8818-ED8FFA3CDE6B}">
@@ -22122,10 +22349,9 @@
 														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
 														<CustomState Name="" ID="{A37C4633-7405-411D-A69D-F52453546E05}" ShortID="485430064">
 															<PropertyList>
-																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-108"/>
-																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-108"/>
+																<Property Name="UserAuxSendVolume0" Type="Real64" Value="-30"/>
+																<Property Name="UserAuxSendVolume1" Type="Real64" Value="-30"/>
 																<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -24881,9 +25107,9 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<BlendContainer Name="AMB_Ambi_D" ID="{F80591F6-61A2-4726-B3D2-08AECCD43E16}" ShortID="121907216">
+										<BlendContainer Name="AMB_Ambi_D_01" ID="{F80591F6-61A2-4726-B3D2-08AECCD43E16}" ShortID="121907216">
 											<PropertyList>
-												<Property Name="Color" Type="int16" Value="10"/>
+												<Property Name="Color" Type="int16" Value="4"/>
 												<Property Name="OverrideColor" Type="bool" Value="True"/>
 											</PropertyList>
 											<ReferenceList>
@@ -24921,39 +25147,6 @@
 													</ChildrenList>
 													<ActiveSourceList>
 														<ActiveSource Name="AMB_Ambi_D_01" ID="{72CC0C50-8796-475E-AF4C-453046D06BE2}" Platform="Linked"/>
-													</ActiveSourceList>
-												</Sound>
-												<Sound Name="AMB_Ambi_D_02" ID="{4B8CCC1E-4F19-4DAF-A330-D911EEBD1B01}" ShortID="184126011">
-													<PropertyList>
-														<Property Name="Inclusion" Type="bool">
-															<ValueList>
-																<Value>False</Value>
-															</ValueList>
-														</Property>
-														<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
-													</PropertyList>
-													<ReferenceList>
-														<Reference Name="Conversion">
-															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
-														</Reference>
-														<Reference Name="OutputBus">
-															<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
-														</Reference>
-													</ReferenceList>
-													<ChildrenList>
-														<AudioFileSource Name="AMB_Ambi_D_02" ID="{8FC67F80-B115-4427-94C2-C4CE759EC641}">
-															<PropertyList>
-																<Property Name="ChannelConfigOverride" Type="int64" Value="516"/>
-															</PropertyList>
-															<Language>SFX</Language>
-															<AudioFile>AMB\AMB_Ambi_Under\AMB_Ambi_D\AMB_Ambi_D_02.wav</AudioFile>
-															<MediaIDList>
-																<MediaID ID="73203675"/>
-															</MediaIDList>
-														</AudioFileSource>
-													</ChildrenList>
-													<ActiveSourceList>
-														<ActiveSource Name="AMB_Ambi_D_02" ID="{8FC67F80-B115-4427-94C2-C4CE759EC641}" Platform="Linked"/>
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
@@ -25328,7 +25521,7 @@
 														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
 														<CustomState Name="" ID="{18E20751-360F-422A-9C02-03B07376B607}" ShortID="401299344">
 															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-12"/>
+																<Property Name="Volume" Type="Real64" Value="-6"/>
 															</PropertyList>
 														</CustomState>
 													</CustomState>
@@ -26172,6 +26365,176 @@
 													</CustomState>
 												</CustomStateList>
 											</StateInfo>
+										</BlendContainer>
+										<BlendContainer Name="AMB_Ambi_D_02" ID="{4BA0B476-FB62-4899-898D-7DD697FEB9E8}" ShortID="325819416">
+											<PropertyList>
+												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="Color" Type="int16" Value="4"/>
+												<Property Name="OverrideColor" Type="bool" Value="True"/>
+												<Property Name="OverridePositioning" Type="bool" Value="True"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Attenuation">
+													<Custom>
+														<Attenuation Name="Attenuation (Custom)" ID="{E98BE722-C44E-4983-BA70-CB9E36DCFBF9}" ShortID="562557537">
+															<PropertyList>
+																<Property Name="RadiusMax" Type="Real64" Value="40"/>
+															</PropertyList>
+															<CurveUsageInfoList>
+																<VolumeDryUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																		<Curve Name="VolumeDry" ID="{4E59B6CD-04DF-4D39-9F91-9C4AA51345AA}">
+																			<PropertyList>
+																				<Property Name="Flags" Type="int32" Value="3"/>
+																			</PropertyList>
+																			<PointList>
+																				<Point>
+																					<XPos>0</XPos>
+																					<YPos>0</YPos>
+																					<Flags>5</Flags>
+																				</Point>
+																				<Point>
+																					<XPos>40</XPos>
+																					<YPos>-200</YPos>
+																					<Flags>37</Flags>
+																				</Point>
+																			</PointList>
+																		</Curve>
+																	</CurveUsageInfo>
+																</VolumeDryUsage>
+																<VolumeWetGameUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
+																</VolumeWetGameUsage>
+																<VolumeWetUserUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
+																</VolumeWetUserUsage>
+																<LowPassFilterUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+																</LowPassFilterUsage>
+																<HighPassFilterUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+																</HighPassFilterUsage>
+																<DualShelfUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+																</DualShelfUsage>
+																<SpreadUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																		<Curve Name="Spread" ID="{17317525-C454-4183-BCAD-AB1CAF465E44}">
+																			<PropertyList>
+																				<Property Name="Flags" Type="int32" Value="1"/>
+																			</PropertyList>
+																			<PointList>
+																				<Point>
+																					<XPos>0</XPos>
+																					<YPos>100</YPos>
+																					<Flags>5</Flags>
+																				</Point>
+																				<Point>
+																					<XPos>23.5853131749461</XPos>
+																					<YPos>100</YPos>
+																					<Flags>0</Flags>
+																				</Point>
+																				<Point>
+																					<XPos>40</XPos>
+																					<YPos>0</YPos>
+																					<Flags>37</Flags>
+																				</Point>
+																			</PointList>
+																		</Curve>
+																	</CurveUsageInfo>
+																</SpreadUsage>
+																<FocusUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+																</FocusUsage>
+																<ObstructionVolumeUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</ObstructionVolumeUsage>
+																<ObstructionLPFUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</ObstructionLPFUsage>
+																<ObstructionHPFUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</ObstructionHPFUsage>
+																<ObstructionDSFUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</ObstructionDSFUsage>
+																<OcclusionVolumeUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</OcclusionVolumeUsage>
+																<OcclusionLPFUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</OcclusionLPFUsage>
+																<OcclusionHPFUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</OcclusionHPFUsage>
+																<OcclusionDSFUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</OcclusionDSFUsage>
+																<DiffractionVolumeUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</DiffractionVolumeUsage>
+																<DiffractionLPFUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</DiffractionLPFUsage>
+																<DiffractionHPFUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</DiffractionHPFUsage>
+																<DiffractionDSFUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</DiffractionDSFUsage>
+																<TransmissionVolumeUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</TransmissionVolumeUsage>
+																<TransmissionLPFUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</TransmissionLPFUsage>
+																<TransmissionHPFUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</TransmissionHPFUsage>
+																<TransmissionDSFUsage>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="UseProject"/>
+																</TransmissionDSFUsage>
+															</CurveUsageInfoList>
+														</Attenuation>
+													</Custom>
+												</Reference>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<Sound Name="AMB_Ambi_D_02" ID="{FA5DEA7E-301C-410F-B18A-3E7E4AB1F70B}" ShortID="538791152">
+													<PropertyList>
+														<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+													</PropertyList>
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="AMB_Ambi_D_02" ID="{5E951F93-13C6-436F-A3B8-970263A2EEBA}">
+															<PropertyList>
+																<Property Name="ChannelConfigOverride" Type="int64" Value="516"/>
+															</PropertyList>
+															<Language>SFX</Language>
+															<AudioFile>AMB\AMB_Ambi_Under\AMB_Ambi_D\AMB_Ambi_D_02.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="73203675"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="AMB_Ambi_D_02" ID="{5E951F93-13C6-436F-A3B8-970263A2EEBA}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+											</ChildrenList>
 										</BlendContainer>
 									</ChildrenList>
 								</PropertyContainer>

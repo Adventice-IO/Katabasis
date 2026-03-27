@@ -20,7 +20,8 @@ namespace AK
         static const AkUniqueID ALEX_3_HIDE_BELOW = 3369146532U;
         static const AkUniqueID ALEX_4_ZERO_TOLERANCE = 1509907605U;
         static const AkUniqueID ALEX_5_SOLITUDE = 2982750171U;
-        static const AkUniqueID AMB_AMBI_D = 2687390210U;
+        static const AkUniqueID AMB_AMBI_D_01 = 2642596128U;
+        static const AkUniqueID AMB_AMBI_D_02 = 2642596131U;
         static const AkUniqueID AMB_AMBI_EXT_PARK_BIRDS_01 = 561904127U;
         static const AkUniqueID AMB_AMBI_EXT_PARK_KIDS_01 = 757254316U;
         static const AkUniqueID AMB_AMBI_EXT_STREET_01 = 3388850435U;
