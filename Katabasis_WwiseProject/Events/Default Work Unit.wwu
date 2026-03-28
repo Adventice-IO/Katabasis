@@ -1210,7 +1210,7 @@
 								</Event>
 								<Event Name="AMB_Ext_Park_Insect_People_Bys_01" ID="{5C4B05E0-B563-4689-AAB0-D4B8C5402BDA}">
 									<PropertyList>
-										<Property Name="Color" Type="int16" Value="10"/>
+										<Property Name="Color" Type="int16" Value="4"/>
 										<Property Name="OverrideColor" Type="bool" Value="True"/>
 									</PropertyList>
 									<ChildrenList>
@@ -2014,6 +2014,61 @@
 								</Event>
 							</ChildrenList>
 						</Folder>
+						<Event Name="SFX_Graffiti" ID="{107C78EA-035C-4FA7-BCE4-026B7F1602FF}">
+							<ChildrenList>
+								<Action Name="" ID="{76382142-BA09-442F-9493-99E340B83563}" ShortID="414931425">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SFX_Graffiti" ID="{A32D2D35-49DD-4AF6-AE2F-3EBC9A4746FF}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="SFX_Impact_Metal" ID="{DF394540-6F6B-48B7-A68D-B21654A7B657}">
+							<ChildrenList>
+								<Action Name="" ID="{9E1D62FF-BF1D-4F48-973D-A6D7AA6DB48F}" ShortID="326916816">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SFX_Impact_Metal" ID="{615E84A5-205D-4CAC-9EC8-57742B2675D9}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="SFX_Wind_Howl" ID="{F4F3FF88-4606-485D-BED3-C831CF9CAF36}">
+							<ChildrenList>
+								<Action Name="" ID="{D36131A4-865A-4999-9A1C-72A554E40239}" ShortID="1016988744">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SFX_Wind_Howl" ID="{CA4562EB-0271-4F90-85CA-DAC20A07929D}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="SFX_Rats" ID="{6F6435ED-8F64-469E-9A53-9308C9AF8B3A}">
+							<ChildrenList>
+								<Action Name="" ID="{4298B28D-2CAF-48F5-A031-C1E2F27EB921}" ShortID="212011649">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SFX_Rats" ID="{A974517A-296D-480E-9995-5E8A076D5612}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="SFX_Elec_All" ID="{8E141165-0060-484D-BD06-B02D1DC10441}">
+							<ChildrenList>
+								<Action Name="" ID="{6C9B04D1-25B7-46E9-B972-58EEFC925073}" ShortID="649101313">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SFX_Elec" ID="{F8A61139-B5FD-46D2-9F51-B8444AAF6819}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="MUS" ID="{51D934EE-62D9-4AE2-8D56-5DF1E49F47A4}" ShortID="636917796">

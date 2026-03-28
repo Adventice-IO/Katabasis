@@ -97,15 +97,19 @@ namespace AK
         static const AkUniqueID SFX_AIRPRESSURE_H = 3370058099U;
         static const AkUniqueID SFX_AIRPRESSURE_I = 3370058098U;
         static const AkUniqueID SFX_ELEC_A = 3373651682U;
+        static const AkUniqueID SFX_ELEC_ALL = 2140914U;
         static const AkUniqueID SFX_ELEC_D = 3373651687U;
         static const AkUniqueID SFX_ELEC_E = 3373651686U;
         static const AkUniqueID SFX_ELEC_F = 3373651685U;
         static const AkUniqueID SFX_ELEC_G = 3373651684U;
         static const AkUniqueID SFX_ELEC_H = 3373651691U;
+        static const AkUniqueID SFX_GRAFFITI = 2148127353U;
+        static const AkUniqueID SFX_IMPACT_METAL = 3249341599U;
         static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MAMDANI = 4259001170U;
         static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MTA = 3164635487U;
         static const AkUniqueID SFX_PORTAL_ACTIVATE = 4131803333U;
         static const AkUniqueID SFX_PORTAL_VALIDATE = 1155651648U;
+        static const AkUniqueID SFX_RATS = 2089405297U;
         static const AkUniqueID SFX_SEWERS_A_DRIPS = 3799102629U;
         static const AkUniqueID SFX_SEWERS_B_PIPE = 4245633758U;
         static const AkUniqueID SFX_SEWERS_C_PIPE = 260636857U;
@@ -131,6 +135,7 @@ namespace AK
         static const AkUniqueID SFX_SUBWAY_K_NYC_BYS_JM = 3569433076U;
         static const AkUniqueID SFX_TONE_TEST = 3501277368U;
         static const AkUniqueID SFX_TRAIN_FREEDOM = 2950012982U;
+        static const AkUniqueID SFX_WIND_HOWL = 1631722864U;
         static const AkUniqueID SPIDERMAN_0_INTRO = 838969532U;
         static const AkUniqueID SPIDERMAN_1_FAMILY_PROBLEMS = 2288458896U;
         static const AkUniqueID SPIDERMAN_2_MOUV_MUETTE = 1867442572U;
@@ -162,6 +167,18 @@ namespace AK
 
     namespace STATES
     {
+        namespace ELEC
+        {
+            static const AkUniqueID GROUP = 4251427962U;
+
+            namespace STATE
+            {
+                static const AkUniqueID NO = 1668749452U;
+                static const AkUniqueID NONE = 748895195U;
+                static const AkUniqueID YES = 979470758U;
+            } // namespace STATE
+        } // namespace ELEC
+
         namespace STATE_GAME
         {
             static const AkUniqueID GROUP = 1203368309U;
