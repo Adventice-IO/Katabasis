@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{E2F91867-84CD-2566-1513-4AE407A60346}",
+    "Hash": "{ABAA81F2-1B5E-6431-9847-3AB9478272CD}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -81,12 +81,44 @@
        "LibId": "6946819"
       },
       {
+       "Id": "690964496",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\SFX\\[Effect Slot [1]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{A62A7524-A566-4CE9-B386-D34E97904938}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
+       "Id": "704971858",
+       "Name": "Sidechain Send (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\UI\\[Effect Slot [0]: (Sidechain Send)]\\Sidechain Send (Custom)",
+       "GUID": "{0EB5F77C-F3C8-4799-B9F6-26F46BB9C1EC}",
+       "LibName": "Ak Sidechain Send",
+       "LibId": "12648451"
+      },
+      {
+       "Id": "803922577",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\[Effect Slot [1]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{4A861E8C-871B-4DA6-BB40-1C5BF709FD38}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
        "Id": "865612985",
        "Name": "Brick_Wall_Minus_1dB_Peak_Fast_Release (Custom)",
        "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\[Effect Slot [1]: (Peak Limiter)]\\Brick_Wall_Minus_1dB_Peak_Fast_Release (Custom)",
        "GUID": "{ACB54C64-6A1F-4A39-99CC-27F26D25FF23}",
        "LibName": "Wwise Peak Limiter",
        "LibId": "7208963"
+      },
+      {
+       "Id": "1070038529",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\AMB\\[Effect Slot [1]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{4F0FCFE3-CD2C-4012-8989-CEE46FB50ED4}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
       }
      ],
      "ShareSets": [
@@ -168,6 +200,9 @@
        "Custom": [
         {
          "Id": "203344492"
+        },
+        {
+         "Id": "690964496"
         }
        ]
       }
@@ -194,6 +229,9 @@
        "Custom": [
         {
          "Id": "212081602"
+        },
+        {
+         "Id": "803922577"
         }
        ]
       }
@@ -207,6 +245,22 @@
        "Custom": [
         {
          "Id": "494544631"
+        },
+        {
+         "Id": "1070038529"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "1551306167",
+      "Name": "UI",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\UI",
+      "GUID": "{E16B4291-1174-469E-A4DD-6690B903BB84}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "704971858"
         }
        ]
       }
@@ -607,6 +661,6 @@
     ]
    }
   ],
-  "FileHash": "{66DD865F-CB1C-D7F6-577D-749CDE5C4B7A}"
+  "FileHash": "{4FF0C1CC-3E8C-2A7D-9D76-D4944320B6C3}"
  }
 }

@@ -3141,7 +3141,7 @@
 																									<PointList>
 																										<Point>
 																											<XPos>0</XPos>
-																											<YPos>-0</YPos>
+																											<YPos>0</YPos>
 																											<Flags>21</Flags>
 																										</Point>
 																										<Point>
@@ -5036,7 +5036,7 @@
 																									<PointList>
 																										<Point>
 																											<XPos>0</XPos>
-																											<YPos>-0</YPos>
+																											<YPos>0</YPos>
 																											<Flags>21</Flags>
 																										</Point>
 																										<Point>
@@ -6732,7 +6732,7 @@
 																									<PointList>
 																										<Point>
 																											<XPos>0</XPos>
-																											<YPos>-0</YPos>
+																											<YPos>0</YPos>
 																											<Flags>21</Flags>
 																										</Point>
 																										<Point>
@@ -8682,7 +8682,7 @@
 																									<PointList>
 																										<Point>
 																											<XPos>0</XPos>
-																											<YPos>-0</YPos>
+																											<YPos>0</YPos>
 																											<Flags>21</Flags>
 																										</Point>
 																										<Point>
@@ -10378,7 +10378,7 @@
 																									<PointList>
 																										<Point>
 																											<XPos>0</XPos>
-																											<YPos>-0</YPos>
+																											<YPos>0</YPos>
 																											<Flags>21</Flags>
 																										</Point>
 																										<Point>
@@ -16900,7 +16900,7 @@
 																									<PointList>
 																										<Point>
 																											<XPos>0</XPos>
-																											<YPos>-0</YPos>
+																											<YPos>0</YPos>
 																											<Flags>21</Flags>
 																										</Point>
 																										<Point>
@@ -37095,7 +37095,7 @@
 															</PropertyList>
 															<PointList>
 																<Point>
-																	<XPos>-0</XPos>
+																	<XPos>0</XPos>
 																	<YPos>9.88701</YPos>
 																	<Flags>12</Flags>
 																	<Time>0</Time>
@@ -37109,7 +37109,7 @@
 															</PropertyList>
 															<PointList>
 																<Point>
-																	<XPos>-0</XPos>
+																	<XPos>0</XPos>
 																	<YPos>9.88701</YPos>
 																	<Flags>12</Flags>
 																	<Time>0</Time>
@@ -37489,7 +37489,7 @@
 															</PropertyList>
 															<PointList>
 																<Point>
-																	<XPos>-0</XPos>
+																	<XPos>0</XPos>
 																	<YPos>9.88701</YPos>
 																	<Flags>12</Flags>
 																	<Time>0</Time>
@@ -37503,7 +37503,7 @@
 															</PropertyList>
 															<PointList>
 																<Point>
-																	<XPos>-0</XPos>
+																	<XPos>0</XPos>
 																	<YPos>9.88701</YPos>
 																	<Flags>12</Flags>
 																	<Time>0</Time>
@@ -37860,7 +37860,7 @@
 															</PropertyList>
 															<PointList>
 																<Point>
-																	<XPos>-0</XPos>
+																	<XPos>0</XPos>
 																	<YPos>9.88701</YPos>
 																	<Flags>12</Flags>
 																	<Time>0</Time>
@@ -37874,7 +37874,7 @@
 															</PropertyList>
 															<PointList>
 																<Point>
-																	<XPos>-0</XPos>
+																	<XPos>0</XPos>
 																	<YPos>9.88701</YPos>
 																	<Flags>12</Flags>
 																	<Time>0</Time>
@@ -38276,7 +38276,7 @@
 															</PropertyList>
 															<PointList>
 																<Point>
-																	<XPos>-0</XPos>
+																	<XPos>0</XPos>
 																	<YPos>9.88701</YPos>
 																	<Flags>12</Flags>
 																	<Time>0</Time>
@@ -38290,7 +38290,7 @@
 															</PropertyList>
 															<PointList>
 																<Point>
-																	<XPos>-0</XPos>
+																	<XPos>0</XPos>
 																	<YPos>9.88701</YPos>
 																	<Flags>12</Flags>
 																	<Time>0</Time>
@@ -38328,7 +38328,7 @@
 													</PropertyList>
 													<PointList>
 														<Point>
-															<XPos>-0</XPos>
+															<XPos>0</XPos>
 															<YPos>9.88701</YPos>
 															<Flags>12</Flags>
 															<Time>0</Time>
@@ -48760,6 +48760,470 @@
 									</CustomState>
 								</CustomStateList>
 							</StateInfo>
+						</BlendContainer>
+					</ChildrenList>
+				</PropertyContainer>
+				<PropertyContainer Name="UI" ID="{78D3E3D5-1CA9-4263-B368-283620B5E43D}" ShortID="62721871">
+					<PropertyList>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-3</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="UI" ID="{E16B4291-1174-469E-A4DD-6690B903BB84}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<BlendContainer Name="UI_ITW" ID="{8C5EA3F9-4CDC-4610-BEE9-8F5AC7B4EE37}" ShortID="1064627439">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="UI_ITW_Validate" ID="{21016D5F-9B5B-4579-874C-B3561E7AEC9B}" ShortID="213321248">
+									<PropertyList>
+										<Property Name="OverrideEffect" Type="bool" Value="True"/>
+										<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
+										<Property Name="UserAuxSendVolume0" Type="Real64">
+											<ValueList>
+												<Value>-12</Value>
+											</ValueList>
+										</Property>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-3</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+										<Reference Name="UserAuxSend0">
+											<ObjectRef Name="REV_LongUltra" ID="{43E67AD9-087F-47C6-82F2-818148AB0A10}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="UI_ITW_Validate" ID="{F41949C6-53DB-4E46-8B0F-F0A1DF346A5E}">
+											<Language>SFX</Language>
+											<AudioFile>UI\UI_ITW_Validate.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="549137070"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="Effects">
+											<EffectSlot Name="" ID="{E1AF49EC-2C53-4285-853E-7DC0AA8AD298}" ShortID="580956675">
+												<ReferenceList>
+													<Reference Name="Effect">
+														<Custom>
+															<Effect Name="Parametric EQ (Custom)" ID="{18CDC14A-AE2E-493E-86DF-6FA3CE811D58}" ShortID="80999267" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
+																<PropertyList>
+																	<Property Name="FilterTypeBand3" Type="int32" Value="5"/>
+																	<Property Name="FrequencyBand3" Type="Real32" Value="202.413"/>
+																	<Property Name="GainBand3" Type="Real32" Value="9.96648"/>
+																	<Property Name="OnOffBand3" Type="bool" Value="True"/>
+																</PropertyList>
+															</Effect>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</EffectSlot>
+										</ObjectList>
+									</ObjectLists>
+									<ActiveSourceList>
+										<ActiveSource Name="UI_ITW_Validate" ID="{F41949C6-53DB-4E46-8B0F-F0A1DF346A5E}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<BlendContainer Name="UI_ITW_Load" ID="{3664AB10-7DBF-4F7D-8E69-EE58CB24529C}" ShortID="932306502">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="UI" ID="{E16B4291-1174-469E-A4DD-6690B903BB84}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="UI_ITW_Load_A" ID="{49FFA50B-01CE-4E62-B585-797727102D2A}" ShortID="467940925">
+											<PropertyList>
+												<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="UI_ITW_Load_A" ID="{AB4E3B0E-84D6-4AF6-90CF-8C798EBABEB0}">
+													<Language>SFX</Language>
+													<AudioFile>UI\UI_ITW_Load\UI_ITW_Load_A.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="530022039"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="RTPC">
+													<RTPC Name="" ID="{44047F7C-75F7-4F36-92B2-DEA65FF13779}" ShortID="864735108">
+														<PropertyList>
+															<Property Name="PropertyName" Type="string" Value="Pitch"/>
+														</PropertyList>
+														<ReferenceList>
+															<Reference Name="ControlInput">
+																<ObjectRef Name="RTPC_Progression" ID="{5BD8080A-DA64-43F0-98B7-79BD20A6BAC9}" WorkUnitID="{CD87D003-6EB8-45E4-BEC9-3829C2568A1E}"/>
+															</Reference>
+															<Reference Name="Curve">
+																<Custom>
+																	<Curve Name="" ID="{FBB862FD-3B88-4B46-B018-BAAC4946D22B}">
+																		<PropertyList>
+																			<Property Name="Flags" Type="int32" Value="65537"/>
+																		</PropertyList>
+																		<PointList>
+																			<Point>
+																				<XPos>0</XPos>
+																				<YPos>-2732</YPos>
+																				<Flags>5</Flags>
+																			</Point>
+																			<Point>
+																				<XPos>1</XPos>
+																				<YPos>-92</YPos>
+																				<Flags>37</Flags>
+																			</Point>
+																		</PointList>
+																	</Curve>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</RTPC>
+												</ObjectList>
+											</ObjectLists>
+											<ActiveSourceList>
+												<ActiveSource Name="UI_ITW_Load_A" ID="{AB4E3B0E-84D6-4AF6-90CF-8C798EBABEB0}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="UI_ITW_Load_B" ID="{3E0F9B7E-3873-4395-B431-DE5C8F3A212E}" ShortID="877896620">
+											<PropertyList>
+												<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="UI_ITW_Load_B" ID="{D1903398-07E1-451F-8365-2CB3CA556DB0}">
+													<Language>SFX</Language>
+													<AudioFile>UI\UI_ITW_Load\UI_ITW_Load_B.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="217470532"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="UI_ITW_Load_B" ID="{D1903398-07E1-451F-8365-2CB3CA556DB0}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="RTPC">
+											<RTPC Name="" ID="{412F4023-E055-4A17-8146-A4978EA77884}" ShortID="974832576">
+												<PropertyList>
+													<Property Name="PropertyName" Type="string" Value="Volume"/>
+												</PropertyList>
+												<ReferenceList>
+													<Reference Name="ControlInput">
+														<ObjectRef Name="RTPC_Progression" ID="{5BD8080A-DA64-43F0-98B7-79BD20A6BAC9}" WorkUnitID="{CD87D003-6EB8-45E4-BEC9-3829C2568A1E}"/>
+													</Reference>
+													<Reference Name="Curve">
+														<Custom>
+															<Curve Name="" ID="{75B0619A-1A88-4AC5-A2CE-5DB10CBCE988}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="3"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>-200</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>0.250331125827815</XPos>
+																		<YPos>0</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>1</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</RTPC>
+										</ObjectList>
+									</ObjectLists>
+								</BlendContainer>
+							</ChildrenList>
+						</BlendContainer>
+						<BlendContainer Name="UI_Portal" ID="{06E2543B-58E3-4D06-83F1-E9068CAE8074}" ShortID="680377947">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="UI_Portal_Validate" ID="{0D401814-99EC-44E9-B6F7-5A95B93E0AFC}" ShortID="291654192">
+									<PropertyList>
+										<Property Name="OverrideEffect" Type="bool" Value="True"/>
+										<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
+										<Property Name="UserAuxSendVolume0" Type="Real64">
+											<ValueList>
+												<Value>-8</Value>
+											</ValueList>
+										</Property>
+										<Property Name="UserAuxSendVolume1" Type="Real64">
+											<ValueList>
+												<Value>-7</Value>
+											</ValueList>
+										</Property>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-6</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="UI" ID="{E16B4291-1174-469E-A4DD-6690B903BB84}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+										<Reference Name="UserAuxSend0">
+											<ObjectRef Name="REV_LongUltra" ID="{43E67AD9-087F-47C6-82F2-818148AB0A10}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+										<Reference Name="UserAuxSend1">
+											<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="UI_Portal_Validate" ID="{8A47116E-020C-431D-BC8E-47F03D6CFFC9}">
+											<Language>SFX</Language>
+											<AudioFile>UI\UI_Portal_Validate.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="57703855"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="Effects">
+											<EffectSlot Name="" ID="{2A0B1458-F251-43C1-814E-DDBF7DC1106B}" ShortID="983166311">
+												<ReferenceList>
+													<Reference Name="Effect">
+														<Custom>
+															<Effect Name="Parametric EQ (Custom)" ID="{A1C2364E-A6C2-47AF-8C7F-0CA494F8229D}" ShortID="688860353" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
+																<PropertyList>
+																	<Property Name="FilterTypeBand3" Type="int32" Value="5"/>
+																	<Property Name="FrequencyBand2" Type="Real32" Value="1124.683"/>
+																	<Property Name="FrequencyBand3" Type="Real32" Value="214.9216"/>
+																	<Property Name="GainBand2" Type="Real32" Value="4.156425"/>
+																	<Property Name="GainBand3" Type="Real32" Value="4.603352"/>
+																	<Property Name="OnOffBand3" Type="bool" Value="True"/>
+																</PropertyList>
+															</Effect>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</EffectSlot>
+										</ObjectList>
+									</ObjectLists>
+									<ActiveSourceList>
+										<ActiveSource Name="UI_Portal_Validate" ID="{8A47116E-020C-431D-BC8E-47F03D6CFFC9}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<BlendContainer Name="UI_Portal_Load" ID="{101C1DDD-3109-438C-8852-E8282853F40C}" ShortID="141352592">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-3</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="UI" ID="{E16B4291-1174-469E-A4DD-6690B903BB84}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="UI_PortalLoad_A" ID="{25FDF27A-2FF3-4B9F-B356-75FFC8094F4E}" ShortID="762062285">
+											<PropertyList>
+												<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+												<Property Name="OverridePositioning" Type="bool" Value="True"/>
+												<Property Name="SpeakerPanning" Type="int16" Value="1"/>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>2</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="UI_PortalLoad_A" ID="{E3CDE179-420F-409F-A5BA-557EF8465C65}">
+													<Language>SFX</Language>
+													<AudioFile>UI\UI_Portal_Load\UI_PortalLoad_A.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="410555071"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<PositioningInfo>
+												<Panner Name="" ID="{4F78F8EF-B79F-4FF2-B9E2-00DDE6C315D2}">
+													<PropertyList>
+														<Property Name="PanX" Type="Real64" Value="-53.7942664418212"/>
+														<Property Name="PanY" Type="Real64" Value="52.2603978300181"/>
+													</PropertyList>
+												</Panner>
+											</PositioningInfo>
+											<ActiveSourceList>
+												<ActiveSource Name="UI_PortalLoad_A" ID="{E3CDE179-420F-409F-A5BA-557EF8465C65}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="UI_PortalLoad_B" ID="{2B6332DA-1E9B-452E-A406-C8C9A118170D}" ShortID="424296054">
+											<PropertyList>
+												<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="UI_PortalLoad_B" ID="{3259F7D3-A4B5-432C-AECA-274466F84A0C}">
+													<Language>SFX</Language>
+													<AudioFile>UI\UI_Portal_Load\UI_PortalLoad_B.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="749521399"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="UI_PortalLoad_B" ID="{3259F7D3-A4B5-432C-AECA-274466F84A0C}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="RTPC">
+											<RTPC Name="" ID="{E4F528D6-8FD3-4CFB-870E-8465F1E18D4D}" ShortID="947379108">
+												<PropertyList>
+													<Property Name="PropertyName" Type="string" Value="Pitch"/>
+												</PropertyList>
+												<ReferenceList>
+													<Reference Name="ControlInput">
+														<ObjectRef Name="RTPC_Progression" ID="{5BD8080A-DA64-43F0-98B7-79BD20A6BAC9}" WorkUnitID="{CD87D003-6EB8-45E4-BEC9-3829C2568A1E}"/>
+													</Reference>
+													<Reference Name="Curve">
+														<Custom>
+															<Curve Name="" ID="{B03EF05C-C9C7-44E2-8197-0933E60C9472}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="65537"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>-941</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>1</XPos>
+																		<YPos>972</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</RTPC>
+											<RTPC Name="" ID="{D3E81E93-0EC5-4890-8DD1-A246069EFFD3}" ShortID="395867333">
+												<PropertyList>
+													<Property Name="PropertyName" Type="string" Value="Volume"/>
+												</PropertyList>
+												<ReferenceList>
+													<Reference Name="ControlInput">
+														<ObjectRef Name="RTPC_Progression" ID="{5BD8080A-DA64-43F0-98B7-79BD20A6BAC9}" WorkUnitID="{CD87D003-6EB8-45E4-BEC9-3829C2568A1E}"/>
+													</Reference>
+													<Reference Name="Curve">
+														<Custom>
+															<Curve Name="" ID="{32AB5718-BE1E-4949-AB8D-848DBDACFBE1}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="3"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>0</XPos>
+																		<YPos>-200</YPos>
+																		<Flags>5</Flags>
+																		<SegmentShape>Exp2</SegmentShape>
+																	</Point>
+																	<Point>
+																		<XPos>0.39875</XPos>
+																		<YPos>0</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>1</XPos>
+																		<YPos>0</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</RTPC>
+										</ObjectList>
+									</ObjectLists>
+								</BlendContainer>
+							</ChildrenList>
 						</BlendContainer>
 					</ChildrenList>
 				</PropertyContainer>

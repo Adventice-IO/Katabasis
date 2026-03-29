@@ -162,6 +162,10 @@ namespace AK
         static const AkUniqueID TOMMY_3_EXIT_SIGN = 3565901682U;
         static const AkUniqueID TOMMY_4_NO_SERVICE = 312400974U;
         static const AkUniqueID TOMMY_5_HYPERSENSITIVE = 3145206958U;
+        static const AkUniqueID UI_ITW_LOAD = 553651687U;
+        static const AkUniqueID UI_ITW_VALIDATE = 535658541U;
+        static const AkUniqueID UI_PORTAL_LOAD = 357797799U;
+        static const AkUniqueID UI_PORTAL_VALIDATE = 3435944941U;
         static const AkUniqueID VOX_TEST_STEVE = 2108038015U;
     } // namespace EVENTS
 
@@ -254,6 +258,7 @@ namespace AK
         static const AkUniqueID SFX = 393239870U;
         static const AkUniqueID SFX_3D = 2822524704U;
         static const AkUniqueID SFX_TEST = 3018450665U;
+        static const AkUniqueID UI = 1551306167U;
         static const AkUniqueID VOX = 543694036U;
     } // namespace BUSSES
 

@@ -2195,6 +2195,82 @@
 						</Event>
 					</ChildrenList>
 				</Folder>
+				<Folder Name="UI" ID="{317E0589-38B9-4DC3-9D11-EA44B2D53E99}" ShortID="380235885">
+					<ChildrenList>
+						<Event Name="UI_ITW_Validate" ID="{8897486B-A86C-401B-84DA-BAF60A409062}">
+							<ChildrenList>
+								<Action Name="" ID="{FECA798A-98A2-475F-862F-E1A5A4FCA903}" ShortID="1035448950">
+									<PropertyList>
+										<Property Name="FadeInCurve" Type="int16" Value="7"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="UI_ITW_Validate" ID="{21016D5F-9B5B-4579-874C-B3561E7AEC9B}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+								<Action Name="" ID="{D79676F5-7056-4430-9FC9-9717DB4050A0}" ShortID="93271186">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+										<Property Name="FadeOutCurve" Type="int16" Value="7"/>
+										<Property Name="FadeTime" Type="Real64" Value="1.5"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="UI_ITW_Load" ID="{3664AB10-7DBF-4F7D-8E69-EE58CB24529C}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="UI_Portal_Validate" ID="{36F44191-45AA-4173-A078-C6AE3651CC35}">
+							<ChildrenList>
+								<Action Name="" ID="{696E3C5D-A985-4A34-8407-F2716749E99C}" ShortID="73818469">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="UI_Portal_Validate" ID="{0D401814-99EC-44E9-B6F7-5A95B93E0AFC}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+								<Action Name="" ID="{8FFB077F-BC3C-4E43-BF99-C7116B434F7F}" ShortID="736774223">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+										<Property Name="FadeOutCurve" Type="int16" Value="6"/>
+										<Property Name="FadeTime" Type="Real64" Value="1"/>
+										<Property Name="Scope" Type="int16" Value="1"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="UI_Portal_Load" ID="{101C1DDD-3109-438C-8852-E8282853F40C}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="UI_Portal_Load" ID="{CB4CDC71-48B8-4F76-BEE8-06EDFD201AF2}">
+							<ChildrenList>
+								<Action Name="" ID="{98C8AC95-25C7-4E6A-9EFE-98AF6B097604}" ShortID="1039897972">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="UI_Portal_Load" ID="{101C1DDD-3109-438C-8852-E8282853F40C}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="UI_ITW_Load" ID="{F3B463B2-A4BB-4878-8D12-1496946A81F1}">
+							<ChildrenList>
+								<Action Name="" ID="{F6AE4AF3-77EA-43B5-B304-2DE8DD22EFEA}" ShortID="462971320">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="UI_ITW_Load" ID="{3664AB10-7DBF-4F7D-8E69-EE58CB24529C}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>
