@@ -18,13 +18,6 @@
     "StaticLib": "AkSilenceSource"
    },
    {
-    "LibName": "Wwise Tone Generator",
-    "LibId": "6684674",
-    "Type": "Source",
-    "DLL": "AkToneGen",
-    "StaticLib": "AkToneSource"
-   },
-   {
     "LibName": "Wwise Parametric EQ",
     "LibId": "6881283",
     "Type": "Effect",
@@ -37,6 +30,13 @@
     "Type": "Effect",
     "DLL": "AkDelay",
     "StaticLib": "AkDelayFX"
+   },
+   {
+    "LibName": "Wwise Compressor",
+    "LibId": "7077891",
+    "Type": "Effect",
+    "DLL": "AkCompressor",
+    "StaticLib": "AkCompressorFX"
    },
    {
     "LibName": "Wwise Peak Limiter",
@@ -53,6 +53,20 @@
     "StaticLib": "AkRoomVerbFX"
    },
    {
+    "LibName": "Wwise Guitar Distortion",
+    "LibId": "8257539",
+    "Type": "Effect",
+    "DLL": "AkGuitarDistortion",
+    "StaticLib": "AkGuitarDistortionFX"
+   },
+   {
+    "LibName": "Wwise Time Stretch",
+    "LibId": "8519683",
+    "Type": "Effect",
+    "DLL": "AkTimeStretch",
+    "StaticLib": "AkTimeStretchFX"
+   },
+   {
     "LibName": "Wwise Stereo Delay",
     "LibId": "8847363",
     "Type": "Effect",
@@ -65,13 +79,6 @@
     "Type": "Effect",
     "DLL": "AkGain",
     "StaticLib": "AkGainFX"
-   },
-   {
-    "LibName": "Wwise Synth One",
-    "LibId": "9699330",
-    "Type": "Source",
-    "DLL": "AkSynthOne",
-    "StaticLib": "AkSynthOneSource"
    },
    {
     "LibName": "System",
@@ -91,6 +98,6 @@
     "StaticLib": "AkSidechainFX"
    }
   ],
-  "FileHash": "{88C4F9D5-3006-396E-474A-FB8B010D123D}"
+  "FileHash": "{2917E24F-C3F8-A6B2-651D-2D52DEFF1FBA}"
  }
 }

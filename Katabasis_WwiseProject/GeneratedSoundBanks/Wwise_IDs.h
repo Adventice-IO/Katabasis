@@ -20,12 +20,14 @@ namespace AK
         static const AkUniqueID ALEX_3_HIDE_BELOW = 3369146532U;
         static const AkUniqueID ALEX_4_ZERO_TOLERANCE = 1509907605U;
         static const AkUniqueID ALEX_5_SOLITUDE = 2982750171U;
-        static const AkUniqueID AMB_AMBI_D = 2687390210U;
+        static const AkUniqueID AMB_AMBI_D_01 = 2642596128U;
+        static const AkUniqueID AMB_AMBI_D_02 = 2642596131U;
         static const AkUniqueID AMB_AMBI_EXT_PARK_BIRDS_01 = 561904127U;
         static const AkUniqueID AMB_AMBI_EXT_PARK_KIDS_01 = 757254316U;
         static const AkUniqueID AMB_AMBI_EXT_STREET_01 = 3388850435U;
         static const AkUniqueID AMB_AMBI_EXT_STREET_02 = 3388850432U;
         static const AkUniqueID AMB_AMBI_EXT_STREET_03 = 3388850433U;
+        static const AkUniqueID AMB_AMBI_F = 2687390208U;
         static const AkUniqueID AMB_AMBI_G_K_O = 2050334025U;
         static const AkUniqueID AMB_AMBI_J = 2687390220U;
         static const AkUniqueID AMB_AMBI_M = 2687390219U;
@@ -96,15 +98,17 @@ namespace AK
         static const AkUniqueID SFX_AIRPRESSURE_H = 3370058099U;
         static const AkUniqueID SFX_AIRPRESSURE_I = 3370058098U;
         static const AkUniqueID SFX_ELEC_A = 3373651682U;
+        static const AkUniqueID SFX_ELEC_ALL = 2140914U;
         static const AkUniqueID SFX_ELEC_D = 3373651687U;
         static const AkUniqueID SFX_ELEC_E = 3373651686U;
         static const AkUniqueID SFX_ELEC_F = 3373651685U;
         static const AkUniqueID SFX_ELEC_G = 3373651684U;
         static const AkUniqueID SFX_ELEC_H = 3373651691U;
+        static const AkUniqueID SFX_GRAFFITI = 2148127353U;
+        static const AkUniqueID SFX_IMPACT_METAL = 3249341599U;
         static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MAMDANI = 4259001170U;
         static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MTA = 3164635487U;
-        static const AkUniqueID SFX_PORTAL_ACTIVATE = 4131803333U;
-        static const AkUniqueID SFX_PORTAL_VALIDATE = 1155651648U;
+        static const AkUniqueID SFX_RATS = 2089405297U;
         static const AkUniqueID SFX_SEWERS_A_DRIPS = 3799102629U;
         static const AkUniqueID SFX_SEWERS_B_PIPE = 4245633758U;
         static const AkUniqueID SFX_SEWERS_C_PIPE = 260636857U;
@@ -114,9 +118,11 @@ namespace AK
         static const AkUniqueID SFX_SEWERS_G_DRIPS = 1280951783U;
         static const AkUniqueID SFX_SEWERS_H_DRIPS = 2946085520U;
         static const AkUniqueID SFX_SEWERS_I_WATER = 754790596U;
-        static const AkUniqueID SFX_SEWERS_J_WATER = 230377275U;
+        static const AkUniqueID SFX_SEWERS_J_WATER_UNDER = 2558009444U;
         static const AkUniqueID SFX_SEWERS_K_WATER = 522077354U;
         static const AkUniqueID SFX_SEWERS_L_WATER = 3886424281U;
+        static const AkUniqueID SFX_SEWERS_M_NYC = 1073561947U;
+        static const AkUniqueID SFX_SEWERS_N_NYC = 4134176780U;
         static const AkUniqueID SFX_SUBWAY_A = 1224719534U;
         static const AkUniqueID SFX_SUBWAY_B_INT = 3184577795U;
         static const AkUniqueID SFX_SUBWAY_C_INT = 1275499414U;
@@ -128,8 +134,8 @@ namespace AK
         static const AkUniqueID SFX_SUBWAY_I_INT = 65382472U;
         static const AkUniqueID SFX_SUBWAY_J_BYS = 2782204094U;
         static const AkUniqueID SFX_SUBWAY_K_NYC_BYS_JM = 3569433076U;
-        static const AkUniqueID SFX_TONE_TEST = 3501277368U;
         static const AkUniqueID SFX_TRAIN_FREEDOM = 2950012982U;
+        static const AkUniqueID SFX_WIND_HOWL = 1631722864U;
         static const AkUniqueID SPIDERMAN_0_INTRO = 838969532U;
         static const AkUniqueID SPIDERMAN_1_FAMILY_PROBLEMS = 2288458896U;
         static const AkUniqueID SPIDERMAN_2_MOUV_MUETTE = 1867442572U;
@@ -156,11 +162,26 @@ namespace AK
         static const AkUniqueID TOMMY_3_EXIT_SIGN = 3565901682U;
         static const AkUniqueID TOMMY_4_NO_SERVICE = 312400974U;
         static const AkUniqueID TOMMY_5_HYPERSENSITIVE = 3145206958U;
-        static const AkUniqueID VOX_TEST_STEVE = 2108038015U;
+        static const AkUniqueID UI_ITW_LOAD = 553651687U;
+        static const AkUniqueID UI_ITW_VALIDATE = 535658541U;
+        static const AkUniqueID UI_PORTAL_LOAD = 357797799U;
+        static const AkUniqueID UI_PORTAL_VALIDATE = 3435944941U;
     } // namespace EVENTS
 
     namespace STATES
     {
+        namespace ELEC
+        {
+            static const AkUniqueID GROUP = 4251427962U;
+
+            namespace STATE
+            {
+                static const AkUniqueID NO = 1668749452U;
+                static const AkUniqueID NONE = 748895195U;
+                static const AkUniqueID YES = 979470758U;
+            } // namespace STATE
+        } // namespace ELEC
+
         namespace STATE_GAME
         {
             static const AkUniqueID GROUP = 1203368309U;
@@ -236,6 +257,7 @@ namespace AK
         static const AkUniqueID SFX = 393239870U;
         static const AkUniqueID SFX_3D = 2822524704U;
         static const AkUniqueID SFX_TEST = 3018450665U;
+        static const AkUniqueID UI = 1551306167U;
         static const AkUniqueID VOX = 543694036U;
     } // namespace BUSSES
 
