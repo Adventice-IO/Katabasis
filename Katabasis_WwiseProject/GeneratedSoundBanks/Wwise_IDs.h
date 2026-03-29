@@ -27,6 +27,7 @@ namespace AK
         static const AkUniqueID AMB_AMBI_EXT_STREET_01 = 3388850435U;
         static const AkUniqueID AMB_AMBI_EXT_STREET_02 = 3388850432U;
         static const AkUniqueID AMB_AMBI_EXT_STREET_03 = 3388850433U;
+        static const AkUniqueID AMB_AMBI_F = 2687390208U;
         static const AkUniqueID AMB_AMBI_G_K_O = 2050334025U;
         static const AkUniqueID AMB_AMBI_J = 2687390220U;
         static const AkUniqueID AMB_AMBI_M = 2687390219U;
@@ -107,8 +108,6 @@ namespace AK
         static const AkUniqueID SFX_IMPACT_METAL = 3249341599U;
         static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MAMDANI = 4259001170U;
         static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MTA = 3164635487U;
-        static const AkUniqueID SFX_PORTAL_ACTIVATE = 4131803333U;
-        static const AkUniqueID SFX_PORTAL_VALIDATE = 1155651648U;
         static const AkUniqueID SFX_RATS = 2089405297U;
         static const AkUniqueID SFX_SEWERS_A_DRIPS = 3799102629U;
         static const AkUniqueID SFX_SEWERS_B_PIPE = 4245633758U;
@@ -119,9 +118,11 @@ namespace AK
         static const AkUniqueID SFX_SEWERS_G_DRIPS = 1280951783U;
         static const AkUniqueID SFX_SEWERS_H_DRIPS = 2946085520U;
         static const AkUniqueID SFX_SEWERS_I_WATER = 754790596U;
-        static const AkUniqueID SFX_SEWERS_J_WATER = 230377275U;
+        static const AkUniqueID SFX_SEWERS_J_WATER_UNDER = 2558009444U;
         static const AkUniqueID SFX_SEWERS_K_WATER = 522077354U;
         static const AkUniqueID SFX_SEWERS_L_WATER = 3886424281U;
+        static const AkUniqueID SFX_SEWERS_M_NYC = 1073561947U;
+        static const AkUniqueID SFX_SEWERS_N_NYC = 4134176780U;
         static const AkUniqueID SFX_SUBWAY_A = 1224719534U;
         static const AkUniqueID SFX_SUBWAY_B_INT = 3184577795U;
         static const AkUniqueID SFX_SUBWAY_C_INT = 1275499414U;
@@ -133,7 +134,6 @@ namespace AK
         static const AkUniqueID SFX_SUBWAY_I_INT = 65382472U;
         static const AkUniqueID SFX_SUBWAY_J_BYS = 2782204094U;
         static const AkUniqueID SFX_SUBWAY_K_NYC_BYS_JM = 3569433076U;
-        static const AkUniqueID SFX_TONE_TEST = 3501277368U;
         static const AkUniqueID SFX_TRAIN_FREEDOM = 2950012982U;
         static const AkUniqueID SFX_WIND_HOWL = 1631722864U;
         static const AkUniqueID SPIDERMAN_0_INTRO = 838969532U;
@@ -166,7 +166,6 @@ namespace AK
         static const AkUniqueID UI_ITW_VALIDATE = 535658541U;
         static const AkUniqueID UI_PORTAL_LOAD = 357797799U;
         static const AkUniqueID UI_PORTAL_VALIDATE = 3435944941U;
-        static const AkUniqueID VOX_TEST_STEVE = 2108038015U;
     } // namespace EVENTS
 
     namespace STATES

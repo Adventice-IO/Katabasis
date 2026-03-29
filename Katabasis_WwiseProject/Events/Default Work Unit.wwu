@@ -4,6 +4,13 @@
 		<WorkUnit Name="Default Work Unit" ID="{B952947A-196A-492C-B1DE-E4209A541FAC}" PersistMode="Standalone">
 			<ChildrenList>
 				<Folder Name="TEST" ID="{A1151B3A-DF7B-472F-802A-FB2EF6D90E1E}" ShortID="86105806">
+					<PropertyList>
+						<Property Name="Inclusion" Type="bool">
+							<ValueList>
+								<Value>False</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
 					<ChildrenList>
 						<Event Name="SFX_Tone_Test" ID="{71A9A207-F29A-44AB-9930-66DA3F3E1658}">
 							<ChildrenList>
@@ -1475,11 +1482,26 @@
 									</ChildrenList>
 								</Event>
 								<Event Name="AMB_Ambi_D_02" ID="{54A758BB-2FC4-425B-8A37-329FCDD77352}">
+									<PropertyList>
+										<Property Name="Color" Type="int16" Value="4"/>
+										<Property Name="OverrideColor" Type="bool" Value="True"/>
+									</PropertyList>
 									<ChildrenList>
 										<Action Name="" ID="{19ADEBB7-C777-40BA-BB16-E3F7825C3C20}" ShortID="473975670">
 											<ReferenceList>
 												<Reference Name="Target">
 													<ObjectRef Name="AMB_Ambi_D_02" ID="{4BA0B476-FB62-4899-898D-7DD697FEB9E8}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="AMB_Ambi_F" ID="{C2D64C0D-F382-455B-84BF-866C6A5AB38E}">
+									<ChildrenList>
+										<Action Name="" ID="{A9E2C1D1-547B-4DF7-B33D-5A03599C65CB}" ShortID="796650040">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="AMB_Ambi_F" ID="{DDAC1795-E5FC-4A81-8DA8-7C28C22AFBF1}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -1776,12 +1798,12 @@
 										</Action>
 									</ChildrenList>
 								</Event>
-								<Event Name="SFX_Sewers_J_Water" ID="{63470B28-BC91-4CBA-91EE-04342DD27374}">
+								<Event Name="SFX_Sewers_J_Water_Under" ID="{63470B28-BC91-4CBA-91EE-04342DD27374}">
 									<ChildrenList>
 										<Action Name="" ID="{47B13E8E-ED54-4004-9389-A6DA088AC11D}" ShortID="913379346">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="SFX_Sewers_J_Water" ID="{504BF7EB-5416-49D5-881D-05827C1BD1EA}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+													<ObjectRef Name="SFX_Sewers_J_Water_Under" ID="{504BF7EB-5416-49D5-881D-05827C1BD1EA}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -1793,6 +1815,28 @@
 											<ReferenceList>
 												<Reference Name="Target">
 													<ObjectRef Name="SFX_Sewers_K_Water" ID="{04F68FA9-1144-415C-B194-02C9C9232BDF}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="SFX_Sewers_N_NYC" ID="{C4903F4E-78EA-4EB6-B35C-17C0EFA17B4F}">
+									<ChildrenList>
+										<Action Name="" ID="{58D437E0-0C90-40CC-B12D-CAA7CD5E74FB}" ShortID="166747965">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="SFX_Sewers_N_NYC" ID="{00D61783-1F20-447A-8BD8-B317F83704B8}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="SFX_Sewers_M_NYC" ID="{C39C5255-3BBE-4AFC-9200-CF346F04453C}">
+									<ChildrenList>
+										<Action Name="" ID="{A6514489-EC27-4188-ADFC-46DA32F46E8D}" ShortID="817355396">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="SFX_Sewers_M_NYC" ID="{FB5D5EC0-63FA-44A5-B483-538BAD1DC03C}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>

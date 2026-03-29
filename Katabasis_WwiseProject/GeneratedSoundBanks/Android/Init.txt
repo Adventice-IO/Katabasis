@@ -1,6 +1,7 @@
 State Group	ID	Name			Wwise Object Path	Notes
 	188982067	State_Map			\Default Work Unit\State_Map	
 	1203368309	State_Game			\Default Work Unit\State_Game	
+	4251427962	ELEC			\Default Work Unit\ELEC	
 
 State	ID	Name	State Group			Notes
 	84696430	Q	State_Map			
@@ -32,12 +33,16 @@ State	ID	Name	State Group			Notes
 	1125500713	Intro	State_Game			
 	2607556080	Menu	State_Game			
 	4184794294	Outro	State_Game			
+	748895195	None	ELEC			
+	979470758	YES	ELEC			
+	1668749452	NO	ELEC			
 
 Audio Bus	ID	Name			Wwise Object Path	Notes
 	393239870	SFX			\Default Work Unit\Main Audio Bus\SFX	
 	543694036	VOX			\Default Work Unit\Main Audio Bus\VOX	
 	712897226	MUS			\Default Work Unit\Main Audio Bus\MUS	
 	1117531639	AMB			\Default Work Unit\Main Audio Bus\AMB	
+	1551306167	UI			\Default Work Unit\Main Audio Bus\UI	
 	2182414867	AMB_3D			\Default Work Unit\Main Audio Bus\AMB\AMB_3D	
 	2246998526	Main Audio Bus			\Default Work Unit\Main Audio Bus	
 	2822524704	SFX_3D			\Default Work Unit\Main Audio Bus\SFX\SFX_3D	
@@ -62,7 +67,11 @@ Effect plug-ins	ID	Name	Type				Notes
 	519127956	Parametric EQ (Custom)	Wwise Parametric EQ			
 	592673904	Gain (Custom)	Wwise Gain			
 	622950439	Delay (Custom)	Wwise Delay			
+	690964496	Parametric EQ (Custom)	Wwise Parametric EQ			
+	704971858	Sidechain Send (Custom)	Ak Sidechain Send			
+	803922577	Parametric EQ (Custom)	Wwise Parametric EQ			
 	865612985	Brick_Wall_Minus_1dB_Peak_Fast_Release (Custom)	Wwise Peak Limiter			
+	1070038529	Parametric EQ (Custom)	Wwise Parametric EQ			
 	1232017842	LR_Slap_with_CrossFeed	Wwise Stereo Delay			
 	2513915904	Hall_Large	Wwise RoomVerb			
 	2791153688	Hall_Small	Wwise RoomVerb			

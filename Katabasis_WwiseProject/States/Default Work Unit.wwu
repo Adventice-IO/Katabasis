@@ -41,15 +41,21 @@
 							<IsShared>true</IsShared>
 						</Transition>
 						<Transition>
-							<StartState Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
-							<EndState Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+							<StartState Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+							<EndState Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
 							<Time>20</Time>
 							<IsShared>true</IsShared>
 						</Transition>
 						<Transition>
-							<StartState Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
-							<EndState Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
-							<Time>20</Time>
+							<StartState Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+							<EndState Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+							<Time>30</Time>
+							<IsShared>true</IsShared>
+						</Transition>
+						<Transition>
+							<StartState Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+							<EndState Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+							<Time>15</Time>
 							<IsShared>true</IsShared>
 						</Transition>
 						<Transition>
@@ -65,8 +71,20 @@
 							<IsShared>true</IsShared>
 						</Transition>
 						<Transition>
-							<StartState Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
-							<EndState Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+							<StartState Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+							<EndState Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+							<Time>15</Time>
+							<IsShared>true</IsShared>
+						</Transition>
+						<Transition>
+							<StartState Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+							<EndState Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+							<Time>20</Time>
+							<IsShared>true</IsShared>
+						</Transition>
+						<Transition>
+							<StartState Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+							<EndState Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
 							<Time>20</Time>
 							<IsShared>true</IsShared>
 						</Transition>
@@ -83,14 +101,8 @@
 							<IsShared>true</IsShared>
 						</Transition>
 						<Transition>
-							<StartState Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
-							<EndState Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
-							<Time>30</Time>
-							<IsShared>true</IsShared>
-						</Transition>
-						<Transition>
-							<StartState Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
-							<EndState Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+							<StartState Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+							<EndState Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
 							<Time>20</Time>
 							<IsShared>true</IsShared>
 						</Transition>
