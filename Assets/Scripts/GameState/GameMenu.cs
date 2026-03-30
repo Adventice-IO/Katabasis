@@ -568,28 +568,27 @@ public class GameMenu : MonoBehaviour
         }
     }
 
-    void UpdateAudioProgressionState()
+void UpdateAudioProgressionState()
+{
+    if (hoveredObject != null && !hoveredSelected)
     {
-        float langProgression = 0f;
-        float startProgression = 0f;
+        float hoverProgress = GetCurrentHoverProgress();
 
-        if (hoveredObject != null && !hoveredSelected)
+        if (hoveredObject == startBTObject && !string.IsNullOrWhiteSpace(selectedLanguage))
         {
-            float hoverProgress = GetCurrentHoverProgress();
-
-            if (hoveredObject == startBTObject && !string.IsNullOrWhiteSpace(selectedLanguage))
-            {
-                startProgression = hoverProgress;
-            }
-            else if (languageByObject.TryGetValue(hoveredObject, out string hoveredLanguage))
-            {
-                langProgression = hoverProgress;
-            }
+            SetAudioRtpc(startProgressionSO, hoverProgress);
         }
-        
-        SetAudioRtpc(langProgressionSO, langProgression);
-        SetAudioRtpc(startProgressionSO, startProgression);
+        else if (languageByObject.TryGetValue(hoveredObject, out string hoveredLanguage))
+        {
+            SetAudioRtpc(langProgressionSO, hoverProgress);
+        }
     }
+    else
+    {
+        SetAudioRtpc(langProgressionSO, 0f);
+        SetAudioRtpc(startProgressionSO, 0f);
+    }
+}
 
     float GetCurrentHoverProgress()
     {
