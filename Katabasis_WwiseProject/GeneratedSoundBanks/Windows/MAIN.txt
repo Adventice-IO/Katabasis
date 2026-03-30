@@ -93,6 +93,7 @@ Event	ID	Name			Wwise Object Path	Notes
 	3058870194	Steve_Duncan_1_Dont_like_people			\Default Work Unit\VOX\VOX_ITW\Steve_Duncan_1_Dont_like_people	
 	3079966932	SFX_Sewers_D_Drips			\Default Work Unit\SFX\SFX_Sewers\SFX_Sewers_D_Drips	
 	3145206958	Tommy_5_Hypersensitive			\Default Work Unit\VOX\VOX_ITW\Tommy_5_Hypersensitive	
+	3149643052	MUS_Menu			\Default Work Unit\MUS\MUS_Menu	
 	3164635487	SFX_MTA_Announcements_MTA			\Default Work Unit\SFX\SFX_MTA_Announcements\SFX_MTA_Announcements_MTA	
 	3164979780	AMB_Ext_Park_Insect_People_Bys_01			\Default Work Unit\AMB\AMB_Ambi_Ext\AMB_Ext_Park_Insect_People_Bys_01	
 	3184577795	SFX_Subway_B_Int			\Default Work Unit\SFX\SFX_Subway\SFX_Subway_B_Int	
@@ -156,6 +157,7 @@ Event	ID	Name			Wwise Object Path	Notes
 
 State Group	ID	Name			Wwise Object Path	Notes
 	188982067	State_Map			\Default Work Unit\State_Map	
+	1203368309	State_Game			\Default Work Unit\State_Game	
 	4251427962	ELEC			\Default Work Unit\ELEC	
 
 State	ID	Name	State Group			Notes
@@ -183,6 +185,12 @@ State	ID	Name	State Group			Notes
 	3583228001	E_Exit	State_Map			
 	4082180463	O_Exit	State_Map			
 	4143968025	M_Exit	State_Map			
+	529726532	End	State_Game			
+	748895195	None	State_Game			
+	1125500713	Intro	State_Game			
+	1852808225	Playing	State_Game			
+	2607556080	Menu	State_Game			
+	4184794294	Outro	State_Game			
 	748895195	None	ELEC			
 	979470758	YES	ELEC			
 	1668749452	NO	ELEC			
@@ -221,7 +229,6 @@ Effect plug-ins	ID	Name	Type				Notes
 	51825829	Compressor (Custom)	Wwise Compressor			
 	80999267	Parametric EQ (Custom)	Wwise Parametric EQ			
 	123713257	Guitar Distortion (Custom)	Wwise Guitar Distortion			
-	175368992	Parametric EQ (Custom)	Wwise Parametric EQ			
 	195416428	Parametric EQ (Custom)	Wwise Parametric EQ			
 	202377678	Parametric EQ (Custom)	Wwise Parametric EQ			
 	205726969	Guitar Distortion (Custom)	Wwise Guitar Distortion			
@@ -240,6 +247,7 @@ Effect plug-ins	ID	Name	Type				Notes
 	688860353	Parametric EQ (Custom)	Wwise Parametric EQ			
 	708817329	Guitar Distortion (Custom)	Wwise Guitar Distortion			
 	777746014	Guitar Distortion (Custom)	Wwise Guitar Distortion			
+	836361355	Parametric EQ (Custom)	Wwise Parametric EQ			
 	880007734	Compressor (Custom)	Wwise Compressor			
 	918909166	Guitar Distortion (Custom)	Wwise Guitar Distortion			
 	973253101	Parametric EQ (Custom)	Wwise Parametric EQ			
@@ -468,6 +476,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	614227026	SFX_Subway_E_01	.cache\81\{815C6A5E-7E05-3AD7-328F-CBB5EE8DCB77}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Subway_Train\SFX_Subway_E\SFX_Subway_E_01		437482
 	622415581	SFX_Sewers_L_Water_04	.cache\BF\{BF859583-E0C6-267D-112D-A369B0FAA0CB}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_L_Water\SFX_Sewers_L_Water_04		129011
 	624309982	SFX_Graffiti_C_02	.cache\31\{31F63558-C54E-7FB1-215E-8844EFC48983}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Graffiti\New Sequence Container\SFX_Graffiti_C\SFX_Graffiti_C_02		10599
+	627052913	MUS_Menu_A	.cache\9E\{9ED51C6E-9729-3FE3-5FB3-EF3AFC8AF12B}.wem		\Containers\Default Work Unit\MUS\MUS_Menu\MUS_Menu_A		338422
 	627199863	Exit_Plan_0_Intro	.cache\D5\{D5B1780B-61EA-E1CE-0C0B-C24B322B75F6}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Exit_Plan_0_Intro		102656
 	627751337	SFX_Graffiti_A_02	.cache\C5\{C5509A12-2E4D-CD3B-08B5-F4CED3C5FD19}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Graffiti\New Sequence Container\SFX_Graffiti_A\SFX_Graffiti_A_02		23532
 	634527399	AMB_Ambi_Ext_Street_01	.cache\03\{03924E9E-AFCF-A9F4-791F-329833E7B64C}.wem		\Containers\Default Work Unit\AMB\AMB_Ambi\AMB_Ambi_Ext\AMB_Ambi_Ext_Street_01		6625170
@@ -591,6 +600,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	995188749	SFX_Wind_Howl_B_08	.cache\31\{311DF46F-28F4-78C5-330F-0CF437EFFBDE}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Wind_Howl\SFX_Wind_Howl_B\SFX_Wind_Howl_B_08		213845
 	1000021276	SFX_MTA_Announcements_Mamdani_05	.cache\56\{56185F5D-3948-C540-229D-C60A548B224B}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_MTA_Announcements\SFX_MTA_Announcements_Mamdani\SFX_MTA_Announcements_Mamdani_05		75566
 	1003306080	SFX_Rats_04	.cache\36\{3622D98F-C287-5898-A38C-8A749F3B0CD0}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Rats\SFX_Rats_04		3574
+	1004040847	MUS_Menu_B	.cache\A9\{A9D4FEA7-70DD-7299-B248-A523D71F9841}.wem		\Containers\Default Work Unit\MUS\MUS_Menu\MUS_Menu_B		980486
 	1006225296	SFX_Elec_H_13	.cache\2A\{2A53B862-76A0-EDF4-D026-1FABF0A0B277}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_H\SFX_Elec_H\SFX_Elec_H_13		60382
 	1006295590	Spiderman_1_Family_problems	.cache\F1\{F13B7883-0F1F-D916-57A0-D0DBBD34779A}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Spiderman_1_Family_problems		444084
 	1007561525	SFX_Wind_Howl_A_03	.cache\2A\{2A813467-7949-2846-751F-CCAB75690C4F}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Wind_Howl\SFX_Wind_Howl_A\SFX_Wind_Howl_A_03		166877

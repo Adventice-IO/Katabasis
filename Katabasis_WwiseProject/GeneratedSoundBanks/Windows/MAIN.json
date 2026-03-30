@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{7E734BBA-16C9-46F8-8CBD-B94EE4B45669}",
     "Language": "SFX",
-    "Hash": "{5EA348C8-6C90-EA56-2D51-DFE3BE15726B}",
+    "Hash": "{DEDF48E2-E54B-313C-EF42-DAFD7CC36B2E}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\MAIN",
     "ShortName": "MAIN",
     "Path": "MAIN.bnk",
@@ -1568,6 +1568,14 @@
       "CachePath": "31/{31F63558-C54E-7FB1-215E-8844EFC48983}.wem"
      },
      {
+      "Id": "627052913",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "MUS\\MUS_Menu\\MUS_Menu_A.wav",
+      "CachePath": "9E/{9ED51C6E-9729-3FE3-5FB3-EF3AFC8AF12B}.wem"
+     },
+     {
       "Id": "627199863",
       "Language": "SFX",
       "Streaming": "false",
@@ -2552,6 +2560,14 @@
       "CachePath": "36/{3622D98F-C287-5898-A38C-8A749F3B0CD0}.wem"
      },
      {
+      "Id": "1004040847",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "MUS\\MUS_Menu\\MUS_Menu_B.wav",
+      "CachePath": "A9/{A9D4FEA7-70DD-7299-B248-A523D71F9841}.wem"
+     },
+     {
       "Id": "1006225296",
       "Language": "SFX",
       "Streaming": "false",
@@ -2817,14 +2833,6 @@
        "GUID": "{5676DE5D-982D-4D49-9921-1DBBC3CEDA2A}",
        "LibName": "Wwise Guitar Distortion",
        "LibId": "8257539"
-      },
-      {
-       "Id": "175368992",
-       "Name": "Parametric EQ (Custom)",
-       "ObjectPath": "\\Containers\\Default Work Unit\\AMB\\AMB_Ambi\\AMB_Ambi_Ext\\AMB_Ambi_Ext_Park_Kids_01\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
-       "GUID": "{EB77E214-B722-492F-BF8D-1584A1EDF585}",
-       "LibName": "Wwise Parametric EQ",
-       "LibId": "6881283"
       },
       {
        "Id": "195416428",
@@ -3101,6 +3109,14 @@
        "GUID": "{17D8C6B2-DA57-43B8-B4AC-EDA913EF617B}",
        "LibName": "Wwise Silence",
        "LibId": "6619138"
+      },
+      {
+       "Id": "836361355",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Containers\\Default Work Unit\\AMB\\AMB_Ambi\\AMB_Ambi_Ext\\AMB_Ext_Park_Insect_People_Bys_01\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{3385183C-4E1B-4FD0-BAB3-E64C116C7E03}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
       },
       {
        "Id": "874086150",
@@ -3499,14 +3515,7 @@
        {
         "Id": "203089093"
        }
-      ],
-      "PluginRefs": {
-       "Custom": [
-        {
-         "Id": "175368992"
-        }
-       ]
-      }
+      ]
      },
      {
       "Id": "3388850435",
@@ -3968,7 +3977,14 @@
        {
         "Id": "646368652"
        }
-      ]
+      ],
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "836361355"
+        }
+       ]
+      }
      },
      {
       "Id": "1615727631",
@@ -5066,6 +5082,22 @@
       "MediaRefs": [
        {
         "Id": "591640685"
+       }
+      ]
+     },
+     {
+      "Id": "3149643052",
+      "Name": "MUS_Menu",
+      "ObjectPath": "\\Events\\Default Work Unit\\MUS\\MUS_Menu",
+      "GUID": "{86E4347C-FBBF-4EE4-BD3C-C195B5CD3B86}",
+      "Color": "4",
+      "DurationType": "Infinite",
+      "MediaRefs": [
+       {
+        "Id": "627052913"
+       },
+       {
+        "Id": "1004040847"
        }
       ]
      },
@@ -8732,6 +8764,14 @@
        {
         "Id": "530022039"
        }
+      ],
+      "AuxBusRefs": [
+       {
+        "Id": "1550993137",
+        "Name": "REV_LongUltra",
+        "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_LongUltra",
+        "GUID": "{43E67AD9-087F-47C6-82F2-818148AB0A10}"
+       }
       ]
      },
      {
@@ -8775,6 +8815,14 @@
        },
        {
         "Id": "749521399"
+       }
+      ],
+      "AuxBusRefs": [
+       {
+        "Id": "1550993137",
+        "Name": "REV_LongUltra",
+        "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\REV_LongUltra",
+        "GUID": "{43E67AD9-087F-47C6-82F2-818148AB0A10}"
        }
       ]
      },
@@ -8836,6 +8884,6 @@
     ]
    }
   ],
-  "FileHash": "{0CD03890-E074-B4BF-5D88-3345CC5D6E32}"
+  "FileHash": "{853A31A8-7524-A738-03CF-D96AEB82FAF8}"
  }
 }

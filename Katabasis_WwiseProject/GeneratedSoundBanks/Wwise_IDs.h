@@ -79,6 +79,7 @@ namespace AK
         static const AkUniqueID MUS_G_K_O = 4014691300U;
         static const AkUniqueID MUS_I = 4159718938U;
         static const AkUniqueID MUS_M = 4159718942U;
+        static const AkUniqueID MUS_MENU = 3149643052U;
         static const AkUniqueID MUS_P = 4159718915U;
         static const AkUniqueID OMILIO_0_INTRO = 581233776U;
         static const AkUniqueID OMILIO_1_SANTE = 3617820752U;
@@ -194,6 +195,7 @@ namespace AK
                 static const AkUniqueID MENU = 2607556080U;
                 static const AkUniqueID NONE = 748895195U;
                 static const AkUniqueID OUTRO = 4184794294U;
+                static const AkUniqueID PLAYING = 1852808225U;
             } // namespace STATE
         } // namespace STATE_GAME
 
