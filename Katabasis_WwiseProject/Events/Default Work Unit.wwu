@@ -2113,6 +2113,21 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Folder Name="SFX_Exit" ID="{CF69DEB1-90FC-47B9-9BE3-0E44DE4E3666}" ShortID="675048701">
+							<ChildrenList>
+								<Event Name="SFX_Exit_D_E" ID="{91604D2E-1099-4B97-A1AB-11BAA1BDAE14}">
+									<ChildrenList>
+										<Action Name="" ID="{66485619-DD62-4821-90D3-E8B2AD337BDD}" ShortID="692757667">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="SFX_Exit_D_E" ID="{ED190BBE-5645-46A6-8607-5800FBA75D9E}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="MUS" ID="{51D934EE-62D9-4AE2-8D56-5DF1E49F47A4}" ShortID="636917796">
@@ -2232,6 +2247,24 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="MUS_P" ID="{65FFA27D-B4D3-48F4-BF8A-42F160E62BDC}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="MUS_Menu" ID="{86E4347C-FBBF-4EE4-BD3C-C195B5CD3B86}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="4"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{C4864082-7226-4706-8E1C-D1BC7FAA5C21}" ShortID="223461950">
+									<PropertyList>
+										<Property Name="FadeTime" Type="Real64" Value="20"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="MUS_Menu" ID="{55EC4845-E6B0-4709-AD97-35493D2F72ED}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>

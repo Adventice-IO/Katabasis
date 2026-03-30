@@ -79,6 +79,7 @@ namespace AK
         static const AkUniqueID MUS_G_K_O = 4014691300U;
         static const AkUniqueID MUS_I = 4159718938U;
         static const AkUniqueID MUS_M = 4159718942U;
+        static const AkUniqueID MUS_MENU = 3149643052U;
         static const AkUniqueID MUS_P = 4159718915U;
         static const AkUniqueID OMILIO_0_INTRO = 581233776U;
         static const AkUniqueID OMILIO_1_SANTE = 3617820752U;
@@ -104,6 +105,7 @@ namespace AK
         static const AkUniqueID SFX_ELEC_F = 3373651685U;
         static const AkUniqueID SFX_ELEC_G = 3373651684U;
         static const AkUniqueID SFX_ELEC_H = 3373651691U;
+        static const AkUniqueID SFX_EXIT_D_E = 2928437996U;
         static const AkUniqueID SFX_GRAFFITI = 2148127353U;
         static const AkUniqueID SFX_IMPACT_METAL = 3249341599U;
         static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MAMDANI = 4259001170U;
@@ -193,6 +195,7 @@ namespace AK
                 static const AkUniqueID MENU = 2607556080U;
                 static const AkUniqueID NONE = 748895195U;
                 static const AkUniqueID OUTRO = 4184794294U;
+                static const AkUniqueID PLAYING = 1852808225U;
             } // namespace STATE
         } // namespace STATE_GAME
 
@@ -256,6 +259,7 @@ namespace AK
         static const AkUniqueID MUS = 712897226U;
         static const AkUniqueID SFX = 393239870U;
         static const AkUniqueID SFX_3D = 2822524704U;
+        static const AkUniqueID SFX_EXIT = 4183237189U;
         static const AkUniqueID SFX_TEST = 3018450665U;
         static const AkUniqueID UI = 1551306167U;
         static const AkUniqueID VOX = 543694036U;

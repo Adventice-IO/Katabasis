@@ -22,6 +22,7 @@ public class Salle : MonoBehaviour
 
     [Header("Audio Settings")]
     public AudioStateRefSO audioSO;
+    public AudioEventRefSO audioEventSO;
 
     public Interview[] interviews;
 
