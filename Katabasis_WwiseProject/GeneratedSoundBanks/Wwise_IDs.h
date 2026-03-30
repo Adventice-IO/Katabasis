@@ -104,6 +104,7 @@ namespace AK
         static const AkUniqueID SFX_ELEC_F = 3373651685U;
         static const AkUniqueID SFX_ELEC_G = 3373651684U;
         static const AkUniqueID SFX_ELEC_H = 3373651691U;
+        static const AkUniqueID SFX_EXIT_D_E = 2928437996U;
         static const AkUniqueID SFX_GRAFFITI = 2148127353U;
         static const AkUniqueID SFX_IMPACT_METAL = 3249341599U;
         static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MAMDANI = 4259001170U;
@@ -256,6 +257,7 @@ namespace AK
         static const AkUniqueID MUS = 712897226U;
         static const AkUniqueID SFX = 393239870U;
         static const AkUniqueID SFX_3D = 2822524704U;
+        static const AkUniqueID SFX_EXIT = 4183237189U;
         static const AkUniqueID SFX_TEST = 3018450665U;
         static const AkUniqueID UI = 1551306167U;
         static const AkUniqueID VOX = 543694036U;
