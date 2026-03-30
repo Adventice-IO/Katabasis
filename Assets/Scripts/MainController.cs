@@ -874,6 +874,7 @@ public class MainController : MonoBehaviour
                 {
                     noAudioSO.state.SetValue();
                 }
+                salle.audioEventSO?.evt.Post(gameObject);
             }
         }
         else
