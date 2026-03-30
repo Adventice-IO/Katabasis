@@ -9,6 +9,7 @@
         _BoxMin("Box Min", Vector) = (0,0,0,0)
         _BoxMax("Box Max", Vector) = (1,1,1,0)
         _BoxFeather("Box Feather", float) = 1
+        _ColorKey ("Purple Key Color", Color) = (0, 1, 0, 1)
     }
 
     SubShader
@@ -28,6 +29,7 @@
             #pragma require structuredbuffer 
 
             #include "UnityCG.cginc"
+			#include "Common.cginc"
 
             struct attribute
             {
@@ -65,6 +67,7 @@
             // Buffers
             StructuredBuffer<OrientedMaskBox> _MaskBoxes;
             int _MaskCount;
+            float4 _ColorKey;
 
             varying vert(attribute v)
             {
@@ -90,7 +93,10 @@
                     o.color = float4(0,0,0,0);
                     return o;
                 }
-                float distFade = saturate((_MaxDistance - d) / _DistFade);
+                float distFade = 1.0;//saturate((_MaxDistance - d) / _DistFade);
+                //distFade = 0.01;
+                distFade *= smoothstep(0.0, 0.25, d-0.75);
+                distFade *= lerp(0.25, 1.0, smoothstep(10.0, 0.0, d-10.0));
 
                 // 4. Masking Logic
                 float maskAlpha = 1.0;
@@ -154,21 +160,43 @@
                     return o;
                 }
 
+                //v.position.xyz += (hash33(v.position.xyz)*2-1) * smoothstep(0.0, 2.0, d-10.0) * 0.05;
+
                 o.position = UnityObjectToClipPos(v.position);
                 o.uv = v.uv;
+                
+                // srgb conversion
+                float4 color = v.color;
+                color.rgb = color.rgb * color.rgb * 1.5;
+                
+                float purple = saturate(0.002/max(0.0001,length(rgb2hsv(_ColorKey) - rgb2hsv(color))));
+                //if (o.vertex.x > 0.)
+                color = lerp(color, 4.0, smoothstep(0.0, 0.1, purple));
+
+                float dcolor = length(color);
+                float black = saturate(0.05/max(0.0001, dcolor*dcolor));
+                //color = lerp(color, 0.4, black);
+                
+                color.rgb *= lerp(1.0, 10.0, smoothstep(3.0, 0.0, d-1.0));
+                
+                // increment saturation
+				float3 hsv = rgb2hsv(color.rgb);
+				hsv.y *= 1.5;
+				color.rgb = hsv2rgb(hsv);
 
                 // Color pass: compensate dark points
-                float brightness = dot(v.color.rgb, float3(0.299, 0.587, 0.114));
+                float brightness = dot(color.rgb, float3(0.299, 0.587, 0.114));
                 float darknessThreshold = 0.1;
                 float brightnessFactor = smoothstep(0.0, darknessThreshold, brightness);
 
-                float3 brightened = lerp(v.color.rgb * 10, v.color.rgb, brightnessFactor);
+                float3 brightened = lerp(color.rgb * 10, color.rgb, brightnessFactor);
                 float3 gray = float3(brightness, brightness, brightness);
                 float saturationFactor = lerp(0.1, 1.0, brightnessFactor);
                 brightened = lerp(gray, brightened, saturationFactor);
 
                 // Fixed: Apply the brightened color that was calculated but never used
-                o.color = float4(brightened, v.color.a) * visibility;
+                o.color = float4(brightened, color.a) * visibility;
+                //o.color = v.color;
                 
                 return o;
             }
