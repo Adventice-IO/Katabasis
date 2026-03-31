@@ -308,7 +308,7 @@ public class DataManager : MonoBehaviour
         string normalizedRelativePath = relativePath.Replace("\\", "/").TrimStart('/');
 
         string externalPath = Path.Combine(GetExternalDataRoot(), "KataData", normalizedRelativePath);
-        //Debug.Log("Looking for root file at custom path : " + externalPath);
+        Debug.Log("Looking for root file at custom path : " + externalPath);
         if (File.Exists(externalPath))
         {
             return externalPath.Replace("\\", "/");
@@ -322,7 +322,7 @@ public class DataManager : MonoBehaviour
         }
 
         string streamingPath = Path.Combine(Application.streamingAssetsPath, normalizedRelativePath);
-        //Debug.Log("Looking for root file at streamingassets: " + streamingPath);
+        Debug.Log("Looking for root file at streamingassets: " + streamingPath);
         if (File.Exists(streamingPath))
         {
             return streamingPath.Replace("\\", "/");
@@ -334,7 +334,7 @@ public class DataManager : MonoBehaviour
             execPath = Path.GetDirectoryName(execPath);
         }
         string executablePath = Path.Combine(execPath, "KataData", normalizedRelativePath);
-        //Debug.Log("Looking for root file at executable path: " + executablePath);
+        Debug.Log("Looking for root file at executable path: " + executablePath);
         if (File.Exists(executablePath))
         {
             return executablePath.Replace("\\", "/");

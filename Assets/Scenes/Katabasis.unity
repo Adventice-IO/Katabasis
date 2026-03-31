@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: dcb24f369413c3743bebab87d138e1a5, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -9484,6 +9484,10 @@ PrefabInstance:
       propertyPath: positionDataTexture
       value: 
       objectReference: {fileID: 435780715}
+    - target: {fileID: 6390315487127845438, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6470180658558893723, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
       value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
@@ -9987,6 +9991,10 @@ PrefabInstance:
     - target: {fileID: 7563479638722898822, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7606286429989595121, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.96235687
       objectReference: {fileID: 0}
     - target: {fileID: 7614378087179900831, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Size.x
@@ -21791,86 +21799,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1125180523919180605, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.22000003
-      objectReference: {fileID: 0}
-    - target: {fileID: 1125180523919180605, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9785998
-      objectReference: {fileID: 0}
-    - target: {fileID: 1125180523919180605, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.20577294
-      objectReference: {fileID: 0}
     - target: {fileID: 2647586264852317331, guid: 2970b78058aa32545a2db93823e98422, type: 3}
       propertyPath: salle
       value: 
       objectReference: {fileID: 916687913}
     - target: {fileID: 2647586264852317331, guid: 2970b78058aa32545a2db93823e98422, type: 3}
+      propertyPath: gameState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647586264852317331, guid: 2970b78058aa32545a2db93823e98422, type: 3}
       propertyPath: initialSalle
       value: 
-      objectReference: {fileID: 916687913}
+      objectReference: {fileID: 853598483}
     - target: {fileID: 2647586264852317331, guid: 2970b78058aa32545a2db93823e98422, type: 3}
       propertyPath: globalSpeedMultiplier
-      value: 10
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2647586264852317331, guid: 2970b78058aa32545a2db93823e98422, type: 3}
       propertyPath: spawnAction.m_Reference
       value: 
       objectReference: {fileID: 335802563}
+    - target: {fileID: 4987325487599617055, guid: 2970b78058aa32545a2db93823e98422, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5266222463245219679, guid: 2970b78058aa32545a2db93823e98422, type: 3}
       propertyPath: simulatorObject
       value: 
       objectReference: {fileID: 187300737}
-    - target: {fileID: 6037991649507718133, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: langHoverSO
-      value: 
-      objectReference: {fileID: 11400000, guid: 559eb092136cb734499daca2be745ea9, type: 2}
-    - target: {fileID: 6037991649507718133, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: langSelectSO
-      value: 
-      objectReference: {fileID: 11400000, guid: 0d969d9346c1d5c478f1d906b1e3831f, type: 2}
-    - target: {fileID: 6037991649507718133, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: startHoverSO
-      value: 
-      objectReference: {fileID: 11400000, guid: 88f4129088d0e53489080eb9f376a793, type: 2}
-    - target: {fileID: 6037991649507718133, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: startSelectSO
-      value: 
-      objectReference: {fileID: 11400000, guid: 8c6ea355afd999a4491e6007e56ba4a6, type: 2}
-    - target: {fileID: 6037991649507718133, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: liveUpdateLayout
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6037991649507718133, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: autoButtonSpacing
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6037991649507718133, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: langProgressionSO
-      value: 
-      objectReference: {fileID: 11400000, guid: 24474dcd683a34e4eac33dba0f81a9cf, type: 2}
-    - target: {fileID: 6037991649507718133, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: startProgressionSO
-      value: 
-      objectReference: {fileID: 11400000, guid: 6f0db6664dbc676499d59d2c86dab79b, type: 2}
-    - target: {fileID: 6704112130730892095, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: interviewLeaveSO
-      value: 
-      objectReference: {fileID: 11400000, guid: a6e47d41aba4fea43803baee0dfd01d5, type: 2}
-    - target: {fileID: 6704112130730892095, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: interviewLeaveTime
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8468039881835211319, guid: 2970b78058aa32545a2db93823e98422, type: 3}
       propertyPath: spawnActivateAction
       value: 
       objectReference: {fileID: 214774216}
-    - target: {fileID: 9091418915236129862, guid: 2970b78058aa32545a2db93823e98422, type: 3}
-      propertyPath: smooth
-      value: 7
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
