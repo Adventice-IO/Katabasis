@@ -1,7 +1,7 @@
 State Group	ID	Name			Wwise Object Path	Notes
 	188982067	State_Map			\Default Work Unit\State_Map	
 	1203368309	State_Game			\Default Work Unit\State_Game	
-	4251427962	ELEC			\Default Work Unit\ELEC	
+	1451125704	State_Elec			\Default Work Unit\State_Elec	
 
 State	ID	Name	State Group			Notes
 	84696430	Q	State_Map			
@@ -31,11 +31,12 @@ State	ID	Name	State Group			Notes
 	529726532	End	State_Game			
 	748895195	None	State_Game			
 	1125500713	Intro	State_Game			
+	1852808225	Playing	State_Game			
 	2607556080	Menu	State_Game			
 	4184794294	Outro	State_Game			
-	748895195	None	ELEC			
-	979470758	YES	ELEC			
-	1668749452	NO	ELEC			
+	748895195	None	State_Elec			
+	979470758	YES	State_Elec			
+	1668749452	NO	State_Elec			
 
 Audio Bus	ID	Name			Wwise Object Path	Notes
 	393239870	SFX			\Default Work Unit\Main Audio Bus\SFX	
@@ -48,6 +49,7 @@ Audio Bus	ID	Name			Wwise Object Path	Notes
 	2822524704	SFX_3D			\Default Work Unit\Main Audio Bus\SFX\SFX_3D	
 	3018450665	SFX_Test			\Default Work Unit\Main Audio Bus\SFX\SFX_Test	
 	3537656764	AMBI			\Default Work Unit\Main Audio Bus\AMB\AMBI	
+	4183237189	SFX_Exit			\Default Work Unit\Main Audio Bus\SFX\SFX_Exit	
 
 Auxiliary Bus	ID	Name			Wwise Object Path	Notes
 	266044713	REV_Long			\Default Work Unit\Main Audio Bus\REV_Long	

@@ -84,6 +84,7 @@ Event	ID	Name			Wwise Object Path	Notes
 	2763982186	Steve_Duncan_0_Intro			\Default Work Unit\VOX\VOX_ITW\Steve_Duncan_0_Intro	
 	2782204094	SFX_Subway_J_Bys			\Default Work Unit\SFX\SFX_Subway\SFX_Subway_J_Bys	
 	2796606861	Kirk_1_Pips			\Default Work Unit\VOX\VOX_ITW\Kirk_1_Pips	
+	2928437996	SFX_Exit_D_E			\Default Work Unit\SFX\SFX_Exit\SFX_Exit_D_E	
 	2946085520	SFX_Sewers_H_Drips			\Default Work Unit\SFX\SFX_Sewers\SFX_Sewers_H_Drips	
 	2950012982	SFX_Train_Freedom			\Default Work Unit\SFX\SFX_Subway\SFX_Train_Freedom	
 	2952482469	SFX_Subway_H_Int			\Default Work Unit\SFX\SFX_Subway\SFX_Subway_H_Int	
@@ -92,6 +93,7 @@ Event	ID	Name			Wwise Object Path	Notes
 	3058870194	Steve_Duncan_1_Dont_like_people			\Default Work Unit\VOX\VOX_ITW\Steve_Duncan_1_Dont_like_people	
 	3079966932	SFX_Sewers_D_Drips			\Default Work Unit\SFX\SFX_Sewers\SFX_Sewers_D_Drips	
 	3145206958	Tommy_5_Hypersensitive			\Default Work Unit\VOX\VOX_ITW\Tommy_5_Hypersensitive	
+	3149643052	MUS_Menu			\Default Work Unit\MUS\MUS_Menu	
 	3164635487	SFX_MTA_Announcements_MTA			\Default Work Unit\SFX\SFX_MTA_Announcements\SFX_MTA_Announcements_MTA	
 	3164979780	AMB_Ext_Park_Insect_People_Bys_01			\Default Work Unit\AMB\AMB_Ambi_Ext\AMB_Ext_Park_Insect_People_Bys_01	
 	3184577795	SFX_Subway_B_Int			\Default Work Unit\SFX\SFX_Subway\SFX_Subway_B_Int	
@@ -148,6 +150,7 @@ Event	ID	Name			Wwise Object Path	Notes
 	4159718935	MUS_D			\Default Work Unit\MUS\MUS_D	
 	4159718938	MUS_I			\Default Work Unit\MUS\MUS_I	
 	4159718942	MUS_M			\Default Work Unit\MUS\MUS_M	
+	4159718943	MUS_L			\Default Work Unit\MUS\MUS_L	
 	4200626423	Tommy_0_Intro			\Default Work Unit\VOX\VOX_ITW\Tommy_0_Intro	
 	4233225522	SFX_Sewers_F_Pipe			\Default Work Unit\SFX\SFX_Sewers\SFX_Sewers_F_Pipe	
 	4245633758	SFX_Sewers_B_Pipe			\Default Work Unit\SFX\SFX_Sewers\SFX_Sewers_B_Pipe	
@@ -155,7 +158,8 @@ Event	ID	Name			Wwise Object Path	Notes
 
 State Group	ID	Name			Wwise Object Path	Notes
 	188982067	State_Map			\Default Work Unit\State_Map	
-	4251427962	ELEC			\Default Work Unit\ELEC	
+	1203368309	State_Game			\Default Work Unit\State_Game	
+	1451125704	State_Elec			\Default Work Unit\State_Elec	
 
 State	ID	Name	State Group			Notes
 	84696430	Q	State_Map			
@@ -182,68 +186,107 @@ State	ID	Name	State Group			Notes
 	3583228001	E_Exit	State_Map			
 	4082180463	O_Exit	State_Map			
 	4143968025	M_Exit	State_Map			
-	748895195	None	ELEC			
-	979470758	YES	ELEC			
-	1668749452	NO	ELEC			
+	529726532	End	State_Game			
+	748895195	None	State_Game			
+	1125500713	Intro	State_Game			
+	1852808225	Playing	State_Game			
+	2607556080	Menu	State_Game			
+	4184794294	Outro	State_Game			
+	748895195	None	State_Elec			
+	979470758	YES	State_Elec			
+	1668749452	NO	State_Elec			
 
 Game Parameter	ID	Name			Wwise Object Path	Notes
 	1540479560	RTCP_Distance			\Default Work Unit\RTCP_Distance	
 	1610769452	RTPC_Interview_Leave			\Default Work Unit\RTPC_Interview_Leave	
 	2942853976	RTPC_Progression			\Default Work Unit\RTPC_Progression	
+	3972935021	RTPC_Azimuth			\Default Work Unit\RTPC_Azimuth	
 
 Modulator LFO	ID	Name			Wwise Object Path	Notes
 	45151608	Modulator LFO (Custom)				
 	61870725	Modulator LFO (Custom)				
 	66985863	Modulator LFO (Custom)				
+	70956209	Modulator LFO (Custom)				
 	81022262	Modulator LFO (Custom)				
 	110819101	Modulator LFO (Custom)				
+	136576898	Modulator LFO (Custom)				
+	147647809	Modulator LFO (Custom)				
+	197523211	Modulator LFO (Custom)				
 	228321916	Modulator LFO (Custom)				
+	245568695	Modulator LFO (Custom)				
 	294391918	Modulator LFO (Custom)				
+	359859345	Modulator LFO (Custom)				
 	368394956	Modulator LFO (Custom)				
+	406976221	Modulator LFO (Custom)				
+	432883047	Modulator LFO (Custom)				
 	433529906	Modulator LFO (Custom)				
+	481524314	Modulator LFO (Custom)				
 	487957237	Modulator LFO (Custom)				
 	560288806	Modulator LFO (Custom)				
+	586868161	Modulator LFO (Custom)				
 	613232293	Modulator LFO (Custom)				
 	617436279	Modulator LFO (Custom)				
+	655488811	Modulator LFO (Custom)				
 	659834831	Modulator LFO (Custom)				
 	679582490	Modulator LFO (Custom)				
 	707489601	Modulator LFO (Custom)				
+	725902799	Modulator LFO (Custom)				
+	751948620	Modulator LFO (Custom)				
 	769829620	Modulator LFO (Custom)				
 	799676578	Modulator LFO (Custom)				
+	853017538	Modulator LFO (Custom)				
 	890617228	Modulator LFO (Custom)				
+	898256929	Modulator LFO (Custom)				
 	904437025	Modulator LFO (Custom)				
 	936996918	Modulator LFO (Custom)				
 	997540090	Modulator LFO (Custom)				
+	1007367165	Modulator LFO (Custom)				
 
 Effect plug-ins	ID	Name	Type				Notes
+	23814935	Guitar Distortion (Custom)	Wwise Guitar Distortion			
 	25366683	Parametric EQ (Custom)	Wwise Parametric EQ			
 	51825829	Compressor (Custom)	Wwise Compressor			
 	80999267	Parametric EQ (Custom)	Wwise Parametric EQ			
+	106818542	Guitar Distortion (Custom)	Wwise Guitar Distortion			
 	123713257	Guitar Distortion (Custom)	Wwise Guitar Distortion			
-	175368992	Parametric EQ (Custom)	Wwise Parametric EQ			
 	195416428	Parametric EQ (Custom)	Wwise Parametric EQ			
 	202377678	Parametric EQ (Custom)	Wwise Parametric EQ			
 	205726969	Guitar Distortion (Custom)	Wwise Guitar Distortion			
+	237581025	Gain (Custom)	Wwise Gain			
 	303055050	Compressor (Custom)	Wwise Compressor			
 	305203431	Parametric EQ (Custom)	Wwise Parametric EQ			
 	320978837	Parametric EQ (Custom)	Wwise Parametric EQ			
+	323729065	Parametric EQ (Custom)	Wwise Parametric EQ			
 	325626322	Parametric EQ (Custom)	Wwise Parametric EQ			
+	340232664	Gain (Custom)	Wwise Gain			
 	351252056	Parametric EQ (Custom)	Wwise Parametric EQ			
+	352841498	Gain (Custom)	Wwise Gain			
 	359979943	Time Stretch (Custom)	Wwise Time Stretch			
 	388305985	Parametric EQ (Custom)	Wwise Parametric EQ			
+	393695116	Gain (Custom)	Wwise Gain			
+	406670243	Guitar Distortion (Custom)	Wwise Guitar Distortion			
 	534493740	Parametric EQ (Custom)	Wwise Parametric EQ			
+	570750000	Guitar Distortion (Custom)	Wwise Guitar Distortion			
 	575094358	Compressor (Custom)	Wwise Compressor			
-	640300665	Parametric EQ (Custom)	Wwise Parametric EQ			
+	602537738	Gain (Custom)	Wwise Gain			
 	669513141	Guitar Distortion (Custom)	Wwise Guitar Distortion			
 	686955432	Compressor (Custom)	Wwise Compressor			
 	688860353	Parametric EQ (Custom)	Wwise Parametric EQ			
 	708817329	Guitar Distortion (Custom)	Wwise Guitar Distortion			
+	732859424	Gain (Custom)	Wwise Gain			
 	777746014	Guitar Distortion (Custom)	Wwise Guitar Distortion			
+	810118480	Guitar Distortion (Custom)	Wwise Guitar Distortion			
+	813334166	Guitar Distortion (Custom)	Wwise Guitar Distortion			
+	836361355	Parametric EQ (Custom)	Wwise Parametric EQ			
+	863524920	Guitar Distortion (Custom)	Wwise Guitar Distortion			
 	880007734	Compressor (Custom)	Wwise Compressor			
 	918909166	Guitar Distortion (Custom)	Wwise Guitar Distortion			
+	938403287	Gain (Custom)	Wwise Gain			
 	973253101	Parametric EQ (Custom)	Wwise Parametric EQ			
 	994166930	Compressor (Custom)	Wwise Compressor			
+	1011825782	Guitar Distortion (Custom)	Wwise Guitar Distortion			
 	1030510756	Parametric EQ (Custom)	Wwise Parametric EQ			
+	1049083119	Gain (Custom)	Wwise Gain			
 	1064711407	Parametric EQ (Custom)	Wwise Parametric EQ			
 
 Source plug-ins	ID	Name	Type		Wwise Object Path	Notes
@@ -294,7 +337,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	71491938	SFX_MTA_Announcements_D_01	.cache\A5\{A5E49825-7C81-B13E-9A60-D9E431A000FE}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_MTA_Announcements\SFX_MTA_Announcements\SFX_MTA_Announcements_D_01		135081
 	71519175	SFX_Impact_Metal_B_07	.cache\85\{8522F3B5-26B6-0C2F-E9B1-9D05D28F5A7F}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Impact_Metal\SFX_Impact_Metal_B\SFX_Impact_Metal_B_07		150401
 	72131393	SFX_MTA_Announcements_B_01	.cache\DC\{DC188B40-66B8-0158-3681-D140E048362D}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_MTA_Announcements\SFX_MTA_Announcements\SFX_MTA_Announcements_B_01		176552
-	72679238	SFX_Sewers_J_Water_01	.cache\DF\{DF532E5F-A388-CA4F-5AC6-B4D8E7FC8DC8}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_J_Water_Under\SFX_Sewers_J_Water_01		192446
+	72679238	SFX_Sewers_J_Water_01	.cache\FD\{FD2C375E-25FF-F241-3561-B18F35A3A996}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_J_Water_Under\SFX_Sewers_J_Water_01		192446
 	73203675	AMB_Ambi_D_02	.cache\9A\{9A8C8204-1585-F608-0579-3E58F4ED6AB3}.wem		\Containers\Default Work Unit\AMB\AMB_Ambi\AMB_Ambi_Under\AMB_Ambi_D_02\AMB_Ambi_D_02		8307045
 	78017512	SFX_Graffiti_B_06	.cache\27\{27B8A064-0FAE-FA2B-44F6-A3B58407F016}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Graffiti\New Sequence Container\SFX_Graffiti_B\SFX_Graffiti_B_06		8433
 	88786783	Freedom_1_Mole_People_1	.cache\B8\{B8367025-BC2A-3FD0-2714-88FFA2E634DD}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Freedom_1_Mole_People_1		934688
@@ -347,7 +390,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	270141064	SFX_AirPressure_I_02	.cache\52\{52D044DC-4DDF-65A8-0FCB-41C48BD69107}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_AirPressure\SFX_AirPressure_I\New Random Container\SFX_AirPressure_I_02		19933
 	273518031	Steve_Mona_5_11Sept	.cache\91\{914B22BF-4803-BC26-43C8-FD265FC964DD}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Steve_Mona_5_11Sept		361042
 	276172692	SFX_Impact_Metal_B_03	.cache\23\{23362A37-4ED0-466B-4858-ABEABF6092A8}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Impact_Metal\SFX_Impact_Metal_B\SFX_Impact_Metal_B_03		251219
-	277595613	SFX_Sewers_I_Water_01	.cache\CB\{CB8AAE1C-4A91-4245-898B-BB0A26E5C9E2}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_I_Water\SFX_Sewers_I_Water_01		736028
+	277595613	SFX_Sewers_I_Water_01	.cache\C3\{C33B02D4-0EC1-3D9D-C94F-7FA68BAC8450}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_I_Water\SFX_Sewers_I_Water_01		736028
 	279803452	AMB_City_I_Cars_B_01	.cache\59\{59ACB8CD-7C5A-1FBB-8499-C13A2A87F116}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_B\AMB_City_I_Cars_B_01		141604
 	284371374	SFX_Impact_Metal_C_02	.cache\96\{96A26B04-CB2F-906D-D2C3-923FB0D3C6F5}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Impact_Metal\SFX_Impact_Metal_C\SFX_Impact_Metal_C_02		265103
 	285214637	AMB_City_I_Cars_A_04	.cache\62\{6217A4C3-E57B-343A-60AB-0A4130534C86}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_A\AMB_City_I_Cars_A_04		247663
@@ -369,12 +412,13 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	331479210	SFX_Elec_H_31	.cache\EB\{EB47F27F-E20F-3384-2ADE-E17B13CBC66B}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_H\SFX_Elec_H\SFX_Elec_H_31		5363
 	333949447	SFX_Subway_C_Int_01	.cache\BF\{BF62B303-0003-85C8-54D2-DF1C4A807035}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Subway_Train\SFX_Subway_C_Int\SFX_Subway_C_Int_01		1441638
 	334370997	SFX_MTA_Announcements_Mamdani_03	.cache\C4\{C4D886F6-303F-1C97-A4B6-0580939CC5C5}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_MTA_Announcements\SFX_MTA_Announcements_Mamdani\SFX_MTA_Announcements_Mamdani_03		81409
+	335536281	SFX_Exit_D_E	.cache\54\{54C51249-208B-B1D3-D70B-AC873AA97000}.wem		\Containers\Default Work Unit\SFX\SFX_Exit\SFX_Exit_D_E		11547098
 	335659140	MUS_E_03	.cache\F6\{F65E8143-AD10-4611-2610-C3E257EEA91F}.wem		\Containers\Default Work Unit\MUS\MUS_E\MUS_E_03		1281288
 	335659142	MUS_E_03	.cache\7F\{7FB50B42-8EE1-3D9E-5834-D9973A0035B0}.wem		\Containers\Default Work Unit\MUS\MUS_G_K_O\MUS_E_03		4390158
 	339461268	SFX_Elec_H_44	.cache\C6\{C6E3901C-A590-2129-6C2D-712666F150B4}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_H\SFX_Elec_H\SFX_Elec_H_44		1939
 	341516233	SFX_Impact_Metal_C_01	.cache\05\{05272001-F577-3ACA-2A35-56F9BBF50B0C}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Impact_Metal\SFX_Impact_Metal_C\SFX_Impact_Metal_C_01		228008
 	341549836	SFX_Elec_H_35	.cache\3C\{3CFF50B2-FBA9-73E2-B3A1-334465A26FE1}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_H\SFX_Elec_H\SFX_Elec_H_35		34174
-	354325212	SFX_Sewers_G_Drips_01	.cache\E7\{E7E10BAA-D273-B3B8-4E9C-C533351BB462}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_G_Drips\SFX_Sewers_G_Drips_01		342318
+	354325212	SFX_Sewers_G_Drips_01	.cache\9A\{9A053BB1-7EF2-C7F6-CD04-D603FF8B0B46}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_G_Drips\SFX_Sewers_G_Drips_01		342318
 	362762254	SFX_Elec_H_12	.cache\30\{3067B622-DB1D-94C3-B6E5-ED91BC1B6F26}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_H\SFX_Elec_H\SFX_Elec_H_12		30641
 	363131856	SFX_Wind_Howl_B_02	.cache\44\{44674A95-EB31-8C7F-23F7-E97651FB52E2}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Wind_Howl\SFX_Wind_Howl_B\SFX_Wind_Howl_B_02		202908
 	366838495	AMB_City_I_Cars_B_03	.cache\76\{765EE115-F7B0-A2EF-A6DD-EC57A06958BB}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_I_Cars\AMB_City_I_Cars_B\AMB_City_I_Cars_B_03		176362
@@ -400,13 +444,13 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	442549698	SFX_Elec_H_25	.cache\8B\{8BAA7E44-99BB-DCB4-E40B-7CADEE07539B}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_H\SFX_Elec_H\SFX_Elec_H_25		34452
 	445146861	SFX_Elec_H_43	.cache\FE\{FE5A22D5-CC1C-A2F3-CA67-2E75828C7EAC}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_H\SFX_Elec_H\SFX_Elec_H_43		4559
 	450015599	Lucinda_1_community	.cache\E3\{E3AC143E-B277-C856-EFBD-79C100553E5B}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Lucinda_1_community		304279
-	450721125	SFX_Sewers_D_Drips_01	.cache\6F\{6F8752F7-57AC-B043-B3D6-A84EA847E435}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_D_Drips\SFX_Sewers_D_Drips_01		1305939
+	450721125	SFX_Sewers_D_Drips_01	.cache\74\{7427B1F1-0AAF-28F9-787E-B1901D5F5F29}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_D_Drips\SFX_Sewers_D_Drips_01		1305939
 	459759044	SFX_Subway_J_05	.cache\C9\{C979C00A-8FE1-07AD-F506-4BCE4614B25A}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Subway_Train\SFX_Subway_J_Bys\New Random Container\SFX_Subway_J_05		158339
 	466230538	Max_4_Dead_body	.cache\90\{9063B7B6-A49B-3CA4-ABA5-36675619C2E3}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Max_4_Dead_body		439006
 	467880560	SFX_Graffiti_B_01	.cache\3C\{3C99D3FD-5EBD-460C-A6FD-BD4A58498494}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Graffiti\New Sequence Container\SFX_Graffiti_B\SFX_Graffiti_B_01		8021
 	468264729	SFX_Elec_E_01	.cache\22\{22AA7792-C7E1-17FF-39DA-F4617D78BEAC}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_E\New Random Container\SFX_Elec_E_01		71122
 	471140763	SFX_Sewers_K_Water_03	.cache\18\{18FE928D-5AD3-51AB-06C8-7E4A7E2B9E05}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_K_Water\SFX_Sewers_K_Water_03		123114
-	472769823	SFX_Sewers_E_Pipe_01	.cache\4A\{4A06876D-9C32-DEF9-4F25-4155C89C3FE3}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_E_Pipe\SFX_Sewers_E_Pipe_01		160538
+	472769823	SFX_Sewers_E_Pipe_01	.cache\A0\{A0432D65-3E69-DB54-2911-337169E45CC7}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_E_Pipe\SFX_Sewers_E_Pipe_01		160538
 	481777507	SFX_Elec_E_02	.cache\51\{518D3AB2-A9A9-2C28-A7ED-C816903F1A0B}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_E\New Random Container\SFX_Elec_E_02		69054
 	483346684	SFX_Impact_Metal_B_04	.cache\CF\{CF7C504A-33E3-6340-4F48-174696945C0F}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Impact_Metal\SFX_Impact_Metal_B\SFX_Impact_Metal_B_04		158554
 	485676422	SFX_Rats_06	.cache\90\{90F3BC10-AD12-B9D8-56A2-E67DC91E400B}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Rats\SFX_Rats_06		3745
@@ -416,13 +460,13 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	490999587	SFX_Wind_Howl_B_06	.cache\9D\{9D55F182-D455-1C26-01A7-E4B876BD3E6E}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Wind_Howl\SFX_Wind_Howl_B\SFX_Wind_Howl_B_06		183935
 	494187232	AMB_City_Alarms_C	.cache\CC\{CC89EA32-D21A-BE37-ABFA-6A2B15EB15EA}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_H_Alarms\AMB_City_Alarms_C\AMB_City_Alarms_C		177364
 	494818383	SFX_AirPressure_I_03	.cache\6C\{6C1A522B-F108-0EC3-7763-56482906DC3F}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_AirPressure\SFX_AirPressure_I\New Random Container\SFX_AirPressure_I_03		16788
-	497162285	MUS_F_01	.cache\9A\{9A98A18B-A981-3967-6511-A27072EBF396}.wem		\Containers\Default Work Unit\MUS\MUS_F_H\MUS_F_01		3040804
+	497162285	MUS_F_01	.cache\C0\{C09E38F2-BA39-CF5C-F3F4-78331498D56C}.wem		\Containers\Default Work Unit\MUS\MUS_F_H\MUS_F_01		3040804
 	499331571	AMB_Ambi_M_02	.cache\A2\{A261AB06-D0DA-75BD-94BA-3B951D26FA75}.wem		\Containers\Default Work Unit\AMB\AMB_Ambi\AMB_Ambi_Under\AMB_Ambi_M\AMB_Ambi_M_02		236330
 	505204793	SFX_Rats_03	.cache\1D\{1DE2E2B9-89F8-89E3-6D93-CFF4E0893E44}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Rats\SFX_Rats_03		2439
 	506164237	AMB_City_Alarms_A	.cache\30\{30C880D0-AC65-05D8-2DE6-C591D3114018}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_H_Alarms\AMB_City_Alarms_A\AMB_City_Alarms_A		44658
 	506817916	SFX_AirPressure_C_01	.cache\C3\{C3366630-E642-09E9-2CB9-76BDD657575B}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_AirPressure\SFX_AirPressure_C\SFX_AirPressure_C_01		345149
 	507537433	SFX_Graffiti_C_04	.cache\61\{61D1ED89-8492-7FAD-A31B-11731D190027}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Graffiti\New Sequence Container\SFX_Graffiti_C\SFX_Graffiti_C_04		8907
-	508422387	SFX_Sewers_B_Pipe_01	.cache\E2\{E2A9B402-3BEB-3AD9-A59E-C9D459DE29AD}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_B_Pipe\SFX_Sewers_B_Pipe_01		123850
+	508422387	SFX_Sewers_B_Pipe_01	.cache\07\{077B0675-1AE3-4F2D-FF70-B66FCDCCAA24}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_B_Pipe\SFX_Sewers_B_Pipe_01		123850
 	520484305	Alex_4_Zero_tolerance	.cache\9B\{9B8D0E56-4240-6CF0-52D1-970A0583F9A5}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Alex_4_Zero_tolerance		545869
 	521078067	AMB_Ambi_Ext_Street_03	.cache\FA\{FAFB7EB9-A1F1-8BD4-A8C4-704B88D6796E}.wem		\Containers\Default Work Unit\AMB\AMB_Ambi\AMB_Ambi_Ext\AMB_Ambi_Ext_Street_03		6303868
 	526688144	SFX_Impact_Metal_C_03	.cache\DA\{DAC4B567-3AF7-E0EF-4C2F-E1E805187773}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Impact_Metal\SFX_Impact_Metal_C\SFX_Impact_Metal_C_03		206963
@@ -442,7 +486,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	549137070	UI_ITW_Validate	.cache\C9\{C9ECAA97-9379-7B99-8C74-A8C744176C0B}.wem		\Containers\Default Work Unit\UI\UI_ITW\UI_ITW_Validate		179819
 	553834825	SFX_MTA_Announcements_Mamdani_02	.cache\FD\{FDC70ADE-0920-8634-DC93-3216FA058920}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_MTA_Announcements\SFX_MTA_Announcements_Mamdani\SFX_MTA_Announcements_Mamdani_02		91962
 	556457258	SFX_Elec_H_01	.cache\44\{44946144-A901-4EE2-A1C5-130FFCB12CF0}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_H\SFX_Elec_H\SFX_Elec_H_01		27696
-	558939912	MUS_F_02	.cache\0D\{0DCB368B-6036-1EE2-0B0A-E6BF97B37F2F}.wem		\Containers\Default Work Unit\MUS\MUS_F_H\MUS_F_02		1107645
+	558939912	MUS_F_02	.cache\4D\{4DB91FF8-8A7B-4E87-540A-73DDC9140B0F}.wem		\Containers\Default Work Unit\MUS\MUS_F_H\MUS_F_02		1107645
 	567483424	SFX_Elec_H_41	.cache\F9\{F995AD23-64E0-C301-0896-11556FE22AE9}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_H\SFX_Elec_H\SFX_Elec_H_41		5462
 	567812038	SFX_Elec_G_01	.cache\90\{907B9DB8-2F49-3D64-78C9-8C6D1A396ECC}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_G\New Random Container\SFX_Elec_G_01		10201
 	569449804	Terry_1_What_is_underground	.cache\A9\{A97120D3-49C5-E501-74C1-516ED2304122}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Terry_1_What_is_underground		589516
@@ -466,6 +510,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	614227026	SFX_Subway_E_01	.cache\81\{815C6A5E-7E05-3AD7-328F-CBB5EE8DCB77}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Subway_Train\SFX_Subway_E\SFX_Subway_E_01		437482
 	622415581	SFX_Sewers_L_Water_04	.cache\BF\{BF859583-E0C6-267D-112D-A369B0FAA0CB}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_L_Water\SFX_Sewers_L_Water_04		129011
 	624309982	SFX_Graffiti_C_02	.cache\31\{31F63558-C54E-7FB1-215E-8844EFC48983}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Graffiti\New Sequence Container\SFX_Graffiti_C\SFX_Graffiti_C_02		10599
+	627052913	MUS_Menu_A	.cache\9E\{9ED51C6E-9729-3FE3-5FB3-EF3AFC8AF12B}.wem		\Containers\Default Work Unit\MUS\MUS_Menu\MUS_Menu_A		338422
 	627199863	Exit_Plan_0_Intro	.cache\D5\{D5B1780B-61EA-E1CE-0C0B-C24B322B75F6}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Exit_Plan_0_Intro		102656
 	627751337	SFX_Graffiti_A_02	.cache\C5\{C5509A12-2E4D-CD3B-08B5-F4CED3C5FD19}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Graffiti\New Sequence Container\SFX_Graffiti_A\SFX_Graffiti_A_02		23532
 	634527399	AMB_Ambi_Ext_Street_01	.cache\03\{03924E9E-AFCF-A9F4-791F-329833E7B64C}.wem		\Containers\Default Work Unit\AMB\AMB_Ambi\AMB_Ambi_Ext\AMB_Ambi_Ext_Street_01		6625170
@@ -483,6 +528,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	661978313	SFX_Subway_K_NYC_Bys_01	.cache\5C\{5CFBDD54-C842-2188-C887-020E32827AF3}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Subway_Train\SFX_Subway_K_NYC_Bys_JM\New Random Container\SFX_Subway_K_NYC_Bys_01		1355098
 	668005384	Terry_2_Historical	.cache\2B\{2B4624DD-1E57-59C4-F136-59A51FC94A50}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Terry_2_Historical		377816
 	668803773	Freedom_2_Everybody_Out	.cache\30\{304C9599-8DA0-BFC8-BC58-944174A17222}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Freedom_2_Everybody_Out		661483
+	684582563	MUS_L	.cache\B8\{B871DC20-4CDA-8B57-D126-957204D318DB}.wem		\Containers\Default Work Unit\MUS\MUS_L\MUS_L		2507330
 	687813183	SFX_Elec_A_01	.cache\8B\{8B79C216-C99D-C489-C2A0-B62038E40100}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_A\New Random Container\SFX_Elec_A_01		111774
 	694773997	SFX_Impact_Metal_A_04	.cache\6E\{6E63FB97-6313-22E0-CF53-B2979C361EA8}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Impact_Metal\SFX_Impact_Metal_A\SFX_Impact_Metal_A_04		16509
 	697577064	SFX_Sewers_K_Water_09	.cache\04\{044F7DBB-190B-8135-0238-19C150AD7DD9}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_K_Water\SFX_Sewers_K_Water_09		121867
@@ -571,7 +617,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	945933513	SFX_Subway_K_NYC_Bys_07	.cache\1C\{1C2D4063-0FCA-0367-A1B7-5CE3BD356184}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Subway_Train\SFX_Subway_K_NYC_Bys_JM\New Random Container\SFX_Subway_K_NYC_Bys_07		1009157
 	947765759	Alex_2_Bebe	.cache\D9\{D9EFE568-FCE2-874D-D865-16F29EE380E1}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Alex_2_Bebe		571871
 	958342699	SFX_Subway_J_06	.cache\00\{00F73AA1-3A33-3F32-9335-EF904497AEB9}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Subway_Train\SFX_Subway_J_Bys\New Random Container\SFX_Subway_J_06		186578
-	959251335	SFX_Sewers_C_Pipe_01_V1	.cache\13\{13869EB9-B396-5C1C-7DA5-6B91C5849FC1}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_C_Pipe\SFX_Sewers_C_Pipe_01_V1		98886
+	959251335	SFX_Sewers_C_Pipe_01_V1	.cache\B5\{B59DA175-2FD3-0A93-DA57-5466DC11A410}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_C_Pipe\SFX_Sewers_C_Pipe_01_V1		98886
 	967671067	AMB_City_A_People_Cars_01	.cache\A9\{A930C836-1026-1A76-AEF3-08F54A823AD5}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_A_People_Cars\AMB_City_A_People_Cars_01		462089
 	969039932	SFX_Sewers_L_Water_06	.cache\83\{836BD86A-14A0-7A42-E828-6EF258FA9768}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_L_Water\SFX_Sewers_L_Water_06		124301
 	969255766	Lucinda_0_Intro	.cache\2B\{2B40F872-C9BA-5BE1-0E80-B2FAF85F56BE}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Lucinda_0_Intro		72007
@@ -589,6 +635,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	995188749	SFX_Wind_Howl_B_08	.cache\31\{311DF46F-28F4-78C5-330F-0CF437EFFBDE}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Wind_Howl\SFX_Wind_Howl_B\SFX_Wind_Howl_B_08		213845
 	1000021276	SFX_MTA_Announcements_Mamdani_05	.cache\56\{56185F5D-3948-C540-229D-C60A548B224B}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_MTA_Announcements\SFX_MTA_Announcements_Mamdani\SFX_MTA_Announcements_Mamdani_05		75566
 	1003306080	SFX_Rats_04	.cache\36\{3622D98F-C287-5898-A38C-8A749F3B0CD0}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Rats\SFX_Rats_04		3574
+	1004040847	MUS_Menu_B	.cache\A9\{A9D4FEA7-70DD-7299-B248-A523D71F9841}.wem		\Containers\Default Work Unit\MUS\MUS_Menu\MUS_Menu_B		980486
 	1006225296	SFX_Elec_H_13	.cache\2A\{2A53B862-76A0-EDF4-D026-1FABF0A0B277}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Elec\SFX_Elec_H\SFX_Elec_H\SFX_Elec_H_13		60382
 	1006295590	Spiderman_1_Family_problems	.cache\F1\{F13B7883-0F1F-D916-57A0-D0DBBD34779A}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Spiderman_1_Family_problems		444084
 	1007561525	SFX_Wind_Howl_A_03	.cache\2A\{2A813467-7949-2846-751F-CCAB75690C4F}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Wind_Howl\SFX_Wind_Howl_A\SFX_Wind_Howl_A_03		166877
@@ -602,7 +649,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	1023934690	MUS_C_02	.cache\EF\{EF5E47AC-40AC-6F16-9F05-52683D295A41}.wem		\Containers\Default Work Unit\MUS\MUS_C\MUS_C_02		3445234
 	1025716175	Max_3_Sharing	.cache\03\{03C3FD83-8886-41A2-EC4B-BDA06897E902}.wem		\Containers\Default Work Unit\VOX\VOX_ITW\Max_3_Sharing		237503
 	1026125693	SFX_Impact_Metal_D_05	.cache\D7\{D70E5DB2-7470-AFF3-2B10-996091607913}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Impact_Metal\SFX_Impact_Metal_D\SFX_Impact_Metal_D_05		279624
-	1033276344	SFX_Sewers_F_Pipe_01	.cache\86\{86F7FAC3-1D66-7FE3-8879-2731CB466F46}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_F_Pipe\SFX_Sewers_F_Pipe_01		217234
+	1033276344	SFX_Sewers_F_Pipe_01	.cache\2F\{2FDC46B0-8770-6979-CFB9-48C5F2DB3606}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_Sewers\SFX_Sewers_F_Pipe\SFX_Sewers_F_Pipe_01		217234
 	1033719215	AMB_City_C_Cars_01	.cache\F5\{F598971C-28F3-72D0-213F-945667D4B9FA}.wem		\Containers\Default Work Unit\AMB\AMB_3D\AMB_City\AMB_City_C_Cars\AMB_City_C_Cars_01		695317
 	1034684845	SFX_AirPressure_A_01	.cache\25\{25B0AF50-F5C1-1E77-2865-7705A4229208}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_AirPressure\SFX_AirPressure_A\SFX_AirPressure_A_01		274907
 	1038266380	SFX_MTA_Announcements_Mamdani_01	.cache\AF\{AFF93CD4-E907-2FA5-CB8A-39453E93FF46}.wem		\Containers\Default Work Unit\SFX\SFX_3D\SFX_MTA_Announcements\SFX_MTA_Announcements_Mamdani\SFX_MTA_Announcements_Mamdani_01		60225

@@ -5,7 +5,7 @@
 			<ChildrenList>
 				<StateGroup Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}">
 					<PropertyList>
-						<Property Name="DefaultTransitionTime" Type="Real64" Value="7"/>
+						<Property Name="DefaultTransitionTime" Type="Real64" Value="15"/>
 					</PropertyList>
 					<ChildrenList>
 						<State Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
@@ -34,6 +34,12 @@
 						<State Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
 					</ChildrenList>
 					<TransitionList>
+						<Transition>
+							<StartState Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+							<EndState Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+							<Time>15</Time>
+							<IsShared>true</IsShared>
+						</Transition>
 						<Transition>
 							<StartState Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
 							<EndState Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
@@ -77,6 +83,12 @@
 							<IsShared>true</IsShared>
 						</Transition>
 						<Transition>
+							<StartState Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+							<EndState Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+							<Time>20</Time>
+							<IsShared>true</IsShared>
+						</Transition>
+						<Transition>
 							<StartState Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
 							<EndState Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
 							<Time>20</Time>
@@ -107,9 +119,15 @@
 							<IsShared>true</IsShared>
 						</Transition>
 						<Transition>
-							<StartState Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
-							<EndState Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
-							<Time>15</Time>
+							<StartState Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+							<EndState Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+							<Time>30</Time>
+							<IsShared>true</IsShared>
+						</Transition>
+						<Transition>
+							<StartState Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+							<EndState Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+							<Time>30</Time>
 							<IsShared>true</IsShared>
 						</Transition>
 					</TransitionList>
@@ -127,7 +145,7 @@
 						<State Name="Playing" ID="{2815DF94-0267-487D-8379-B05F51EFD7A2}"/>
 					</ChildrenList>
 				</StateGroup>
-				<StateGroup Name="ELEC" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}">
+				<StateGroup Name="State_Elec" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}">
 					<PropertyList>
 						<Property Name="DefaultTransitionTime" Type="Real64" Value="10"/>
 					</PropertyList>

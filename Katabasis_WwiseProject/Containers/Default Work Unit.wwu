@@ -2946,7 +2946,7 @@
 														<StateGroupInfo Name="" ID="{C465B1FD-0B9A-4C64-8E90-BF95C749842E}" ShortID="645697059"/>
 													</StateGroupInfo>
 													<StateGroupInfo>
-														<StateGroupRef Name="ELEC" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
+														<StateGroupRef Name="State_Elec" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
 														<StateGroupInfo Name="" ID="{5B6DCC8F-60BA-44E7-8ACF-7500494C261F}" ShortID="523604522"/>
 													</StateGroupInfo>
 												</StateGroupList>
@@ -4841,7 +4841,7 @@
 														<StateGroupInfo Name="" ID="{DB3DD325-6D2A-4050-9E81-8D9831E6DF86}" ShortID="778529934"/>
 													</StateGroupInfo>
 													<StateGroupInfo>
-														<StateGroupRef Name="ELEC" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
+														<StateGroupRef Name="State_Elec" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
 														<StateGroupInfo Name="" ID="{1827000D-2B4E-4180-9CE2-86658895B460}" ShortID="1030707494"/>
 													</StateGroupInfo>
 												</StateGroupList>
@@ -6537,7 +6537,7 @@
 														<StateGroupInfo Name="" ID="{1332723F-DB56-4E1D-BAE0-1D4242D3077D}" ShortID="271927602"/>
 													</StateGroupInfo>
 													<StateGroupInfo>
-														<StateGroupRef Name="ELEC" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
+														<StateGroupRef Name="State_Elec" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
 														<StateGroupInfo Name="" ID="{5DDAECF8-35F5-4A3A-8737-3D9E8740513B}" ShortID="413149741"/>
 													</StateGroupInfo>
 												</StateGroupList>
@@ -8487,7 +8487,7 @@
 														<StateGroupInfo Name="" ID="{4A2F9468-65AE-44B3-9989-66D9FCA98613}" ShortID="231070553"/>
 													</StateGroupInfo>
 													<StateGroupInfo>
-														<StateGroupRef Name="ELEC" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
+														<StateGroupRef Name="State_Elec" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
 														<StateGroupInfo Name="" ID="{B88FC44B-376D-42AB-A638-9A7F330E326C}" ShortID="885787436"/>
 													</StateGroupInfo>
 												</StateGroupList>
@@ -10183,7 +10183,7 @@
 														<StateGroupInfo Name="" ID="{B2315369-5DCD-4CAC-8AFA-C05CB4982E71}" ShortID="217193218"/>
 													</StateGroupInfo>
 													<StateGroupInfo>
-														<StateGroupRef Name="ELEC" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
+														<StateGroupRef Name="State_Elec" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
 														<StateGroupInfo Name="" ID="{93869DFE-0568-4275-AE55-34A4A2AF1C8F}" ShortID="99496520"/>
 													</StateGroupInfo>
 												</StateGroupList>
@@ -16705,7 +16705,7 @@
 														<StateGroupInfo Name="" ID="{CA6CC3F0-4D19-419C-880D-99C9948707F7}" ShortID="465039125"/>
 													</StateGroupInfo>
 													<StateGroupInfo>
-														<StateGroupRef Name="ELEC" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
+														<StateGroupRef Name="State_Elec" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
 														<StateGroupInfo Name="" ID="{13109495-93E0-4B9B-98E2-0FBF57DDBA09}" ShortID="607867286"/>
 													</StateGroupInfo>
 												</StateGroupList>
@@ -17287,7 +17287,7 @@
 												<StateGroupInfo Name="" ID="{8E967B9F-7C3D-489B-BAC5-ECBE83E651B4}" ShortID="675465694"/>
 											</StateGroupInfo>
 											<StateGroupInfo>
-												<StateGroupRef Name="ELEC" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
+												<StateGroupRef Name="State_Elec" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}"/>
 												<StateGroupInfo Name="" ID="{C7FC1B2F-4A2D-4305-824F-AE1E9E24C27B}" ShortID="14280846"/>
 											</StateGroupInfo>
 										</StateGroupList>
@@ -20623,7 +20623,7 @@
 											<Custom>
 												<Attenuation Name="Attenuation (Custom)" ID="{2805B3C9-63AB-4FCF-81C6-2AD015B3C8C2}" ShortID="861408023">
 													<PropertyList>
-														<Property Name="RadiusMax" Type="Real64" Value="30"/>
+														<Property Name="RadiusMax" Type="Real64" Value="35"/>
 													</PropertyList>
 													<CurveUsageInfoList>
 														<VolumeDryUsage>
@@ -20640,7 +20640,7 @@
 																			<SegmentShape>Log2</SegmentShape>
 																		</Point>
 																		<Point>
-																			<XPos>30</XPos>
+																			<XPos>35</XPos>
 																			<YPos>-200</YPos>
 																			<Flags>37</Flags>
 																		</Point>
@@ -20652,7 +20652,25 @@
 															<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
 														</VolumeWetGameUsage>
 														<VolumeWetUserUsage>
-															<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
+															<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																<Curve Name="VolumeWetUser" ID="{8C6D27ED-702C-481D-8F9A-A378AFF41879}">
+																	<PropertyList>
+																		<Property Name="Flags" Type="int32" Value="3"/>
+																	</PropertyList>
+																	<PointList>
+																		<Point>
+																			<XPos>0</XPos>
+																			<YPos>-4.89625</YPos>
+																			<Flags>5</Flags>
+																		</Point>
+																		<Point>
+																			<XPos>35</XPos>
+																			<YPos>-200</YPos>
+																			<Flags>37</Flags>
+																		</Point>
+																	</PointList>
+																</Curve>
+															</CurveUsageInfo>
 														</VolumeWetUserUsage>
 														<LowPassFilterUsage>
 															<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
@@ -20667,14 +20685,14 @@
 																			<Flags>5</Flags>
 																		</Point>
 																		<Point>
-																			<XPos>0.001</XPos>
+																			<XPos>0.00116666666666667</XPos>
 																			<YPos>0</YPos>
 																			<Flags>0</Flags>
-																			<SegmentShape>Exp2</SegmentShape>
+																			<SegmentShape>Exp1</SegmentShape>
 																		</Point>
 																		<Point>
-																			<XPos>30</XPos>
-																			<YPos>70</YPos>
+																			<XPos>35</XPos>
+																			<YPos>49</YPos>
 																			<Flags>37</Flags>
 																		</Point>
 																	</PointList>
@@ -20682,7 +20700,32 @@
 															</CurveUsageInfo>
 														</LowPassFilterUsage>
 														<HighPassFilterUsage>
-															<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+															<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																<Curve Name="HighPassFilter" ID="{9E31AFBD-5A9F-4501-B8D2-18484BCB0C8E}">
+																	<PropertyList>
+																		<Property Name="Flags" Type="int32" Value="65537"/>
+																	</PropertyList>
+																	<PointList>
+																		<Point>
+																			<XPos>0</XPos>
+																			<YPos>0</YPos>
+																			<Flags>5</Flags>
+																			<SegmentShape>Exp2</SegmentShape>
+																		</Point>
+																		<Point>
+																			<XPos>8.31467875</XPos>
+																			<YPos>0</YPos>
+																			<Flags>0</Flags>
+																			<SegmentShape>Exp2</SegmentShape>
+																		</Point>
+																		<Point>
+																			<XPos>35</XPos>
+																			<YPos>30</YPos>
+																			<Flags>37</Flags>
+																		</Point>
+																	</PointList>
+																</Curve>
+															</CurveUsageInfo>
 														</HighPassFilterUsage>
 														<DualShelfUsage>
 															<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
@@ -20698,26 +20741,21 @@
 																			<XPos>0</XPos>
 																			<YPos>100</YPos>
 																			<Flags>5</Flags>
-																		</Point>
-																		<Point>
-																			<XPos>4.28933</XPos>
-																			<YPos>100</YPos>
-																			<Flags>0</Flags>
 																			<SegmentShape>Log1</SegmentShape>
 																		</Point>
 																		<Point>
-																			<XPos>12.38739</XPos>
-																			<YPos>0</YPos>
+																			<XPos>8.7857</XPos>
+																			<YPos>-0</YPos>
 																			<Flags>0</Flags>
 																			<SegmentShape>Exp1</SegmentShape>
 																		</Point>
 																		<Point>
-																			<XPos>12.38839</XPos>
-																			<YPos>0</YPos>
+																			<XPos>8.78686666666667</XPos>
+																			<YPos>-0</YPos>
 																			<Flags>0</Flags>
 																		</Point>
 																		<Point>
-																			<XPos>30</XPos>
+																			<XPos>35</XPos>
 																			<YPos>0</YPos>
 																			<Flags>37</Flags>
 																		</Point>
@@ -20792,6 +20830,9 @@
 										<Reference Name="UserAuxSend1">
 											<ObjectRef Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 										</Reference>
+										<Reference Name="UserAuxSend2">
+											<ObjectRef Name="REV_LongUltra" ID="{43E67AD9-087F-47C6-82F2-818148AB0A10}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
 									</ReferenceList>
 									<ChildrenList>
 										<RandomSequenceContainer Name="SFX_Sewers_A_Drips" ID="{3B82A159-B187-445E-BCCC-87DDCA558D7E}" ShortID="691907350">
@@ -20804,7 +20845,7 @@
 																<PropertyList>
 																	<Property Name="Enabled" Type="bool" Value="True"/>
 																	<Property Name="Max" Type="Real64" Value="300"/>
-																	<Property Name="Min" Type="Real64" Value="-300"/>
+																	<Property Name="Min" Type="Real64" Value="-1025"/>
 																</PropertyList>
 															</Modifier>
 														</ModifierInfo>
@@ -20987,6 +21028,7 @@
 										<RandomSequenceContainer Name="SFX_Sewers_B_Pipe" ID="{8CA47E82-684D-4234-9302-0A884DC1136A}" ShortID="780557265">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="OverrideEffect" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -21178,10 +21220,126 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Effects">
+													<EffectSlot Name="" ID="{DDF7D99C-E011-4EB3-A79F-840A7B13FFD3}" ShortID="1042229278">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Guitar Distortion (Custom)" ID="{6E7DD6A7-530F-490F-BFF7-DA9B4772B43E}" ShortID="1011825782" PluginName="Wwise Guitar Distortion" CompanyID="0" PluginID="126" PluginType="3">
+																		<PropertyList>
+																			<Property Name="DistortionDrive" Type="Real32" Value="66"/>
+																			<Property Name="DistortionType" Type="int32" Value="1"/>
+																			<Property Name="WetDryMix" Type="Real32" Value="10"/>
+																		</PropertyList>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+													<EffectSlot Name="" ID="{E9C2E7C2-2858-4A74-AC34-A4695F383AFF}" ShortID="149003711">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Gain (Custom)" ID="{044D57E5-AAE5-43F5-AE75-F0C61537A492}" ShortID="1049083119" PluginName="Wwise Gain" CompanyID="0" PluginID="139" PluginType="3">
+																		<ObjectLists>
+																			<ObjectList Name="RTPC">
+																				<RTPC Name="" ID="{D3F9C644-9AF8-4BD6-99D0-7BB2901876D0}" ShortID="387881367">
+																					<PropertyList>
+																						<Property Name="PropertyName" Type="string" Value="FullBandGain"/>
+																					</PropertyList>
+																					<ReferenceList>
+																						<Reference Name="ControlInput">
+																							<Custom>
+																								<ModulatorLfo Name="Modulator LFO (Custom)" ID="{0B6249F1-7FB1-4684-B040-A9B04E8689A8}" ShortID="853017538">
+																									<PropertyList>
+																										<Property Name="LfoFrequency" Type="Real64" Value="0"/>
+																										<Property Name="LfoSmoothing" Type="Real64" Value="51"/>
+																										<Property Name="LfoWaveform" Type="int32" Value="4"/>
+																									</PropertyList>
+																									<ObjectLists>
+																										<ObjectList Name="RTPC">
+																											<RTPC Name="" ID="{E111E26F-AB0D-47F6-BF7B-D6F7D092A386}" ShortID="404004902">
+																												<PropertyList>
+																													<Property Name="PropertyName" Type="string" Value="LfoFrequency"/>
+																												</PropertyList>
+																												<ReferenceList>
+																													<Reference Name="ControlInput">
+																														<Custom>
+																															<ModulatorLfo Name="Modulator LFO (Custom)" ID="{D7B83C61-CC0D-4F66-A719-CF1B59B188EC}" ShortID="586868161">
+																																<PropertyList>
+																																	<Property Name="LfoDepth" Type="Real64" Value="51"/>
+																																	<Property Name="LfoFrequency" Type="Real64" Value="1.92"/>
+																																	<Property Name="LfoWaveform" Type="int32" Value="5"/>
+																																</PropertyList>
+																															</ModulatorLfo>
+																														</Custom>
+																													</Reference>
+																													<Reference Name="Curve">
+																														<Custom>
+																															<Curve Name="" ID="{5F884B38-7EDD-40F5-BB9F-3BCF392B291B}">
+																																<PropertyList>
+																																	<Property Name="Flags" Type="int32" Value="5"/>
+																																</PropertyList>
+																																<PointList>
+																																	<Point>
+																																		<XPos>0</XPos>
+																																		<YPos>0.01</YPos>
+																																		<Flags>21</Flags>
+																																	</Point>
+																																	<Point>
+																																		<XPos>1</XPos>
+																																		<YPos>21.8274</YPos>
+																																		<Flags>53</Flags>
+																																	</Point>
+																																</PointList>
+																															</Curve>
+																														</Custom>
+																													</Reference>
+																												</ReferenceList>
+																											</RTPC>
+																										</ObjectList>
+																									</ObjectLists>
+																								</ModulatorLfo>
+																							</Custom>
+																						</Reference>
+																						<Reference Name="Curve">
+																							<Custom>
+																								<Curve Name="" ID="{7066E272-CAE6-48BB-BA92-B8E971624028}">
+																									<PropertyList>
+																										<Property Name="Flags" Type="int32" Value="3"/>
+																									</PropertyList>
+																									<PointList>
+																										<Point>
+																											<XPos>0</XPos>
+																											<YPos>-96.3000030517578</YPos>
+																											<Flags>21</Flags>
+																										</Point>
+																										<Point>
+																											<XPos>1</XPos>
+																											<YPos>0</YPos>
+																											<Flags>53</Flags>
+																										</Point>
+																									</PointList>
+																								</Curve>
+																							</Custom>
+																						</Reference>
+																					</ReferenceList>
+																				</RTPC>
+																			</ObjectList>
+																		</ObjectLists>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+												</ObjectList>
+											</ObjectLists>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Sewers_C_Pipe" ID="{AFB6A065-C032-46C8-9A71-622E7DEC64F5}" ShortID="402744175">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="OverrideEffect" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -21373,6 +21531,121 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Effects">
+													<EffectSlot Name="" ID="{4F56F6BF-2029-45BF-A6DE-4382B7BE9E41}" ShortID="628047177">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Guitar Distortion (Custom)" ID="{CC06BC48-54DB-48E6-8A60-B4DC1B18D5E3}" ShortID="813334166" PluginName="Wwise Guitar Distortion" CompanyID="0" PluginID="126" PluginType="3">
+																		<PropertyList>
+																			<Property Name="DistortionDrive" Type="Real32" Value="66"/>
+																			<Property Name="DistortionType" Type="int32" Value="1"/>
+																			<Property Name="WetDryMix" Type="Real32" Value="10"/>
+																		</PropertyList>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+													<EffectSlot Name="" ID="{26E3CA71-3415-404F-9B3A-D646AF9A07B1}" ShortID="63480130">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Gain (Custom)" ID="{A98827AB-2287-471C-BBCD-E49177381CE9}" ShortID="602537738" PluginName="Wwise Gain" CompanyID="0" PluginID="139" PluginType="3">
+																		<ObjectLists>
+																			<ObjectList Name="RTPC">
+																				<RTPC Name="" ID="{5ECEC302-7A23-4E73-8BA6-A5D99C6E0AB2}" ShortID="1034623419">
+																					<PropertyList>
+																						<Property Name="PropertyName" Type="string" Value="FullBandGain"/>
+																					</PropertyList>
+																					<ReferenceList>
+																						<Reference Name="ControlInput">
+																							<Custom>
+																								<ModulatorLfo Name="Modulator LFO (Custom)" ID="{46F0EA8A-8361-4B66-90E7-B7714E8580D7}" ShortID="655488811">
+																									<PropertyList>
+																										<Property Name="LfoFrequency" Type="Real64" Value="0"/>
+																										<Property Name="LfoSmoothing" Type="Real64" Value="51"/>
+																										<Property Name="LfoWaveform" Type="int32" Value="4"/>
+																									</PropertyList>
+																									<ObjectLists>
+																										<ObjectList Name="RTPC">
+																											<RTPC Name="" ID="{4CB12B9A-2112-46EB-A0EF-6965D9D981E8}" ShortID="396369777">
+																												<PropertyList>
+																													<Property Name="PropertyName" Type="string" Value="LfoFrequency"/>
+																												</PropertyList>
+																												<ReferenceList>
+																													<Reference Name="ControlInput">
+																														<Custom>
+																															<ModulatorLfo Name="Modulator LFO (Custom)" ID="{59C24CB3-3F48-49D7-B214-16C5C4CA3578}" ShortID="147647809">
+																																<PropertyList>
+																																	<Property Name="LfoDepth" Type="Real64" Value="51"/>
+																																	<Property Name="LfoFrequency" Type="Real64" Value="1.92"/>
+																																	<Property Name="LfoWaveform" Type="int32" Value="5"/>
+																																</PropertyList>
+																															</ModulatorLfo>
+																														</Custom>
+																													</Reference>
+																													<Reference Name="Curve">
+																														<Custom>
+																															<Curve Name="" ID="{C113906B-977A-4F59-B2F6-C3E573A5062D}">
+																																<PropertyList>
+																																	<Property Name="Flags" Type="int32" Value="5"/>
+																																</PropertyList>
+																																<PointList>
+																																	<Point>
+																																		<XPos>0</XPos>
+																																		<YPos>0.01</YPos>
+																																		<Flags>21</Flags>
+																																	</Point>
+																																	<Point>
+																																		<XPos>1</XPos>
+																																		<YPos>21.8274</YPos>
+																																		<Flags>53</Flags>
+																																	</Point>
+																																</PointList>
+																															</Curve>
+																														</Custom>
+																													</Reference>
+																												</ReferenceList>
+																											</RTPC>
+																										</ObjectList>
+																									</ObjectLists>
+																								</ModulatorLfo>
+																							</Custom>
+																						</Reference>
+																						<Reference Name="Curve">
+																							<Custom>
+																								<Curve Name="" ID="{B58981F1-33A4-410D-8547-A98270077BA4}">
+																									<PropertyList>
+																										<Property Name="Flags" Type="int32" Value="3"/>
+																									</PropertyList>
+																									<PointList>
+																										<Point>
+																											<XPos>0</XPos>
+																											<YPos>-96.3000030517578</YPos>
+																											<Flags>21</Flags>
+																										</Point>
+																										<Point>
+																											<XPos>1</XPos>
+																											<YPos>0</YPos>
+																											<Flags>53</Flags>
+																										</Point>
+																									</PointList>
+																								</Curve>
+																							</Custom>
+																						</Reference>
+																					</ReferenceList>
+																				</RTPC>
+																			</ObjectList>
+																		</ObjectLists>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+												</ObjectList>
+											</ObjectLists>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Sewers_D_Drips" ID="{8AB6BF5F-0001-4D3D-9EF1-B8A5511CEAF8}" ShortID="408326905">
 											<PropertyList>
@@ -21382,6 +21655,7 @@
 														<Value>8</Value>
 													</ValueList>
 												</Property>
+												<Property Name="OverrideEffect" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -21389,7 +21663,7 @@
 																<PropertyList>
 																	<Property Name="Enabled" Type="bool" Value="True"/>
 																	<Property Name="Max" Type="Real64" Value="300"/>
-																	<Property Name="Min" Type="Real64" Value="-300"/>
+																	<Property Name="Min" Type="Real64" Value="-1100"/>
 																</PropertyList>
 															</Modifier>
 														</ModifierInfo>
@@ -21577,6 +21851,7 @@
 										<RandomSequenceContainer Name="SFX_Sewers_E_Pipe" ID="{E0A76263-F818-4A5B-BA66-552D783310BC}" ShortID="71010646">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="OverrideEffect" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -21768,10 +22043,126 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Effects">
+													<EffectSlot Name="" ID="{7901716A-5B34-4984-AE31-27058ACC77BB}" ShortID="1055562413">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Guitar Distortion (Custom)" ID="{2CF642CE-E97A-4453-8610-69EE95D8417F}" ShortID="23814935" PluginName="Wwise Guitar Distortion" CompanyID="0" PluginID="126" PluginType="3">
+																		<PropertyList>
+																			<Property Name="DistortionDrive" Type="Real32" Value="66"/>
+																			<Property Name="DistortionType" Type="int32" Value="1"/>
+																			<Property Name="WetDryMix" Type="Real32" Value="20"/>
+																		</PropertyList>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+													<EffectSlot Name="" ID="{9384B868-CBE3-4B1A-B210-A4DC9B8FD367}" ShortID="1043225030">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Gain (Custom)" ID="{8524F88B-E001-4533-B0B9-C786361D6AB2}" ShortID="732859424" PluginName="Wwise Gain" CompanyID="0" PluginID="139" PluginType="3">
+																		<ObjectLists>
+																			<ObjectList Name="RTPC">
+																				<RTPC Name="" ID="{E75B6F12-A680-464C-9E9D-20FE8D6668A2}" ShortID="532869675">
+																					<PropertyList>
+																						<Property Name="PropertyName" Type="string" Value="FullBandGain"/>
+																					</PropertyList>
+																					<ReferenceList>
+																						<Reference Name="ControlInput">
+																							<Custom>
+																								<ModulatorLfo Name="Modulator LFO (Custom)" ID="{B69ECDAB-74CE-4764-9738-10E3E60C5974}" ShortID="1007367165">
+																									<PropertyList>
+																										<Property Name="LfoFrequency" Type="Real64" Value="0"/>
+																										<Property Name="LfoSmoothing" Type="Real64" Value="51"/>
+																										<Property Name="LfoWaveform" Type="int32" Value="4"/>
+																									</PropertyList>
+																									<ObjectLists>
+																										<ObjectList Name="RTPC">
+																											<RTPC Name="" ID="{39CC8341-9E74-4527-B601-5F65F894A212}" ShortID="36159511">
+																												<PropertyList>
+																													<Property Name="PropertyName" Type="string" Value="LfoFrequency"/>
+																												</PropertyList>
+																												<ReferenceList>
+																													<Reference Name="ControlInput">
+																														<Custom>
+																															<ModulatorLfo Name="Modulator LFO (Custom)" ID="{3AE8119A-C76D-4C87-B64C-C948A4F9A828}" ShortID="136576898">
+																																<PropertyList>
+																																	<Property Name="LfoDepth" Type="Real64" Value="51"/>
+																																	<Property Name="LfoFrequency" Type="Real64" Value="1.92"/>
+																																	<Property Name="LfoWaveform" Type="int32" Value="5"/>
+																																</PropertyList>
+																															</ModulatorLfo>
+																														</Custom>
+																													</Reference>
+																													<Reference Name="Curve">
+																														<Custom>
+																															<Curve Name="" ID="{8C8FC22F-FA40-4084-B4DC-BBEDE6B2002E}">
+																																<PropertyList>
+																																	<Property Name="Flags" Type="int32" Value="5"/>
+																																</PropertyList>
+																																<PointList>
+																																	<Point>
+																																		<XPos>0</XPos>
+																																		<YPos>0.01</YPos>
+																																		<Flags>21</Flags>
+																																	</Point>
+																																	<Point>
+																																		<XPos>1</XPos>
+																																		<YPos>21.8274</YPos>
+																																		<Flags>53</Flags>
+																																	</Point>
+																																</PointList>
+																															</Curve>
+																														</Custom>
+																													</Reference>
+																												</ReferenceList>
+																											</RTPC>
+																										</ObjectList>
+																									</ObjectLists>
+																								</ModulatorLfo>
+																							</Custom>
+																						</Reference>
+																						<Reference Name="Curve">
+																							<Custom>
+																								<Curve Name="" ID="{4755633C-B134-48C3-9D04-6C9E00AC48F4}">
+																									<PropertyList>
+																										<Property Name="Flags" Type="int32" Value="3"/>
+																									</PropertyList>
+																									<PointList>
+																										<Point>
+																											<XPos>0</XPos>
+																											<YPos>-96.3000030517578</YPos>
+																											<Flags>21</Flags>
+																										</Point>
+																										<Point>
+																											<XPos>1</XPos>
+																											<YPos>0</YPos>
+																											<Flags>53</Flags>
+																										</Point>
+																									</PointList>
+																								</Curve>
+																							</Custom>
+																						</Reference>
+																					</ReferenceList>
+																				</RTPC>
+																			</ObjectList>
+																		</ObjectLists>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+												</ObjectList>
+											</ObjectLists>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Sewers_F_Pipe" ID="{13BA11E7-D47E-44E6-889C-56E8215CD0BB}" ShortID="367871190">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="OverrideEffect" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -21966,6 +22357,121 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Effects">
+													<EffectSlot Name="" ID="{6C02F0FF-3DCC-43EC-88F8-F9CED15D5087}" ShortID="1009505798">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Guitar Distortion (Custom)" ID="{3965D1E5-80A8-4832-8105-23ACCFB9F7C8}" ShortID="570750000" PluginName="Wwise Guitar Distortion" CompanyID="0" PluginID="126" PluginType="3">
+																		<PropertyList>
+																			<Property Name="DistortionDrive" Type="Real32" Value="66"/>
+																			<Property Name="DistortionType" Type="int32" Value="1"/>
+																			<Property Name="WetDryMix" Type="Real32" Value="20"/>
+																		</PropertyList>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+													<EffectSlot Name="" ID="{0B5CE218-B2F1-4D8C-95B4-95926F48A6F7}" ShortID="111415548">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Gain (Custom)" ID="{7880E72F-D635-471C-A13D-6AA281F909D9}" ShortID="340232664" PluginName="Wwise Gain" CompanyID="0" PluginID="139" PluginType="3">
+																		<ObjectLists>
+																			<ObjectList Name="RTPC">
+																				<RTPC Name="" ID="{5236CA10-3D2C-4F3E-A440-857601109891}" ShortID="692722878">
+																					<PropertyList>
+																						<Property Name="PropertyName" Type="string" Value="FullBandGain"/>
+																					</PropertyList>
+																					<ReferenceList>
+																						<Reference Name="ControlInput">
+																							<Custom>
+																								<ModulatorLfo Name="Modulator LFO (Custom)" ID="{7A66400D-DACD-4795-8E32-C736B8B9E3D7}" ShortID="481524314">
+																									<PropertyList>
+																										<Property Name="LfoFrequency" Type="Real64" Value="0"/>
+																										<Property Name="LfoSmoothing" Type="Real64" Value="51"/>
+																										<Property Name="LfoWaveform" Type="int32" Value="4"/>
+																									</PropertyList>
+																									<ObjectLists>
+																										<ObjectList Name="RTPC">
+																											<RTPC Name="" ID="{AEABE693-BA43-4090-BBB5-060FA9925932}" ShortID="80008283">
+																												<PropertyList>
+																													<Property Name="PropertyName" Type="string" Value="LfoFrequency"/>
+																												</PropertyList>
+																												<ReferenceList>
+																													<Reference Name="ControlInput">
+																														<Custom>
+																															<ModulatorLfo Name="Modulator LFO (Custom)" ID="{88C8DA82-98C4-4115-A0F6-524B7D887850}" ShortID="898256929">
+																																<PropertyList>
+																																	<Property Name="LfoDepth" Type="Real64" Value="51"/>
+																																	<Property Name="LfoFrequency" Type="Real64" Value="1.92"/>
+																																	<Property Name="LfoWaveform" Type="int32" Value="5"/>
+																																</PropertyList>
+																															</ModulatorLfo>
+																														</Custom>
+																													</Reference>
+																													<Reference Name="Curve">
+																														<Custom>
+																															<Curve Name="" ID="{EF4D680E-7086-4B77-A460-F9A8C294C88F}">
+																																<PropertyList>
+																																	<Property Name="Flags" Type="int32" Value="5"/>
+																																</PropertyList>
+																																<PointList>
+																																	<Point>
+																																		<XPos>0</XPos>
+																																		<YPos>0.01</YPos>
+																																		<Flags>21</Flags>
+																																	</Point>
+																																	<Point>
+																																		<XPos>1</XPos>
+																																		<YPos>21.8274</YPos>
+																																		<Flags>53</Flags>
+																																	</Point>
+																																</PointList>
+																															</Curve>
+																														</Custom>
+																													</Reference>
+																												</ReferenceList>
+																											</RTPC>
+																										</ObjectList>
+																									</ObjectLists>
+																								</ModulatorLfo>
+																							</Custom>
+																						</Reference>
+																						<Reference Name="Curve">
+																							<Custom>
+																								<Curve Name="" ID="{978F80D0-A53B-4AAA-B398-1190A7CD5BE4}">
+																									<PropertyList>
+																										<Property Name="Flags" Type="int32" Value="3"/>
+																									</PropertyList>
+																									<PointList>
+																										<Point>
+																											<XPos>0</XPos>
+																											<YPos>-96.3000030517578</YPos>
+																											<Flags>21</Flags>
+																										</Point>
+																										<Point>
+																											<XPos>1</XPos>
+																											<YPos>0</YPos>
+																											<Flags>53</Flags>
+																										</Point>
+																									</PointList>
+																								</Curve>
+																							</Custom>
+																						</Reference>
+																					</ReferenceList>
+																				</RTPC>
+																			</ObjectList>
+																		</ObjectLists>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+												</ObjectList>
+											</ObjectLists>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Sewers_G_Drips" ID="{EB62F2C3-EA31-4BEC-B241-6F8B73756C24}" ShortID="844582120">
 											<PropertyList>
@@ -21977,7 +22483,7 @@
 																<PropertyList>
 																	<Property Name="Enabled" Type="bool" Value="True"/>
 																	<Property Name="Max" Type="Real64" Value="2000"/>
-																	<Property Name="Min" Type="Real64" Value="-300"/>
+																	<Property Name="Min" Type="Real64" Value="-925"/>
 																</PropertyList>
 															</Modifier>
 														</ModifierInfo>
@@ -22169,7 +22675,7 @@
 																<PropertyList>
 																	<Property Name="Enabled" Type="bool" Value="True"/>
 																	<Property Name="Max" Type="Real64" Value="4800"/>
-																	<Property Name="Min" Type="Real64" Value="-300"/>
+																	<Property Name="Min" Type="Real64" Value="-1000"/>
 																</PropertyList>
 															</Modifier>
 														</ModifierInfo>
@@ -22352,6 +22858,7 @@
 										<RandomSequenceContainer Name="SFX_Sewers_I_Water" ID="{93EBA4DF-4234-4193-9BBB-2B6C027FE6A9}" ShortID="414083094">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="OverrideEffect" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -22563,10 +23070,126 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Effects">
+													<EffectSlot Name="" ID="{E0CF8161-1644-4EDB-B9FB-77C8B108E4FB}" ShortID="845048974">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Guitar Distortion (Custom)" ID="{27D8533B-4F42-48A6-8980-0DCDF127F21D}" ShortID="106818542" PluginName="Wwise Guitar Distortion" CompanyID="0" PluginID="126" PluginType="3">
+																		<PropertyList>
+																			<Property Name="DistortionDrive" Type="Real32" Value="66"/>
+																			<Property Name="DistortionType" Type="int32" Value="1"/>
+																			<Property Name="WetDryMix" Type="Real32" Value="20"/>
+																		</PropertyList>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+													<EffectSlot Name="" ID="{C332D33F-5B86-42FF-B925-51C8AAB8C236}" ShortID="578408230">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Gain (Custom)" ID="{64D7EE2A-77CF-489B-AD7D-223391D0A969}" ShortID="938403287" PluginName="Wwise Gain" CompanyID="0" PluginID="139" PluginType="3">
+																		<ObjectLists>
+																			<ObjectList Name="RTPC">
+																				<RTPC Name="" ID="{2A35E2C8-2702-4A5B-AEC8-3DC7875AEF65}" ShortID="77300771">
+																					<PropertyList>
+																						<Property Name="PropertyName" Type="string" Value="FullBandGain"/>
+																					</PropertyList>
+																					<ReferenceList>
+																						<Reference Name="ControlInput">
+																							<Custom>
+																								<ModulatorLfo Name="Modulator LFO (Custom)" ID="{27D4F9AF-1A4B-40B5-99E9-14A7D4A9AAA5}" ShortID="725902799">
+																									<PropertyList>
+																										<Property Name="LfoFrequency" Type="Real64" Value="0"/>
+																										<Property Name="LfoSmoothing" Type="Real64" Value="51"/>
+																										<Property Name="LfoWaveform" Type="int32" Value="4"/>
+																									</PropertyList>
+																									<ObjectLists>
+																										<ObjectList Name="RTPC">
+																											<RTPC Name="" ID="{636012DA-722B-4267-80F9-AF960AEEB532}" ShortID="191208317">
+																												<PropertyList>
+																													<Property Name="PropertyName" Type="string" Value="LfoFrequency"/>
+																												</PropertyList>
+																												<ReferenceList>
+																													<Reference Name="ControlInput">
+																														<Custom>
+																															<ModulatorLfo Name="Modulator LFO (Custom)" ID="{18C9D183-57F3-4C3F-B652-02809185679E}" ShortID="70956209">
+																																<PropertyList>
+																																	<Property Name="LfoDepth" Type="Real64" Value="51"/>
+																																	<Property Name="LfoFrequency" Type="Real64" Value="1.92"/>
+																																	<Property Name="LfoWaveform" Type="int32" Value="5"/>
+																																</PropertyList>
+																															</ModulatorLfo>
+																														</Custom>
+																													</Reference>
+																													<Reference Name="Curve">
+																														<Custom>
+																															<Curve Name="" ID="{30DAEF9A-6E6C-4DCF-AC62-83187E07A186}">
+																																<PropertyList>
+																																	<Property Name="Flags" Type="int32" Value="5"/>
+																																</PropertyList>
+																																<PointList>
+																																	<Point>
+																																		<XPos>0</XPos>
+																																		<YPos>0.01</YPos>
+																																		<Flags>21</Flags>
+																																	</Point>
+																																	<Point>
+																																		<XPos>1</XPos>
+																																		<YPos>21.8274</YPos>
+																																		<Flags>53</Flags>
+																																	</Point>
+																																</PointList>
+																															</Curve>
+																														</Custom>
+																													</Reference>
+																												</ReferenceList>
+																											</RTPC>
+																										</ObjectList>
+																									</ObjectLists>
+																								</ModulatorLfo>
+																							</Custom>
+																						</Reference>
+																						<Reference Name="Curve">
+																							<Custom>
+																								<Curve Name="" ID="{34A3A75F-A34E-4CB7-A38D-CD6C8EBF79DA}">
+																									<PropertyList>
+																										<Property Name="Flags" Type="int32" Value="3"/>
+																									</PropertyList>
+																									<PointList>
+																										<Point>
+																											<XPos>0</XPos>
+																											<YPos>-96.3000030517578</YPos>
+																											<Flags>21</Flags>
+																										</Point>
+																										<Point>
+																											<XPos>1</XPos>
+																											<YPos>0</YPos>
+																											<Flags>53</Flags>
+																										</Point>
+																									</PointList>
+																								</Curve>
+																							</Custom>
+																						</Reference>
+																					</ReferenceList>
+																				</RTPC>
+																			</ObjectList>
+																		</ObjectLists>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+												</ObjectList>
+											</ObjectLists>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Sewers_J_Water_Under" ID="{504BF7EB-5416-49D5-881D-05827C1BD1EA}" ShortID="893727661">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="OverrideEffect" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -22758,6 +23381,120 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Effects">
+													<EffectSlot Name="" ID="{33D83EE6-9344-481E-A6DA-5B7F30C9FB71}" ShortID="951446402">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Guitar Distortion (Custom)" ID="{7FFE929A-9B14-4BFD-9474-950870F275A0}" ShortID="810118480" PluginName="Wwise Guitar Distortion" CompanyID="0" PluginID="126" PluginType="3">
+																		<PropertyList>
+																			<Property Name="DistortionDrive" Type="Real32" Value="66"/>
+																			<Property Name="DistortionType" Type="int32" Value="1"/>
+																			<Property Name="WetDryMix" Type="Real32" Value="20"/>
+																		</PropertyList>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+													<EffectSlot Name="" ID="{09D727AF-2935-461A-A9FD-D759B52775A5}" ShortID="697681311">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Gain (Custom)" ID="{B3875445-C715-407B-9427-698CEEE5DF30}" ShortID="352841498" PluginName="Wwise Gain" CompanyID="0" PluginID="139" PluginType="3">
+																		<ObjectLists>
+																			<ObjectList Name="RTPC">
+																				<RTPC Name="" ID="{91A8B807-4303-48DE-8AFD-CC903AD47A6F}" ShortID="883924653">
+																					<PropertyList>
+																						<Property Name="PropertyName" Type="string" Value="FullBandGain"/>
+																					</PropertyList>
+																					<ReferenceList>
+																						<Reference Name="ControlInput">
+																							<Custom>
+																								<ModulatorLfo Name="Modulator LFO (Custom)" ID="{9CF19B66-6FA6-4E71-8136-98A518592E52}" ShortID="432883047">
+																									<PropertyList>
+																										<Property Name="LfoFrequency" Type="Real64" Value="0"/>
+																										<Property Name="LfoSmoothing" Type="Real64" Value="40"/>
+																										<Property Name="LfoWaveform" Type="int32" Value="4"/>
+																									</PropertyList>
+																									<ObjectLists>
+																										<ObjectList Name="RTPC">
+																											<RTPC Name="" ID="{7EF23E9C-25D4-490E-BB11-E2D736453144}" ShortID="169220181">
+																												<PropertyList>
+																													<Property Name="PropertyName" Type="string" Value="LfoFrequency"/>
+																												</PropertyList>
+																												<ReferenceList>
+																													<Reference Name="ControlInput">
+																														<Custom>
+																															<ModulatorLfo Name="Modulator LFO (Custom)" ID="{CEF85F90-D495-4CDF-ABAD-6CD4901C68E0}" ShortID="751948620">
+																																<PropertyList>
+																																	<Property Name="LfoFrequency" Type="Real64" Value="1.92"/>
+																																	<Property Name="LfoWaveform" Type="int32" Value="5"/>
+																																</PropertyList>
+																															</ModulatorLfo>
+																														</Custom>
+																													</Reference>
+																													<Reference Name="Curve">
+																														<Custom>
+																															<Curve Name="" ID="{13077C5A-A6C7-49ED-B6AF-8159ADE70E88}">
+																																<PropertyList>
+																																	<Property Name="Flags" Type="int32" Value="5"/>
+																																</PropertyList>
+																																<PointList>
+																																	<Point>
+																																		<XPos>0</XPos>
+																																		<YPos>0.01</YPos>
+																																		<Flags>21</Flags>
+																																	</Point>
+																																	<Point>
+																																		<XPos>1</XPos>
+																																		<YPos>21.8274</YPos>
+																																		<Flags>53</Flags>
+																																	</Point>
+																																</PointList>
+																															</Curve>
+																														</Custom>
+																													</Reference>
+																												</ReferenceList>
+																											</RTPC>
+																										</ObjectList>
+																									</ObjectLists>
+																								</ModulatorLfo>
+																							</Custom>
+																						</Reference>
+																						<Reference Name="Curve">
+																							<Custom>
+																								<Curve Name="" ID="{B416A5CB-651A-40FD-B8B9-99A4D3E2F180}">
+																									<PropertyList>
+																										<Property Name="Flags" Type="int32" Value="3"/>
+																									</PropertyList>
+																									<PointList>
+																										<Point>
+																											<XPos>0</XPos>
+																											<YPos>-96.3000030517578</YPos>
+																											<Flags>21</Flags>
+																										</Point>
+																										<Point>
+																											<XPos>1</XPos>
+																											<YPos>0</YPos>
+																											<Flags>53</Flags>
+																										</Point>
+																									</PointList>
+																								</Curve>
+																							</Custom>
+																						</Reference>
+																					</ReferenceList>
+																				</RTPC>
+																			</ObjectList>
+																		</ObjectLists>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+												</ObjectList>
+											</ObjectLists>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Sewers_K_Water" ID="{04F68FA9-1144-415C-B194-02C9C9232BDF}" ShortID="614947341">
 											<PropertyList>
@@ -22766,6 +23503,7 @@
 														<Value>16</Value>
 													</ValueList>
 												</Property>
+												<Property Name="OverrideEffect" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -23052,6 +23790,121 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Effects">
+													<EffectSlot Name="" ID="{7DD03503-3F90-4F73-9F2B-955D16AAB23C}" ShortID="2022823">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Guitar Distortion (Custom)" ID="{8839D72F-CFA4-4B9C-8BE8-3851039A2152}" ShortID="863524920" PluginName="Wwise Guitar Distortion" CompanyID="0" PluginID="126" PluginType="3">
+																		<PropertyList>
+																			<Property Name="DistortionDrive" Type="Real32" Value="66"/>
+																			<Property Name="DistortionType" Type="int32" Value="1"/>
+																			<Property Name="WetDryMix" Type="Real32" Value="20"/>
+																		</PropertyList>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+													<EffectSlot Name="" ID="{D84133CB-75DE-4E8A-B199-04AFD8048CD6}" ShortID="420816305">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Gain (Custom)" ID="{2CFCFC9B-BA32-4A56-91A0-89D63A1DE143}" ShortID="393695116" PluginName="Wwise Gain" CompanyID="0" PluginID="139" PluginType="3">
+																		<ObjectLists>
+																			<ObjectList Name="RTPC">
+																				<RTPC Name="" ID="{F79CAA63-0CB3-457C-AE53-9CBE5385386B}" ShortID="519091189">
+																					<PropertyList>
+																						<Property Name="PropertyName" Type="string" Value="FullBandGain"/>
+																					</PropertyList>
+																					<ReferenceList>
+																						<Reference Name="ControlInput">
+																							<Custom>
+																								<ModulatorLfo Name="Modulator LFO (Custom)" ID="{38C4957E-5695-4353-AF8C-71454EB79439}" ShortID="245568695">
+																									<PropertyList>
+																										<Property Name="LfoFrequency" Type="Real64" Value="0"/>
+																										<Property Name="LfoSmoothing" Type="Real64" Value="51"/>
+																										<Property Name="LfoWaveform" Type="int32" Value="4"/>
+																									</PropertyList>
+																									<ObjectLists>
+																										<ObjectList Name="RTPC">
+																											<RTPC Name="" ID="{98BD1C19-4F4D-4542-B2F0-1A9124919449}" ShortID="689709172">
+																												<PropertyList>
+																													<Property Name="PropertyName" Type="string" Value="LfoFrequency"/>
+																												</PropertyList>
+																												<ReferenceList>
+																													<Reference Name="ControlInput">
+																														<Custom>
+																															<ModulatorLfo Name="Modulator LFO (Custom)" ID="{74AC8810-DBC6-4A1D-936D-90FA8009CF78}" ShortID="197523211">
+																																<PropertyList>
+																																	<Property Name="LfoDepth" Type="Real64" Value="51"/>
+																																	<Property Name="LfoFrequency" Type="Real64" Value="1.92"/>
+																																	<Property Name="LfoWaveform" Type="int32" Value="5"/>
+																																</PropertyList>
+																															</ModulatorLfo>
+																														</Custom>
+																													</Reference>
+																													<Reference Name="Curve">
+																														<Custom>
+																															<Curve Name="" ID="{0CC33D6A-E14B-49A4-8031-1A840B101673}">
+																																<PropertyList>
+																																	<Property Name="Flags" Type="int32" Value="5"/>
+																																</PropertyList>
+																																<PointList>
+																																	<Point>
+																																		<XPos>0</XPos>
+																																		<YPos>0.01</YPos>
+																																		<Flags>21</Flags>
+																																	</Point>
+																																	<Point>
+																																		<XPos>1</XPos>
+																																		<YPos>21.8274</YPos>
+																																		<Flags>53</Flags>
+																																	</Point>
+																																</PointList>
+																															</Curve>
+																														</Custom>
+																													</Reference>
+																												</ReferenceList>
+																											</RTPC>
+																										</ObjectList>
+																									</ObjectLists>
+																								</ModulatorLfo>
+																							</Custom>
+																						</Reference>
+																						<Reference Name="Curve">
+																							<Custom>
+																								<Curve Name="" ID="{A24CCD90-9DE2-4943-970A-AF040BE7A6D4}">
+																									<PropertyList>
+																										<Property Name="Flags" Type="int32" Value="3"/>
+																									</PropertyList>
+																									<PointList>
+																										<Point>
+																											<XPos>0</XPos>
+																											<YPos>-96.3000030517578</YPos>
+																											<Flags>21</Flags>
+																										</Point>
+																										<Point>
+																											<XPos>1</XPos>
+																											<YPos>0</YPos>
+																											<Flags>53</Flags>
+																										</Point>
+																									</PointList>
+																								</Curve>
+																							</Custom>
+																						</Reference>
+																					</ReferenceList>
+																				</RTPC>
+																			</ObjectList>
+																		</ObjectLists>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+												</ObjectList>
+											</ObjectLists>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Sewers_L_Water" ID="{1CB64881-43F5-49EB-B7B3-9ECFF9E8C74A}" ShortID="917989079">
 											<PropertyList>
@@ -23060,6 +23913,7 @@
 														<Value>15</Value>
 													</ValueList>
 												</Property>
+												<Property Name="OverrideEffect" Type="bool" Value="True"/>
 												<Property Name="Pitch" Type="int32">
 													<ModifierList>
 														<ModifierInfo>
@@ -23346,6 +24200,121 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Effects">
+													<EffectSlot Name="" ID="{110274E8-9209-46D5-9EAE-1976D45D9CDE}" ShortID="318016337">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Guitar Distortion (Custom)" ID="{383FFF1F-5886-4266-A741-890AA9548511}" ShortID="406670243" PluginName="Wwise Guitar Distortion" CompanyID="0" PluginID="126" PluginType="3">
+																		<PropertyList>
+																			<Property Name="DistortionDrive" Type="Real32" Value="66"/>
+																			<Property Name="DistortionType" Type="int32" Value="1"/>
+																			<Property Name="WetDryMix" Type="Real32" Value="20"/>
+																		</PropertyList>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+													<EffectSlot Name="" ID="{2C9FD228-5F89-4758-BA35-5587B0BC84FB}" ShortID="1039641021">
+														<ReferenceList>
+															<Reference Name="Effect">
+																<Custom>
+																	<Effect Name="Gain (Custom)" ID="{69C7CE27-440A-4CEF-B3DD-A05156E7C36E}" ShortID="237581025" PluginName="Wwise Gain" CompanyID="0" PluginID="139" PluginType="3">
+																		<ObjectLists>
+																			<ObjectList Name="RTPC">
+																				<RTPC Name="" ID="{20B2E605-8B0C-4EB5-B1A7-88E929D54566}" ShortID="186962665">
+																					<PropertyList>
+																						<Property Name="PropertyName" Type="string" Value="FullBandGain"/>
+																					</PropertyList>
+																					<ReferenceList>
+																						<Reference Name="ControlInput">
+																							<Custom>
+																								<ModulatorLfo Name="Modulator LFO (Custom)" ID="{2374652B-18A0-4319-9CDD-64ED417F93DE}" ShortID="359859345">
+																									<PropertyList>
+																										<Property Name="LfoFrequency" Type="Real64" Value="0"/>
+																										<Property Name="LfoSmoothing" Type="Real64" Value="51"/>
+																										<Property Name="LfoWaveform" Type="int32" Value="4"/>
+																									</PropertyList>
+																									<ObjectLists>
+																										<ObjectList Name="RTPC">
+																											<RTPC Name="" ID="{53E299B8-FD3D-4AE6-9EC9-35D08720395E}" ShortID="580872936">
+																												<PropertyList>
+																													<Property Name="PropertyName" Type="string" Value="LfoFrequency"/>
+																												</PropertyList>
+																												<ReferenceList>
+																													<Reference Name="ControlInput">
+																														<Custom>
+																															<ModulatorLfo Name="Modulator LFO (Custom)" ID="{3B383E66-54AE-4CEA-B621-1E774D664A1C}" ShortID="406976221">
+																																<PropertyList>
+																																	<Property Name="LfoDepth" Type="Real64" Value="51"/>
+																																	<Property Name="LfoFrequency" Type="Real64" Value="1.92"/>
+																																	<Property Name="LfoWaveform" Type="int32" Value="5"/>
+																																</PropertyList>
+																															</ModulatorLfo>
+																														</Custom>
+																													</Reference>
+																													<Reference Name="Curve">
+																														<Custom>
+																															<Curve Name="" ID="{EC97EE64-4E8B-44BF-974D-E0FED8C1D249}">
+																																<PropertyList>
+																																	<Property Name="Flags" Type="int32" Value="5"/>
+																																</PropertyList>
+																																<PointList>
+																																	<Point>
+																																		<XPos>0</XPos>
+																																		<YPos>0.01</YPos>
+																																		<Flags>21</Flags>
+																																	</Point>
+																																	<Point>
+																																		<XPos>1</XPos>
+																																		<YPos>21.8274</YPos>
+																																		<Flags>53</Flags>
+																																	</Point>
+																																</PointList>
+																															</Curve>
+																														</Custom>
+																													</Reference>
+																												</ReferenceList>
+																											</RTPC>
+																										</ObjectList>
+																									</ObjectLists>
+																								</ModulatorLfo>
+																							</Custom>
+																						</Reference>
+																						<Reference Name="Curve">
+																							<Custom>
+																								<Curve Name="" ID="{0183A608-2788-4748-A4C7-019F42872878}">
+																									<PropertyList>
+																										<Property Name="Flags" Type="int32" Value="3"/>
+																									</PropertyList>
+																									<PointList>
+																										<Point>
+																											<XPos>0</XPos>
+																											<YPos>-96.3000030517578</YPos>
+																											<Flags>21</Flags>
+																										</Point>
+																										<Point>
+																											<XPos>1</XPos>
+																											<YPos>0</YPos>
+																											<Flags>53</Flags>
+																										</Point>
+																									</PointList>
+																								</Curve>
+																							</Custom>
+																						</Reference>
+																					</ReferenceList>
+																				</RTPC>
+																			</ObjectList>
+																		</ObjectLists>
+																	</Effect>
+																</Custom>
+															</Reference>
+														</ReferenceList>
+													</EffectSlot>
+												</ObjectList>
+											</ObjectLists>
 										</RandomSequenceContainer>
 										<BlendContainer Name="SFX_Sewers_M_NYC" ID="{FB5D5EC0-63FA-44A5-B483-538BAD1DC03C}" ShortID="521228359">
 											<PropertyList>
@@ -23416,11 +24385,33 @@
 										</BlendContainer>
 										<BlendContainer Name="SFX_Sewers_N_NYC" ID="{00D61783-1F20-447A-8BD8-B317F83704B8}" ShortID="967338230">
 											<PropertyList>
-												<Property Name="OverrideEffect" Type="bool" Value="True"/>
+												<Property Name="Pitch" Type="int32">
+													<ModifierList>
+														<ModifierInfo>
+															<Modifier Name="" ID="{5238B467-A133-4A1A-8543-2DDFE21E096B}">
+																<PropertyList>
+																	<Property Name="Enabled" Type="bool" Value="True"/>
+																	<Property Name="Max" Type="Real64" Value="500"/>
+																	<Property Name="Min" Type="Real64" Value="-500"/>
+																</PropertyList>
+															</Modifier>
+														</ModifierInfo>
+													</ModifierList>
+												</Property>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
 														<Value>-9</Value>
 													</ValueList>
+													<ModifierList>
+														<ModifierInfo>
+															<Modifier Name="" ID="{17EB0B12-29E1-4CD9-9C24-599699507D3E}">
+																<PropertyList>
+																	<Property Name="Enabled" Type="bool" Value="True"/>
+																	<Property Name="Min" Type="Real64" Value="-9"/>
+																</PropertyList>
+															</Modifier>
+														</ModifierInfo>
+													</ModifierList>
 												</Property>
 											</PropertyList>
 											<ReferenceList>
@@ -23435,6 +24426,7 @@
 												<Sound Name="SFX_Sewers_N_NYC" ID="{CF932FC2-034E-4A75-9160-33A40DDC572E}" ShortID="198789007">
 													<PropertyList>
 														<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+														<Property Name="OverrideEffect" Type="bool" Value="True"/>
 													</PropertyList>
 													<ReferenceList>
 														<Reference Name="Conversion">
@@ -23453,29 +24445,33 @@
 															</MediaIDList>
 														</AudioFileSource>
 													</ChildrenList>
+													<ObjectLists>
+														<ObjectList Name="Effects">
+															<EffectSlot Name="" ID="{C0961BF6-444B-4AC1-976B-1C70AA5E77D9}" ShortID="856208795">
+																<ReferenceList>
+																	<Reference Name="Effect">
+																		<Custom>
+																			<Effect Name="Parametric EQ (Custom)" ID="{9133E177-BC4B-4F04-A7AD-2AD6D86B0814}" ShortID="323729065" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
+																				<PropertyList>
+																					<Property Name="FrequencyBand1" Type="Real32" Value="80.38901"/>
+																					<Property Name="FrequencyBand3" Type="Real32" Value="624.916"/>
+																					<Property Name="GainBand1" Type="Real32" Value="-5.765363"/>
+																					<Property Name="GainBand3" Type="Real32" Value="5.22905"/>
+																					<Property Name="OnOffBand3" Type="bool" Value="True"/>
+																					<Property Name="QFactorBand3" Type="Real32" Value="0.6"/>
+																				</PropertyList>
+																			</Effect>
+																		</Custom>
+																	</Reference>
+																</ReferenceList>
+															</EffectSlot>
+														</ObjectList>
+													</ObjectLists>
 													<ActiveSourceList>
 														<ActiveSource Name="SFX_Sewers_N_NYC" ID="{F27DDE7B-14A5-487C-A02E-1CA3CCABFF0E}" Platform="Linked"/>
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
-											<ObjectLists>
-												<ObjectList Name="Effects">
-													<EffectSlot Name="" ID="{F08946F3-17AC-4277-A005-195B5F65AC41}" ShortID="881068815">
-														<ReferenceList>
-															<Reference Name="Effect">
-																<Custom>
-																	<Effect Name="Parametric EQ (Custom)" ID="{BB3BC548-2143-498E-938F-FEC5D5E7DE3A}" ShortID="640300665" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
-																		<PropertyList>
-																			<Property Name="FrequencyBand1" Type="Real32" Value="80.38901"/>
-																			<Property Name="GainBand1" Type="Real32" Value="-5.765363"/>
-																		</PropertyList>
-																	</Effect>
-																</Custom>
-															</Reference>
-														</ReferenceList>
-													</EffectSlot>
-												</ObjectList>
-											</ObjectLists>
 										</BlendContainer>
 									</ChildrenList>
 									<StateInfo>
@@ -23503,6 +24499,7 @@
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23513,6 +24510,7 @@
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23523,6 +24521,7 @@
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23533,6 +24532,7 @@
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23554,6 +24554,7 @@
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23564,6 +24565,7 @@
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23573,7 +24575,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-12"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23584,6 +24586,7 @@
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23627,6 +24630,7 @@
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23648,6 +24652,7 @@
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23658,6 +24663,7 @@
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23668,6 +24674,7 @@
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23677,7 +24684,7 @@
 													<PropertyList>
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
-														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-12"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23699,6 +24706,7 @@
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23731,6 +24739,7 @@
 														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
 														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
 														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
 													</PropertyList>
 												</CustomState>
 											</CustomState>
@@ -23747,6 +24756,61 @@
 											</CustomState>
 										</CustomStateList>
 									</StateInfo>
+									<ObjectLists>
+										<ObjectList Name="RTPC">
+											<RTPC Name="" ID="{DB8215EB-F65B-48EF-BB18-40D97DF20828}" ShortID="805608792">
+												<PropertyList>
+													<Property Name="PropertyName" Type="string" Value="Lowpass"/>
+												</PropertyList>
+												<ReferenceList>
+													<Reference Name="ControlInput">
+														<ObjectRef Name="RTPC_Azimuth" ID="{8C717E47-5FFC-44D9-B2AC-CCC94EE9EDE7}" WorkUnitID="{CD87D003-6EB8-45E4-BEC9-3829C2568A1E}"/>
+													</Reference>
+													<Reference Name="Curve">
+														<Custom>
+															<Curve Name="" ID="{BCBD8DB7-3481-4050-988B-1EEB8E5038BC}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="65537"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>-180</XPos>
+																		<YPos>20</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>-80</XPos>
+																		<YPos>20</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>-49.5445544554456</XPos>
+																		<YPos>0</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>48.8316831683168</XPos>
+																		<YPos>0</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>80</XPos>
+																		<YPos>20</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>180</XPos>
+																		<YPos>20</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</RTPC>
+										</ObjectList>
+									</ObjectLists>
 								</BlendContainer>
 								<BlendContainer Name="SFX_Subway_Train" ID="{56C9048E-34AE-4028-BFE3-645F75A94812}" ShortID="653698873">
 									<PropertyList>
@@ -33750,22 +34814,25 @@
 												<Reference Name="Attenuation">
 													<Custom>
 														<Attenuation Name="Attenuation (Custom)" ID="{46FFE6B3-634A-4177-B271-C516887BCD55}" ShortID="819112400">
+															<PropertyList>
+																<Property Name="RadiusMax" Type="Real64" Value="90"/>
+															</PropertyList>
 															<CurveUsageInfoList>
 																<VolumeDryUsage>
 																	<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
-																		<Curve Name="VolumeDry" ID="{9C8005AC-BE86-4CEE-B94B-7871A83BE949}">
+																		<Curve Name="VolumeDry" ID="{6B8A94E6-A584-42C8-82B0-C8C6AB3234F4}">
 																			<PropertyList>
 																				<Property Name="Flags" Type="int32" Value="3"/>
 																			</PropertyList>
 																			<PointList>
 																				<Point>
 																					<XPos>0</XPos>
-																					<YPos>0</YPos>
+																					<YPos>-6.08615</YPos>
 																					<Flags>5</Flags>
-																					<SegmentShape>Log1</SegmentShape>
+																					<SegmentShape>Exp2</SegmentShape>
 																				</Point>
 																				<Point>
-																					<XPos>100</XPos>
+																					<XPos>90</XPos>
 																					<YPos>-200</YPos>
 																					<Flags>37</Flags>
 																				</Point>
@@ -33777,10 +34844,52 @@
 																	<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
 																</VolumeWetGameUsage>
 																<VolumeWetUserUsage>
-																	<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																		<Curve Name="VolumeWetUser" ID="{E4A577AE-B5A8-4123-A2E8-77E01AE19B53}">
+																			<PropertyList>
+																				<Property Name="Flags" Type="int32" Value="3"/>
+																			</PropertyList>
+																			<PointList>
+																				<Point>
+																					<XPos>0</XPos>
+																					<YPos>-2.52057</YPos>
+																					<Flags>5</Flags>
+																					<SegmentShape>Exp3</SegmentShape>
+																				</Point>
+																				<Point>
+																					<XPos>90</XPos>
+																					<YPos>-200</YPos>
+																					<Flags>37</Flags>
+																				</Point>
+																			</PointList>
+																		</Curve>
+																	</CurveUsageInfo>
 																</VolumeWetUserUsage>
 																<LowPassFilterUsage>
-																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																		<Curve Name="LowPassFilter" ID="{6A1FE4A4-2919-4B3E-BBEF-E1F0FB2605CF}">
+																			<PropertyList>
+																				<Property Name="Flags" Type="int32" Value="65537"/>
+																			</PropertyList>
+																			<PointList>
+																				<Point>
+																					<XPos>0</XPos>
+																					<YPos>0</YPos>
+																					<Flags>5</Flags>
+																				</Point>
+																				<Point>
+																					<XPos>17.238312</XPos>
+																					<YPos>0</YPos>
+																					<Flags>0</Flags>
+																				</Point>
+																				<Point>
+																					<XPos>90</XPos>
+																					<YPos>60</YPos>
+																					<Flags>37</Flags>
+																				</Point>
+																			</PointList>
+																		</Curve>
+																	</CurveUsageInfo>
 																</LowPassFilterUsage>
 																<HighPassFilterUsage>
 																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
@@ -33789,7 +34898,40 @@
 																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
 																</DualShelfUsage>
 																<SpreadUsage>
-																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
+																	<CurveUsageInfo Platform="Linked" CurveToUse="None">
+																		<Curve Name="Spread" ID="{8F53329F-3CA2-4FC7-B7C9-7DDB63EC4876}">
+																			<PropertyList>
+																				<Property Name="Flags" Type="int32" Value="1"/>
+																			</PropertyList>
+																			<PointList>
+																				<Point>
+																					<XPos>0</XPos>
+																					<YPos>100</YPos>
+																					<Flags>5</Flags>
+																				</Point>
+																				<Point>
+																					<XPos>10.647324</XPos>
+																					<YPos>100</YPos>
+																					<Flags>0</Flags>
+																				</Point>
+																				<Point>
+																					<XPos>24.50892</XPos>
+																					<YPos>100</YPos>
+																					<Flags>0</Flags>
+																				</Point>
+																				<Point>
+																					<XPos>37.16517</XPos>
+																					<YPos>0</YPos>
+																					<Flags>0</Flags>
+																				</Point>
+																				<Point>
+																					<XPos>90</XPos>
+																					<YPos>0</YPos>
+																					<Flags>37</Flags>
+																				</Point>
+																			</PointList>
+																		</Curve>
+																	</CurveUsageInfo>
 																</SpreadUsage>
 																<FocusUsage>
 																	<CurveUsageInfo Platform="Linked" CurveToUse="None"/>
@@ -35216,9 +36358,9 @@
 												<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
 												<CustomState Name="" ID="{04C33052-1869-4938-8730-8D69EAA2218A}" ShortID="945347638">
 													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-15"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
-														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
+														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-12"/>
 														<Property Name="Volume" Type="Real64" Value="-9"/>
 													</PropertyList>
 												</CustomState>
@@ -35249,9 +36391,9 @@
 												<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
 												<CustomState Name="" ID="{6D92E891-B76F-4EAA-8D2E-5AED52F3844A}" ShortID="449349026">
 													<PropertyList>
-														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-15"/>
-														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-18"/>
-														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-108"/>
+														<Property Name="UserAuxSendVolume0" Type="Real64" Value="-9"/>
+														<Property Name="UserAuxSendVolume1" Type="Real64" Value="-12"/>
+														<Property Name="UserAuxSendVolume2" Type="Real64" Value="-12"/>
 														<Property Name="Volume" Type="Real64" Value="-9"/>
 													</PropertyList>
 												</CustomState>
@@ -35456,6 +36598,61 @@
 											</CustomState>
 										</CustomStateList>
 									</StateInfo>
+									<ObjectLists>
+										<ObjectList Name="RTPC">
+											<RTPC Name="" ID="{AEC496AD-BDA2-41F9-8C56-F3DCBC8AEB22}" ShortID="469939290">
+												<PropertyList>
+													<Property Name="PropertyName" Type="string" Value="Lowpass"/>
+												</PropertyList>
+												<ReferenceList>
+													<Reference Name="ControlInput">
+														<ObjectRef Name="RTPC_Azimuth" ID="{8C717E47-5FFC-44D9-B2AC-CCC94EE9EDE7}" WorkUnitID="{CD87D003-6EB8-45E4-BEC9-3829C2568A1E}"/>
+													</Reference>
+													<Reference Name="Curve">
+														<Custom>
+															<Curve Name="" ID="{D61789EA-AE8B-4D1A-A3E0-6D68286994C4}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="65537"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>-180</XPos>
+																		<YPos>20</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>-80</XPos>
+																		<YPos>20</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>-49.5445544554456</XPos>
+																		<YPos>0</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>48.8316831683168</XPos>
+																		<YPos>0</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>80</XPos>
+																		<YPos>20</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>180</XPos>
+																		<YPos>20</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</RTPC>
+										</ObjectList>
+									</ObjectLists>
 								</RandomSequenceContainer>
 								<RandomSequenceContainer Name="SFX_Rats" ID="{A974517A-296D-480E-9995-5E8A076D5612}" ShortID="227916093">
 									<PropertyList>
@@ -35544,7 +36741,26 @@
 															<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
 														</VolumeWetGameUsage>
 														<VolumeWetUserUsage>
-															<CurveUsageInfo Platform="Linked" CurveToUse="UseVolumeDry"/>
+															<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
+																<Curve Name="VolumeWetUser" ID="{F8D74B68-E467-4757-B05B-3DCD5D9B1369}">
+																	<PropertyList>
+																		<Property Name="Flags" Type="int32" Value="3"/>
+																	</PropertyList>
+																	<PointList>
+																		<Point>
+																			<XPos>0</XPos>
+																			<YPos>-2.52057</YPos>
+																			<Flags>5</Flags>
+																			<SegmentShape>Exp3</SegmentShape>
+																		</Point>
+																		<Point>
+																			<XPos>75</XPos>
+																			<YPos>-200</YPos>
+																			<Flags>37</Flags>
+																		</Point>
+																	</PointList>
+																</Curve>
+															</CurveUsageInfo>
 														</VolumeWetUserUsage>
 														<LowPassFilterUsage>
 															<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
@@ -36202,9 +37418,71 @@
 											</CustomState>
 										</CustomStateList>
 									</StateInfo>
+									<ObjectLists>
+										<ObjectList Name="RTPC">
+											<RTPC Name="" ID="{3AEC066A-0C59-4295-A494-278844E19FED}" ShortID="767328428">
+												<PropertyList>
+													<Property Name="PropertyName" Type="string" Value="Lowpass"/>
+												</PropertyList>
+												<ReferenceList>
+													<Reference Name="ControlInput">
+														<ObjectRef Name="RTPC_Azimuth" ID="{8C717E47-5FFC-44D9-B2AC-CCC94EE9EDE7}" WorkUnitID="{CD87D003-6EB8-45E4-BEC9-3829C2568A1E}"/>
+													</Reference>
+													<Reference Name="Curve">
+														<Custom>
+															<Curve Name="" ID="{1769B3EA-8D16-46CB-981A-114D7D10A167}">
+																<PropertyList>
+																	<Property Name="Flags" Type="int32" Value="65537"/>
+																</PropertyList>
+																<PointList>
+																	<Point>
+																		<XPos>-180</XPos>
+																		<YPos>20</YPos>
+																		<Flags>5</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>-80</XPos>
+																		<YPos>20</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>-49.5445544554456</XPos>
+																		<YPos>0</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>48.8316831683168</XPos>
+																		<YPos>0</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>80</XPos>
+																		<YPos>20</YPos>
+																		<Flags>0</Flags>
+																	</Point>
+																	<Point>
+																		<XPos>180</XPos>
+																		<YPos>20</YPos>
+																		<Flags>37</Flags>
+																	</Point>
+																</PointList>
+															</Curve>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</RTPC>
+										</ObjectList>
+									</ObjectLists>
 								</RandomSequenceContainer>
 								<BlendContainer Name="SFX_Wind_Howl" ID="{CA4562EB-0271-4F90-85CA-DAC20A07929D}" ShortID="991064843">
 									<PropertyList>
+										<Property Name="OverridePositioning" Type="bool" Value="True"/>
+										<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
+										<Property Name="UserAuxSendVolume0" Type="Real64">
+											<ValueList>
+												<Value>-12</Value>
+											</ValueList>
+										</Property>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-9</Value>
@@ -36217,6 +37495,9 @@
 										</Reference>
 										<Reference Name="OutputBus">
 											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+										<Reference Name="UserAuxSend0">
+											<ObjectRef Name="REV_LongUltra" ID="{43E67AD9-087F-47C6-82F2-818148AB0A10}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
@@ -36472,208 +37753,6 @@
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
-											<StateInfo>
-												<StateGroupList>
-													<StateGroupInfo>
-														<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
-														<StateGroupInfo Name="" ID="{36B1F9B4-E35C-4116-8924-1CBEE0A0B15C}" ShortID="1038155127"/>
-													</StateGroupInfo>
-												</StateGroupList>
-												<CustomStateList>
-													<CustomState>
-														<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
-														<CustomState Name="" ID="{3A4DD39E-674F-46A3-B0D9-43B959C1859A}" ShortID="562488119">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
-														<CustomState Name="" ID="{0DAC7CEC-B03F-4BC9-A596-E766EF93A98F}" ShortID="1038960848">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-12"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
-														<CustomState Name="" ID="{D47BD80A-CB37-4FA8-AB1D-3EAACD54498D}" ShortID="389170768">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-12"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
-														<CustomState Name="" ID="{266A7335-69E1-4EF2-85F7-85E801EC707D}" ShortID="77837685">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-16"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
-														<CustomState Name="" ID="{4619F90B-C29F-426A-8CBF-A04BE5A09366}" ShortID="289625569">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
-														<CustomState Name="" ID="{5E9F5523-03D4-460E-8C4F-D3C3DEB99BF7}" ShortID="642937098">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-12"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
-														<CustomState Name="" ID="{C380B03B-35DB-4BC1-9751-0EECE106BF87}" ShortID="28907276">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
-														<CustomState Name="" ID="{1419D604-C8DD-4058-9C09-2F3AD1E294AF}" ShortID="825746301">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
-														<CustomState Name="" ID="{BBF49BB1-F04E-431D-B7E4-43942C5BD394}" ShortID="947985849">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
-														<CustomState Name="" ID="{2B1C0E93-6839-4AF2-8889-9DCEC1C96ABF}" ShortID="1039274032">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
-														<CustomState Name="" ID="{D8FDD9AC-C8DE-4808-9FC8-044244B346F8}" ShortID="833060154">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
-														<CustomState Name="" ID="{FA6194A4-3E22-4B18-AA17-D135A1D1F4A7}" ShortID="853663054">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
-														<CustomState Name="" ID="{02BDF7DD-3D03-4029-9B1D-8D97A90CE0AE}" ShortID="562102380">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
-														<CustomState Name="" ID="{FE3A6222-3274-485C-BB15-727DD7C8ABEC}" ShortID="176007445">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
-														<CustomState Name="" ID="{150245F0-BCAD-4F2A-AC8B-1DFC412E1882}" ShortID="524437288">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
-														<CustomState Name="" ID="{DDAC9E78-1139-4EDE-B0C1-08ACAD955C90}" ShortID="812434063">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
-														<CustomState Name="" ID="{4212D59C-87B9-4B64-A97F-AE932B98BA99}" ShortID="675474047">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-12"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
-														<CustomState Name="" ID="{4E18BFED-BDF9-4F93-8002-50A662C6DC5A}" ShortID="961004304">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
-														<CustomState Name="" ID="{61BAE748-4CF4-4224-8A30-3AAD7322F486}" ShortID="905147730">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
-														<CustomState Name="" ID="{738FBBCD-C7C6-4C23-84DC-FE3C0288634F}" ShortID="1026754329">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
-														<CustomState Name="" ID="{9A0515BC-30B1-4839-8D89-C600B9142650}" ShortID="273106342">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
-														<CustomState Name="" ID="{931E9CC5-3A1B-41ED-8A33-A6F6C0F07B91}" ShortID="640668378">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
-														<CustomState Name="" ID="{98050D8D-0FAD-4776-B7B7-7B7A294096E6}" ShortID="785752070">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-													<CustomState>
-														<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
-														<CustomState Name="" ID="{E1E67473-0E99-4C98-9555-28B7947A7224}" ShortID="581093297">
-															<PropertyList>
-																<Property Name="Volume" Type="Real64" Value="-108"/>
-															</PropertyList>
-														</CustomState>
-													</CustomState>
-												</CustomStateList>
-											</StateInfo>
 										</RandomSequenceContainer>
 										<RandomSequenceContainer Name="SFX_Wind_Howl_B" ID="{A14CFAEC-96EC-4404-BE2C-F3C4C8491346}" ShortID="89065081">
 											<PropertyList>
@@ -36878,6 +37957,208 @@
 											</ChildrenList>
 										</RandomSequenceContainer>
 									</ChildrenList>
+									<StateInfo>
+										<StateGroupList>
+											<StateGroupInfo>
+												<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+												<StateGroupInfo Name="" ID="{944959E5-607E-41B0-8B21-7CC2D1FB22FD}" ShortID="101502243"/>
+											</StateGroupInfo>
+										</StateGroupList>
+										<CustomStateList>
+											<CustomState>
+												<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+												<CustomState Name="" ID="{18487F94-FDB1-4C4C-88B3-B3E70FBFC6C9}" ShortID="983275938">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+												<CustomState Name="" ID="{BBD562AD-C79A-41A5-898C-C29D9B0529B8}" ShortID="326647126">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-12"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+												<CustomState Name="" ID="{C90F5049-487E-455A-AF59-0CACA45324BA}" ShortID="380671491">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-12"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+												<CustomState Name="" ID="{EB5899EA-7BD3-474A-AF8E-042F7D43EBB7}" ShortID="534527518">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-16"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+												<CustomState Name="" ID="{E0CBA541-D2EC-4236-9258-C31FC971CEED}" ShortID="989709582">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+												<CustomState Name="" ID="{B2522316-EA1B-4060-9DFC-96C0852917DF}" ShortID="357127636">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-12"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+												<CustomState Name="" ID="{3576B12B-AA07-4C14-966C-EDC72914DC00}" ShortID="828773589">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+												<CustomState Name="" ID="{2F8D6953-28F1-4514-8CFD-52933A98BADA}" ShortID="864993163">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-12"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+												<CustomState Name="" ID="{12E1B199-790D-4867-AE74-F6789C9226E7}" ShortID="1022377823">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+												<CustomState Name="" ID="{85E53A5B-59FF-4D1A-90F7-6AF328B5A8CF}" ShortID="34427325">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+												<CustomState Name="" ID="{E31FF016-2039-4809-A4A7-45448811AA81}" ShortID="412840737">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+												<CustomState Name="" ID="{C3BEE7FD-C7E7-4E3E-8D29-25FE0605F3FB}" ShortID="27269484">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+												<CustomState Name="" ID="{85B4C8AF-A90C-4275-AEE8-592F283A08A1}" ShortID="1068458563">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+												<CustomState Name="" ID="{57E2B797-95BE-4273-BA26-B6C209A4FFF9}" ShortID="1058469114">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+												<CustomState Name="" ID="{0CB930A5-7424-4744-BEF0-BA57E70BD6A5}" ShortID="657711961">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+												<CustomState Name="" ID="{09BC32DF-A455-4DBF-8EDE-5F4FCA81BC3A}" ShortID="65884008">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+												<CustomState Name="" ID="{162E0897-C5F6-4D89-A7D7-10104A657975}" ShortID="789379981">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-12"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+												<CustomState Name="" ID="{13257D4C-1686-472F-891A-1AA4FD0AC523}" ShortID="564847587">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+												<CustomState Name="" ID="{5A9129F7-20F5-4999-BA45-98B7D7329F51}" ShortID="309315367">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+												<CustomState Name="" ID="{56AF4289-EBA0-46EF-A2F1-4E76FA1D8EDB}" ShortID="554526040">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+												<CustomState Name="" ID="{C6686461-2106-4761-9EAF-CDC8FD670CD2}" ShortID="148367149">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+												<CustomState Name="" ID="{9D5993BE-F369-4BF4-B95C-C8C030F8BF61}" ShortID="185841044">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+												<CustomState Name="" ID="{7704C8FC-933C-4DBE-8688-8BBF1F8EF8F5}" ShortID="498838073">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-6"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+											<CustomState>
+												<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+												<CustomState Name="" ID="{FD6447E4-78CC-4734-B3D1-2B830A219068}" ShortID="1018095316">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64" Value="-108"/>
+													</PropertyList>
+												</CustomState>
+											</CustomState>
+										</CustomStateList>
+									</StateInfo>
 								</BlendContainer>
 								<BlendContainer Name="SFX_Impact_Metal" ID="{615E84A5-205D-4CAC-9EC8-57742B2675D9}" ShortID="348305869">
 									<PropertyList>
@@ -42597,7 +43878,11 @@
 													</CustomState>
 													<CustomState>
 														<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
-														<CustomState Name="" ID="{CF2ACF9B-B1FC-4F07-BE89-929DA1E7E2AD}" ShortID="22703565"/>
+														<CustomState Name="" ID="{CF2ACF9B-B1FC-4F07-BE89-929DA1E7E2AD}" ShortID="22703565">
+															<PropertyList>
+																<Property Name="Volume" Type="Real64" Value="-108"/>
+															</PropertyList>
+														</CustomState>
 													</CustomState>
 													<CustomState>
 														<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
@@ -48604,6 +49889,11 @@
 							<PropertyList>
 								<Property Name="Color" Type="int16" Value="4"/>
 								<Property Name="OverrideColor" Type="bool" Value="True"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-3</Value>
+									</ValueList>
+								</Property>
 							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
@@ -48617,6 +49907,11 @@
 								<Sound Name="MUS_E_01" ID="{B41CF801-EECF-4C06-8899-6BFDF5EA45B2}" ShortID="732847674">
 									<PropertyList>
 										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-3</Value>
+											</ValueList>
+										</Property>
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
@@ -49260,6 +50555,8 @@
 						</BlendContainer>
 						<BlendContainer Name="MUS_P" ID="{65FFA27D-B4D3-48F4-BF8A-42F160E62BDC}" ShortID="703222392">
 							<PropertyList>
+								<Property Name="Color" Type="int16" Value="4"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
 										<Value>-10</Value>
@@ -49537,6 +50834,8 @@
 						</BlendContainer>
 						<BlendContainer Name="MUS_Menu" ID="{55EC4845-E6B0-4709-AD97-35493D2F72ED}" ShortID="210723897">
 							<PropertyList>
+								<Property Name="Color" Type="int16" Value="4"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
 										<Value>-14</Value>
@@ -49654,6 +50953,250 @@
 									<CustomState>
 										<StateRef Name="Menu" ID="{450D271D-C510-4F22-9ACB-210DDC500722}"/>
 										<CustomState Name="" ID="{87625EAE-302F-4BB9-89C8-6EE3CA4119B9}" ShortID="175328326"/>
+									</CustomState>
+								</CustomStateList>
+							</StateInfo>
+						</BlendContainer>
+						<BlendContainer Name="MUS_L" ID="{BFE343BD-2E37-491F-ABCC-749B93B88487}" ShortID="805911308">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="4"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-9</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="MUS_L" ID="{D9144E82-D11A-468E-A953-4C79F929C705}" ShortID="736167675">
+									<PropertyList>
+										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6D05662A-2F72-46A8-BC5C-94C4F9A47108}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{CB6D4301-B562-4685-8941-B2848812D5DF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="MUS_L" ID="{E01F8244-3AF4-410C-8581-63D3AC2EB9F7}">
+											<Language>SFX</Language>
+											<AudioFile>MUS\MUS_L\MUS_L.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="684582563"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="MUS_L" ID="{E01F8244-3AF4-410C-8581-63D3AC2EB9F7}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+							<StateInfo>
+								<StateGroupList>
+									<StateGroupInfo>
+										<StateGroupRef Name="State_Map" ID="{851551F0-CA59-405C-8810-C89C4F9167FE}"/>
+										<StateGroupInfo Name="" ID="{D01023E1-631C-42E8-A9EE-4BF7E97670B3}" ShortID="869148041"/>
+									</StateGroupInfo>
+								</StateGroupList>
+								<CustomStateList>
+									<CustomState>
+										<StateRef Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
+										<CustomState Name="" ID="{BE6F2B9F-1CD3-4704-A7B1-263DE2828852}" ShortID="550458094">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="C" ID="{D243EDA2-8507-4152-BAFA-694FE5A919D4}"/>
+										<CustomState Name="" ID="{0ADAFB2A-BD4C-4885-9FDF-A3324B1D50DA}" ShortID="543207974">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="O" ID="{8913FDFA-68D4-41A4-A1E4-83501D98DDE1}"/>
+										<CustomState Name="" ID="{E26019C5-4589-4494-8E8E-40B983948262}" ShortID="620528998">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="D" ID="{5719A88C-2C17-41D2-847E-792E43A4ACFF}"/>
+										<CustomState Name="" ID="{B782EA18-674A-4442-80BD-FC5A32EB3878}" ShortID="392478369">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="D_Exit" ID="{EA05E9DA-B382-41D7-8632-9208D61DE7E0}"/>
+										<CustomState Name="" ID="{E0EAA23D-A0E8-42E1-A482-AFD80C5CEED4}" ShortID="282658760">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="G" ID="{CD2C14EE-BA33-424D-B6F2-8576644EA71B}"/>
+										<CustomState Name="" ID="{41330E17-2243-4530-9423-D3DFCDA16289}" ShortID="241805133">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+										<CustomState Name="" ID="{3E3CD171-D9D1-45F6-B23C-81183104C03B}" ShortID="215693969">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+										<CustomState Name="" ID="{0488DCD4-7AA6-4E57-900B-AF59B48A809E}" ShortID="515580704">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+										<CustomState Name="" ID="{8448916A-D409-41BF-8A11-3B0721C0013F}" ShortID="570171178">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="B" ID="{284B1AEA-DEEE-4639-AF8E-3379A60A16EC}"/>
+										<CustomState Name="" ID="{A52D91C0-321E-42A4-A48F-416F1734FBC3}" ShortID="879435372">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="O_Exit" ID="{60F756FF-CB20-46B0-BB0C-35C1712AFE19}"/>
+										<CustomState Name="" ID="{D3396672-5FC1-4FF5-AF14-58034B914FC8}" ShortID="878332519">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+										<CustomState Name="" ID="{E9AC1254-7742-4C0C-8B46-C2883F3142F1}" ShortID="306090638">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+										<CustomState Name="" ID="{A6A1A0E7-996E-4153-842B-31669DAAEF2B}" ShortID="1015303632">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="A" ID="{464A22DA-77B5-498B-A08E-4839CF354037}"/>
+										<CustomState Name="" ID="{6EBC8DBD-8ECF-462D-BDE6-016B489D39F9}" ShortID="40042198">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="J" ID="{E2FA8549-42F4-4C02-A1B7-09ECD54EEF5A}"/>
+										<CustomState Name="" ID="{CC45323A-FD06-40F0-BA79-F62539230374}" ShortID="1055031736">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+										<CustomState Name="" ID="{9BC565E8-22E8-46DD-8AA9-E9033131BEC8}" ShortID="909741274">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+										<CustomState Name="" ID="{7E0C7FA3-E1BC-40F4-BED6-694D27FDBB4F}" ShortID="332859868">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="F" ID="{CFE7AFD1-E86C-4CA2-9F8E-4610F2DC0C20}"/>
+										<CustomState Name="" ID="{B9DD820E-AFCC-4F6A-B791-F24F40D4A8A9}" ShortID="277755895">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="M_Exit" ID="{52431833-40A7-4D61-A7D2-A63D9B77EB39}"/>
+										<CustomState Name="" ID="{4BD6DE12-9987-4074-9C91-B39798AFFF14}" ShortID="626163832">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="E" ID="{4F90CA77-146A-4E6D-A81A-AD807F7E5FD7}"/>
+										<CustomState Name="" ID="{A6713621-E743-4E49-A97A-BAC3023F9016}" ShortID="317373883">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="None" ID="{12B604DD-B92A-4E89-8686-D1BF3E56A872}"/>
+										<CustomState Name="" ID="{5D1BF96D-51EB-4416-9D5C-C572A09A7E10}" ShortID="754844026">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="E_Exit" ID="{9D6AA290-9CA6-4F00-845C-30EC24F15912}"/>
+										<CustomState Name="" ID="{F6E64F90-22DE-4C10-827F-546D65F9C639}" ShortID="933470842">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+										<CustomState Name="" ID="{AB587DA2-DC7D-4FDF-8627-E9B17C34C6ED}" ShortID="864085194"/>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="K_Exit" ID="{97223D56-4005-4FB5-8E99-3547C3294F0E}"/>
+										<CustomState Name="" ID="{77FF0AAE-6B9B-44E0-BFA7-34E30B9CF524}" ShortID="864022628">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
 									</CustomState>
 								</CustomStateList>
 							</StateInfo>
