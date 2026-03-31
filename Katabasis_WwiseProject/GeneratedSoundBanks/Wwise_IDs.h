@@ -78,6 +78,7 @@ namespace AK
         static const AkUniqueID MUS_F = 4159718933U;
         static const AkUniqueID MUS_G_K_O = 4014691300U;
         static const AkUniqueID MUS_I = 4159718938U;
+        static const AkUniqueID MUS_L = 4159718943U;
         static const AkUniqueID MUS_M = 4159718942U;
         static const AkUniqueID MUS_MENU = 3149643052U;
         static const AkUniqueID MUS_P = 4159718915U;
@@ -126,14 +127,8 @@ namespace AK
         static const AkUniqueID SFX_SEWERS_M_NYC = 1073561947U;
         static const AkUniqueID SFX_SEWERS_N_NYC = 4134176780U;
         static const AkUniqueID SFX_SUBWAY_A = 1224719534U;
-        static const AkUniqueID SFX_SUBWAY_B_INT = 3184577795U;
-        static const AkUniqueID SFX_SUBWAY_C_INT = 1275499414U;
-        static const AkUniqueID SFX_SUBWAY_D_INT = 4144213825U;
         static const AkUniqueID SFX_SUBWAY_E = 1224719530U;
         static const AkUniqueID SFX_SUBWAY_F = 1224719529U;
-        static const AkUniqueID SFX_SUBWAY_G_INT = 1030555722U;
-        static const AkUniqueID SFX_SUBWAY_H_INT = 2952482469U;
-        static const AkUniqueID SFX_SUBWAY_I_INT = 65382472U;
         static const AkUniqueID SFX_SUBWAY_J_BYS = 2782204094U;
         static const AkUniqueID SFX_SUBWAY_K_NYC_BYS_JM = 3569433076U;
         static const AkUniqueID SFX_TRAIN_FREEDOM = 2950012982U;
@@ -172,9 +167,9 @@ namespace AK
 
     namespace STATES
     {
-        namespace ELEC
+        namespace STATE_ELEC
         {
-            static const AkUniqueID GROUP = 4251427962U;
+            static const AkUniqueID GROUP = 1451125704U;
 
             namespace STATE
             {
@@ -182,7 +177,7 @@ namespace AK
                 static const AkUniqueID NONE = 748895195U;
                 static const AkUniqueID YES = 979470758U;
             } // namespace STATE
-        } // namespace ELEC
+        } // namespace STATE_ELEC
 
         namespace STATE_GAME
         {
@@ -237,6 +232,7 @@ namespace AK
     namespace GAME_PARAMETERS
     {
         static const AkUniqueID RTCP_DISTANCE = 1540479560U;
+        static const AkUniqueID RTPC_AZIMUTH = 3972935021U;
         static const AkUniqueID RTPC_INTERVIEW_LEAVE = 1610769452U;
         static const AkUniqueID RTPC_PROGRESSION = 2942853976U;
         static const AkUniqueID RTPC_VOX_METER_B2 = 598118295U;
