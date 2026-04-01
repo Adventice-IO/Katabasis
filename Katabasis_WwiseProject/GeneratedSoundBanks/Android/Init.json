@@ -10,12 +10,20 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{19E46BA4-59AE-1DBE-88C2-256C0E457F38}",
+    "Hash": "{83B42D6C-14C9-3946-EA70-38AF267BA09E}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
     "Plugins": {
      "Custom": [
+      {
+       "Id": "55521182",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\MUS_Game\\[Effect Slot [1]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{D29FD5C9-99E2-4BAC-A2AA-A75D931ED2F8}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
       {
        "Id": "73417393",
        "Name": "Sidechain Send (Custom)",
@@ -23,6 +31,14 @@
        "GUID": "{CF585C31-3EE3-4908-B88F-764D02956C4F}",
        "LibName": "Ak Sidechain Send",
        "LibId": "12648451"
+      },
+      {
+       "Id": "179087147",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\MUS_Menu\\[Effect Slot [1]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{77452461-497F-4673-A9CB-7381106B2101}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
       },
       {
        "Id": "203344492",
@@ -41,10 +57,18 @@
        "LibId": "6557955"
       },
       {
-       "Id": "212081602",
+       "Id": "281004832",
        "Name": "Parametric EQ (Custom)",
-       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
-       "GUID": "{4CE161AD-664E-4FF1-A155-F6D4E35C843A}",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\MUS_Game\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{D5D4951E-8E9B-4F82-AD68-FC3D9816C957}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
+       "Id": "383251248",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\MUS_Outro\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{F281856D-E7D9-4F41-8F07-64E1DEC18AC3}",
        "LibName": "Wwise Parametric EQ",
        "LibId": "6881283"
       },
@@ -97,20 +121,20 @@
        "LibId": "12648451"
       },
       {
-       "Id": "803922577",
-       "Name": "Parametric EQ (Custom)",
-       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\[Effect Slot [1]: (Parametric EQ)]\\Parametric EQ (Custom)",
-       "GUID": "{4A861E8C-871B-4DA6-BB40-1C5BF709FD38}",
-       "LibName": "Wwise Parametric EQ",
-       "LibId": "6881283"
-      },
-      {
        "Id": "865612985",
        "Name": "Brick_Wall_Minus_1dB_Peak_Fast_Release (Custom)",
        "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\[Effect Slot [1]: (Peak Limiter)]\\Brick_Wall_Minus_1dB_Peak_Fast_Release (Custom)",
        "GUID": "{ACB54C64-6A1F-4A39-99CC-27F26D25FF23}",
        "LibName": "Wwise Peak Limiter",
        "LibId": "7208963"
+      },
+      {
+       "Id": "1039234515",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\MUS_Menu\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{CD8ECD64-24CC-4EAD-B818-D8D0C385CA1C}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
       },
       {
        "Id": "1070038529",
@@ -224,14 +248,17 @@
       "Id": "712897226",
       "Name": "MUS",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS",
-      "GUID": "{E9B4A790-D51D-4C7D-BA5E-B0B7741926A3}",
+      "GUID": "{E9B4A790-D51D-4C7D-BA5E-B0B7741926A3}"
+     },
+     {
+      "Id": "983233530",
+      "Name": "MUS_Outro",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\MUS_Outro",
+      "GUID": "{A3D37CCE-1D9C-4096-BED6-2B1B0DAF4A09}",
       "PluginRefs": {
        "Custom": [
         {
-         "Id": "212081602"
-        },
-        {
-         "Id": "803922577"
+         "Id": "383251248"
         }
        ]
       }
@@ -261,6 +288,22 @@
        "Custom": [
         {
          "Id": "704971858"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "2054245787",
+      "Name": "MUS_Game",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\MUS_Game",
+      "GUID": "{1587CAC3-72B9-468B-96AD-04C293ED8FEF}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "55521182"
+        },
+        {
+         "Id": "281004832"
         }
        ]
       }
@@ -298,6 +341,22 @@
       "Name": "SFX_Test",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\SFX\\SFX_Test",
       "GUID": "{AA943238-36C0-4EB0-900A-2C520D789FA0}"
+     },
+     {
+      "Id": "3149643052",
+      "Name": "MUS_Menu",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\MUS_Menu",
+      "GUID": "{9DB8F557-0525-414F-9AD1-D0F9789B3DAF}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "179087147"
+        },
+        {
+         "Id": "1039234515"
+        }
+       ]
+      }
      },
      {
       "Id": "3537656764",
@@ -679,6 +738,6 @@
     ]
    }
   ],
-  "FileHash": "{046DD711-C4F5-3F5C-951D-2F41CEEBE1E9}"
+  "FileHash": "{CEEE9AD6-3A6C-771E-329B-E4E0731E24CA}"
  }
 }

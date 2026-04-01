@@ -89,6 +89,12 @@
 							<IsShared>true</IsShared>
 						</Transition>
 						<Transition>
+							<StartState Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
+							<EndState Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
+							<Time>30</Time>
+							<IsShared>true</IsShared>
+						</Transition>
+						<Transition>
 							<StartState Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
 							<EndState Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
 							<Time>20</Time>
@@ -101,8 +107,20 @@
 							<IsShared>true</IsShared>
 						</Transition>
 						<Transition>
+							<StartState Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
+							<EndState Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
+							<Time>30</Time>
+							<IsShared>true</IsShared>
+						</Transition>
+						<Transition>
 							<StartState Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
 							<EndState Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+							<Time>20</Time>
+							<IsShared>true</IsShared>
+						</Transition>
+						<Transition>
+							<StartState Name="M" ID="{27ABB2FD-721C-4C77-ABE3-487FFD3D2A38}"/>
+							<EndState Name="N" ID="{1B230ECF-4582-4080-B18C-88345FB601DD}"/>
 							<Time>20</Time>
 							<IsShared>true</IsShared>
 						</Transition>
@@ -119,15 +137,15 @@
 							<IsShared>true</IsShared>
 						</Transition>
 						<Transition>
-							<StartState Name="H" ID="{18BFEE8D-8795-4466-B7C2-52FAD02BC520}"/>
-							<EndState Name="L" ID="{182BD5CB-AA19-4F12-8874-10BC00AB0507}"/>
-							<Time>30</Time>
+							<StartState Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+							<EndState Name="R_Exit" ID="{1AF1A7C8-0D69-4745-98E7-3EAEE927BEB1}"/>
+							<Time>60</Time>
 							<IsShared>true</IsShared>
 						</Transition>
 						<Transition>
-							<StartState Name="I" ID="{C75050DA-E1B3-43A3-A9FD-8C8DA30E5AD0}"/>
-							<EndState Name="K" ID="{FF67EA33-2D8F-4C9C-BEDE-217E6055787A}"/>
-							<Time>30</Time>
+							<StartState Name="P" ID="{58CB3313-DDDB-447C-A0F2-4D18DE94FAF0}"/>
+							<EndState Name="Q" ID="{8D1E2A4B-0234-496B-B4AB-BD183E427CAC}"/>
+							<Time>15</Time>
 							<IsShared>true</IsShared>
 						</Transition>
 					</TransitionList>
@@ -144,6 +162,20 @@
 						<State Name="End" ID="{74D521A2-E950-469B-AE5D-2CD4DF7B09C2}"/>
 						<State Name="Playing" ID="{2815DF94-0267-487D-8379-B05F51EFD7A2}"/>
 					</ChildrenList>
+					<TransitionList>
+						<Transition>
+							<StartState Name="End" ID="{74D521A2-E950-469B-AE5D-2CD4DF7B09C2}"/>
+							<EndState Name="Menu" ID="{450D271D-C510-4F22-9ACB-210DDC500722}"/>
+							<Time>3</Time>
+							<IsShared>false</IsShared>
+						</Transition>
+						<Transition>
+							<StartState Name="Outro" ID="{6FBAADB7-4C86-4769-98A8-13F59CD0F605}"/>
+							<EndState Name="End" ID="{74D521A2-E950-469B-AE5D-2CD4DF7B09C2}"/>
+							<Time>5</Time>
+							<IsShared>false</IsShared>
+						</Transition>
+					</TransitionList>
 				</StateGroup>
 				<StateGroup Name="State_Elec" ID="{77BA6578-7452-464A-AE4D-CBBB03AE40EE}">
 					<PropertyList>
