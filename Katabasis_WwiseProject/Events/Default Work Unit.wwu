@@ -1111,6 +1111,57 @@
 								</Event>
 							</ChildrenList>
 						</Folder>
+						<Folder Name="VOX_Int_Out_Sieste" ID="{1F76DDE1-5966-48CB-A131-988758A4AE98}" ShortID="304318995">
+							<ChildrenList>
+								<Event Name="VOX_Intro" ID="{86043875-ED83-4A2D-85B6-47F339516150}">
+									<ChildrenList>
+										<Action Name="" ID="{845EB49F-8D21-4902-9AF8-4EA494AB45FB}" ShortID="994327820">
+											<PropertyList>
+												<Property Name="Delay" Type="Real64" Value="12"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="VOX_Intro" ID="{F870E9C4-F920-4730-A7B0-EB9F45BF221E}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="VOX_Outro_01" ID="{C964C981-1415-44A6-A8DA-5D656D6CAA08}">
+									<ChildrenList>
+										<Action Name="" ID="{2793C476-BE9A-4AF0-A779-37BF053098E9}" ShortID="1071886020">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="VOX_Outro_01" ID="{BCB23E88-A89C-46AA-AB6D-FDDDCE2C7544}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="VOX_Outro_02" ID="{5495B70B-AB07-4685-9C10-6DCAB17C101D}">
+									<ChildrenList>
+										<Action Name="" ID="{2E13B241-B81B-4373-8EAF-AD32CDB7BD9E}" ShortID="1046561752">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="VOX_Outro_02" ID="{2FFB4724-6D59-4A21-A633-8E33245F6B15}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="VOX_Sieste" ID="{10DF6DCB-36CC-47F8-A6E5-607DD94C76BD}">
+									<ChildrenList>
+										<Action Name="" ID="{DD21B149-0D8F-4E34-8AED-046520358C90}" ShortID="714222465">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="VOX_Sieste" ID="{D5EC60D6-5ED7-4595-BE54-EC63980E394B}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="AMB" ID="{99813B28-F2CD-409D-A7A7-53147129EEFF}" ShortID="961410658">
@@ -1225,6 +1276,17 @@
 											<ReferenceList>
 												<Reference Name="Target">
 													<ObjectRef Name="AMB_Ext_Park_Insect_People_Bys_01" ID="{6F8B0AF0-EEB3-4F23-BA24-FBDAB472156B}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="AMB_Ambi_Ext_Espagnol" ID="{7F5C5390-1FBF-4745-A25A-9C138B64E0C6}">
+									<ChildrenList>
+										<Action Name="" ID="{C51242A4-B037-4B88-AB52-4E73A55FD06E}" ShortID="407643572">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="AMB_Ambi_Ext_Espagnol" ID="{DF33A0B0-B140-4469-9C5D-1DC1775149DF}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -1502,6 +1564,21 @@
 											<ReferenceList>
 												<Reference Name="Target">
 													<ObjectRef Name="AMB_Ambi_F" ID="{DDAC1795-E5FC-4A81-8DA8-7C28C22AFBF1}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="AMB_Ambi_R" ID="{A8B7F0DD-3965-460F-8EA9-C27BEA896AA0}">
+									<PropertyList>
+										<Property Name="Color" Type="int16" Value="4"/>
+										<Property Name="OverrideColor" Type="bool" Value="True"/>
+									</PropertyList>
+									<ChildrenList>
+										<Action Name="" ID="{78023D15-D9C3-4D9A-B78E-A6E1160DE31A}" ShortID="403497971">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="AMB_Ambi_R" ID="{E68DC62B-6620-496F-B584-04ECB83C8588}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -2042,6 +2119,153 @@
 								</Event>
 							</ChildrenList>
 						</Folder>
+						<Event Name="SFX_People_01" ID="{4F951656-3058-447C-B44B-8AB16F1147DE}">
+							<ChildrenList>
+								<Action Name="" ID="{F2550CBA-5E98-4F2E-80E6-D60C72DBD9E3}" ShortID="924312665">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SFX_People_01" ID="{9F0B1DD8-C36F-4666-9B03-9327603FE3B0}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+								<Action Name="" ID="{F7DE4412-F30A-4601-9F1A-28B9567185D5}" ShortID="911354657">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="36"/>
+										<Property Name="SeekPercent" Type="Real64">
+											<ModifierList>
+												<ModifierInfo>
+													<Modifier Name="" ID="{F6E86178-1FAD-4DB7-9A82-2978B16F2318}">
+														<PropertyList>
+															<Property Name="Enabled" Type="bool" Value="True"/>
+															<Property Name="Max" Type="Real64" Value="100"/>
+														</PropertyList>
+													</Modifier>
+												</ModifierInfo>
+											</ModifierList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SFX_People_01" ID="{9F0B1DD8-C36F-4666-9B03-9327603FE3B0}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="SFX_People_02" ID="{3A37E924-01E7-44AB-8B8A-90A13B701798}">
+							<ChildrenList>
+								<Action Name="" ID="{D045F339-0D86-4DFE-8DA2-D79773ECBE5F}" ShortID="605928121">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SFX_People_02" ID="{881F0F4B-A386-48CA-95D8-1D34D0687148}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+								<Action Name="" ID="{F99BF99F-189E-40ED-82E3-A93B715B08F5}" ShortID="712079418">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="36"/>
+										<Property Name="SeekPercent" Type="Real64">
+											<ModifierList>
+												<ModifierInfo>
+													<Modifier Name="" ID="{AD7ECB2D-DAAD-4792-8B4A-D08B9C2945F6}">
+														<PropertyList>
+															<Property Name="Enabled" Type="bool" Value="True"/>
+															<Property Name="Max" Type="Real64" Value="100"/>
+														</PropertyList>
+													</Modifier>
+												</ModifierInfo>
+											</ModifierList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="SFX_People_02" ID="{881F0F4B-A386-48CA-95D8-1D34D0687148}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Folder Name="SFX_GrandCentral" ID="{3DB0E935-3980-4717-9C18-F46F93784C5B}" ShortID="318681131">
+							<ChildrenList>
+								<Event Name="SFX_GrandCentral_01" ID="{84F5AE87-EAD1-4AEE-9F40-791BFD80002A}">
+									<ChildrenList>
+										<Action Name="" ID="{A431CF5B-B3EF-4E2B-95DA-5B3E04C3ADCD}" ShortID="696773506">
+											<PropertyList>
+												<Property Name="FadeTime" Type="Real64">
+													<ModifierList>
+														<ModifierInfo>
+															<Modifier Name="" ID="{1F5C1DD6-EE7E-4242-AAC3-0856BEEA87CC}">
+																<PropertyList>
+																	<Property Name="Enabled" Type="bool" Value="True"/>
+																	<Property Name="Max" Type="Real64" Value="60"/>
+																</PropertyList>
+															</Modifier>
+														</ModifierInfo>
+													</ModifierList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="SFX_GrandCentral_01" ID="{BD612CB6-BF36-40C5-88BE-A7C3306B6771}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+										<Action Name="" ID="{CFD827AF-9D95-4FDD-86B1-8A76B214EA6D}" ShortID="477145091">
+											<PropertyList>
+												<Property Name="ActionType" Type="int16" Value="36"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="SFX_GrandCentral_01" ID="{BD612CB6-BF36-40C5-88BE-A7C3306B6771}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="SFX_GrandCentral_02" ID="{8CBD4EE1-F61D-4A2D-AF2B-424D91DF7AD0}">
+									<ChildrenList>
+										<Action Name="" ID="{66ED606C-E799-49CE-B96C-EC3EBE5DB385}" ShortID="141705044">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="SFX_GrandCentral_02" ID="{99B6DEA9-DBFE-4CD1-B9A4-B35CA3A4350B}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+										<Action Name="" ID="{A254AF7A-30FE-4804-8834-965D05ACAC95}" ShortID="365413256">
+											<PropertyList>
+												<Property Name="ActionType" Type="int16" Value="36"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="SFX_GrandCentral_02" ID="{99B6DEA9-DBFE-4CD1-B9A4-B35CA3A4350B}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="SFX_GrandCentral_03" ID="{A038510E-3B74-4BA1-99A5-CD9B022B5F2A}">
+									<ChildrenList>
+										<Action Name="" ID="{FEFCF3FC-39CE-4F96-BB4E-77B47F7A9933}" ShortID="931614988">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="SFX_GrandCentral_03" ID="{6286DAFD-0221-475D-867B-5306BE5F0D8A}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+										<Action Name="" ID="{3EA52059-D34F-4669-BC50-5F9EE03B34F0}" ShortID="233093126">
+											<PropertyList>
+												<Property Name="ActionType" Type="int16" Value="36"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="SFX_GrandCentral_03" ID="{6286DAFD-0221-475D-867B-5306BE5F0D8A}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="MUS" ID="{51D934EE-62D9-4AE2-8D56-5DF1E49F47A4}" ShortID="636917796">
@@ -2185,11 +2409,41 @@
 							</ChildrenList>
 						</Event>
 						<Event Name="MUS_L" ID="{888467DB-089D-4280-8E8D-89BA36DDADFC}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="4"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
 							<ChildrenList>
 								<Action Name="" ID="{0A3394D8-16B4-43F1-B318-D9EABE8BF29F}" ShortID="849550987">
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="MUS_L" ID="{BFE343BD-2E37-491F-ABCC-749B93B88487}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="MUS_R" ID="{618D55E3-1D75-452D-9036-0CA827DE67AB}">
+							<ChildrenList>
+								<Action Name="" ID="{182FF499-6160-4363-947D-AD9C6EA35C6A}" ShortID="63814290">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="MUS_R_Outro" ID="{E7562EE9-77BA-4F31-AE90-BE42793651D7}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="MUS_N_Q" ID="{35CD6E35-D8B4-4D13-8748-AE58D8B72BEC}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="4"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Action Name="" ID="{39D0AB60-1BD4-4963-9164-B1A91810FEF6}" ShortID="317995220">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="MUS_N_Q" ID="{7E7DDB41-C5D6-4463-9D17-8D1EF2BA66D1}" WorkUnitID="{51855652-AAE1-4C86-ABF2-5C8F6083BF56}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>

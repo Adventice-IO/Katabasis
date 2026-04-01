@@ -64,6 +64,52 @@
 								</Bus>
 								<Bus Name="AMB_3D" ID="{50581E6F-B531-4A7D-80D7-D9503E9EFF14}"/>
 							</ChildrenList>
+							<StateInfo>
+								<StateGroupList>
+									<StateGroupInfo>
+										<StateGroupRef Name="State_Game" ID="{14855AE6-A0D9-47AA-AE19-6FD8B9D55DE0}"/>
+										<StateGroupInfo Name="" ID="{65C84E7C-B6FE-4B3A-8AA5-3DF4FF017534}" ShortID="245310110"/>
+									</StateGroupInfo>
+								</StateGroupList>
+								<CustomStateList>
+									<CustomState>
+										<StateRef Name="Intro" ID="{36AABFA5-335C-4179-9A09-9ACD878C4A8F}"/>
+										<CustomState Name="" ID="{ECD93C57-0FC3-4A6D-B272-E84B47537F71}" ShortID="989901075"/>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="None" ID="{25D2BE65-E18F-444A-A38A-C5FA568D76C7}"/>
+										<CustomState Name="" ID="{7B6E7F92-2585-4D3D-A07C-DDDFF8B280E4}" ShortID="122079040">
+											<PropertyList>
+												<Property Name="BusVolume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="End" ID="{74D521A2-E950-469B-AE5D-2CD4DF7B09C2}"/>
+										<CustomState Name="" ID="{9B434433-0A41-4654-BC07-893647C65950}" ShortID="758266377">
+											<PropertyList>
+												<Property Name="BusVolume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="Outro" ID="{6FBAADB7-4C86-4769-98A8-13F59CD0F605}"/>
+										<CustomState Name="" ID="{2F64E0AC-6C44-4593-861F-158FE4424257}" ShortID="150940967"/>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="Playing" ID="{2815DF94-0267-487D-8379-B05F51EFD7A2}"/>
+										<CustomState Name="" ID="{569B3951-CF1D-4A95-8975-E255CD4614D2}" ShortID="198293916"/>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="Menu" ID="{450D271D-C510-4F22-9ACB-210DDC500722}"/>
+										<CustomState Name="" ID="{1F243559-04C3-4572-A9AB-BD57AC6CDC11}" ShortID="358749331">
+											<PropertyList>
+												<Property Name="BusVolume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+								</CustomStateList>
+							</StateInfo>
 							<ObjectLists>
 								<ObjectList Name="Effects">
 									<EffectSlot Name="" ID="{F9759157-02E0-4D87-9B1D-D01097E27FD2}" ShortID="369660722">
@@ -106,6 +152,34 @@
 												</Custom>
 											</Reference>
 										</ReferenceList>
+										<StateInfo>
+											<CustomStateList>
+												<CustomState>
+													<StateRef Name="Intro" ID="{36AABFA5-335C-4179-9A09-9ACD878C4A8F}"/>
+													<CustomState Name="" ID="{073165AB-0ED5-4C98-99F2-54225698800D}" ShortID="181921167"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="None" ID="{25D2BE65-E18F-444A-A38A-C5FA568D76C7}"/>
+													<CustomState Name="" ID="{F28A2329-75F6-4585-BF36-67BB54961DFE}" ShortID="159695645"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="End" ID="{74D521A2-E950-469B-AE5D-2CD4DF7B09C2}"/>
+													<CustomState Name="" ID="{339AA138-3C0D-4085-9D6A-6ADB5ECD7E2E}" ShortID="772994702"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="Outro" ID="{6FBAADB7-4C86-4769-98A8-13F59CD0F605}"/>
+													<CustomState Name="" ID="{A2C2ACAB-EB6E-485C-9C6B-106717C490B9}" ShortID="897884235"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="Playing" ID="{2815DF94-0267-487D-8379-B05F51EFD7A2}"/>
+													<CustomState Name="" ID="{8DF6AAE4-A985-4DB8-9037-13083B5AE6BF}" ShortID="770263299"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="Menu" ID="{450D271D-C510-4F22-9ACB-210DDC500722}"/>
+													<CustomState Name="" ID="{F3E6E9F2-284A-4ECD-BC32-BC70D01FD97D}" ShortID="745092965"/>
+												</CustomState>
+											</CustomStateList>
+										</StateInfo>
 									</EffectSlot>
 									<EffectSlot Name="" ID="{095DB45C-9791-49AB-999C-1FE5C1C7E7FF}" ShortID="215023310">
 										<ReferenceList>
@@ -146,6 +220,34 @@
 												</Custom>
 											</Reference>
 										</ReferenceList>
+										<StateInfo>
+											<CustomStateList>
+												<CustomState>
+													<StateRef Name="Intro" ID="{36AABFA5-335C-4179-9A09-9ACD878C4A8F}"/>
+													<CustomState Name="" ID="{424C4031-736F-4A3A-AC55-9326BB25621D}" ShortID="833227552"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="None" ID="{25D2BE65-E18F-444A-A38A-C5FA568D76C7}"/>
+													<CustomState Name="" ID="{1EAECFB4-7531-4086-B242-C85EBAD11ECA}" ShortID="603496586"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="End" ID="{74D521A2-E950-469B-AE5D-2CD4DF7B09C2}"/>
+													<CustomState Name="" ID="{DD4BA48E-C43B-4625-BEED-1DD7097EC2AE}" ShortID="361757739"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="Outro" ID="{6FBAADB7-4C86-4769-98A8-13F59CD0F605}"/>
+													<CustomState Name="" ID="{58E51CEF-95AA-4D0C-A913-B0D98AD328EB}" ShortID="994395773"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="Playing" ID="{2815DF94-0267-487D-8379-B05F51EFD7A2}"/>
+													<CustomState Name="" ID="{DD8649B9-CACB-4FEA-9BCF-23EAFA0AE95D}" ShortID="972108411"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="Menu" ID="{450D271D-C510-4F22-9ACB-210DDC500722}"/>
+													<CustomState Name="" ID="{9249F5FD-81E2-426D-977D-AEAEABF17FF8}" ShortID="959146957"/>
+												</CustomState>
+											</CustomStateList>
+										</StateInfo>
 									</EffectSlot>
 								</ObjectList>
 							</ObjectLists>
@@ -171,6 +273,52 @@
 									</PropertyList>
 								</Bus>
 							</ChildrenList>
+							<StateInfo>
+								<StateGroupList>
+									<StateGroupInfo>
+										<StateGroupRef Name="State_Game" ID="{14855AE6-A0D9-47AA-AE19-6FD8B9D55DE0}"/>
+										<StateGroupInfo Name="" ID="{B7E03C9B-1B49-4652-83B2-874AA5A78FDE}" ShortID="832265540"/>
+									</StateGroupInfo>
+								</StateGroupList>
+								<CustomStateList>
+									<CustomState>
+										<StateRef Name="Intro" ID="{36AABFA5-335C-4179-9A09-9ACD878C4A8F}"/>
+										<CustomState Name="" ID="{43DCDC3C-AFFF-4EA0-B982-BAD33FD80591}" ShortID="573720073"/>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="None" ID="{25D2BE65-E18F-444A-A38A-C5FA568D76C7}"/>
+										<CustomState Name="" ID="{6783EF3C-92F2-4895-85B3-BA1EED1E71D0}" ShortID="530439778">
+											<PropertyList>
+												<Property Name="BusVolume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="End" ID="{74D521A2-E950-469B-AE5D-2CD4DF7B09C2}"/>
+										<CustomState Name="" ID="{F9AFF927-F8F0-40D0-BC57-45250F88934C}" ShortID="981139075">
+											<PropertyList>
+												<Property Name="BusVolume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="Outro" ID="{6FBAADB7-4C86-4769-98A8-13F59CD0F605}"/>
+										<CustomState Name="" ID="{A07E3252-7965-484E-B614-B55C3A44B3AF}" ShortID="787749931"/>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="Playing" ID="{2815DF94-0267-487D-8379-B05F51EFD7A2}"/>
+										<CustomState Name="" ID="{F412F056-83A4-4628-98CE-C7768F17EB45}" ShortID="492172463"/>
+									</CustomState>
+									<CustomState>
+										<StateRef Name="Menu" ID="{450D271D-C510-4F22-9ACB-210DDC500722}"/>
+										<CustomState Name="" ID="{B8D02DA9-CFC7-4297-94BC-3F7604FEBED3}" ShortID="251661103">
+											<PropertyList>
+												<Property Name="BusVolume" Type="Real64" Value="-108"/>
+											</PropertyList>
+										</CustomState>
+									</CustomState>
+								</CustomStateList>
+							</StateInfo>
 							<ObjectLists>
 								<ObjectList Name="Effects">
 									<EffectSlot Name="" ID="{8A975E9D-B664-490D-AF8D-7FF823F2BD43}" ShortID="822662222">
@@ -213,6 +361,34 @@
 												</Custom>
 											</Reference>
 										</ReferenceList>
+										<StateInfo>
+											<CustomStateList>
+												<CustomState>
+													<StateRef Name="Intro" ID="{36AABFA5-335C-4179-9A09-9ACD878C4A8F}"/>
+													<CustomState Name="" ID="{004A3458-D1E9-4C77-A504-BB2F71612D9C}" ShortID="158802413"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="None" ID="{25D2BE65-E18F-444A-A38A-C5FA568D76C7}"/>
+													<CustomState Name="" ID="{8046C293-8BC3-4B32-80C1-72B370C3BEAF}" ShortID="961864818"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="End" ID="{74D521A2-E950-469B-AE5D-2CD4DF7B09C2}"/>
+													<CustomState Name="" ID="{8D5208D9-354C-4AA4-B604-4ECB825574CB}" ShortID="787498371"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="Outro" ID="{6FBAADB7-4C86-4769-98A8-13F59CD0F605}"/>
+													<CustomState Name="" ID="{417E2919-0DAB-42C6-B3F2-C9E4115B18B1}" ShortID="632284783"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="Playing" ID="{2815DF94-0267-487D-8379-B05F51EFD7A2}"/>
+													<CustomState Name="" ID="{8F569814-BC6C-4D67-85F9-B746EA3A2CEC}" ShortID="854570258"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="Menu" ID="{450D271D-C510-4F22-9ACB-210DDC500722}"/>
+													<CustomState Name="" ID="{2A0B8837-1C0D-4CF0-82E9-7B392A81E2A4}" ShortID="769126493"/>
+												</CustomState>
+											</CustomStateList>
+										</StateInfo>
 									</EffectSlot>
 									<EffectSlot Name="" ID="{C0F1EF2E-D6FF-4F74-AADD-2F471EF8FCB5}" ShortID="39281189">
 										<ReferenceList>
@@ -253,6 +429,34 @@
 												</Custom>
 											</Reference>
 										</ReferenceList>
+										<StateInfo>
+											<CustomStateList>
+												<CustomState>
+													<StateRef Name="Intro" ID="{36AABFA5-335C-4179-9A09-9ACD878C4A8F}"/>
+													<CustomState Name="" ID="{A4FE0200-61E3-43C3-AFCC-92754F5498EF}" ShortID="623212247"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="None" ID="{25D2BE65-E18F-444A-A38A-C5FA568D76C7}"/>
+													<CustomState Name="" ID="{E257D3E2-C398-494A-9720-8667E8ED4E4A}" ShortID="871072028"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="End" ID="{74D521A2-E950-469B-AE5D-2CD4DF7B09C2}"/>
+													<CustomState Name="" ID="{833781F2-CE79-41FF-9CD3-8E4A1BFE3BCB}" ShortID="631849323"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="Outro" ID="{6FBAADB7-4C86-4769-98A8-13F59CD0F605}"/>
+													<CustomState Name="" ID="{F75FF98E-32F1-411A-A364-DF52BB3EAE10}" ShortID="376226910"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="Playing" ID="{2815DF94-0267-487D-8379-B05F51EFD7A2}"/>
+													<CustomState Name="" ID="{692C62E1-2CA7-4E8B-9B52-84156EBCADA1}" ShortID="335556947"/>
+												</CustomState>
+												<CustomState>
+													<StateRef Name="Menu" ID="{450D271D-C510-4F22-9ACB-210DDC500722}"/>
+													<CustomState Name="" ID="{5903BB6C-B00E-4BD7-B2C8-3EF60E59F32F}" ShortID="942847737"/>
+												</CustomState>
+											</CustomStateList>
+										</StateInfo>
 									</EffectSlot>
 								</ObjectList>
 							</ObjectLists>
@@ -332,91 +536,226 @@
 									</ValueList>
 								</Property>
 							</PropertyList>
-							<ObjectLists>
-								<ObjectList Name="Effects">
-									<EffectSlot Name="" ID="{32F67D26-1ED5-427E-B799-46FF226E7D30}" ShortID="992215821">
-										<ReferenceList>
-											<Reference Name="Effect">
-												<Custom>
-													<Effect Name="Parametric EQ (Custom)" ID="{4CE161AD-664E-4FF1-A155-F6D4E35C843A}" ShortID="212081602" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
-														<PropertyList>
-															<Property Name="DynamicsEnableBand1" Type="bool" Value="True"/>
-															<Property Name="DynamicsEnableBand2" Type="bool" Value="True"/>
-															<Property Name="DynamicsEnableBand3" Type="bool" Value="True"/>
-															<Property Name="FilterTypeBand1" Type="int32" Value="6"/>
-															<Property Name="FrequencyBand1" Type="Real32" Value="300"/>
-															<Property Name="FrequencyBand2" Type="Real32" Value="800"/>
-															<Property Name="FrequencyBand3" Type="Real32" Value="3131"/>
-															<Property Name="FrequencyBand4" Type="Real32" Value="5000"/>
-															<Property Name="GainBand1" Type="Real32" Value="0.04469274"/>
-															<Property Name="GainBand2" Type="Real32" Value="-0.04469274"/>
-															<Property Name="OnOffBand3" Type="bool" Value="True"/>
-															<Property Name="QFactorBand1" Type="Real32" Value="0.8"/>
-															<Property Name="QFactorBand2" Type="Real32" Value="0.5"/>
-															<Property Name="QFactorBand3" Type="Real32" Value="0.5"/>
-															<Property Name="RangeBand1" Type="Real32" Value="-12"/>
-															<Property Name="RangeBand2" Type="Real32" Value="-16"/>
-															<Property Name="RangeBand3" Type="Real32" Value="-16"/>
-															<Property Name="ReleaseTimeBand1" Type="Real32" Value="0.3"/>
-															<Property Name="ReleaseTimeBand2" Type="Real32" Value="0.3"/>
-															<Property Name="ReleaseTimeBand3" Type="Real32" Value="0.3"/>
-															<Property Name="RolloffRateBand2" Type="int32" Value="48"/>
-															<Property Name="ThresholdBand1" Type="Real32" Value="-40"/>
-															<Property Name="ThresholdBand2" Type="Real32" Value="-40"/>
-															<Property Name="ThresholdBand3" Type="Real32" Value="-46"/>
-														</PropertyList>
-														<ReferenceList>
-															<Reference Name="DynamicsSidechainRef">
-																<ObjectRef Name="VOX" ID="{B330E8EC-B4C7-4833-B217-951547B5C658}" WorkUnitID="{C0C70797-2E5D-412D-834B-DB39AEE7C750}"/>
-															</Reference>
-														</ReferenceList>
-													</Effect>
-												</Custom>
-											</Reference>
-										</ReferenceList>
-									</EffectSlot>
-									<EffectSlot Name="" ID="{616DE453-9513-4606-807C-69399401FB25}" ShortID="767625560">
-										<ReferenceList>
-											<Reference Name="Effect">
-												<Custom>
-													<Effect Name="Parametric EQ (Custom)" ID="{4A861E8C-871B-4DA6-BB40-1C5BF709FD38}" ShortID="803922577" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
-														<PropertyList>
-															<Property Name="DynamicsEnableBand1" Type="bool" Value="True"/>
-															<Property Name="DynamicsEnableBand2" Type="bool" Value="True"/>
-															<Property Name="DynamicsEnableBand3" Type="bool" Value="True"/>
-															<Property Name="FrequencyBand1" Type="Real32" Value="300"/>
-															<Property Name="FrequencyBand2" Type="Real32" Value="800"/>
-															<Property Name="FrequencyBand3" Type="Real32" Value="3131"/>
-															<Property Name="FrequencyBand4" Type="Real32" Value="5000"/>
-															<Property Name="GainBand1" Type="Real32" Value="0.04469274"/>
-															<Property Name="GainBand2" Type="Real32" Value="-0.04469274"/>
-															<Property Name="OnOffBand3" Type="bool" Value="True"/>
-															<Property Name="QFactorBand1" Type="Real32" Value="0.8"/>
-															<Property Name="QFactorBand2" Type="Real32" Value="0.5"/>
-															<Property Name="QFactorBand3" Type="Real32" Value="0.5"/>
-															<Property Name="RangeBand1" Type="Real32" Value="-15"/>
-															<Property Name="RangeBand2" Type="Real32" Value="-24"/>
-															<Property Name="RangeBand3" Type="Real32" Value="-24"/>
-															<Property Name="ReleaseTimeBand1" Type="Real32" Value="0.4"/>
-															<Property Name="ReleaseTimeBand2" Type="Real32" Value="0.4"/>
-															<Property Name="ReleaseTimeBand3" Type="Real32" Value="0.4"/>
-															<Property Name="RolloffRateBand2" Type="int32" Value="48"/>
-															<Property Name="ThresholdBand1" Type="Real32" Value="-36"/>
-															<Property Name="ThresholdBand2" Type="Real32" Value="-40"/>
-															<Property Name="ThresholdBand3" Type="Real32" Value="-46"/>
-														</PropertyList>
-														<ReferenceList>
-															<Reference Name="DynamicsSidechainRef">
-																<ObjectRef Name="UI" ID="{FB208EFA-21B2-4CE9-ACB6-E758EC794401}" WorkUnitID="{C0C70797-2E5D-412D-834B-DB39AEE7C750}"/>
-															</Reference>
-														</ReferenceList>
-													</Effect>
-												</Custom>
-											</Reference>
-										</ReferenceList>
-									</EffectSlot>
-								</ObjectList>
-							</ObjectLists>
+							<ChildrenList>
+								<Bus Name="MUS_Menu" ID="{9DB8F557-0525-414F-9AD1-D0F9789B3DAF}">
+									<ObjectLists>
+										<ObjectList Name="Effects">
+											<EffectSlot Name="" ID="{7E6ED882-DAEE-4D93-B194-8A07E5EFE0C0}" ShortID="922589643">
+												<ReferenceList>
+													<Reference Name="Effect">
+														<Custom>
+															<Effect Name="Parametric EQ (Custom)" ID="{CD8ECD64-24CC-4EAD-B818-D8D0C385CA1C}" ShortID="1039234515" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
+																<PropertyList>
+																	<Property Name="DynamicsEnableBand1" Type="bool" Value="True"/>
+																	<Property Name="DynamicsEnableBand2" Type="bool" Value="True"/>
+																	<Property Name="DynamicsEnableBand3" Type="bool" Value="True"/>
+																	<Property Name="FilterTypeBand1" Type="int32" Value="6"/>
+																	<Property Name="FrequencyBand1" Type="Real32" Value="300"/>
+																	<Property Name="FrequencyBand2" Type="Real32" Value="800"/>
+																	<Property Name="FrequencyBand3" Type="Real32" Value="3131"/>
+																	<Property Name="FrequencyBand4" Type="Real32" Value="5000"/>
+																	<Property Name="GainBand1" Type="Real32" Value="0.04469274"/>
+																	<Property Name="GainBand2" Type="Real32" Value="-0.04469274"/>
+																	<Property Name="OnOffBand3" Type="bool" Value="True"/>
+																	<Property Name="QFactorBand1" Type="Real32" Value="0.8"/>
+																	<Property Name="QFactorBand2" Type="Real32" Value="0.5"/>
+																	<Property Name="QFactorBand3" Type="Real32" Value="0.5"/>
+																	<Property Name="RangeBand1" Type="Real32" Value="-12"/>
+																	<Property Name="RangeBand2" Type="Real32" Value="-16"/>
+																	<Property Name="RangeBand3" Type="Real32" Value="-16"/>
+																	<Property Name="ReleaseTimeBand1" Type="Real32" Value="0.3"/>
+																	<Property Name="ReleaseTimeBand2" Type="Real32" Value="0.3"/>
+																	<Property Name="ReleaseTimeBand3" Type="Real32" Value="0.3"/>
+																	<Property Name="RolloffRateBand2" Type="int32" Value="48"/>
+																	<Property Name="ThresholdBand1" Type="Real32" Value="-40"/>
+																	<Property Name="ThresholdBand2" Type="Real32" Value="-40"/>
+																	<Property Name="ThresholdBand3" Type="Real32" Value="-46"/>
+																</PropertyList>
+																<ReferenceList>
+																	<Reference Name="DynamicsSidechainRef">
+																		<ObjectRef Name="VOX" ID="{B330E8EC-B4C7-4833-B217-951547B5C658}" WorkUnitID="{C0C70797-2E5D-412D-834B-DB39AEE7C750}"/>
+																	</Reference>
+																</ReferenceList>
+															</Effect>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</EffectSlot>
+											<EffectSlot Name="" ID="{BF99F285-7C61-471F-9723-E25DF7B3B0F0}" ShortID="112291454">
+												<ReferenceList>
+													<Reference Name="Effect">
+														<Custom>
+															<Effect Name="Parametric EQ (Custom)" ID="{77452461-497F-4673-A9CB-7381106B2101}" ShortID="179087147" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
+																<PropertyList>
+																	<Property Name="DynamicsEnableBand1" Type="bool" Value="True"/>
+																	<Property Name="DynamicsEnableBand2" Type="bool" Value="True"/>
+																	<Property Name="DynamicsEnableBand3" Type="bool" Value="True"/>
+																	<Property Name="FrequencyBand1" Type="Real32" Value="300"/>
+																	<Property Name="FrequencyBand2" Type="Real32" Value="800"/>
+																	<Property Name="FrequencyBand3" Type="Real32" Value="3131"/>
+																	<Property Name="FrequencyBand4" Type="Real32" Value="5000"/>
+																	<Property Name="GainBand1" Type="Real32" Value="0.04469274"/>
+																	<Property Name="GainBand2" Type="Real32" Value="-0.04469274"/>
+																	<Property Name="OnOffBand3" Type="bool" Value="True"/>
+																	<Property Name="QFactorBand1" Type="Real32" Value="0.8"/>
+																	<Property Name="QFactorBand2" Type="Real32" Value="0.5"/>
+																	<Property Name="QFactorBand3" Type="Real32" Value="0.5"/>
+																	<Property Name="RangeBand1" Type="Real32" Value="-15"/>
+																	<Property Name="RangeBand2" Type="Real32" Value="-24"/>
+																	<Property Name="RangeBand3" Type="Real32" Value="-24"/>
+																	<Property Name="ReleaseTimeBand1" Type="Real32" Value="0.4"/>
+																	<Property Name="ReleaseTimeBand2" Type="Real32" Value="0.4"/>
+																	<Property Name="ReleaseTimeBand3" Type="Real32" Value="0.4"/>
+																	<Property Name="RolloffRateBand2" Type="int32" Value="48"/>
+																	<Property Name="ThresholdBand1" Type="Real32" Value="-36"/>
+																	<Property Name="ThresholdBand2" Type="Real32" Value="-40"/>
+																	<Property Name="ThresholdBand3" Type="Real32" Value="-46"/>
+																</PropertyList>
+																<ReferenceList>
+																	<Reference Name="DynamicsSidechainRef">
+																		<ObjectRef Name="UI" ID="{FB208EFA-21B2-4CE9-ACB6-E758EC794401}" WorkUnitID="{C0C70797-2E5D-412D-834B-DB39AEE7C750}"/>
+																	</Reference>
+																</ReferenceList>
+															</Effect>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</EffectSlot>
+										</ObjectList>
+									</ObjectLists>
+								</Bus>
+								<Bus Name="MUS_Game" ID="{1587CAC3-72B9-468B-96AD-04C293ED8FEF}">
+									<ObjectLists>
+										<ObjectList Name="Effects">
+											<EffectSlot Name="" ID="{EEB8A61A-AF5B-40FD-B24C-3460F333DBA6}" ShortID="206371546">
+												<ReferenceList>
+													<Reference Name="Effect">
+														<Custom>
+															<Effect Name="Parametric EQ (Custom)" ID="{D5D4951E-8E9B-4F82-AD68-FC3D9816C957}" ShortID="281004832" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
+																<PropertyList>
+																	<Property Name="DynamicsEnableBand1" Type="bool" Value="True"/>
+																	<Property Name="DynamicsEnableBand2" Type="bool" Value="True"/>
+																	<Property Name="DynamicsEnableBand3" Type="bool" Value="True"/>
+																	<Property Name="FilterTypeBand1" Type="int32" Value="6"/>
+																	<Property Name="FrequencyBand1" Type="Real32" Value="300"/>
+																	<Property Name="FrequencyBand2" Type="Real32" Value="800"/>
+																	<Property Name="FrequencyBand3" Type="Real32" Value="3131"/>
+																	<Property Name="FrequencyBand4" Type="Real32" Value="5000"/>
+																	<Property Name="GainBand1" Type="Real32" Value="0.04469274"/>
+																	<Property Name="GainBand2" Type="Real32" Value="-0.04469274"/>
+																	<Property Name="OnOffBand3" Type="bool" Value="True"/>
+																	<Property Name="QFactorBand1" Type="Real32" Value="0.8"/>
+																	<Property Name="QFactorBand2" Type="Real32" Value="0.5"/>
+																	<Property Name="QFactorBand3" Type="Real32" Value="0.5"/>
+																	<Property Name="RangeBand1" Type="Real32" Value="-12"/>
+																	<Property Name="RangeBand2" Type="Real32" Value="-16"/>
+																	<Property Name="RangeBand3" Type="Real32" Value="-16"/>
+																	<Property Name="ReleaseTimeBand1" Type="Real32" Value="0.3"/>
+																	<Property Name="ReleaseTimeBand2" Type="Real32" Value="0.3"/>
+																	<Property Name="ReleaseTimeBand3" Type="Real32" Value="0.3"/>
+																	<Property Name="RolloffRateBand2" Type="int32" Value="48"/>
+																	<Property Name="ThresholdBand1" Type="Real32" Value="-40"/>
+																	<Property Name="ThresholdBand2" Type="Real32" Value="-40"/>
+																	<Property Name="ThresholdBand3" Type="Real32" Value="-46"/>
+																</PropertyList>
+																<ReferenceList>
+																	<Reference Name="DynamicsSidechainRef">
+																		<ObjectRef Name="VOX" ID="{B330E8EC-B4C7-4833-B217-951547B5C658}" WorkUnitID="{C0C70797-2E5D-412D-834B-DB39AEE7C750}"/>
+																	</Reference>
+																</ReferenceList>
+															</Effect>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</EffectSlot>
+											<EffectSlot Name="" ID="{082AC412-03DB-4AD8-839F-D4215C60518A}" ShortID="672843890">
+												<ReferenceList>
+													<Reference Name="Effect">
+														<Custom>
+															<Effect Name="Parametric EQ (Custom)" ID="{D29FD5C9-99E2-4BAC-A2AA-A75D931ED2F8}" ShortID="55521182" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
+																<PropertyList>
+																	<Property Name="DynamicsEnableBand1" Type="bool" Value="True"/>
+																	<Property Name="DynamicsEnableBand2" Type="bool" Value="True"/>
+																	<Property Name="DynamicsEnableBand3" Type="bool" Value="True"/>
+																	<Property Name="FrequencyBand1" Type="Real32" Value="300"/>
+																	<Property Name="FrequencyBand2" Type="Real32" Value="800"/>
+																	<Property Name="FrequencyBand3" Type="Real32" Value="3131"/>
+																	<Property Name="FrequencyBand4" Type="Real32" Value="5000"/>
+																	<Property Name="GainBand1" Type="Real32" Value="0.04469274"/>
+																	<Property Name="GainBand2" Type="Real32" Value="-0.04469274"/>
+																	<Property Name="OnOffBand3" Type="bool" Value="True"/>
+																	<Property Name="QFactorBand1" Type="Real32" Value="0.8"/>
+																	<Property Name="QFactorBand2" Type="Real32" Value="0.5"/>
+																	<Property Name="QFactorBand3" Type="Real32" Value="0.5"/>
+																	<Property Name="RangeBand1" Type="Real32" Value="-15"/>
+																	<Property Name="RangeBand2" Type="Real32" Value="-24"/>
+																	<Property Name="RangeBand3" Type="Real32" Value="-24"/>
+																	<Property Name="ReleaseTimeBand1" Type="Real32" Value="0.4"/>
+																	<Property Name="ReleaseTimeBand2" Type="Real32" Value="0.4"/>
+																	<Property Name="ReleaseTimeBand3" Type="Real32" Value="0.4"/>
+																	<Property Name="RolloffRateBand2" Type="int32" Value="48"/>
+																	<Property Name="ThresholdBand1" Type="Real32" Value="-36"/>
+																	<Property Name="ThresholdBand2" Type="Real32" Value="-40"/>
+																	<Property Name="ThresholdBand3" Type="Real32" Value="-46"/>
+																</PropertyList>
+																<ReferenceList>
+																	<Reference Name="DynamicsSidechainRef">
+																		<ObjectRef Name="UI" ID="{FB208EFA-21B2-4CE9-ACB6-E758EC794401}" WorkUnitID="{C0C70797-2E5D-412D-834B-DB39AEE7C750}"/>
+																	</Reference>
+																</ReferenceList>
+															</Effect>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</EffectSlot>
+										</ObjectList>
+									</ObjectLists>
+								</Bus>
+								<Bus Name="MUS_Outro" ID="{A3D37CCE-1D9C-4096-BED6-2B1B0DAF4A09}">
+									<ObjectLists>
+										<ObjectList Name="Effects">
+											<EffectSlot Name="" ID="{A5586F51-A968-43B0-AF3F-73DE19DD843B}" ShortID="954664360">
+												<ReferenceList>
+													<Reference Name="Effect">
+														<Custom>
+															<Effect Name="Parametric EQ (Custom)" ID="{F281856D-E7D9-4F41-8F07-64E1DEC18AC3}" ShortID="383251248" PluginName="Wwise Parametric EQ" CompanyID="0" PluginID="105" PluginType="3">
+																<PropertyList>
+																	<Property Name="DynamicsEnableBand1" Type="bool" Value="True"/>
+																	<Property Name="DynamicsEnableBand2" Type="bool" Value="True"/>
+																	<Property Name="DynamicsEnableBand3" Type="bool" Value="True"/>
+																	<Property Name="FilterTypeBand1" Type="int32" Value="6"/>
+																	<Property Name="FrequencyBand1" Type="Real32" Value="300"/>
+																	<Property Name="FrequencyBand2" Type="Real32" Value="800"/>
+																	<Property Name="FrequencyBand3" Type="Real32" Value="3131"/>
+																	<Property Name="FrequencyBand4" Type="Real32" Value="5000"/>
+																	<Property Name="GainBand1" Type="Real32" Value="0.04469274"/>
+																	<Property Name="GainBand2" Type="Real32" Value="-0.04469274"/>
+																	<Property Name="OnOffBand3" Type="bool" Value="True"/>
+																	<Property Name="QFactorBand1" Type="Real32" Value="0.8"/>
+																	<Property Name="QFactorBand2" Type="Real32" Value="0.5"/>
+																	<Property Name="QFactorBand3" Type="Real32" Value="0.5"/>
+																	<Property Name="RangeBand1" Type="Real32" Value="-3"/>
+																	<Property Name="RangeBand2" Type="Real32" Value="-3"/>
+																	<Property Name="RangeBand3" Type="Real32" Value="-3"/>
+																	<Property Name="RolloffRateBand2" Type="int32" Value="48"/>
+																	<Property Name="ThresholdBand1" Type="Real32" Value="-40"/>
+																	<Property Name="ThresholdBand2" Type="Real32" Value="-40"/>
+																	<Property Name="ThresholdBand3" Type="Real32" Value="-46"/>
+																</PropertyList>
+																<ReferenceList>
+																	<Reference Name="DynamicsSidechainRef">
+																		<ObjectRef Name="VOX" ID="{B330E8EC-B4C7-4833-B217-951547B5C658}" WorkUnitID="{C0C70797-2E5D-412D-834B-DB39AEE7C750}"/>
+																	</Reference>
+																</ReferenceList>
+															</Effect>
+														</Custom>
+													</Reference>
+												</ReferenceList>
+											</EffectSlot>
+										</ObjectList>
+									</ObjectLists>
+								</Bus>
+							</ChildrenList>
 						</Bus>
 						<AuxBus Name="DEL_Under" ID="{DFDF05F4-01E7-4874-92A3-744FAFB65CDA}">
 							<ObjectLists>
