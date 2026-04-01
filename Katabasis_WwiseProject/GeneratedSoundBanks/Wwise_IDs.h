@@ -45,6 +45,7 @@ namespace AK
         static const AkUniqueID AMB_CITY_G_PEOPLE = 2366823393U;
         static const AkUniqueID AMB_CITY_I_CARS_A = 1869628175U;
         static const AkUniqueID AMB_CITY_I_CARS_B = 1869628172U;
+        static const AkUniqueID AMB_CITY_J_WALLA_RESTAURANT = 4031094294U;
         static const AkUniqueID AMB_EXT_PARK_INSECT_PEOPLE_BYS_01 = 3164979780U;
         static const AkUniqueID CHRIS_2_0_INTRO = 1615727631U;
         static const AkUniqueID CHRIS_2_2_RADIO = 663280590U;
