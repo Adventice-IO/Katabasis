@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
     "Language": "SFX",
-    "Hash": "{7B6B5235-D99D-52C2-D77E-CABE0F42E485}",
+    "Hash": "{AC0D8592-3024-655A-0E85-E04EE521C9C9}",
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk",
@@ -65,10 +65,26 @@
        "LibId": "6881283"
       },
       {
+       "Id": "313911841",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\SFX\\SFX_3D\\SFX_Train_Freedom\\[Effect Slot [1]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{356D058D-EFBD-4EFA-A9BD-81C30474019A}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
        "Id": "383251248",
        "Name": "Parametric EQ (Custom)",
        "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\MUS\\MUS_Outro\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
        "GUID": "{F281856D-E7D9-4F41-8F07-64E1DEC18AC3}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
+       "Id": "461115851",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\SFX\\SFX_3D\\SFX_Train_Freedom\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{AFC93C69-B310-4942-BF21-3F99CED68934}",
        "LibName": "Wwise Parametric EQ",
        "LibId": "6881283"
       },
@@ -335,6 +351,22 @@
       "Name": "SFX_3D",
       "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\SFX\\SFX_3D",
       "GUID": "{2558D0E1-5FF0-4876-B806-1A0689ACB07F}"
+     },
+     {
+      "Id": "2950012982",
+      "Name": "SFX_Train_Freedom",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus\\SFX\\SFX_3D\\SFX_Train_Freedom",
+      "GUID": "{3F628CF8-A019-498F-AA88-C7AD3ABEC762}",
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "313911841"
+        },
+        {
+         "Id": "461115851"
+        }
+       ]
+      }
      },
      {
       "Id": "3018450665",
@@ -738,6 +770,6 @@
     ]
    }
   ],
-  "FileHash": "{5F8114A5-87FE-B3B1-3C2A-556ABF865688}"
+  "FileHash": "{DC70C564-9C0B-AAF3-6E67-C29F7060C00F}"
  }
 }
