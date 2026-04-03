@@ -106,6 +106,7 @@ namespace AK
         static const AkUniqueID SFX_AIRPRESSURE_H = 3370058099U;
         static const AkUniqueID SFX_AIRPRESSURE_I = 3370058098U;
         static const AkUniqueID SFX_CAT = 481770683U;
+        static const AkUniqueID SFX_CELLO = 1865518572U;
         static const AkUniqueID SFX_ELEC_A = 3373651682U;
         static const AkUniqueID SFX_ELEC_ALL = 2140914U;
         static const AkUniqueID SFX_ELEC_D = 3373651687U;
@@ -122,6 +123,7 @@ namespace AK
         static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MAMDANI = 4259001170U;
         static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MTA = 3164635487U;
         static const AkUniqueID SFX_MTA_CLOSINGDOORS = 26940306U;
+        static const AkUniqueID SFX_NEON = 1163018313U;
         static const AkUniqueID SFX_PEOPLE_01 = 538432994U;
         static const AkUniqueID SFX_PEOPLE_02 = 538432993U;
         static const AkUniqueID SFX_RAPPERS = 1932663926U;
@@ -146,7 +148,15 @@ namespace AK
         static const AkUniqueID SFX_SUBWAY_F = 1224719529U;
         static const AkUniqueID SFX_SUBWAY_J_BYS = 2782204094U;
         static const AkUniqueID SFX_SUBWAY_K_NYC_BYS_JM = 3569433076U;
+        static const AkUniqueID SFX_TOURNIQUET = 42279345U;
         static const AkUniqueID SFX_TRAIN_FREEDOM = 2950012982U;
+        static const AkUniqueID SFX_TRAVAUX_A = 3021302792U;
+        static const AkUniqueID SFX_TRAVAUX_B = 3021302795U;
+        static const AkUniqueID SFX_TRAVAUX_C = 3021302794U;
+        static const AkUniqueID SFX_TRAVAUX_D = 3021302797U;
+        static const AkUniqueID SFX_TRAVAUX_E = 3021302796U;
+        static const AkUniqueID SFX_TRAVAUX_F = 3021302799U;
+        static const AkUniqueID SFX_TRAVAUX_G = 3021302798U;
         static const AkUniqueID SFX_WIND_HOWL = 1631722864U;
         static const AkUniqueID SFX_WOOD_CREEK = 1709669759U;
         static const AkUniqueID SPIDERMAN_0_INTRO = 838969532U;
