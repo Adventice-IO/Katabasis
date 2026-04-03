@@ -30,6 +30,7 @@
 
             #include "UnityCG.cginc"
 			#include "Common.cginc"
+			#include "Color.cginc"
 
             struct attribute
             {
@@ -164,25 +165,10 @@
 
                 o.position = UnityObjectToClipPos(v.position);
                 o.uv = v.uv;
-                
-                // srgb conversion
-                float4 color = v.color;
-                color.rgb = color.rgb * color.rgb * 1.5;
-                
-                float purple = saturate(0.002/max(0.0001,length(rgb2hsv(_ColorKey) - rgb2hsv(color))));
-                //if (o.vertex.x > 0.)
-                color = lerp(color, 4.0, smoothstep(0.0, 0.1, purple));
 
-                float dcolor = length(color);
-                float black = saturate(0.05/max(0.0001, dcolor*dcolor));
-                //color = lerp(color, 0.4, black);
-                
-                color.rgb *= lerp(1.0, 10.0, smoothstep(3.0, 0.0, d-1.0));
-                
-                // increment saturation
-				float3 hsv = rgb2hsv(color.rgb);
-				hsv.y *= 1.5;
-				color.rgb = hsv2rgb(hsv);
+                float4 color = get_color(v.color, _ColorKey);
+    
+                //color.rgb *= lerp(1.0, 10.0, smoothstep(3.0, 0.0, d-1.0));
 
                 // Color pass: compensate dark points
                 float brightness = dot(color.rgb, float3(0.299, 0.587, 0.114));
