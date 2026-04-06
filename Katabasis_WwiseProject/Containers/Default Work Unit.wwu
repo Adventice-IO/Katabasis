@@ -678,14 +678,17 @@
 						<PropertyContainer Name="SFX_3D" ID="{18F7AB63-5322-42E3-A889-71C2E2BB53C9}" ShortID="462498645">
 							<PropertyList>
 								<Property Name="3DSpatialization" Type="int16" Value="2"/>
+								<Property Name="BelowThresholdBehavior" Type="int16" Value="2"/>
 								<Property Name="OverridePositioning" Type="bool" Value="True"/>
 								<Property Name="OverridePriority" Type="bool" Value="True"/>
+								<Property Name="OverrideVirtualVoice" Type="bool" Value="True"/>
 								<Property Name="PriorityDistanceFactor" Type="bool" Value="True"/>
 								<Property Name="PriorityDistanceOffset" Type="int16">
 									<ValueList>
 										<Value>-40</Value>
 									</ValueList>
 								</Property>
+								<Property Name="VirtualVoiceQueueBehavior" Type="int16" Value="0"/>
 							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Attenuation">
@@ -25086,16 +25089,16 @@
 								<BlendContainer Name="SFX_Subway_Train" ID="{56C9048E-34AE-4028-BFE3-645F75A94812}" ShortID="653698873">
 									<PropertyList>
 										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="OverridePriority" Type="bool" Value="True"/>
 										<Property Name="OverrideUserAuxSends" Type="bool" Value="True"/>
-										<Property Name="PriorityDistanceFactor" Type="bool" Value="True"/>
+										<Property Name="Priority" Type="int16">
+											<ValueList>
+												<Value>60</Value>
+											</ValueList>
+										</Property>
 										<Property Name="PriorityDistanceOffset" Type="int16">
 											<ValueList>
 												<Value>-40</Value>
-											</ValueList>
-										</Property>
-										<Property Name="Volume" Type="Real64">
-											<ValueList>
-												<Value>-4</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -25259,7 +25262,7 @@
 												</Property>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
-														<Value>3</Value>
+														<Value>5</Value>
 													</ValueList>
 													<ModifierList>
 														<ModifierInfo>
@@ -27627,7 +27630,7 @@
 												<Property Name="PlayMechanismStepOrContinuous" Type="int16" Value="0"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
-														<Value>3</Value>
+														<Value>5</Value>
 													</ValueList>
 													<ModifierList>
 														<ModifierInfo>
@@ -55932,7 +55935,7 @@
 																		</Point>
 																		<Point>
 																			<XPos>27.97784</XPos>
-																			<YPos>-0</YPos>
+																			<YPos>0</YPos>
 																			<Flags>0</Flags>
 																			<SegmentShape>Exp3</SegmentShape>
 																		</Point>
