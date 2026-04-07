@@ -1035,13 +1035,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3966192772413791964, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4976647607938919449, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6900676903622151380, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8135023674665499069, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
       propertyPath: m_Name
       value: XR Interaction Simulator
       objectReference: {fileID: 0}
     - target: {fileID: 8135023674665499069, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8518324294302271954, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2882,6 +2894,10 @@ PrefabInstance:
     - target: {fileID: 359360560114331563, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3818919819974312888, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -42.4
       objectReference: {fileID: 0}
     - target: {fileID: 6746142246407683067, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
       propertyPath: renderCamera
@@ -5820,6 +5836,30 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8127832025661862784, guid: b1735d61535e1324f93ae882e43ca5ea, type: 3}
   m_PrefabInstance: {fileID: 697056178}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &712017719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326774969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1238b6a40d44c34e84975feb3ba60ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AK.Wwise.Unity.MonoBehaviour::AkGameObj
+  m_listeners:
+    initialListenerList: []
+    useDefaultListeners: 1
+  isEnvironmentAware: 1
+  isStaticObject: 0
+  usePositionOffsetData: 0
+  m_positionOffsetData:
+    KeepMe: 0
+    positionOffset: {x: 0, y: 0, z: 0}
+  scalingFactor: 1
+  m_posOffsetData: {fileID: 0}
+  listenerMask: 1
 --- !u!84 &713121170
 RenderTexture:
   m_ObjectHideFlags: 0
@@ -6584,13 +6624,17 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: 0.11810589
       objectReference: {fileID: 0}
+    - target: {fileID: 254313727594784958, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9748029
+      objectReference: {fileID: 0}
     - target: {fileID: 338639487320133028, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: volumeViewpoint
       value: 
       objectReference: {fileID: 986442941}
     - target: {fileID: 349604176702047908, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 349604176702047908, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -6636,9 +6680,13 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: 0.11810589
       objectReference: {fileID: 0}
+    - target: {fileID: 482671016201412775, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.45093173
+      objectReference: {fileID: 0}
     - target: {fileID: 544009420782936647, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 544009420782936647, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -6682,7 +6730,7 @@ PrefabInstance:
       objectReference: {fileID: 1266619515}
     - target: {fileID: 656168865700790641, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 656168865700790641, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -6706,7 +6754,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 668699719744643721, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 668699719744643721, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -6718,7 +6766,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 735764731772994237, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 735764731772994237, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -6790,7 +6838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 773256241957531322, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 773256241957531322, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -6814,7 +6862,7 @@ PrefabInstance:
       objectReference: {fileID: 2032568669}
     - target: {fileID: 856513666044718667, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 856513666044718667, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -6826,7 +6874,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 908228160020763900, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 908228160020763900, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -6940,6 +6988,14 @@ PrefabInstance:
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
       objectReference: {fileID: 1277535141}
+    - target: {fileID: 1126599861718277833, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_Url
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126599861718277833, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_DataSource
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1176504598534616484, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
       value: 512
@@ -6983,6 +7039,10 @@ PrefabInstance:
     - target: {fileID: 1256020423309468668, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1353547721041393161, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.91409886
       objectReference: {fileID: 0}
     - target: {fileID: 1366183998022173902, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: colorDataTexture
@@ -7038,7 +7098,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1438543220215805161, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1438543220215805161, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -7050,7 +7110,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1462076148646000914, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1462076148646000914, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -7059,6 +7119,10 @@ PrefabInstance:
     - target: {fileID: 1462076148646000914, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_DataSource
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1522839409486745999, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: 'interviews.Array.data[1]'
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1553415161023808465, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
@@ -7166,7 +7230,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1628634657169599571, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/Max/Max%200.%20Intro.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1628634657169599571, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -7349,8 +7413,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 891178587}
     - target: {fileID: 1948241099657766416, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9832007
+      objectReference: {fileID: 0}
+    - target: {fileID: 1948241099657766416, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.26048452
+      value: 0.18252775
       objectReference: {fileID: 0}
     - target: {fileID: 2008325115160964529, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: volumeViewpoint
@@ -7410,7 +7478,7 @@ PrefabInstance:
       objectReference: {fileID: 248849739}
     - target: {fileID: 2107047021942780967, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2107047021942780967, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -7546,7 +7614,7 @@ PrefabInstance:
       objectReference: {fileID: 819821544}
     - target: {fileID: 2276847119453468901, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2276847119453468901, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -7606,7 +7674,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2489507944581836643, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2489507944581836643, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -7745,12 +7813,44 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1324919865}
     - target: {fileID: 2795587758171586709, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2795587758171586709, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2795587758171586709, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
       value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 2795587758171586709, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
       value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 2795587758171586709, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Name
+      value: OffsetAngle
+      objectReference: {fileID: 0}
+    - target: {fileID: 2795587758171586709, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Value
+      value: 4.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2795587758171586709, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Name
+      value: Offset
+      objectReference: {fileID: 0}
+    - target: {fileID: 2795587758171586709, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2795587758171586709, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.x
+      value: -0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2795587758171586709, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.z
+      value: -0.38
       objectReference: {fileID: 0}
     - target: {fileID: 2795587758171586709, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
@@ -7764,6 +7864,10 @@ PrefabInstance:
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
       objectReference: {fileID: 1585284248}
+    - target: {fileID: 2795587758171586709, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2828089060779459695, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Size.x
       value: 3.576082
@@ -7814,7 +7918,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2862539003252778874, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: file:///D:/Projects/Katabasis/KataData/interviews/Steve_Mona/Steve_Mona_0_Intro.mp4
       objectReference: {fileID: 0}
     - target: {fileID: 2862539003252778874, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -8006,7 +8110,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3256739965499736154, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3256739965499736154, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -8024,9 +8128,17 @@ PrefabInstance:
       propertyPath: volumeViewpoint
       value: 
       objectReference: {fileID: 986442941}
+    - target: {fileID: 3283596948041470753, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.0008152741
+      objectReference: {fileID: 0}
+    - target: {fileID: 3283596948041470753, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.99999964
+      objectReference: {fileID: 0}
     - target: {fileID: 3290202975961228467, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3290202975961228467, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -8086,11 +8198,11 @@ PrefabInstance:
       objectReference: {fileID: 2078364401}
     - target: {fileID: 3362357337357687060, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.64181894
+      value: 0.7296037
       objectReference: {fileID: 0}
     - target: {fileID: 3362357337357687060, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.7668563
+      value: -0.68387026
       objectReference: {fileID: 0}
     - target: {fileID: 3463180130790385144, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Size.x
@@ -8150,7 +8262,7 @@ PrefabInstance:
       objectReference: {fileID: 986442941}
     - target: {fileID: 3539073683349366870, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3539073683349366870, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -8162,7 +8274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3545479856320621620, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3545479856320621620, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -8206,7 +8318,7 @@ PrefabInstance:
       objectReference: {fileID: 438024573}
     - target: {fileID: 3680694761847317689, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3680694761847317689, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -8242,7 +8354,7 @@ PrefabInstance:
       objectReference: {fileID: 1303468119}
     - target: {fileID: 3730043508345336276, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: file:///D:/Projects/Katabasis/KataData/interviews/Freedom/Freedom_1/Freedom_0_Intro.mp4
       objectReference: {fileID: 0}
     - target: {fileID: 3730043508345336276, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -8350,7 +8462,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3960507444058782157, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3960507444058782157, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -8482,7 +8594,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4166719078052131357, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4166719078052131357, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -8494,7 +8606,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4180053215924986317, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: file:///D:/Projects/Katabasis/KataData/interviews/Kirk/Kirk_0_Intro.mp4
       objectReference: {fileID: 0}
     - target: {fileID: 4180053215924986317, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -8581,12 +8693,44 @@ PrefabInstance:
       value: 0.11810589
       objectReference: {fileID: 0}
     - target: {fileID: 4283112428098192930, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283112428098192930, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283112428098192930, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
       value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 4283112428098192930, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
       value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283112428098192930, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Name
+      value: OffsetAngle
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283112428098192930, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Value
+      value: 7.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283112428098192930, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Name
+      value: Offset
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283112428098192930, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283112428098192930, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.x
+      value: -0.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283112428098192930, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.z
+      value: -0.33
       objectReference: {fileID: 0}
     - target: {fileID: 4283112428098192930, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
@@ -8600,6 +8744,10 @@ PrefabInstance:
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
       objectReference: {fileID: 1245289963}
+    - target: {fileID: 4283112428098192930, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4298438058551448399, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
       value: 512
@@ -8717,12 +8865,44 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1197875640}
     - target: {fileID: 4627058570432337882, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4627058570432337882, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4627058570432337882, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
       value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 4627058570432337882, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
       value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 4627058570432337882, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Name
+      value: OffsetAngle
+      objectReference: {fileID: 0}
+    - target: {fileID: 4627058570432337882, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Value
+      value: 4.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 4627058570432337882, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Name
+      value: Offset
+      objectReference: {fileID: 0}
+    - target: {fileID: 4627058570432337882, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4627058570432337882, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4627058570432337882, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.z
+      value: -0.17
       objectReference: {fileID: 0}
     - target: {fileID: 4627058570432337882, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
@@ -8736,6 +8916,10 @@ PrefabInstance:
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
       objectReference: {fileID: 1994310932}
+    - target: {fileID: 4627058570432337882, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4675070586172195511, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
       value: 512
@@ -8774,7 +8958,7 @@ PrefabInstance:
       objectReference: {fileID: 529712457}
     - target: {fileID: 4759878403086518028, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4759878403086518028, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -8899,6 +9083,14 @@ PrefabInstance:
     - target: {fileID: 4887958196349835264, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4900702664584938038, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9834144
+      objectReference: {fileID: 0}
+    - target: {fileID: 4900702664584938038, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.18137303
       objectReference: {fileID: 0}
     - target: {fileID: 4948851268726792887, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9050,7 +9242,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5211303774821135681, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5211303774821135681, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -9062,7 +9254,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5225855074780946476, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: file:///D:/Projects/Katabasis/KataData/interviews/Steve_Duncan/Steve_Duncan_0_Intro.mp4
       objectReference: {fileID: 0}
     - target: {fileID: 5225855074780946476, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -9137,12 +9329,44 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 979742925}
     - target: {fileID: 5329961570285324227, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5329961570285324227, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5329961570285324227, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
       value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 5329961570285324227, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
       value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 5329961570285324227, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Name
+      value: OffsetAngle
+      objectReference: {fileID: 0}
+    - target: {fileID: 5329961570285324227, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Value
+      value: 4.68
+      objectReference: {fileID: 0}
+    - target: {fileID: 5329961570285324227, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Name
+      value: Offset
+      objectReference: {fileID: 0}
+    - target: {fileID: 5329961570285324227, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5329961570285324227, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.x
+      value: -0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 5329961570285324227, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.z
+      value: -0.32
       objectReference: {fileID: 0}
     - target: {fileID: 5329961570285324227, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
@@ -9156,6 +9380,10 @@ PrefabInstance:
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
       objectReference: {fileID: 320578077}
+    - target: {fileID: 5329961570285324227, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5343084877296489491, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
       value: 512
@@ -9188,6 +9416,10 @@ PrefabInstance:
       propertyPath: positionDataTexture
       value: 
       objectReference: {fileID: 2056512014}
+    - target: {fileID: 5399031033710757423, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.18043594
+      objectReference: {fileID: 0}
     - target: {fileID: 5435253567286221474, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: volumeViewpoint
       value: 
@@ -9409,12 +9641,44 @@ PrefabInstance:
       value: 0.11810589
       objectReference: {fileID: 0}
     - target: {fileID: 6074392181130527092, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6074392181130527092, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6074392181130527092, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
       value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 6074392181130527092, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[1].m_Value
       value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 6074392181130527092, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Name
+      value: OffsetAngle
+      objectReference: {fileID: 0}
+    - target: {fileID: 6074392181130527092, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Value
+      value: 4.59
+      objectReference: {fileID: 0}
+    - target: {fileID: 6074392181130527092, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Name
+      value: Offset
+      objectReference: {fileID: 0}
+    - target: {fileID: 6074392181130527092, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6074392181130527092, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.x
+      value: 0.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 6074392181130527092, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Value.z
+      value: -0.32
       objectReference: {fileID: 0}
     - target: {fileID: 6074392181130527092, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
@@ -9428,9 +9692,13 @@ PrefabInstance:
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
       objectReference: {fileID: 554823262}
+    - target: {fileID: 6074392181130527092, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6142549041098565275, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: file:///D:/Projects/Katabasis/KataData/interviews/Tommy/Tommy_0_Intro.mp4
       objectReference: {fileID: 0}
     - target: {fileID: 6142549041098565275, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -9458,7 +9726,7 @@ PrefabInstance:
       objectReference: {fileID: 1025474453}
     - target: {fileID: 6181823959609074256, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6181823959609074256, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -9484,13 +9752,21 @@ PrefabInstance:
       propertyPath: positionDataTexture
       value: 
       objectReference: {fileID: 435780715}
+    - target: {fileID: 6389815863474236632, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9425376
+      objectReference: {fileID: 0}
+    - target: {fileID: 6389815863474236632, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.3341001
+      objectReference: {fileID: 0}
     - target: {fileID: 6390315487127845438, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6470180658558893723, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6470180658558893723, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -9511,6 +9787,14 @@ PrefabInstance:
     - target: {fileID: 6473144024060698799, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6520486278108019097, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.08541279
+      objectReference: {fileID: 0}
+    - target: {fileID: 6520486278108019097, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9963457
       objectReference: {fileID: 0}
     - target: {fileID: 6537916463133416330, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Size.x
@@ -9586,7 +9870,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6775714753087253346, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6775714753087253346, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -9746,7 +10030,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7180588547070743466, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7180588547070743466, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -9794,7 +10078,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7268472429007366429, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7268472429007366429, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -9806,7 +10090,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7280572022805988843, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7280572022805988843, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -9886,7 +10170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7315842485036771820, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7315842485036771820, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -9898,7 +10182,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384651406048814559, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7384651406048814559, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -9992,9 +10276,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7591177372960256668, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.011107117
+      objectReference: {fileID: 0}
+    - target: {fileID: 7606286429989595121, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.25929493
+      objectReference: {fileID: 0}
     - target: {fileID: 7606286429989595121, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.96235687
+      value: 0.96579826
       objectReference: {fileID: 0}
     - target: {fileID: 7614378087179900831, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Size.x
@@ -10026,7 +10318,7 @@ PrefabInstance:
       objectReference: {fileID: 986442941}
     - target: {fileID: 7774959717142036978, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7774959717142036978, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -10086,7 +10378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7916241663501712811, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/Moses/Moses%200.%20Intro.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7916241663501712811, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -10296,6 +10588,14 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: 0.11810589
       objectReference: {fileID: 0}
+    - target: {fileID: 8373798622428553542, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70916986
+      objectReference: {fileID: 0}
+    - target: {fileID: 8373798622428553542, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.70503765
+      objectReference: {fileID: 0}
     - target: {fileID: 8393001203165594697, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
       value: 512
@@ -10420,6 +10720,14 @@ PrefabInstance:
       propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[2].m_Value
       value: 
       objectReference: {fileID: 1865750088}
+    - target: {fileID: 8701431336182462790, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.36529806
+      objectReference: {fileID: 0}
+    - target: {fileID: 8701431336182462790, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.93089056
+      objectReference: {fileID: 0}
     - target: {fileID: 8736906951410273750, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: colorDataTexture
       value: 
@@ -10454,7 +10762,7 @@ PrefabInstance:
       objectReference: {fileID: 466542249}
     - target: {fileID: 8765743313041189637, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/Freedom/Freedom%201/Freedom%200.%20Intro.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8765743313041189637, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -10554,7 +10862,7 @@ PrefabInstance:
       objectReference: {fileID: 703082172}
     - target: {fileID: 8896413618169790020, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8896413618169790020, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -10582,7 +10890,7 @@ PrefabInstance:
       objectReference: {fileID: 1630755088}
     - target: {fileID: 8992145711330685887, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_Url
-      value: file:///D:/Projects/Katabasis/KataData/interviews/test.mov
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8992145711330685887, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       propertyPath: m_VideoClip
@@ -10629,7 +10937,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 986442941}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1913374470693256524, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5186611038874126899, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
@@ -10641,6 +10950,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6016955899502894237, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1864786077}
+    - targetCorrespondingSourceObject: {fileID: 1866018934695659084, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 712017719}
+    - targetCorrespondingSourceObject: {fileID: 8563966169841172762, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1871223767}
+    - targetCorrespondingSourceObject: {fileID: 981609440506138850, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1770321019}
+    - targetCorrespondingSourceObject: {fileID: 314739721678160123, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1893619023}
+    - targetCorrespondingSourceObject: {fileID: 7737766444984534957, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1831450793}
   m_SourcePrefab: {fileID: 100100000, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
 --- !u!114 &853598163 stripped
 MonoBehaviour:
@@ -10831,26 +11155,6 @@ GameObject:
 --- !u!1 &853598202 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7046896190766034100, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
-  m_PrefabInstance: {fileID: 853598162}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &853598204 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1536297088871672647, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
-  m_PrefabInstance: {fileID: 853598162}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &853598205 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7141147078104990822, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
-  m_PrefabInstance: {fileID: 853598162}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &853598206 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4127888568520169064, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
-  m_PrefabInstance: {fileID: 853598162}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &853598207 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1913374470693256524, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
   m_PrefabInstance: {fileID: 853598162}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &853598209 stripped
@@ -14549,11 +14853,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2076199088490352213, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
   m_PrefabInstance: {fileID: 853598162}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1326774948 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7464176919242891181, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
-  m_PrefabInstance: {fileID: 853598162}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1326774949 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 624358581307496699, guid: b5361569398b9be42b9f9e1fdf01fbb6, type: 3}
@@ -16411,20 +16710,6 @@ MonoBehaviour:
   - _gameObject: {fileID: 853598209}
     _prefab: Assets/Models/Magnet.obj
   - _gameObject: {fileID: 1326774949}
-    _prefab: Assets/Prefabs/Interview/DepthKitPlayer.prefab
-  - _gameObject: {fileID: 853598207}
-    _prefab: Assets/Prefabs/Interview/Cabine.prefab
-  - _gameObject: {fileID: 853598206}
-    _prefab: Assets/Models/Arrow.obj
-  - _gameObject: {fileID: 853598207}
-    _prefab: Assets/Prefabs/Interview/Cabine.prefab
-  - _gameObject: {fileID: 853598205}
-    _prefab: Assets/Models/Arrow.obj
-  - _gameObject: {fileID: 853598207}
-    _prefab: Assets/Prefabs/Interview/Cabine.prefab
-  - _gameObject: {fileID: 853598204}
-    _prefab: Assets/Models/Magnet.obj
-  - _gameObject: {fileID: 1326774948}
     _prefab: Assets/Prefabs/Interview/DepthKitPlayer.prefab
   - _gameObject: {fileID: 853598202}
     _prefab: Assets/Prefabs/Interview/Cabine.prefab
@@ -19634,6 +19919,30 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
+--- !u!114 &1770321019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326774967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1238b6a40d44c34e84975feb3ba60ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AK.Wwise.Unity.MonoBehaviour::AkGameObj
+  m_listeners:
+    initialListenerList: []
+    useDefaultListeners: 1
+  isEnvironmentAware: 1
+  isStaticObject: 0
+  usePositionOffsetData: 0
+  m_positionOffsetData:
+    KeepMe: 0
+    positionOffset: {x: 0, y: 0, z: 0}
+  scalingFactor: 1
+  m_posOffsetData: {fileID: 0}
+  listenerMask: 1
 --- !u!1 &1779458148 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2594962879950791450, guid: b1735d61535e1324f93ae882e43ca5ea, type: 3}
@@ -19900,6 +20209,30 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
+--- !u!114 &1831450793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326774952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1238b6a40d44c34e84975feb3ba60ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AK.Wwise.Unity.MonoBehaviour::AkGameObj
+  m_listeners:
+    initialListenerList: []
+    useDefaultListeners: 1
+  isEnvironmentAware: 1
+  isStaticObject: 0
+  usePositionOffsetData: 0
+  m_positionOffsetData:
+    KeepMe: 0
+    positionOffset: {x: 0, y: 0, z: 0}
+  scalingFactor: 1
+  m_posOffsetData: {fileID: 0}
+  listenerMask: 1
 --- !u!84 &1845393911
 RenderTexture:
   m_ObjectHideFlags: 0
@@ -20220,6 +20553,54 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
+--- !u!114 &1871223767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326774968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1238b6a40d44c34e84975feb3ba60ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AK.Wwise.Unity.MonoBehaviour::AkGameObj
+  m_listeners:
+    initialListenerList: []
+    useDefaultListeners: 1
+  isEnvironmentAware: 1
+  isStaticObject: 0
+  usePositionOffsetData: 0
+  m_positionOffsetData:
+    KeepMe: 0
+    positionOffset: {x: 0, y: 0, z: 0}
+  scalingFactor: 1
+  m_posOffsetData: {fileID: 0}
+  listenerMask: 1
+--- !u!114 &1893619023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326774953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1238b6a40d44c34e84975feb3ba60ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AK.Wwise.Unity.MonoBehaviour::AkGameObj
+  m_listeners:
+    initialListenerList: []
+    useDefaultListeners: 1
+  isEnvironmentAware: 1
+  isStaticObject: 0
+  usePositionOffsetData: 0
+  m_positionOffsetData:
+    KeepMe: 0
+    positionOffset: {x: 0, y: 0, z: 0}
+  scalingFactor: 1
+  m_posOffsetData: {fileID: 0}
+  listenerMask: 1
 --- !u!84 &1894288813
 RenderTexture:
   m_ObjectHideFlags: 0
@@ -21810,7 +22191,7 @@ PrefabInstance:
     - target: {fileID: 2647586264852317331, guid: 2970b78058aa32545a2db93823e98422, type: 3}
       propertyPath: initialSalle
       value: 
-      objectReference: {fileID: 853598483}
+      objectReference: {fileID: 916687913}
     - target: {fileID: 2647586264852317331, guid: 2970b78058aa32545a2db93823e98422, type: 3}
       propertyPath: globalSpeedMultiplier
       value: 1
