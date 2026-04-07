@@ -20,6 +20,7 @@ namespace AK
         static const AkUniqueID ALEX_3_HIDE_BELOW = 3369146532U;
         static const AkUniqueID ALEX_4_ZERO_TOLERANCE = 1509907605U;
         static const AkUniqueID ALEX_5_SOLITUDE = 2982750171U;
+        static const AkUniqueID AMB_AMBI_A_SPANISHKITCHEN = 508865514U;
         static const AkUniqueID AMB_AMBI_D_01 = 2642596128U;
         static const AkUniqueID AMB_AMBI_D_02 = 2642596131U;
         static const AkUniqueID AMB_AMBI_EXT_ESPAGNOL = 2102245317U;
@@ -45,6 +46,7 @@ namespace AK
         static const AkUniqueID AMB_CITY_G_PEOPLE = 2366823393U;
         static const AkUniqueID AMB_CITY_I_CARS_A = 1869628175U;
         static const AkUniqueID AMB_CITY_I_CARS_B = 1869628172U;
+        static const AkUniqueID AMB_CITY_J_WALLA_RESTAURANT = 4031094294U;
         static const AkUniqueID AMB_EXT_PARK_INSECT_PEOPLE_BYS_01 = 3164979780U;
         static const AkUniqueID CHRIS_2_0_INTRO = 1615727631U;
         static const AkUniqueID CHRIS_2_2_RADIO = 663280590U;
@@ -103,6 +105,8 @@ namespace AK
         static const AkUniqueID SFX_AIRPRESSURE_G = 3370058108U;
         static const AkUniqueID SFX_AIRPRESSURE_H = 3370058099U;
         static const AkUniqueID SFX_AIRPRESSURE_I = 3370058098U;
+        static const AkUniqueID SFX_CAT = 481770683U;
+        static const AkUniqueID SFX_CELLO = 1865518572U;
         static const AkUniqueID SFX_ELEC_A = 3373651682U;
         static const AkUniqueID SFX_ELEC_ALL = 2140914U;
         static const AkUniqueID SFX_ELEC_D = 3373651687U;
@@ -118,8 +122,11 @@ namespace AK
         static const AkUniqueID SFX_IMPACT_METAL = 3249341599U;
         static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MAMDANI = 4259001170U;
         static const AkUniqueID SFX_MTA_ANNOUNCEMENTS_MTA = 3164635487U;
+        static const AkUniqueID SFX_MTA_CLOSINGDOORS = 26940306U;
+        static const AkUniqueID SFX_NEON = 1163018313U;
         static const AkUniqueID SFX_PEOPLE_01 = 538432994U;
         static const AkUniqueID SFX_PEOPLE_02 = 538432993U;
+        static const AkUniqueID SFX_RAPPERS = 1932663926U;
         static const AkUniqueID SFX_RATS = 2089405297U;
         static const AkUniqueID SFX_SEWERS_A_DRIPS = 3799102629U;
         static const AkUniqueID SFX_SEWERS_B_PIPE = 4245633758U;
@@ -127,6 +134,7 @@ namespace AK
         static const AkUniqueID SFX_SEWERS_D_DRIPS = 3079966932U;
         static const AkUniqueID SFX_SEWERS_E_PIPE = 2549190315U;
         static const AkUniqueID SFX_SEWERS_F_PIPE = 4233225522U;
+        static const AkUniqueID SFX_SEWERS_FOOTSTEPS = 507618608U;
         static const AkUniqueID SFX_SEWERS_G_DRIPS = 1280951783U;
         static const AkUniqueID SFX_SEWERS_H_DRIPS = 2946085520U;
         static const AkUniqueID SFX_SEWERS_I_WATER = 754790596U;
@@ -140,8 +148,17 @@ namespace AK
         static const AkUniqueID SFX_SUBWAY_F = 1224719529U;
         static const AkUniqueID SFX_SUBWAY_J_BYS = 2782204094U;
         static const AkUniqueID SFX_SUBWAY_K_NYC_BYS_JM = 3569433076U;
+        static const AkUniqueID SFX_TOURNIQUET = 42279345U;
         static const AkUniqueID SFX_TRAIN_FREEDOM = 2950012982U;
+        static const AkUniqueID SFX_TRAVAUX_A = 3021302792U;
+        static const AkUniqueID SFX_TRAVAUX_B = 3021302795U;
+        static const AkUniqueID SFX_TRAVAUX_C = 3021302794U;
+        static const AkUniqueID SFX_TRAVAUX_D = 3021302797U;
+        static const AkUniqueID SFX_TRAVAUX_E = 3021302796U;
+        static const AkUniqueID SFX_TRAVAUX_F = 3021302799U;
+        static const AkUniqueID SFX_TRAVAUX_G = 3021302798U;
         static const AkUniqueID SFX_WIND_HOWL = 1631722864U;
+        static const AkUniqueID SFX_WOOD_CREEK = 1709669759U;
         static const AkUniqueID SPIDERMAN_0_INTRO = 838969532U;
         static const AkUniqueID SPIDERMAN_1_FAMILY_PROBLEMS = 2288458896U;
         static const AkUniqueID SPIDERMAN_2_MOUV_MUETTE = 1867442572U;
@@ -273,6 +290,7 @@ namespace AK
         static const AkUniqueID SFX_3D = 2822524704U;
         static const AkUniqueID SFX_EXIT = 4183237189U;
         static const AkUniqueID SFX_TEST = 3018450665U;
+        static const AkUniqueID SFX_TRAIN_FREEDOM = 2950012982U;
         static const AkUniqueID UI = 1551306167U;
         static const AkUniqueID VOX = 543694036U;
     } // namespace BUSSES
