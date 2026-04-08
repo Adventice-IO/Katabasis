@@ -87,6 +87,8 @@
                 // 2. Space Transformations
                 float3 worldPos = mul(unity_ObjectToWorld, v.position).xyz;
                 float d = distance(_WorldSpaceCameraPos, worldPos);
+                float cylinder = distance(_WorldSpaceCameraPos.xz, worldPos.xz);
+                cylinder = min(cylinder - 1.0, -(abs(_WorldSpaceCameraPos.y-worldPos.y) - 0.5));
                 
                 // 3. Distance Cull/Fade
                 if (d > _MaxDistance) {
@@ -96,8 +98,9 @@
                 }
                 float distFade = 1.0;//saturate((_MaxDistance - d) / _DistFade);
                 //distFade = 0.01;
-                distFade *= smoothstep(0.0, 0.25, d-0.75);
-                distFade *= lerp(0.25, 1.0, smoothstep(10.0, 0.0, d-10.0));
+                distFade *= smoothstep(0.0, 0.5, d-1.25);
+                // distFade *= smoothstep(0.0, 0.5, -cylinder);
+                distFade *= lerp(0.1, 1.0, smoothstep(10.0, 0.0, d-10.0));
 
                 // 4. Masking Logic
                 float maskAlpha = 1.0;
@@ -182,7 +185,8 @@
 
                 // Fixed: Apply the brightened color that was calculated but never used
                 o.color = float4(brightened, color.a) * visibility;
-                //o.color = v.color;
+                // o.color = v.color;
+                // o.color = 1 * distFade;;
                 
                 return o;
             }
