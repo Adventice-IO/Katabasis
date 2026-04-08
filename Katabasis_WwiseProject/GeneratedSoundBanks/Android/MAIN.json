@@ -10,7 +10,7 @@
     "Type": "User",
     "GUID": "{7E734BBA-16C9-46F8-8CBD-B94EE4B45669}",
     "Language": "SFX",
-    "Hash": "{7A6491BE-342D-AFFC-2D58-86746180E858}",
+    "Hash": "{AAC14AFE-DF56-CC1C-2351-8FDFA29CD6FE}",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\MAIN",
     "ShortName": "MAIN",
     "Path": "MAIN.bnk",
@@ -126,6 +126,14 @@
       "Location": "Memory",
       "ShortName": "SFX\\SFX_Neon\\SFX_Neon_38.wav",
       "CachePath": "4D/{4DC465BF-D00E-7B08-B351-337A8D8BB2B2}.wem"
+     },
+     {
+      "Id": "28121282",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "SFX\\SFX_Sewers\\SFX_Sewers_A_Drips\\SFX_Sewers_A_Drips_01.wav",
+      "CachePath": "A9/{A9DEB91C-9EA0-61C6-4933-979066B77C1D}.wem"
      },
      {
       "Id": "29741189",
@@ -2640,14 +2648,6 @@
       "CachePath": "F3/{F32476F8-9D21-7E45-0C02-74BD4E9CD1B1}.wem"
      },
      {
-      "Id": "811395107",
-      "Language": "SFX",
-      "Streaming": "false",
-      "Location": "Memory",
-      "ShortName": "SFX\\SFX_Sewers\\SFX_Sewers_A_Drips\\SFX_Sewers_A_Drips_01.wav",
-      "CachePath": "AE/{AE8BE1E0-CB7F-8394-EBE2-5F2AC16E8B7A}.wem"
-     },
-     {
       "Id": "815323057",
       "Language": "SFX",
       "Streaming": "false",
@@ -3909,6 +3909,14 @@
        "LibId": "6881283"
       },
       {
+       "Id": "472772939",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Containers\\Default Work Unit\\AMB\\AMB_Ambi\\AMB_Ambi_Ext\\AMB_Ambi_Ext_Street_03\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{C3FE6AA5-BDEB-4F58-8432-8F93CA0E7123}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
+      },
+      {
        "Id": "534493740",
        "Name": "Parametric EQ (Custom)",
        "ObjectPath": "\\Containers\\Default Work Unit\\AMB\\AMB_3D\\AMB_City\\AMB_City_H_Alarms\\AMB_City_Alarms_A\\AMB_City_Alarms_A\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
@@ -3996,6 +4004,14 @@
        "GUID": "{0EAFF432-037C-4254-A64A-951F60D21BC6}",
        "LibName": "Wwise Silence",
        "LibId": "6619138"
+      },
+      {
+       "Id": "640906439",
+       "Name": "Parametric EQ (Custom)",
+       "ObjectPath": "\\Containers\\Default Work Unit\\SFX\\SFX_3D\\SFX_Subway_Train\\[Effect Slot [0]: (Parametric EQ)]\\Parametric EQ (Custom)",
+       "GUID": "{B16F3347-3523-4B9E-97CA-76C8DCC99F1A}",
+       "LibName": "Wwise Parametric EQ",
+       "LibId": "6881283"
       },
       {
        "Id": "653815334",
@@ -4686,7 +4702,14 @@
        {
         "Id": "612576449"
        }
-      ]
+      ],
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "472772939"
+        }
+       ]
+      }
      },
      {
       "Id": "2687390208",
@@ -8559,14 +8582,6 @@
       ]
      },
      {
-      "Id": "2089405297",
-      "Name": "SFX_Rats",
-      "ObjectPath": "\\Events\\Default Work Unit\\SFX\\SFX_Rats",
-      "GUID": "{6F6435ED-8F64-469E-9A53-9308C9AF8B3A}",
-      "MaxAttenuation": "75",
-      "DurationType": "Infinite"
-     },
-     {
       "Id": "3799102629",
       "Name": "SFX_Sewers_A_Drips",
       "ObjectPath": "\\Events\\Default Work Unit\\SFX\\SFX_Sewers\\SFX_Sewers_A_Drips",
@@ -8575,7 +8590,7 @@
       "DurationType": "Infinite",
       "MediaRefs": [
        {
-        "Id": "811395107"
+        "Id": "28121282"
        }
       ],
       "AuxBusRefs": [
@@ -9216,6 +9231,9 @@
        "Custom": [
         {
          "Id": "37549470"
+        },
+        {
+         "Id": "640906439"
         }
        ]
       },
@@ -9257,6 +9275,9 @@
        "Custom": [
         {
          "Id": "444100841"
+        },
+        {
+         "Id": "640906439"
         }
        ]
       },
@@ -9290,6 +9311,9 @@
       ],
       "PluginRefs": {
        "Custom": [
+        {
+         "Id": "640906439"
+        },
         {
          "Id": "799183654"
         }
@@ -9350,6 +9374,9 @@
       "PluginRefs": {
        "Custom": [
         {
+         "Id": "640906439"
+        },
+        {
          "Id": "737493474"
         }
        ]
@@ -9403,6 +9430,13 @@
         "Id": "945933513"
        }
       ],
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "640906439"
+        }
+       ]
+      },
       "AuxBusRefs": [
        {
         "Id": "266044713",
@@ -11053,6 +11087,6 @@
     ]
    }
   ],
-  "FileHash": "{07FB1829-D57B-143D-C32C-81840D39B8E7}"
+  "FileHash": "{A7ECE44B-18D6-F658-88BD-784EE722D10D}"
  }
 }

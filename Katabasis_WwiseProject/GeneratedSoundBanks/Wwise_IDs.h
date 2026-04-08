@@ -127,7 +127,6 @@ namespace AK
         static const AkUniqueID SFX_PEOPLE_01 = 538432994U;
         static const AkUniqueID SFX_PEOPLE_02 = 538432993U;
         static const AkUniqueID SFX_RAPPERS = 1932663926U;
-        static const AkUniqueID SFX_RATS = 2089405297U;
         static const AkUniqueID SFX_SEWERS_A_DRIPS = 3799102629U;
         static const AkUniqueID SFX_SEWERS_B_PIPE = 4245633758U;
         static const AkUniqueID SFX_SEWERS_C_PIPE = 260636857U;
