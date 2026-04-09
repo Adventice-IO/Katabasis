@@ -7,10 +7,9 @@
 					<PropertyList>
 						<Property Name="MaxSoundPerInstance" Type="int16">
 							<ValueList>
-								<Value>1000</Value>
+								<Value>250</Value>
 							</ValueList>
 						</Property>
-						<Property Name="OverLimitBehavior" Type="int16" Value="1"/>
 					</PropertyList>
 					<ReferenceList>
 						<Reference Name="AudioDevice" PluginName="System" CompanyID="0" PluginID="174" PluginType="7">
@@ -1034,7 +1033,7 @@
 										<Custom>
 											<Effect Name="Gain (Custom)" ID="{E103F636-7739-420E-ABDF-33DBE6D9AAC8}" ShortID="592673904" PluginName="Wwise Gain" CompanyID="0" PluginID="139" PluginType="3">
 												<PropertyList>
-													<Property Name="FullBandGain" Type="Real32" Value="9"/>
+													<Property Name="FullBandGain" Type="Real32" Value="8"/>
 												</PropertyList>
 											</Effect>
 										</Custom>
@@ -1049,7 +1048,7 @@
 												<PropertyList>
 													<Property Name="Ratio" Type="Real32" Value="50"/>
 													<Property Name="ReleaseTime" Type="Real32" Value="0.02"/>
-													<Property Name="Threshold" Type="Real32" Value="-1"/>
+													<Property Name="Threshold" Type="Real32" Value="-2"/>
 												</PropertyList>
 											</Effect>
 										</Custom>
