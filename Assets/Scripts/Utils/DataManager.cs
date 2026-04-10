@@ -95,6 +95,9 @@ public class DataManager : MonoBehaviour
             {
                 string path = GetBasePath(folder);
                 Debug.Log("Resolved path for " + folder + ": " + (string.IsNullOrWhiteSpace(path) ? "Not found ('" + folder + "')" : path));
+                if(string.IsNullOrWhiteSpace(path))               {
+                    errored = true;
+                }
             }
 
             Debug.Log("Folder Check : " + Application.persistentDataPath + " -- " + Application.dataPath);
@@ -108,7 +111,7 @@ public class DataManager : MonoBehaviour
         if (errored)
         {
             Debug.Log("Looking for zip folder to extract");
-            string folderZip = Path.Combine(Application.dataPath, "KataData.zip");
+            string folderZip = Path.Combine(Application.persistentDataPath, "KataData.zip");
 
             if (File.Exists(folderZip))
             {
