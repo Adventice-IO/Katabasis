@@ -11,6 +11,7 @@ namespace BAPointCloudRenderer.Loading {
     /// This is the place, where most of the magic happens.
     /// </summary>
     class V2TraversalThread {
+        private const string LogPrefix = "[PointCloudTraversal]";
 
         private GameObject parent;
         private object locker = new object();
@@ -39,6 +40,9 @@ namespace BAPointCloudRenderer.Loading {
         private V2Cache cache;
 
         private Thread thread;
+        private long traversalIterationCount;
+        private long traversalFailureCount;
+        private string lastFailure;
 
         /// <summary>
         /// Creates the object, but does not start the thread yet
@@ -67,20 +71,24 @@ namespace BAPointCloudRenderer.Loading {
         }
 
         private void Run() {
-            try {
-                while (running) {
+            while (running) {
+                try {
                     toDelete = new Queue<Node>();
                     toRender = new Queue<Node>();
                     uint pointcount = TraverseAndBuildRenderingQueue();
                     mainThread.SetQueues(toRender, toDelete, pointcount);
-                    lock (this) {
-                        if (running) {
-                            Monitor.Wait(this);
-                        }
+                    Interlocked.Increment(ref traversalIterationCount);
+                } catch (Exception ex) {
+                    lastFailure = ex.ToString();
+                    Interlocked.Increment(ref traversalFailureCount);
+                    Debug.LogError($"{LogPrefix} Traversal failed but the traversal thread will continue: {ex}");
+                }
+
+                lock (this) {
+                    if (running) {
+                        Monitor.Wait(this);
                     }
                 }
-            } catch (Exception ex) {
-                Debug.LogError(ex);
             }
         }
 
@@ -300,6 +308,26 @@ namespace BAPointCloudRenderer.Loading {
                 thread = null;
             }
 
+        }
+
+        public bool IsAlive() {
+            return thread != null && thread.IsAlive;
+        }
+
+        public int VisibleNodeCount() {
+            return visibleNodes != null ? visibleNodes.Count : 0;
+        }
+
+        public long TraversalIterationCount() {
+            return Interlocked.Read(ref traversalIterationCount);
+        }
+
+        public long TraversalFailureCount() {
+            return Interlocked.Read(ref traversalFailureCount);
+        }
+
+        public string LastFailure() {
+            return lastFailure;
         }
 
     }

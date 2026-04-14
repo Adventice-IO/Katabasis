@@ -37,13 +37,24 @@ namespace BAPointCloudRenderer.CloudController {
         /// If enabled, nodes are loaded in all directions based only on camera position and far clip plane.
         /// </summary>
         public bool render360 = false;
+        /// <summary>
+        /// If enabled, periodic runtime diagnostics are logged to help track leaks or stalled loading.
+        /// </summary>
+        public bool enableDiagnostics = true;
+        /// <summary>
+        /// Interval in seconds between diagnostic snapshots.
+        /// </summary>
+        public float diagnosticsLogIntervalSeconds = 10f;
+
+        private V2Renderer runtimeRenderer;
 
         // Use this for initialization
         protected override void Initialize() {
             if (userCamera == null) {
                 userCamera = Camera.main;
             }
-            PointRenderer = new V2Renderer(this, minNodeSize, pointBudget, nodesLoadedPerFrame, nodesGOsPerFrame, userCamera, meshConfiguration, cacheSizeInPoints, render360);
+            runtimeRenderer = new V2Renderer(this, minNodeSize, pointBudget, nodesLoadedPerFrame, nodesGOsPerFrame, userCamera, meshConfiguration, cacheSizeInPoints, render360);
+            PointRenderer = runtimeRenderer;
         }
 
 
@@ -55,6 +66,10 @@ namespace BAPointCloudRenderer.CloudController {
                 return;
             }
             PointRenderer.Update();
+            if (enableDiagnostics && runtimeRenderer != null)
+            {
+                runtimeRenderer.LogPeriodicSnapshot(Mathf.Max(1f, diagnosticsLogIntervalSeconds));
+            }
             DrawDebugInfo();
         }
     }

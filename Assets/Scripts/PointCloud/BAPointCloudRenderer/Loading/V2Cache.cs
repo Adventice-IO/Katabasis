@@ -9,6 +9,9 @@ namespace BAPointCloudRenderer.Loading {
 
         private uint maxPoints;
         private uint cachePointCount = 0;
+        private int cacheNodeCount = 0;
+        private int evictionCount = 0;
+        private int directDropCount = 0;
         private RandomAccessQueue<Node> queue = new RandomAccessQueue<Node>();
 
         /// <summary>
@@ -32,14 +35,18 @@ namespace BAPointCloudRenderer.Loading {
                 while (cachePointCount + node.PointCount > maxPoints && !queue.IsEmpty()) {
                     Node old = queue.Dequeue();
                     cachePointCount -= (uint)old.PointCount;
+                    cacheNodeCount--;
+                    evictionCount++;
                     old.ForgetPoints();
                 }
                 if (cachePointCount + node.PointCount <= maxPoints) {
                     //In Cache einfügen
                     queue.Enqueue(node);
                     cachePointCount += (uint)node.PointCount;
+                    cacheNodeCount++;
                 } else {
                     //Nicht in Cache einfügen -> direkt entfernen
+                    directDropCount++;
                     node.ForgetPoints();
                 }
             }
@@ -53,6 +60,7 @@ namespace BAPointCloudRenderer.Loading {
                 if (queue.Contains(node)) {
                     queue.Remove(node);
                     cachePointCount -= (uint)node.PointCount;
+                    cacheNodeCount--;
                 }
             }
         }
@@ -63,6 +71,28 @@ namespace BAPointCloudRenderer.Loading {
         public uint PointCount() {
             lock (queue) {
                 return cachePointCount;
+            }
+        }
+
+        public uint MaxPointCount() {
+            return maxPoints;
+        }
+
+        public int NodeCount() {
+            lock (queue) {
+                return cacheNodeCount;
+            }
+        }
+
+        public int EvictionCount() {
+            lock (queue) {
+                return evictionCount;
+            }
+        }
+
+        public int DirectDropCount() {
+            lock (queue) {
+                return directDropCount;
             }
         }
     }

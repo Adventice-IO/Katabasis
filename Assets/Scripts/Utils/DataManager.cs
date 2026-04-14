@@ -71,6 +71,9 @@ public class DataManager : MonoBehaviour
         public float Progress;
         public string StatusText = string.Empty;
         public string ErrorMessage = string.Empty;
+        public long ProcessedBytes;
+        public long TotalBytes;
+        public string CurrentFileName = string.Empty;
     }
 
     void Awake()
@@ -696,12 +699,25 @@ public class DataManager : MonoBehaviour
     {
         using (ZipArchive archive = ZipFile.OpenRead(zipPath))
         {
-            int totalEntries = archive.Entries.Count;
-            int processedEntries = 0;
-
-            if (totalEntries == 0)
+            long totalBytes = 0;
+            foreach (ZipArchiveEntry entry in archive.Entries)
             {
-                UpdateExtractionStatus(extractionState, "Extracting " + displayName + "...", 1f);
+                if (!string.IsNullOrEmpty(entry.Name))
+                {
+                    totalBytes += Math.Max(0L, entry.Length);
+                }
+            }
+
+            lock (extractionState.SyncRoot)
+            {
+                extractionState.TotalBytes = totalBytes;
+                extractionState.ProcessedBytes = 0L;
+                extractionState.CurrentFileName = string.Empty;
+            }
+
+            if (archive.Entries.Count == 0)
+            {
+                UpdateExtractionStatus(extractionState, "Extracting " + displayName + "...", 1f, 0L, 0L, string.Empty);
                 return;
             }
 
@@ -727,14 +743,77 @@ public class DataManager : MonoBehaviour
                         Directory.CreateDirectory(directoryPath);
                     }
 
-                    entry.ExtractToFile(fullPath, true);
+                    ExtractEntryToFileWithProgress(entry, fullPath, displayName, extractionState);
                 }
+            }
 
-                processedEntries++;
-                float progress = Mathf.Clamp01((float)processedEntries / totalEntries);
-                UpdateExtractionStatus(extractionState, "Extracting " + displayName + "...", progress);
+            UpdateExtractionStatus(extractionState, BuildExtractionStatusText(displayName, string.Empty, totalBytes, totalBytes), 1f, totalBytes, totalBytes, string.Empty);
+        }
+    }
+
+    void ExtractEntryToFileWithProgress(ZipArchiveEntry entry, string destinationPath, string displayName, ExtractionState extractionState)
+    {
+        const int bufferSize = 1024 * 1024;
+        const long progressUpdateStepBytes = 32L * 1024L * 1024L;
+
+        long entryLength = Math.Max(0L, entry.Length);
+        long totalBytes;
+        long processedBytes;
+
+        lock (extractionState.SyncRoot)
+        {
+            totalBytes = extractionState.TotalBytes;
+            processedBytes = extractionState.ProcessedBytes;
+            extractionState.CurrentFileName = entry.FullName;
+        }
+
+        UpdateExtractionStatus(
+            extractionState,
+            BuildExtractionStatusText(displayName, entry.FullName, processedBytes, totalBytes),
+            GetExtractionProgressValue(processedBytes, totalBytes),
+            processedBytes,
+            totalBytes,
+            entry.FullName);
+
+        using (Stream sourceStream = entry.Open())
+        using (FileStream destinationStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize))
+        {
+            byte[] buffer = new byte[bufferSize];
+            int bytesRead;
+            long entryBytesWritten = 0L;
+            long nextProgressUpdateAt = progressUpdateStepBytes;
+
+            while ((bytesRead = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                destinationStream.Write(buffer, 0, bytesRead);
+                entryBytesWritten += bytesRead;
+                processedBytes += bytesRead;
+
+                if (entryBytesWritten >= nextProgressUpdateAt || entryBytesWritten == entryLength)
+                {
+                    UpdateExtractionStatus(
+                        extractionState,
+                        BuildExtractionStatusText(displayName, entry.FullName, processedBytes, totalBytes),
+                        GetExtractionProgressValue(processedBytes, totalBytes),
+                        processedBytes,
+                        totalBytes,
+                        entry.FullName);
+
+                    while (entryBytesWritten >= nextProgressUpdateAt)
+                    {
+                        nextProgressUpdateAt += progressUpdateStepBytes;
+                    }
+                }
             }
         }
+
+        UpdateExtractionStatus(
+            extractionState,
+            BuildExtractionStatusText(displayName, entry.FullName, processedBytes, totalBytes),
+            GetExtractionProgressValue(processedBytes, totalBytes),
+            processedBytes,
+            totalBytes,
+            entry.FullName);
     }
 
     ExtractionState BeginExtraction(string displayName, ExtractionState extractionState)
@@ -746,6 +825,9 @@ public class DataManager : MonoBehaviour
             extractionState.Progress = 0f;
             extractionState.StatusText = "Extracting " + displayName + "...";
             extractionState.ErrorMessage = string.Empty;
+            extractionState.ProcessedBytes = 0L;
+            extractionState.TotalBytes = 0L;
+            extractionState.CurrentFileName = string.Empty;
         }
 
         return extractionState;
@@ -753,10 +835,18 @@ public class DataManager : MonoBehaviour
 
     void UpdateExtractionStatus(ExtractionState extractionState, string statusText, float progress)
     {
+        UpdateExtractionStatus(extractionState, statusText, progress, extractionState.ProcessedBytes, extractionState.TotalBytes, extractionState.CurrentFileName);
+    }
+
+    void UpdateExtractionStatus(ExtractionState extractionState, string statusText, float progress, long processedBytes, long totalBytes, string currentFileName)
+    {
         lock (extractionState.SyncRoot)
         {
             extractionState.StatusText = statusText;
             extractionState.Progress = Mathf.Clamp01(progress);
+            extractionState.ProcessedBytes = processedBytes;
+            extractionState.TotalBytes = totalBytes;
+            extractionState.CurrentFileName = currentFileName ?? string.Empty;
         }
     }
 
@@ -823,7 +913,51 @@ public class DataManager : MonoBehaviour
             infoTM.gameObject.SetActive(true);
         }
 
-        infoTM.text = statusText + " " + Mathf.RoundToInt(Mathf.Clamp01(progress) * 100f) + "%";
+        float safeProgress = Mathf.Clamp01(progress) * 100f;
+        infoTM.text = statusText + "\n" + safeProgress.ToString("0.0") + "%";
+    }
+
+    float GetExtractionProgressValue(long processedBytes, long totalBytes)
+    {
+        if (totalBytes <= 0L)
+        {
+            return 0f;
+        }
+
+        return Mathf.Clamp01((float)((double)processedBytes / totalBytes));
+    }
+
+    string BuildExtractionStatusText(string displayName, string currentFileName, long processedBytes, long totalBytes)
+    {
+        string baseText = "Extracting " + displayName + "...";
+        string fileText = string.IsNullOrWhiteSpace(currentFileName) ? string.Empty : "\n" + Path.GetFileName(currentFileName);
+
+        if (totalBytes <= 0L)
+        {
+            return baseText + fileText;
+        }
+
+        return baseText + fileText + "\n" + FormatBytes(processedBytes) + " / " + FormatBytes(totalBytes);
+    }
+
+    string FormatBytes(long bytes)
+    {
+        string[] units = { "B", "KB", "MB", "GB", "TB" };
+        double value = Math.Max(0L, bytes);
+        int unitIndex = 0;
+
+        while (value >= 1024d && unitIndex < units.Length - 1)
+        {
+            value /= 1024d;
+            unitIndex++;
+        }
+
+        if (unitIndex == 0)
+        {
+            return value.ToString("0") + " " + units[unitIndex];
+        }
+
+        return value.ToString("0.0") + " " + units[unitIndex];
     }
 
     void HideDownloadInfo()

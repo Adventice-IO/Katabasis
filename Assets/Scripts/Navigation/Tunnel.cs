@@ -43,7 +43,10 @@ public class Tunnel : MonoBehaviour
     public GameObject handlePrefab;
     public GameObject checkpointPrefab;
 
+    [Header("Subtitles")]
+    public string subtitlesPath;
 
+    [Header("Spline")]
     public SplineContainer splineContainer;
     private bool lastWasSelected = false;
 

@@ -128,6 +128,8 @@ public class MainController : MonoBehaviour
     [Range(0.01f, 1f)]
     public float viewDistanceAnimSpeed = 0.2f;
     public float viewDistanceHideSpeed = 10f;
+    public bool enablePointCloudDiagnostics = true;
+    public float pointCloudDiagnosticsLogIntervalSeconds = 10f;
 
     [Range(0f, 1f)]
     public float pointCloudViewDistanceMultiplier = 1.0f;
@@ -152,6 +154,8 @@ public class MainController : MonoBehaviour
     GameObject sallesGO;
     GameObject tunnelsGO;
     bool wasUserPresent;
+    float nextPointCloudDiagnosticsLogTime;
+    float lastLoggedVisionZoneDistance = -1f;
 
     private void Start()
     {
@@ -372,7 +376,20 @@ public class MainController : MonoBehaviour
 
         if (Camera.main != null)
         {
-            Camera.main.farClipPlane = getAverageVisionZoneMaxDistance();
+            float targetFarClip = getAverageVisionZoneMaxDistance();
+            Camera.main.farClipPlane = targetFarClip;
+
+            if (enablePointCloudDiagnostics && Application.isPlaying)
+            {
+                bool shouldLogByInterval = Time.unscaledTime >= nextPointCloudDiagnosticsLogTime;
+                bool shouldLogByDistanceChange = lastLoggedVisionZoneDistance < 0f || Mathf.Abs(lastLoggedVisionZoneDistance - targetFarClip) >= 5f;
+                if (shouldLogByInterval || shouldLogByDistanceChange)
+                {
+                    nextPointCloudDiagnosticsLogTime = Time.unscaledTime + Mathf.Max(1f, pointCloudDiagnosticsLogIntervalSeconds);
+                    lastLoggedVisionZoneDistance = targetFarClip;
+                    Debug.Log(BuildPointCloudDiagnostics(targetFarClip));
+                }
+            }
         }
 
 #if UNITY_EDITOR
@@ -411,7 +428,7 @@ public class MainController : MonoBehaviour
                 float viewOffset = Time.deltaTime * viewDistanceAnimSpeed;
                 pointCloudViewDistanceMultiplier = Mathf.Clamp01(pointCloudViewDistanceMultiplier + viewOffset);
             }
-            
+
             if (editMode != _lastEditMode)
             {
                 _lastEditMode = editMode;
@@ -819,6 +836,8 @@ public class MainController : MonoBehaviour
         timeAtPlay = Time.time;
         freeMotion = false;
         isRunning = true;
+
+
         currentSpeed = 0;
         // Optional: If we are at the end, restart
         if (trackPosition >= 0.99f)
@@ -826,6 +845,16 @@ public class MainController : MonoBehaviour
             trackPosition = 0f;
             currentSpeed = 0f;
         }
+
+        if (tunnel != null && tunnel.subtitlesPath != "")
+        {
+            Subtitles subtitleManager = FindAnyObjectByType<Subtitles>();
+            if (subtitleManager != null)
+            {
+                subtitleManager.play("off/" + tunnel.subtitlesPath + "_" + language + ".srt");
+            }
+        }
+
     }
 
     public void Pause()
@@ -837,7 +866,7 @@ public class MainController : MonoBehaviour
     public void setPosition(float position)
     {
         trackPosition = Mathf.Clamp01(position);
-        if(isRunning && followPathOrientation && splineContainer != null)
+        if (isRunning && followPathOrientation && splineContainer != null)
         {
             float actualTrackPosition = isReversed ? (1f - trackPosition) : trackPosition;
             Vector3 forward = splineContainer.EvaluateTangent(actualTrackPosition);
@@ -987,6 +1016,47 @@ public class MainController : MonoBehaviour
         }
 
         return target;
+    }
+
+    string BuildPointCloudDiagnostics(float targetFarClip)
+    {
+        Camera mainCamera = Camera.main;
+        VisionZone[] zones = FindObjectsByType<VisionZone>(FindObjectsSortMode.None);
+
+        System.Text.StringBuilder activeZones = new System.Text.StringBuilder();
+        int activeZoneCount = 0;
+        foreach (VisionZone zone in zones)
+        {
+            float weight = zone.getWeight();
+            if (weight <= 0.01f)
+            {
+                continue;
+            }
+
+            if (activeZones.Length > 0)
+            {
+                activeZones.Append(", ");
+            }
+
+            activeZones.Append(zone.name);
+            activeZones.Append(":w=");
+            activeZones.Append(weight.ToString("F2"));
+            activeZones.Append(",max=");
+            activeZones.Append(zone.maxDistance.ToString("F1"));
+            activeZoneCount++;
+        }
+
+        string cameraName = mainCamera != null ? mainCamera.name : "null";
+        float cameraFarClip = mainCamera != null ? mainCamera.farClipPlane : 0f;
+        float cameraFieldOfView = mainCamera != null ? mainCamera.fieldOfView : 0f;
+        float cameraPixelHeight = mainCamera != null ? mainCamera.pixelRect.height : 0f;
+        string cameraTargetTexture = "none";
+        if (mainCamera != null && mainCamera.targetTexture != null)
+        {
+            cameraTargetTexture = mainCamera.targetTexture.width + "x" + mainCamera.targetTexture.height;
+        }
+
+        return $"[PointCloudCamera] camera='{cameraName}' camFar={cameraFarClip:F2} targetFar={targetFarClip:F2} camFov={cameraFieldOfView:F2} camPixelHeight={cameraPixelHeight:F0} camTarget={cameraTargetTexture} viewDistanceMultiplier={pointCloudViewDistanceMultiplier:F2} gameState={gameState} activeVisionZones={activeZoneCount} zones=[{activeZones}]";
     }
 
 

@@ -28,6 +28,7 @@ public class KatabasisMeshConfiguration : MeshConfiguration
     public Camera renderCamera = null;
     public bool displayLOD = false;
     public Transform root;
+    public bool allowDeferredBlockCleanup = false;
 
     private HashSet<PointCloudBlock> gameObjectCollection = null;
     private GraphicsBuffer _maskBuffer;
@@ -155,7 +156,25 @@ public class KatabasisMeshConfiguration : MeshConfiguration
 
     public override void RemoveGameObject(GameObject gameObject)
     {
-        gameObject.GetComponent<PointCloudBlock>()?.kill();
+        PointCloudBlock block = gameObject.GetComponent<PointCloudBlock>();
+        if (block == null)
+        {
+            MeshFilter filter = gameObject.GetComponent<MeshFilter>();
+            if (filter != null && filter.sharedMesh != null)
+            {
+                Destroy(filter.sharedMesh);
+            }
+            Destroy(gameObject);
+            return;
+        }
+
+        if (allowDeferredBlockCleanup)
+        {
+            block.kill();
+            return;
+        }
+
+        block.forceKillImmediate();
     }
 
     private void OnDisable()

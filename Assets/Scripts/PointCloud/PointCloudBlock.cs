@@ -1,8 +1,11 @@
 using System;
+using System.Threading;
 using UnityEngine;
 
 public class PointCloudBlock : MonoBehaviour
 {
+    private const string LogPrefix = "[PointCloudBlock]";
+
     PointCloudProfile profile;
 
     MaterialPropertyBlock block;
@@ -26,6 +29,24 @@ public class PointCloudBlock : MonoBehaviour
 
     Vector3 boxMin;
     Vector3 boxMax;
+
+    private bool trackedAsLive;
+    private bool trackedAsPendingKill;
+
+    private static int _liveBlockCount;
+    private static int _pendingKillCount;
+    private static long _createdBlockCount;
+    private static long _destroyedBlockCount;
+
+    public static int LiveBlockCount => Interlocked.CompareExchange(ref _liveBlockCount, 0, 0);
+    public static int PendingKillCount => Interlocked.CompareExchange(ref _pendingKillCount, 0, 0);
+    public static long CreatedBlockCount => Interlocked.Read(ref _createdBlockCount);
+    public static long DestroyedBlockCount => Interlocked.Read(ref _destroyedBlockCount);
+
+    private void Awake()
+    {
+        TrackLive();
+    }
 
     public void init(PointCloudProfile profile)
     {
@@ -106,12 +127,17 @@ public class PointCloudBlock : MonoBehaviour
         if (timeAtKill < 0f)
         {
             timeAtKill = Time.time;
+            TrackPendingKill();
         }
     }
 
     public void forceKillImmediate()
     {
-        timeAtKill = 0f;
+        if (timeAtKill < 0f)
+        {
+            timeAtKill = Time.time;
+            TrackPendingKill();
+        }
         onKill?.Invoke();
     }
 
@@ -132,5 +158,48 @@ public class PointCloudBlock : MonoBehaviour
         Gizmos.DrawSphere(boxMin, 0.1f);
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(boxMax, 0.1f);
+    }
+
+    private void OnDestroy()
+    {
+        if (trackedAsPendingKill)
+        {
+            Interlocked.Decrement(ref _pendingKillCount);
+            trackedAsPendingKill = false;
+        }
+
+        if (trackedAsLive)
+        {
+            Interlocked.Decrement(ref _liveBlockCount);
+            Interlocked.Increment(ref _destroyedBlockCount);
+            trackedAsLive = false;
+        }
+    }
+
+    private void TrackLive()
+    {
+        if (trackedAsLive)
+        {
+            return;
+        }
+
+        trackedAsLive = true;
+        Interlocked.Increment(ref _liveBlockCount);
+        Interlocked.Increment(ref _createdBlockCount);
+    }
+
+    private void TrackPendingKill()
+    {
+        if (trackedAsPendingKill)
+        {
+            return;
+        }
+
+        trackedAsPendingKill = true;
+        Interlocked.Increment(ref _pendingKillCount);
+        if (_pendingKillCount > 128)
+        {
+            Debug.LogWarning($"{LogPrefix} Pending kill block count is high: {_pendingKillCount}. This usually means cleanup is lagging behind traversal.");
+        }
     }
 }

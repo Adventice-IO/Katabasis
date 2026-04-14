@@ -16,6 +16,7 @@ namespace BAPointCloudRenderer.CloudController
     [ExecuteAlways]
     public class PointCloudLoader : MonoBehaviour
     {
+        private const string LogPrefix = "[PointCloudLoader]";
 
         /// <summary>
         /// Path to the folder which contains the cloud.js file or URL to download the cloud from. In the latter case, it will be downloaded to a /temp folder
@@ -40,6 +41,7 @@ namespace BAPointCloudRenderer.CloudController
         private Node rootNode;
         bool waitingForPotreeData;
         string resolvedCloudPath;
+        private Thread hierarchyThread;
 
         DataManager dataManager;
         private void Awake()
@@ -71,23 +73,28 @@ namespace BAPointCloudRenderer.CloudController
                 rootNode = CloudLoader.LoadHierarchyOnly(metaData);
 
                 setController.AddRootNode(this, rootNode, metaData);
+                Debug.Log($"{LogPrefix} Loaded hierarchy for '{metaData.cloudName}' from '{resolvedCloudPath}'.");
 
             }
             catch (System.IO.FileNotFoundException ex)
             {
-                Debug.LogError("Could not find file: " + ex.FileName);
+                Debug.LogError($"{LogPrefix} Could not find file while loading '{resolvedCloudPath}': {ex.FileName}");
             }
             catch (System.IO.DirectoryNotFoundException ex)
             {
-                Debug.LogError("Could not find directory: " + ex.Message);
+                Debug.LogError($"{LogPrefix} Could not find directory while loading '{resolvedCloudPath}': {ex.Message}");
             }
             catch (System.Net.WebException ex)
             {
-                Debug.LogError("Could not access web address. " + ex.Message);
+                Debug.LogError($"{LogPrefix} Could not access web address while loading '{resolvedCloudPath}': {ex.Message}");
             }
             catch (Exception ex)
             {
-                Debug.LogError(ex + Thread.CurrentThread.Name);
+                Debug.LogError($"{LogPrefix} Unexpected hierarchy load failure on '{resolvedCloudPath}' in thread '{Thread.CurrentThread.Name}': {ex}");
+            }
+            finally
+            {
+                hierarchyThread = null;
             }
         }
 
@@ -117,9 +124,11 @@ namespace BAPointCloudRenderer.CloudController
 
                 resolvedCloudPath = GetResolvedCloudPath();
                 setController.RegisterController(this);
-                Thread thread = new Thread(LoadHierarchy);
-                thread.Name = "Loader for " + resolvedCloudPath;
-                thread.Start();
+                hierarchyThread = new Thread(LoadHierarchy);
+                hierarchyThread.Name = "Loader for " + resolvedCloudPath;
+                hierarchyThread.IsBackground = true;
+                Debug.Log($"{LogPrefix} Starting hierarchy load for '{resolvedCloudPath}'.");
+                hierarchyThread.Start();
             }
         }
 
@@ -165,6 +174,7 @@ namespace BAPointCloudRenderer.CloudController
                 return false;
             }
             setController.RemoveRootNode(this, rootNode);
+            Debug.Log($"{LogPrefix} Removed point cloud '{rootNode.MetaData.cloudName}' from '{resolvedCloudPath}'.");
             rootNode = null;
             return true;
         }

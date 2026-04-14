@@ -10,6 +10,7 @@ namespace BAPointCloudRenderer.Loading {
     /// The multithreaded Real-Time-Renderer as described in the Bachelor Thesis in chapter 3.2.2 - 3.2.7
     /// </summary>
     class V2Renderer : AbstractRenderer {
+        private const string LogPrefix = "[PointCloudRenderer]";
 
         private AbstractPointCloudSet pcset;
 
@@ -23,6 +24,7 @@ namespace BAPointCloudRenderer.Loading {
 
         private MeshConfiguration config;
         private uint renderingpointcount;
+        private readonly uint pointBudget;
 
         //Camera Info
         private Camera camera;
@@ -32,6 +34,7 @@ namespace BAPointCloudRenderer.Loading {
         private Queue<Node> toRender;
         private Queue<Node> toDelete;
         private Queue<Node> toDeleteExternal; //Nodes that have been scheduled for removal via removeRoot
+        private float nextDiagnosticsLogTime;
 
         /// <summary>
         /// Creates a new V2Renderer and starts all the threads
@@ -50,12 +53,15 @@ namespace BAPointCloudRenderer.Loading {
             this.camera = camera;
             this.config = config;
             this.render360 = render360;
+            this.pointBudget = pointBudget;
             cache = new V2Cache(cacheSize);
             loadingThread = new V2LoadingThread(cache);
             loadingThread.Start();
             traversalThread = new V2TraversalThread(pcset.gameObject, this, loadingThread, rootNodes, minNodeSize, pointBudget, nodesLoadedPerFrame, nodesGOsperFrame, cache, render360);
             traversalThread.Start();
             toDeleteExternal = new Queue<Node>();
+            nextDiagnosticsLogTime = 0f;
+            Debug.Log($"{LogPrefix} Started renderer for '{pcset.name}' with pointBudget={pointBudget}, cacheSize={cacheSize}, nodesLoadedPerFrame={nodesLoadedPerFrame}, nodesGOsPerFrame={nodesGOsperFrame}, render360={render360}.");
         }
 
         /// <summary>
@@ -64,6 +70,7 @@ namespace BAPointCloudRenderer.Loading {
         /// <param name="rootNode">not null</param>
         public void AddRootNode(Node rootNode, PointCloudLoader loader) {
             rootNodes.Add(rootNode);
+            Debug.Log($"{LogPrefix} Added root node '{rootNode}' for loader '{loader.name}'. Root count is now {rootNodes.Count}.");
         }
 
         /// <summary>
@@ -75,6 +82,7 @@ namespace BAPointCloudRenderer.Loading {
             lock (toDeleteExternal) {
                 toDeleteExternal.Enqueue(rootNode);
             }
+            Debug.Log($"{LogPrefix} Scheduled root node '{rootNode}' for removal from loader '{loader.name}'. Pending root removals: {toDeleteExternal.Count}.");
         }
 
         /// <summary>
@@ -167,10 +175,12 @@ namespace BAPointCloudRenderer.Loading {
             if (unityThread != null && Thread.CurrentThread != unityThread) {
                 throw new System.Exception("ShutDown() has to be called from the Unity Main Thread!");
             }
+            Debug.Log($"{LogPrefix} Shutdown requested for '{pcset.name}'. {BuildDiagnosticsSnapshot()}");
             Pause();
             foreach (Node node in rootNodes) {
                 node.RemoveAllGameObjects(config);
             }
+            Debug.Log($"{LogPrefix} Shutdown completed for '{pcset.name}'.");
         }
 
         /// <summary>
@@ -182,6 +192,7 @@ namespace BAPointCloudRenderer.Loading {
             lock (traversalThread) {
                 Monitor.PulseAll(traversalThread);
             }
+            traversalThread.StopAndWait();
             loadingThread.Stop();
         }
 
@@ -230,6 +241,44 @@ namespace BAPointCloudRenderer.Loading {
                 this.toDelete = toDelete;
                 this.renderingpointcount = pointcount;
             }
+        }
+
+        public void LogPeriodicSnapshot(float intervalSeconds) {
+            float now = Time.unscaledTime;
+            if (now < nextDiagnosticsLogTime) {
+                return;
+            }
+
+            nextDiagnosticsLogTime = now + Mathf.Max(1f, intervalSeconds);
+            Debug.Log(BuildDiagnosticsSnapshot());
+        }
+
+        public string BuildDiagnosticsSnapshot() {
+            int queuedRenderCount;
+            int queuedDeleteCount;
+            lock (locker) {
+                queuedRenderCount = toRender != null ? toRender.Count : 0;
+                queuedDeleteCount = toDelete != null ? toDelete.Count : 0;
+            }
+
+            int pendingRootDeletes;
+            lock (toDeleteExternal) {
+                pendingRootDeletes = toDeleteExternal.Count;
+            }
+
+            string loadingFailure = loadingThread.LastFailure();
+            string traversalFailure = traversalThread.LastFailure();
+
+            string cameraName = camera != null ? camera.name : "null";
+            float cameraFarClip = camera != null ? camera.farClipPlane : 0f;
+            float cameraFieldOfView = camera != null ? camera.fieldOfView : 0f;
+            float cameraPixelHeight = camera != null ? camera.pixelRect.height : 0f;
+            string cameraTargetTexture = "none";
+            if (camera != null && camera.targetTexture != null) {
+                cameraTargetTexture = camera.targetTexture.width + "x" + camera.targetTexture.height;
+            }
+
+            return $"{LogPrefix} Snapshot set='{pcset.name}' camera='{cameraName}' camFar={cameraFarClip:F2} camFov={cameraFieldOfView:F2} camPixelHeight={cameraPixelHeight:F0} camTarget={cameraTargetTexture} renderedPoints={renderingpointcount}/{pointBudget} rootNodes={rootNodes.Count} visibleNodes={traversalThread.VisibleNodeCount()} queuedRender={queuedRenderCount} queuedDelete={queuedDeleteCount} pendingRootDeletes={pendingRootDeletes} cachePoints={cache.PointCount()}/{cache.MaxPointCount()} cacheNodes={cache.NodeCount()} cacheEvictions={cache.EvictionCount()} cacheDirectDrops={cache.DirectDropCount()} loadingQueue={loadingThread.PendingQueueCount()} loadingScheduled={loadingThread.ScheduledNodeCount()} loadingCompleted={loadingThread.CompletedLoadCount()} loadingFailures={loadingThread.FailedLoadCount()} traversalIterations={traversalThread.TraversalIterationCount()} traversalFailures={traversalThread.TraversalFailureCount()} blocksLive={PointCloudBlock.LiveBlockCount} blocksPendingKill={PointCloudBlock.PendingKillCount} loaderThreadAlive={loadingThread.IsAlive()} traversalThreadAlive={traversalThread.IsAlive()} lastLoadingFailure='{loadingFailure ?? ""}' lastTraversalFailure='{traversalFailure ?? ""}'";
         }
     }
 }

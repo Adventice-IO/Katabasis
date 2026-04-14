@@ -11,6 +11,7 @@ namespace BAPointCloudRenderer.Loading {
     /// Responsible for loading the point data.
     /// </summary>
     class V2LoadingThread {
+        private const string LogPrefix = "[PointCloudLoading]";
 
         private ThreadSafeQueue<Node> loadingQueue;
         private bool running = true;
@@ -18,6 +19,10 @@ namespace BAPointCloudRenderer.Loading {
         private readonly HashSet<Node> scheduledNodes = new HashSet<Node>();
         private readonly object scheduledNodesLock = new object();
         private Thread thread;
+        private int pendingQueueCount;
+        private long completedLoadCount;
+        private long failedLoadCount;
+        private string lastFailure;
         
         public V2LoadingThread(V2Cache cache) {
             loadingQueue = new ThreadSafeQueue<Node>();
@@ -32,27 +37,38 @@ namespace BAPointCloudRenderer.Loading {
         }
 
         private void Run() {
-            try {
-                while (running) {
+            while (running) {
+                try {
                     Node n;
                     if (loadingQueue.TryDequeue(out n)) {
+                        Interlocked.Decrement(ref pendingQueueCount);
                         lock (scheduledNodesLock) {
                             scheduledNodes.Remove(n);
                         }
+
+                        bool shouldLoad = false;
                         Monitor.Enter(n);
-                        if (!n.HasPointsToRender() && !n.HasGameObjects()) {
-                            Monitor.Exit(n);
-                            CloudLoader.LoadPointsForNode(n);
-                            cache.Insert(n);
-                        } else {
+                        try {
+                            shouldLoad = !n.HasPointsToRender() && !n.HasGameObjects();
+                        } finally {
                             Monitor.Exit(n);
                         }
+
+                        if (!shouldLoad) {
+                            continue;
+                        }
+
+                        CloudLoader.LoadPointsForNode(n);
+                        cache.Insert(n);
+                        Interlocked.Increment(ref completedLoadCount);
                     } else {
                         Thread.Sleep(1);
                     }
+                } catch (Exception ex) {
+                    lastFailure = ex.ToString();
+                    Interlocked.Increment(ref failedLoadCount);
+                    Debug.LogError($"{LogPrefix} Node load failed but the loading thread will continue: {ex}");
                 }
-            } catch (Exception ex) {
-                Debug.LogError(ex);
             }
         }
 
@@ -79,6 +95,33 @@ namespace BAPointCloudRenderer.Loading {
                 }
             }
             loadingQueue.Enqueue(node);
+            Interlocked.Increment(ref pendingQueueCount);
+        }
+
+        public bool IsAlive() {
+            return thread != null && thread.IsAlive;
+        }
+
+        public int PendingQueueCount() {
+            return Interlocked.CompareExchange(ref pendingQueueCount, 0, 0);
+        }
+
+        public int ScheduledNodeCount() {
+            lock (scheduledNodesLock) {
+                return scheduledNodes.Count;
+            }
+        }
+
+        public long CompletedLoadCount() {
+            return Interlocked.Read(ref completedLoadCount);
+        }
+
+        public long FailedLoadCount() {
+            return Interlocked.Read(ref failedLoadCount);
+        }
+
+        public string LastFailure() {
+            return lastFailure;
         }
 
     }
