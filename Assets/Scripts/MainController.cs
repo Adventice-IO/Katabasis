@@ -846,14 +846,23 @@ public class MainController : MonoBehaviour
             currentSpeed = 0f;
         }
 
-        if (tunnel != null && tunnel.subtitlesPath != "")
+        if (tunnel != null)
         {
-            Subtitles subtitleManager = FindAnyObjectByType<Subtitles>();
-            if (subtitleManager != null)
+            if (tunnel.subtitlesPath != "")
             {
-                subtitleManager.play("off/" + tunnel.subtitlesPath + "_" + language + ".srt");
+                Subtitles subtitleManager = FindAnyObjectByType<Subtitles>();
+                if (subtitleManager != null)
+                {
+                    subtitleManager.play("off/" + tunnel.subtitlesPath + "_" + language + ".srt");
+                }
+            }
+
+            if (tunnel.audioEventSO != null)
+            {
+                tunnel.audioEventSO.evt.Post(gameObject);
             }
         }
+
 
     }
 

@@ -36,7 +36,7 @@ public class Tunnel : MonoBehaviour
     [Header("Audio Settings")]
     public AudioStateRefSO startSO;
     public List<PortalAudioData> audioPortals = new List<PortalAudioData>();
-
+    public AudioEventRefSO audioEventSO;
 
     [Header("Manipulation")]
     public bool autoGroundKnots = true;

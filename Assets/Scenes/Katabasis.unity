@@ -497,7 +497,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 638221236218943314, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
       propertyPath: render360
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 638221236218943314, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
       propertyPath: userCamera
@@ -505,11 +505,15 @@ PrefabInstance:
       objectReference: {fileID: 2117942271}
     - target: {fileID: 638221236218943314, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
       propertyPath: pointBudget
-      value: 500000
+      value: 5000000
       objectReference: {fileID: 0}
     - target: {fileID: 638221236218943314, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
       propertyPath: cacheSizeInPoints
-      value: 500000
+      value: 5000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 638221236218943314, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
+      propertyPath: enableDiagnostics
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 638221236218943314, guid: 07815f4659404084ab23c5ab9057b7cf, type: 3}
       propertyPath: moveCenterToTransformPosition
@@ -801,6 +805,10 @@ PrefabInstance:
       propertyPath: salleDepart
       value: 
       objectReference: {fileID: 916687913}
+    - target: {fileID: 1081824611423370720, guid: b1735d61535e1324f93ae882e43ca5ea, type: 3}
+      propertyPath: audioEventSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 0332ba9cda8ed1943b89fe159659d2e4, type: 2}
     - target: {fileID: 1081824611423370720, guid: b1735d61535e1324f93ae882e43ca5ea, type: 3}
       propertyPath: salleArrivee
       value: 
