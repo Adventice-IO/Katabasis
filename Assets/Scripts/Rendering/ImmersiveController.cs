@@ -14,7 +14,8 @@ public class ImmersiveController : MonoBehaviour
     public int resolutionHeight = 698;
     public int resolutionDepth = 2618;
 
-    public float farClipPlane = 100f;
+    public float farClipPlaneSides = 100f;
+    public float farClipPlaneFrontback = 100f;
 
     Camera leftCam;
     Camera rightCam;
@@ -131,7 +132,7 @@ public class ImmersiveController : MonoBehaviour
         cam.aspect = safeWallWidth / safeWallHeight;
         cam.fieldOfView = verticalFov;
         cam.nearClipPlane = 0.01f;
-        cam.farClipPlane = farClipPlane;
+        cam.farClipPlane =  cam == leftCam || cam == rightCam ? farClipPlaneSides : farClipPlaneFrontback;
     }
 
     void ReleaseRenderTexture(RenderTexture renderTexture)
