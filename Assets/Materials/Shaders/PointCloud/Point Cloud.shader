@@ -18,6 +18,7 @@
         Blend One One
         ZWrite Off
         Cull Off
+        // Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
 
         Pass
         {
@@ -87,8 +88,8 @@
                 // 2. Space Transformations
                 float3 worldPos = mul(unity_ObjectToWorld, v.position).xyz;
                 float d = distance(_WorldSpaceCameraPos, worldPos);
-                float cylinder = distance(_WorldSpaceCameraPos.xz, worldPos.xz);
-                cylinder = min(cylinder - 1.0, -(abs(_WorldSpaceCameraPos.y-worldPos.y) - 0.5));
+                // float cylinder = distance(_WorldSpaceCameraPos.xz, worldPos.xz);
+                // cylinder = min(cylinder - 1.0, -(abs(_WorldSpaceCameraPos.y-worldPos.y) - 0.5));
                 
                 // 3. Distance Cull/Fade
                 if (d > _MaxDistance) {

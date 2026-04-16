@@ -18,12 +18,12 @@ Shader "Custom/PointCloudDistanceFade"
 
     SubShader
     {
-        Tags { "Queue"="Transparent" "RenderType"="Transparent" "IgnoreProjector"="True" }
-        LOD 100
-
-        Blend SrcAlpha OneMinusSrcAlpha
+        Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
+        Blend One One
         ZWrite Off
         Cull Off
+        // Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
+        // Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
         {
@@ -73,13 +73,18 @@ Shader "Custom/PointCloudDistanceFade"
                 UNITY_TRANSFER_INSTANCE_ID(v, o);
 
                 float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
+                float d = distance(_WorldSpaceCameraPos, worldPos);
+                float distFade = smoothstep(0.0, 0.5, d-1.25);
+                // distFade *= lerp(0.1, 1.0, smoothstep(10.0, 0.0, d-10.0));
+                distFade *= smoothstep(10.0, 0.0, d-20.0);
                 
                 // Calculate distance in vertex shader for performance
                 o.camDist = distance(worldPos, _WorldSpaceCameraPos);
 
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 
-                o.color = get_color(v.color, _ColorKey);
+                o.color = get_color(v.color, _ColorKey);// * distFade;
                 
                 return o;
             }
@@ -107,7 +112,8 @@ Shader "Custom/PointCloudDistanceFade"
 
                 // Ensure opacity never drops below MinAlpha
                 // We use max() to clamp the lower bound
-                col.a *= max(distanceOpacity, minAlpha);
+                // col.a *= max(distanceOpacity, minAlpha);
+                col.rgb *= max(distanceOpacity, minAlpha);
 
 
                 //Color pass : compensate dark points so they remain visible

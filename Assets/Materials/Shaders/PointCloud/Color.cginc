@@ -5,10 +5,10 @@ float4 get_color(float4 color, float4 purple_key) {
     // color.rgb = GammaToLinearSpace(color.rgb);
     float4 color_t = color;
     // float4 color_t = pow(color, float4(2.2, 2.2, 2.2, 1));
-#if UNITY_PLATFORM_ANDROID
-    color.rgb = LinearToGammaSpace(color.rgb);
-#endif
-    color.rgb = color.rgb * color.rgb * 0.7;
+// #if UNITY_PLATFORM_ANDROID
+//     color.rgb = LinearToGammaSpace(color.rgb);
+// #endif
+    color.rgb = color.rgb * color.rgb * 1.5;
 
     //float dcolor = length(color);
     //float black = saturate(0.05/max(0.0001, dcolor*dcolor));
@@ -19,9 +19,9 @@ float4 get_color(float4 color, float4 purple_key) {
     // color = lerp(color, float4(1,0,0,1), smoothstep(0.0, 0.1, purple));
     
     // increment saturation
-    float3 hsv = rgb2hsv(color.rgb);
-    hsv.y *= 1.5;
-    color.rgb = hsv2rgb(hsv);
+    // float3 hsv = rgb2hsv(color.rgb);
+    // hsv.y *= 1.5;
+    // color.rgb = hsv2rgb(hsv);
 
     return color;
 }
