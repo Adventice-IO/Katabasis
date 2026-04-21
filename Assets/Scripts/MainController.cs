@@ -369,6 +369,7 @@ public class MainController : MonoBehaviour
 
     private void Update()
     {
+       // Debug.Log("MainConroller position : " + transform.position+", camera position :" + (Camera.main != null ? Camera.main.transform.position.ToString() : "null"));
         if (allTunnels == null)
         {
             allTunnels = FindObjectsByType<Tunnel>(FindObjectsSortMode.None);
@@ -714,9 +715,15 @@ public class MainController : MonoBehaviour
 
     // --- Public API for Buttons ---
 
+    InterviewManager GetInterviewManager()
+    {
+        return FindAnyObjectByType<InterviewManager>();
+    }
+
     public void ResetGame()
     {
         visitedSalles.Clear();
+        GetInterviewManager()?.ResetGame();
         gameState = GameState.Menu;
         if (salle != null) salle.setActive(false);
         salle = null;
@@ -890,6 +897,7 @@ public class MainController : MonoBehaviour
     public void Reset()
     {
         visitedSalles = new List<Salle>();
+        GetInterviewManager()?.ResetGame();
         TeleportToSalle(initialSalle);
         ResetPosition();
     }

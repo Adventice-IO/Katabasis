@@ -228,6 +228,7 @@ public class Interview : MonoBehaviour
 
     void resetPlaybackState()
     {
+        CancelInvoke(nameof(endEvaporate));
         progression = 0;
         evaporateProg = 0;
         shouldEvaporate = false;
@@ -319,14 +320,9 @@ public class Interview : MonoBehaviour
 #endif
         }
 
-        if (evaporateProg == 1)
+        if (evaporateProg >= 1f)
         {
-            if (!resourcesReleased)
-            {
-                ReleasePlaybackResources(true);
-                resourcesReleased = true;
-            }
-
+            endEvaporate();
             return;
         }
 
@@ -407,9 +403,9 @@ public class Interview : MonoBehaviour
     void show(bool shouldShow)
     {
         LogDebug("Show(" + shouldShow + ") for salle " + (salle != null ? salle.name : "None"));
-        vfx.enabled = shouldShow;
         if (shouldShow)
         {
+            vfx.enabled = true;
             if (!previewLoadQueued && !previewLoadInProgress)
             {
                 BeginPreviewLoad();
@@ -417,15 +413,23 @@ public class Interview : MonoBehaviour
         }
         else
         {
+            if (shouldEvaporate || evaporateProg > 0f || state == State.Ending)
+            {
+                vfx.enabled = true;
+                return;
+            }
+
             HandleSalleExitWhileListening();
             if (leaveRequestedWhileListening)
             {
+                vfx.enabled = true;
                 state = State.Ending;
                 progression = 0;
                 shouldEvaporate = true;
             }
             else
             {
+                vfx.enabled = false;
                 ClearResumeState();
                 ReleasePlaybackResources(true);
                 resetPlaybackState();
@@ -734,7 +738,7 @@ public class Interview : MonoBehaviour
         double knownVideoLength = GetKnownVideoLength();
 
         float startTime = 0f;
-        bool applyResume = !isIntroEntry && hasResumeTime;
+        bool applyResume = hasResumeTime;
         if (applyResume)
         {
             float maxResumeTime = knownVideoLength > 0d
@@ -816,8 +820,6 @@ public class Interview : MonoBehaviour
         evaporateEvent?.evt.Post(gameObject);
         state = State.Ending;
         OnInterviewEnded?.Invoke(this);
-
-        Invoke(nameof(endEvaporate), evaporateTime + 5f);
     }
 
     void stopWwiseVideoEvent(bool forceStop = false)
@@ -844,6 +846,11 @@ public class Interview : MonoBehaviour
 
     void endEvaporate()
     {
+        if (!gameObject.activeSelf)
+        {
+            return;
+        }
+
         if (videoPlayer != null) videoPlayer.Stop();
         ReleasePlaybackResources(true);
         gameObject.SetActive(false);
@@ -917,10 +924,11 @@ public class Interview : MonoBehaviour
         }
 
         InterviewManager manager = FindAnyObjectByType<InterviewManager>();
+        bool shouldResumeCurrentIntro = currentEntryIsIntro;
         while (playbackIndex >= 0 && playbackIndex < playbackSequence.Length)
         {
             InterviewManager.InterviewData data = playbackSequence[playbackIndex];
-            if (!data.isIntro || manager == null || !manager.HasIntroStarted(data.person))
+            if (!data.isIntro || manager == null || !manager.HasIntroStarted(data.person) || shouldResumeCurrentIntro)
             {
                 break;
             }
@@ -949,7 +957,7 @@ public class Interview : MonoBehaviour
 
     void CaptureResumeTimeForCurrentEntry()
     {
-        if (currentEntryIsIntro || videoPlayer == null)
+        if (videoPlayer == null)
         {
             return;
         }
@@ -982,7 +990,7 @@ public class Interview : MonoBehaviour
         CaptureResumeTimeForCurrentEntry();
         leaveRequestedWhileListening = true;
         loadingEvent?.evt.Stop(gameObject);
-        subtitles?.stop();
+        // subtitles?.stop();
         if (videoPlayer != null)
         {
             videoPlayer.Stop();
@@ -1104,7 +1112,7 @@ public class Interview : MonoBehaviour
             }
         }
 
-        subtitles?.stop();
+        //subtitles?.stop();
         loadingEvent?.evt.Stop(gameObject);
 
 

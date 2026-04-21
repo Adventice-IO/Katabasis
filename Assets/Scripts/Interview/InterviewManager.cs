@@ -144,8 +144,17 @@ public class InterviewManager : MonoBehaviour
 
         playedPersonsSinceAssignment.Clear();
         playedThemesHistory.Clear();
+        activeAssignmentsBySlot.Clear();
+        resolvedPlaybackBySlot.Clear();
         consumedSlots.Clear();
         startedIntroPersons.Clear();
+        roomAssignments.Clear();
+        preparedSalle = null;
+        lastAssignedSalle = null;
+        activePlayingSlot = null;
+        StopLoadAssignmentsRoutine();
+        ResetInterviewLeaveRtpc();
+        lastActiveInterviewDebug = null;
         RebuildPersonStats();
     }
 
@@ -262,22 +271,6 @@ public class InterviewManager : MonoBehaviour
         if (entry.isIntro)
         {
             MarkIntroStarted(entry.person);
-
-            if (slot != null && resolvedPlaybackBySlot.TryGetValue(slot, out InterviewData[] sequence) && sequence != null && sequence.Length > 0)
-            {
-                InterviewData[] remainingSequence = sequence
-                    .Where(data => !data.isIntro)
-                    .ToArray();
-
-                if (remainingSequence.Length > 0)
-                {
-                    resolvedPlaybackBySlot[slot] = remainingSequence;
-                }
-                else
-                {
-                    resolvedPlaybackBySlot.Remove(slot);
-                }
-            }
         }
     }
 
@@ -990,15 +983,17 @@ public class InterviewManager : MonoBehaviour
     List<InterviewData> GetPlayableCandidates(string person, List<InterviewData> interviews, int? salleLevel)
     {
         return interviews
-            .Where(data => !data.visited)
-            .Where(data => !data.proposed)
+            .Where(data => !HasPlaybackIdentityState(data, candidate => candidate.visited))
+            .Where(data => !HasPlaybackIdentityState(data, candidate => candidate.proposed))
             .Where(data => !salleLevel.HasValue || data.levels.Contains(salleLevel.Value))
             .ToList();
     }
 
     bool IsInterviewAllowedForPlayback(InterviewData candidate, int? salleLevel)
     {
-        return !candidate.visited && !candidate.proposed && (!salleLevel.HasValue || candidate.levels.Contains(salleLevel.Value));
+        return !HasPlaybackIdentityState(candidate, data => data.visited)
+            && !HasPlaybackIdentityState(candidate, data => data.proposed)
+            && (!salleLevel.HasValue || candidate.levels.Contains(salleLevel.Value));
     }
 
     void RegisterPlayedInterview(InterviewData interview)
@@ -1042,7 +1037,7 @@ public class InterviewManager : MonoBehaviour
     {
         for (int i = 0; i < interviewDataList.Count; i++)
         {
-            if (!MatchesInterview(interviewDataList[i], interview.filename, interview.depthkitId, interview.levels))
+            if (!SharesPlaybackIdentity(interviewDataList[i], interview.filename, interview.depthkitId))
             {
                 continue;
             }
@@ -1050,7 +1045,6 @@ public class InterviewManager : MonoBehaviour
             var data = interviewDataList[i];
             data.proposed = true;
             interviewDataList[i] = data;
-            return;
         }
     }
 
@@ -1066,9 +1060,11 @@ public class InterviewManager : MonoBehaviour
 
     bool MarkInterviewVisitedInternal(string interviewId, string depthkitId, List<int> levels)
     {
+        bool matched = false;
+
         for (int i = 0; i < interviewDataList.Count; i++)
         {
-            if (!MatchesInterview(interviewDataList[i], interviewId, depthkitId, levels))
+            if (!SharesPlaybackIdentity(interviewDataList[i], interviewId, depthkitId))
             {
                 continue;
             }
@@ -1077,10 +1073,10 @@ public class InterviewManager : MonoBehaviour
             data.visited = true;
             data.proposed = false;
             interviewDataList[i] = data;
-            return true;
+            matched = true;
         }
 
-        return false;
+        return matched;
     }
 
     InterviewData? GetInterviewData(string interviewId, int? level)
@@ -1088,7 +1084,7 @@ public class InterviewManager : MonoBehaviour
         List<int> levels = level.HasValue ? new List<int> { level.Value } : null;
         for (int i = 0; i < interviewDataList.Count; i++)
         {
-            if (MatchesInterview(interviewDataList[i], interviewId, interviewId, levels))
+            if (MatchesInterviewExact(interviewDataList[i], interviewId, interviewId, levels))
             {
                 return interviewDataList[i];
             }
@@ -1128,11 +1124,29 @@ public class InterviewManager : MonoBehaviour
         return sequence[sequence.Length - 1];
     }
 
-    bool MatchesInterview(InterviewData data, string filename, string depthkitId, List<int> levels)
+    bool HasPlaybackIdentityState(InterviewData interview, Func<InterviewData, bool> selector)
     {
-        bool matchesId =
+        for (int i = 0; i < interviewDataList.Count; i++)
+        {
+            if (SharesPlaybackIdentity(interviewDataList[i], interview.filename, interview.depthkitId) && selector(interviewDataList[i]))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool SharesPlaybackIdentity(InterviewData data, string filename, string depthkitId)
+    {
+        return
             string.Equals(data.filename, filename, StringComparison.OrdinalIgnoreCase) ||
             string.Equals(data.depthkitId, depthkitId, StringComparison.OrdinalIgnoreCase);
+    }
+
+    bool MatchesInterviewExact(InterviewData data, string filename, string depthkitId, List<int> levels)
+    {
+        bool matchesId = SharesPlaybackIdentity(data, filename, depthkitId);
 
         if (!matchesId)
         {
