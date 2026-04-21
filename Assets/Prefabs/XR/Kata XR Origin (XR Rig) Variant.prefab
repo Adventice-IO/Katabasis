@@ -56,9 +56,10 @@ MonoBehaviour:
   resolutionWidth: 5236
   resolutionHeight: 698
   resolutionDepth: 2618
-  farClipPlane: 100
-  leftRenderTexture: {fileID: 8400000, guid: 4c3f6c373a241e144871d6daf99e4f0a, type: 2}
-  rightRenderTexture: {fileID: 8400000, guid: 181c8807636c1f34db840b9036e24590, type: 2}
+  farClipPlaneSides: 100
+  farClipPlaneFrontback: 200
+  leftRenderTexture: {fileID: 8400000, guid: 181c8807636c1f34db840b9036e24590, type: 2}
+  rightRenderTexture: {fileID: 8400000, guid: 4c3f6c373a241e144871d6daf99e4f0a, type: 2}
   frontRenderTexture: {fileID: 8400000, guid: 5f68de0cec4a22844a6d11627873a7b1, type: 2}
   backRenderTexture: {fileID: 8400000, guid: c72fcb04f89ddad4c869a161651ce7d5, type: 2}
   dynamicTextures: 0
@@ -128,16 +129,16 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 100
+  far clip plane: 200
   field of view: 15.189287
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1073745911
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: c72fcb04f89ddad4c869a161651ce7d5, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -184,7 +185,7 @@ MonoBehaviour:
   m_StopNaN: 0
   m_Dithering: 0
   m_ClearDepth: 1
-  m_AllowXRRendering: 0
+  m_AllowXRRendering: 1
   m_AllowHDROutput: 1
   m_UseScreenCoordOverride: 0
   m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -277,7 +278,7 @@ MonoBehaviour:
   cartonTime: 4
   cartonFadeTime: 1
   spawnDistance: 5
-  cartonScale: 3
+  cartonScale: 1.7
   timeBeforeReset: 2
   cartons: []
 --- !u!1 &4412677102631063596
@@ -527,16 +528,16 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 100
+  far clip plane: 200
   field of view: 15.189287
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1073745911
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 5f68de0cec4a22844a6d11627873a7b1, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -583,7 +584,7 @@ MonoBehaviour:
   m_StopNaN: 0
   m_Dithering: 0
   m_ClearDepth: 1
-  m_AllowXRRendering: 0
+  m_AllowXRRendering: 1
   m_AllowHDROutput: 1
   m_UseScreenCoordOverride: 0
   m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -912,8 +913,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7746020257354616683}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.20577294, y: -0, z: -0, w: 0.9785998}
-  m_LocalPosition: {x: 0, y: -0.22000003, z: 0.5}
+  m_LocalRotation: {x: 0.22445889, y: -0, z: -0, w: 0.9744836}
+  m_LocalPosition: {x: 0, y: -0.3599999, z: 0.7400055}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -937,7 +938,7 @@ MonoBehaviour:
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
-  m_WorldSpaceWidth: 500
+  m_WorldSpaceWidth: 538
   m_WorldSpaceHeight: 90
   m_PivotReferenceSize: 1
   m_Pivot: 7
@@ -956,7 +957,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Subtitles
   subs: {fileID: 0}
   isPlaying: 0
-  offset: {x: 0, y: -0.22, z: 0.5}
+  offset: {x: 0, y: -0.36, z: 0.74}
   smooth: 7
 --- !u!1 &8074931417435072676
 GameObject:
@@ -1081,9 +1082,9 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1073745911
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 4c3f6c373a241e144871d6daf99e4f0a, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1130,7 +1131,7 @@ MonoBehaviour:
   m_StopNaN: 0
   m_Dithering: 0
   m_ClearDepth: 1
-  m_AllowXRRendering: 0
+  m_AllowXRRendering: 1
   m_AllowHDROutput: 1
   m_UseScreenCoordOverride: 0
   m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -1218,9 +1219,9 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1073745911
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 181c8807636c1f34db840b9036e24590, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1267,7 +1268,7 @@ MonoBehaviour:
   m_StopNaN: 0
   m_Dithering: 0
   m_ClearDepth: 1
-  m_AllowXRRendering: 0
+  m_AllowXRRendering: 1
   m_AllowHDROutput: 1
   m_UseScreenCoordOverride: 0
   m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -1317,6 +1318,14 @@ PrefabInstance:
     - target: {fileID: 665326919092368300, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: tunnels
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 927309121262695183, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1250152698927207567, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1691571359758317101, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_IsActive
@@ -1386,9 +1395,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kata XR Origin (XR Rig) Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 2425469361241291328, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2572820093246560282, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_CastDistance
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2974021035037999946, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3237230896655369491, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_RaycastMask.m_Bits
@@ -1397,6 +1414,10 @@ PrefabInstance:
     - target: {fileID: 3237230896655369491, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_InteractionLayers.m_Bits
       value: 112
+      objectReference: {fileID: 0}
+    - target: {fileID: 3922177026488651056, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: end
@@ -1492,7 +1513,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: globalSpeedMultiplier
-      value: 10
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: speedCurve.m_Curve.Array.size
@@ -1674,6 +1695,10 @@ PrefabInstance:
       propertyPath: m_GazeInteractor
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5807523068563062282, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5831623572012434036, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1684,11 +1709,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6398742847350777855, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6873022368256633593, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7325477772855753073, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_IsActive
@@ -1704,7 +1729,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8524822086086354612, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9167892766432708302, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: teleportActivateAction
@@ -2364,4 +2389,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TransformFollower
   target: {fileID: 1389821045889146871}
   simulatorObject: {fileID: 0}
-  verticalOffset: 10
+  verticalOffset: -10
