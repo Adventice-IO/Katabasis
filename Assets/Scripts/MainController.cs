@@ -790,6 +790,7 @@ public class MainController : MonoBehaviour
         ResetPosition();
         if (salle.isExit && !editMode)
         {
+            Debug.Log("Teleporting to " + salle.name + ", Arrived at exit salle, going to outro");
             gameState = GameState.Outro;
         }
 

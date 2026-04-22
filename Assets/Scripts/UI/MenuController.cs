@@ -75,6 +75,9 @@ public class MenuController : MonoBehaviour
             transform.position = Camera.main.transform.TransformPoint(Vector3.forward * 2);
             transform.LookAt(Camera.main.transform);
             transform.Rotate(0, 180, 0);
+        }else
+        {
+            return;
         }
 
         uiDocument = GetComponent<UIDocument>();
@@ -115,28 +118,28 @@ public class MenuController : MonoBehaviour
         sallesList.makeItem = () =>
         {
             var button = new Button();
+            button.clicked += () => OnSalleButtonClicked(button);
             return button;
         };
 
         tunnelsList.makeItem = () =>
         {
             var button = new Button();
+            button.clicked += () => OnTunnelButtonClicked(button);
             return button;
         };
 
         sallesList.bindItem = (element, index) =>
         {
             var button = element as Button;
-            button.clicked -= () => OnSalleClicked(index);
-            button.clicked += () => OnSalleClicked(index);
+            button.userData = index;
             button.text = sallesItems[index].gameObject.name;
         };
 
         tunnelsList.bindItem = (element, index) =>
         {
             var button = element as Button;
-            button.clicked -= () => OnTunnelClicked(index);
-            button.clicked += () => OnTunnelClicked(index);
+            button.userData = index;
 
             button.text = tunnelsItems[index].gameObject.name;
         };
@@ -192,9 +195,18 @@ public class MenuController : MonoBehaviour
 
     private void OnSalleClicked(int index)
     {
-
         var salle = sallesList.itemsSource[index] as Salle;
+        
+        Debug.Log("Salle button clicked: " + index+" > "+salle.name);
         mainController.TeleportToSalle(salle);
+    }
+
+    private void OnSalleButtonClicked(Button button)
+    {
+        if (button.userData is int index)
+        {
+            OnSalleClicked(index);
+        }
     }
 
     private void OnTunnelClicked(int index)
@@ -205,6 +217,14 @@ public class MenuController : MonoBehaviour
         mainController.ResetPosition(true);
 
         tunnelsList.SetSelectionWithoutNotify(new List<int> { });
+    }
+
+    private void OnTunnelButtonClicked(Button button)
+    {
+        if (button.userData is int index)
+        {
+            OnTunnelClicked(index);
+        }
     }
 
     private void onPlayPauseClicked()

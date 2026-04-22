@@ -43,8 +43,13 @@ public class Interview : MonoBehaviour
     float resumeTimeSeconds;
     bool hasResumeTime;
     bool leaveRequestedWhileListening;
+    bool forceAudioOnlyForNextSequenceEntry;
+    float playbackRealtimeOrigin = -1f;
+    float playbackExpectedEndTime = -1f;
+    bool playbackCompletionHandled;
 
     const float ResumeLeadSeconds = 5f;
+    const float PlaybackCompletionToleranceSeconds = 0.05f;
 
     [Range(0, 4)]
     public int level;
@@ -241,6 +246,8 @@ public class Interview : MonoBehaviour
         isTransitioningSequence = false;
         currentEntryIsIntro = false;
         currentPerson = null;
+        forceAudioOnlyForNextSequenceEntry = false;
+        ResetPlaybackTimer();
         resourcesReleased = false;
         state = State.Idle;
     }
@@ -270,6 +277,92 @@ public class Interview : MonoBehaviour
     public bool IsPreviewBusy()
     {
         return previewLoadQueued || previewLoadInProgress;
+    }
+
+    void ResetPlaybackTimer()
+    {
+        playbackRealtimeOrigin = -1f;
+        playbackExpectedEndTime = -1f;
+        playbackCompletionHandled = false;
+    }
+
+    bool HasPendingSequenceEntry()
+    {
+        return playbackSequence != null
+            && playbackIndex >= 0
+            && playbackIndex < playbackSequence.Length - 1;
+    }
+
+    void TryArmPlaybackTimer()
+    {
+        if (playbackRealtimeOrigin < 0f || playbackExpectedEndTime >= 0f)
+        {
+            return;
+        }
+
+        double knownVideoLength = GetKnownVideoLength();
+        if (knownVideoLength <= 0d)
+        {
+            return;
+        }
+
+        playbackExpectedEndTime = playbackRealtimeOrigin + (float)knownVideoLength;
+        LogDebug("Armed playback timer for '" + interviewId + "' at t=" + playbackExpectedEndTime.ToString("0.00"));
+    }
+
+    void StartPlaybackTimer(float startTime)
+    {
+        playbackCompletionHandled = false;
+        playbackRealtimeOrigin = Time.time - Mathf.Max(0f, startTime);
+        playbackExpectedEndTime = -1f;
+        TryArmPlaybackTimer();
+
+        if (playbackExpectedEndTime < 0f)
+        {
+            PrepareVideoMetadata();
+        }
+    }
+
+    bool UpdateTimedPlaybackCompletion()
+    {
+        if (state != State.Playing || playbackCompletionHandled)
+        {
+            return false;
+        }
+
+        if (!forceAudioOnlyForNextSequenceEntry
+            && HasPendingSequenceEntry()
+            && videoEventID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID
+            && (videoPlayer == null || !videoPlayer.isPlaying))
+        {
+            forceAudioOnlyForNextSequenceEntry = true;
+            LogDebug("Video visuals stopped before sequence completion; next entry will start audio-only");
+        }
+
+        if (playbackExpectedEndTime < 0f)
+        {
+            TryArmPlaybackTimer();
+            return false;
+        }
+
+        if (Time.time < playbackExpectedEndTime + PlaybackCompletionToleranceSeconds)
+        {
+            return false;
+        }
+
+        CompleteCurrentPlayback("timer");
+        return true;
+    }
+
+    bool ShouldPlayDepthkitVideo(bool audioOnly)
+    {
+        return !audioOnly
+            && isActiveAndEnabled
+            && videoPlayer != null
+            && videoPlayer.isActiveAndEnabled
+            && clip != null
+            && clip.isActiveAndEnabled
+            && (vfx == null || vfx.enabled);
     }
 
     void WarmPreviewDataAsync()
@@ -326,6 +419,11 @@ public class Interview : MonoBehaviour
             return;
         }
 
+        if (UpdateTimedPlaybackCompletion())
+        {
+            return;
+        }
+
         if (progression < 1 && !mainController.editMode)
         {
             if (Application.isPlaying)
@@ -365,7 +463,7 @@ public class Interview : MonoBehaviour
             {
                 if (!shouldEvaporate)
                 {
-                    bool hasPendingSequenceEntry = playbackSequence != null && playbackIndex >= 0 && playbackIndex < playbackSequence.Length - 1;
+                    bool hasPendingSequenceEntry = HasPendingSequenceEntry();
                     if (!hasPendingSequenceEntry && videoPlayer.time > videoPlayer.length - evaporatePreDelay)
                     {
                         evaporate();
@@ -701,7 +799,7 @@ public class Interview : MonoBehaviour
         previewLoadCoroutine = null;
     }
 
-    public void play()
+    public void play(bool audioOnly = false)
     {
         LogDebug("Starting playback for mediaPath='" + interviewId + "' depthkitPath='" + itwName + "'");
         leaveRequestedWhileListening = false;
@@ -731,9 +829,6 @@ public class Interview : MonoBehaviour
 
         Debug.Log("Start Wwise Event from play");
         videoEventID = AkUnitySoundEngine.PostEvent(wwiseEventName, gameObject);
-        
-
-        videoPlayer.Play();
 
         double knownVideoLength = GetKnownVideoLength();
 
@@ -748,7 +843,10 @@ public class Interview : MonoBehaviour
             if (startTime > 0f)
             {
                 Debug.Log("Resuming video at " + startTime + " seconds");
-                videoPlayer.time = startTime;
+                if (videoPlayer != null)
+                {
+                    videoPlayer.time = startTime;
+                }
                 if (videoEventID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID)
                 {
                     Debug.Log("Seeking Wwise Event to " + startTime + " seconds");
@@ -756,6 +854,19 @@ public class Interview : MonoBehaviour
                 }
             }
         }
+
+        bool playDepthkitVideo = ShouldPlayDepthkitVideo(audioOnly);
+        if (playDepthkitVideo)
+        {
+            videoPlayer.Play();
+        }
+        else if (videoPlayer != null)
+        {
+            LogDebug("Skipping VideoPlayer playback and launching audio/subtitles only");
+            videoPlayer.Stop();
+        }
+
+        StartPlaybackTimer(startTime);
 
         state = State.Playing;
 
@@ -787,6 +898,7 @@ public class Interview : MonoBehaviour
 
         LogDebug("Stopping playback because another interview started");
         CaptureResumeTimeForCurrentEntry();
+        ResetPlaybackTimer();
         leaveRequestedWhileListening = false;
         if (stopWwiseEvent)
         {
@@ -910,8 +1022,10 @@ public class Interview : MonoBehaviour
         playbackIndex = nextIndex;
         shouldEvaporate = false;
         evaporateProg = 0;
+        bool playAudioOnly = forceAudioOnlyForNextSequenceEntry;
+        forceAudioOnlyForNextSequenceEntry = false;
         loadPlaybackEntry(playbackSequence[playbackIndex]);
-        play();
+        play(playAudioOnly);
         isTransitioningSequence = false;
         return true;
     }
@@ -989,6 +1103,10 @@ public class Interview : MonoBehaviour
 
         CaptureResumeTimeForCurrentEntry();
         leaveRequestedWhileListening = true;
+        if (HasPendingSequenceEntry())
+        {
+            forceAudioOnlyForNextSequenceEntry = true;
+        }
         loadingEvent?.evt.Stop(gameObject);
         // subtitles?.stop();
         if (videoPlayer != null)
@@ -998,9 +1116,15 @@ public class Interview : MonoBehaviour
     }
 
 
-    void OnVideoFinished(VideoPlayer vp)
+    void CompleteCurrentPlayback(string completionSource)
     {
-        LogDebug("Video finished for mediaPath='" + interviewId + "'");
+        if (playbackCompletionHandled)
+        {
+            return;
+        }
+
+        playbackCompletionHandled = true;
+        LogDebug("Playback completed via " + completionSource + " for mediaPath='" + interviewId + "'");
         GetKnownVideoLength();
         string previousInterviewId = interviewId;
         InterviewManager.InterviewData[] completedSequence = playbackSequence;
@@ -1010,6 +1134,8 @@ public class Interview : MonoBehaviour
         {
             return;
         }
+
+        ResetPlaybackTimer();
 
         InterviewManager consumedManager = FindAnyObjectByType<InterviewManager>();
         consumedManager?.MarkSlotConsumed(this);
@@ -1049,9 +1175,16 @@ public class Interview : MonoBehaviour
         }
     }
 
+
+    void OnVideoFinished(VideoPlayer vp)
+    {
+        CompleteCurrentPlayback("video callback");
+    }
+
     void OnVideoPrepared(VideoPlayer vp)
     {
         CacheCurrentVideoLength();
+        TryArmPlaybackTimer();
     }
 
     float getDiffToClosestCut()
