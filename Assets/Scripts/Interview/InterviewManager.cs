@@ -297,12 +297,12 @@ public class InterviewManager : MonoBehaviour
 
     public void PrepareAssignmentsForSalle(Salle salle)
     {
-        if (salle == null || salle.isExit)
+        if (salle != null && salle.isExit)
         {
             interviewStopAllEvent?.evt.Post(gameObject);
 
             //kill all pending media loads to avoid having interviews popping in after reaching the exit salle
-            Debug.Log("PrepareAssignmentsForSalle received null/exit salle. Stopping all interviews and clearing pending playback.", this);
+            Debug.LogWarning("PrepareAssignmentsForSalle received null/exit salle. Stopping all interviews and clearing pending playback.", this);
             StopLoadAssignmentsRoutine();
             if (activePlayingSlot != null)
             {

@@ -43,6 +43,7 @@ public class Interview : MonoBehaviour
     float resumeTimeSeconds;
     bool hasResumeTime;
     bool leaveRequestedWhileListening;
+    bool keepVfxAliveAfterSalleExit;
     float playbackRealtimeOrigin = -1f;
     float playbackExpectedEndTime = -1f;
     bool playbackCompletionHandled;
@@ -80,6 +81,8 @@ public class Interview : MonoBehaviour
     public float evaporatePreDelay = 0.5f;
     public float evaporateTime = 3f;
     public bool shouldEvaporate = false;
+    [SerializeField] float evaporatePostDelay = 5f;
+    float evaporateReachedFullTime = -1f;
 
     Salle salle;
 
@@ -179,15 +182,26 @@ public class Interview : MonoBehaviour
 
         if (leaveRequestedWhileListening)
         {
-            TracePlayback("cleanup() preserved active playback after salle exit; visuals will be hidden but playlist stays alive");
-            if (vfx != null)
-            {
-                vfx.enabled = false;
-            }
+            TracePlayback("cleanup() starting visual-only evaporation after salle exit while keeping playback continuity alive");
+            StartSalleExitEvaporation();
             return;
         }
 
         evaporate();
+    }
+
+    void StartSalleExitEvaporation()
+    {
+        if (shouldEvaporate)
+        {
+            return;
+        }
+
+        shouldEvaporate = true;
+        evaporateProg = 0f;
+        evaporateReachedFullTime = -1f;
+        keepVfxAliveAfterSalleExit = true;
+        evaporateEvent?.evt.Post(gameObject);
     }
 
     public bool MatchesPreviewAssignment(InterviewManager.InterviewData data)
@@ -246,7 +260,9 @@ public class Interview : MonoBehaviour
         CancelInvoke(nameof(endEvaporate));
         progression = 0;
         evaporateProg = 0;
+        evaporateReachedFullTime = -1f;
         shouldEvaporate = false;
+        keepVfxAliveAfterSalleExit = false;
         previewLoadQueued = false;
         previewLoadInProgress = false;
         revealStartTime = -1f;
@@ -407,7 +423,7 @@ public class Interview : MonoBehaviour
         {
             if (salle != null)
             {
-                bool shouldEnable = mainController.isInSalle(salle);
+                bool shouldEnable = keepVfxAliveAfterSalleExit || mainController.isInSalle(salle);
                 if (shouldEnable != vfx.enabled)
                 {
                     show(shouldEnable);
@@ -425,7 +441,15 @@ public class Interview : MonoBehaviour
 
         if (evaporateProg >= 1f)
         {
-            endEvaporate();
+            if (evaporateReachedFullTime < 0f)
+            {
+                evaporateReachedFullTime = Time.time;
+            }
+
+            if (Time.time >= evaporateReachedFullTime + evaporatePostDelay)
+            {
+                endEvaporate();
+            }
             return;
         }
 
@@ -486,6 +510,10 @@ public class Interview : MonoBehaviour
         {
             float evapProg = Time.deltaTime / evaporateTime;
             evaporateProg = Mathf.Clamp(evaporateProg + evapProg, 0, 1);
+            if (evaporateProg >= 1f && evaporateReachedFullTime < 0f)
+            {
+                evaporateReachedFullTime = Time.time;
+            }
         }
 
         float diffToClosestCut = getDiffToClosestCut();
@@ -528,7 +556,7 @@ public class Interview : MonoBehaviour
             }
 
             HandleSalleExitWhileListening();
-            if (leaveRequestedWhileListening)
+            if (leaveRequestedWhileListening && !keepVfxAliveAfterSalleExit)
             {
                 TracePlayback("show(false) kept playback running after salle exit; hiding VFX without moving to Ending state");
                 vfx.enabled = false;
@@ -933,6 +961,8 @@ public class Interview : MonoBehaviour
         ReleasePlaybackResources(false);
         shouldEvaporate = false;
         evaporateProg = 0;
+        evaporateReachedFullTime = -1f;
+        keepVfxAliveAfterSalleExit = false;
         progression = 0;
         playbackSequence = null;
         playbackIndex = -1;
@@ -954,6 +984,8 @@ public class Interview : MonoBehaviour
 
         LogDebug("Evaporating interview '" + interviewId + "'");
         shouldEvaporate = true;
+        evaporateReachedFullTime = -1f;
+        keepVfxAliveAfterSalleExit = true;
 
         evaporateEvent?.evt.Post(gameObject);
         state = State.Ending;
@@ -989,6 +1021,21 @@ public class Interview : MonoBehaviour
             return;
         }
 
+        if (leaveRequestedWhileListening && state == State.Playing)
+        {
+            TracePlayback("endEvaporate() completed visual-only salle-exit evaporation; hiding VFX while playback continues");
+            keepVfxAliveAfterSalleExit = false;
+            shouldEvaporate = false;
+            evaporateProg = 0f;
+            evaporateReachedFullTime = -1f;
+            if (vfx != null)
+            {
+                vfx.enabled = false;
+            }
+            return;
+        }
+
+        keepVfxAliveAfterSalleExit = false;
         if (videoPlayer != null) videoPlayer.Stop();
         ReleasePlaybackResources(true);
         gameObject.SetActive(false);
