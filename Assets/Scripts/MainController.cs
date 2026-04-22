@@ -624,7 +624,9 @@ public class MainController : MonoBehaviour
                     trackPosition = 1f;
                     currentSpeed = 0f;
                     isRunning = false;
-                    TeleportToSalle(tunnel.salleArrivee, false);
+                    Salle tSalle =isReversed?tunnel.salleDepart : tunnel.salleArrivee;
+                    Debug.Log("Arrived at end of tunnel, teleporting to salle " + tSalle.name);
+                    TeleportToSalle(tSalle, false);
                 }
                 else
                 {
@@ -980,7 +982,7 @@ public class MainController : MonoBehaviour
 
     public bool isTunnelACurrentOut(Tunnel checkTunnel)
     {
-        return getAllOutTunnels().Contains(checkTunnel);
+        return isInASalle() && getAllOutTunnels().Contains(checkTunnel);
     }
 
     Tunnel getClosestTunnel()
@@ -999,6 +1001,11 @@ public class MainController : MonoBehaviour
         }
 
         return closestTunnel;
+    }
+
+    public bool isRunningReversed()
+    {
+        return isRunning && isReversed;
     }
 
 

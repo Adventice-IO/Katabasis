@@ -3469,7 +3469,6 @@ MonoBehaviour:
   language: en
   salle: {fileID: 0}
   tunnel: {fileID: 0}
-  endAutoNextTime: 3
   animateRotation: 0
   trackPosition: 0
   defaultCamMaxDistance: 50
@@ -3477,6 +3476,7 @@ MonoBehaviour:
   maxSpeed: 50
   maxAcceleration: 5
   playFullSpeedTime: 2
+  globalSpeedMultiplier: 1
   speedCurve:
     serializedVersion: 2
     m_Curve:
@@ -3652,12 +3652,15 @@ MonoBehaviour:
   menu: {fileID: 0}
   intro: {fileID: 0}
   outro: {fileID: 0}
+  end: {fileID: 0}
   lockInfoPlane: {fileID: 7325477772855753073}
   speedInfo: {fileID: 0}
   teleportationLoco: {fileID: 0}
   turnLoco: {fileID: 0}
   viewDistanceAnimSpeed: 0.2
   viewDistanceHideSpeed: 10
+  enablePointCloudDiagnostics: 1
+  pointCloudDiagnosticsLogIntervalSeconds: 10
   pointCloudViewDistanceMultiplier: 1
 --- !u!114 &3732688429945291836 stripped
 MonoBehaviour:

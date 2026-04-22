@@ -39,6 +39,7 @@ public class Salle : MonoBehaviour
 
     public void setActive(bool active)
     {
+        Debug.Log("Setting salle " + name + " active: " + active);
         if (!active)
         {
             foreach (var i in interviews)

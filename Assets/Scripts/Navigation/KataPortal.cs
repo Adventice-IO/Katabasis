@@ -102,7 +102,22 @@ public class KataPortal : MonoBehaviour
         else
         {
             bool showInSalle = mainController.isTunnelACurrentOut(tunnel) && mainController.timeSinceArrived > timeBeforeReveal;
-            bool showInTunnel = isInTunnel && (isReverse ? mainController.trackPosition > .5f : mainController.trackPosition < .5f);
+
+
+
+            bool showInTunnel = isInTunnel;
+            if(isInTunnel)
+            {
+                if (isReverse)
+                {
+                    showInTunnel = mainController.isRunningReversed() && mainController.trackPosition < .5f;
+                }
+                else
+                {
+                    showInTunnel = !mainController.isRunningReversed() && mainController.trackPosition < .5f;
+                }
+            }
+            
             shouldShow = mainController.gameState == MainController.GameState.Playing && (showInTunnel || showInSalle);
             if (showInSalle)
             {
