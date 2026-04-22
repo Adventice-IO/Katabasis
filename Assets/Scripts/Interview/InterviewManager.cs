@@ -299,6 +299,45 @@ public class InterviewManager : MonoBehaviour
     {
         if (salle == null || salle.isExit)
         {
+            interviewStopAllEvent?.evt.Post(gameObject);
+
+            //kill all pending media loads to avoid having interviews popping in after reaching the exit salle
+            Debug.Log("PrepareAssignmentsForSalle received null/exit salle. Stopping all interviews and clearing pending playback.", this);
+            StopLoadAssignmentsRoutine();
+            if (activePlayingSlot != null)
+            {
+                activePlayingSlot.StopPlaybackForInterviewChange(true);
+                activePlayingSlot = null;
+            }
+            foreach (RoomPersonAssignment assignment in roomAssignments)
+            {
+                if (assignment.interviewSlot == null)
+                {
+                    continue;
+                }
+                assignment.interviewSlot.ResetForPreviewAssignment();
+            }
+            foreach (Interview slot in activeAssignmentsBySlot.Keys.ToList())
+            {
+                if (slot == null)
+                {
+                    continue;
+                }
+                slot.ResetForPreviewAssignment();
+            }
+            activeAssignmentsBySlot.Clear();
+            resolvedPlaybackBySlot.Clear();
+            roomAssignments.Clear();
+            consumedSlots.Clear();
+            startedIntroPersons.Clear();
+            preparedSalle = null;
+            lastAssignedSalle = salle;
+
+            Subtitles subs = GameObject.FindAnyObjectByType<Subtitles>();
+            if (subs != null)
+            {
+                subs.stop();
+            }
             return;
         }
 
