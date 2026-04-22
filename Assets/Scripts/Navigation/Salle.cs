@@ -25,6 +25,7 @@ public class Salle : MonoBehaviour
     public AudioEventRefSO audioEventSO;
 
     public Interview[] interviews;
+    bool suppressInterviewEndCascade;
 
     private void Start()
     {
@@ -42,10 +43,18 @@ public class Salle : MonoBehaviour
         Debug.Log("Setting salle " + name + " active: " + active);
         if (!active)
         {
-            foreach (var i in interviews)
+            suppressInterviewEndCascade = true;
+            try
             {
-                if(i == null) continue;
-                i.cleanup();
+                foreach (var i in interviews)
+                {
+                    if(i == null) continue;
+                    i.cleanup();
+                }
+            }
+            finally
+            {
+                suppressInterviewEndCascade = false;
             }
         }
         else
@@ -93,6 +102,11 @@ public class Salle : MonoBehaviour
 
     public void onInterviewEnd(Interview interview)
     {
+        if (suppressInterviewEndCascade)
+        {
+            return;
+        }
+
         int playedInterviewCount = interviews.Count(i => i.state == Interview.State.Ending);
         if (playedInterviewCount >= maxPlayedInterview)
         {

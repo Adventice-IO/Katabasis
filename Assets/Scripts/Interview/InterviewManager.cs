@@ -85,6 +85,8 @@ public class InterviewManager : MonoBehaviour
 
     public AudioRTPCRefSO interviewLeaveSO;
     public float interviewLeaveTime = 5f;
+    public AudioEventRefSO interviewStopAllEvent;
+    
 
     MainController mainController;
     DataManager dataManager;
@@ -95,12 +97,13 @@ public class InterviewManager : MonoBehaviour
         mainController = GameObject.FindAnyObjectByType<MainController>();
         assignmentRandom = new System.Random(Environment.TickCount);
         LoadInterviewData();
-        SetInterviewLeaveRtpcValue(0f);
+        SetInterviewLeaveRtpcValue(GetInterviewLeaveTargetValue());
     }
 
     void Update()
     {
         UpdateInterviewLeaveRtpcAnimation();
+        UpdateInterviewLeaveRtpcTarget();
         LogCurrentInterviewDebug();
 
         Salle currentSalle = mainController != null ? mainController.salle : null;
@@ -246,8 +249,6 @@ public class InterviewManager : MonoBehaviour
             return;
         }
 
-        ResetInterviewLeaveRtpc();
-
         if (activePlayingSlot != null && activePlayingSlot != slot)
         {
             activePlayingSlot.StopPlaybackForInterviewChange(true);
@@ -290,11 +291,6 @@ public class InterviewManager : MonoBehaviour
         resolvedPlaybackBySlot.Remove(slot);
         consumedSlots.Remove(slot);
         roomAssignments.RemoveAll(assignment => assignment.interviewSlot == slot);
-
-        if (activePlayingSlot == null)
-        {
-            ResetInterviewLeaveRtpc();
-        }
 
         LogCurrentInterviewDebug(true);
     }
@@ -444,39 +440,41 @@ public class InterviewManager : MonoBehaviour
             return;
         }
 
-        if (previousSalle != null
-            && nextSalle == null
-            && activePlayingSlot != null)
-        {
-            Debug.Log("Leaving room '" + previousSalle.name + "' with active interview, starting interviewLeave RTPC fade.", this);
-            StartInterviewLeaveRtpc();
-        }
+        Debug.Log("Salle transition: previous='" + (previousSalle != null ? previousSalle.name : "None") + "', next='" + (nextSalle != null ? nextSalle.name : "None") + "'. Updating interviewLeave RTPC target.", this);
+        UpdateInterviewLeaveRtpcTarget(true);
     }
 
-    void StartInterviewLeaveRtpc()
+    float GetInterviewLeaveTargetValue()
     {
-        if (activePlayingSlot == null)
-        {
-            Debug.Log("Skipping interviewLeave RTPC fade because there is no active interview.", this);
-            return;
-        }
+        return mainController != null && mainController.salle != null ? 0f : 1f;
+    }
 
-        if (Mathf.Approximately(interviewLeaveValue, 1f) || isInterviewLeaveAnimating)
+    void UpdateInterviewLeaveRtpcTarget(bool forceLog = false)
+    {
+        float targetValue = GetInterviewLeaveTargetValue();
+        bool alreadyAtTarget = Mathf.Abs(interviewLeaveAnimationTargetValue - targetValue) < 0.001f;
+        bool alreadySettled = !isInterviewLeaveAnimating && Mathf.Abs(interviewLeaveValue - targetValue) < 0.001f;
+        if (alreadyAtTarget && alreadySettled)
         {
             return;
         }
 
         if (!Application.isPlaying)
         {
-            SetInterviewLeaveRtpcValue(1f);
+            SetInterviewLeaveRtpcValue(targetValue);
             return;
         }
 
-        Debug.Log("Animating interviewLeave RTPC from " + interviewLeaveValue + " to 1 over " + interviewLeaveTime + "s.", this);
+        if (forceLog || !alreadyAtTarget)
+        {
+            string stateLabel = Mathf.Approximately(targetValue, 0f) ? "salle" : "tunnel";
+           // Debug.Log("Animating interviewLeave RTPC from " + interviewLeaveValue + " to " + targetValue + " over " + interviewLeaveTime + "s because player is in " + stateLabel + ".", this);
+        }
+
         isInterviewLeaveAnimating = true;
         interviewLeaveAnimationStartTime = Time.time;
         interviewLeaveAnimationStartValue = interviewLeaveValue;
-        interviewLeaveAnimationTargetValue = 1f;
+        interviewLeaveAnimationTargetValue = targetValue;
     }
 
     void ResetInterviewLeaveRtpc()
@@ -523,7 +521,7 @@ public class InterviewManager : MonoBehaviour
         interviewLeaveValue = clampedValue;
         if (interviewLeaveSO != null && interviewLeaveSO.rtpc != null)
         {
-            Debug.Log("Setting interview leave RTPC to " + interviewLeaveValue);
+            //Debug.Log("Setting interview leave RTPC to " + interviewLeaveValue);
             interviewLeaveSO.rtpc.SetGlobalValue(interviewLeaveValue);
         }
     }

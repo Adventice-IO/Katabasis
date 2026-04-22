@@ -43,7 +43,6 @@ public class Interview : MonoBehaviour
     float resumeTimeSeconds;
     bool hasResumeTime;
     bool leaveRequestedWhileListening;
-    bool forceAudioOnlyForNextSequenceEntry;
     float playbackRealtimeOrigin = -1f;
     float playbackExpectedEndTime = -1f;
     bool playbackCompletionHandled;
@@ -177,6 +176,17 @@ public class Interview : MonoBehaviour
     public void cleanup()
     {
         HandleSalleExitWhileListening();
+
+        if (leaveRequestedWhileListening)
+        {
+            TracePlayback("cleanup() preserved active playback after salle exit; visuals will be hidden but playlist stays alive");
+            if (vfx != null)
+            {
+                vfx.enabled = false;
+            }
+            return;
+        }
+
         evaporate();
     }
 
@@ -246,7 +256,6 @@ public class Interview : MonoBehaviour
         isTransitioningSequence = false;
         currentEntryIsIntro = false;
         currentPerson = null;
-        forceAudioOnlyForNextSequenceEntry = false;
         ResetPlaybackTimer();
         resourcesReleased = false;
         state = State.Idle;
@@ -279,6 +288,11 @@ public class Interview : MonoBehaviour
         return previewLoadQueued || previewLoadInProgress;
     }
 
+    void TracePlayback(string message)
+    {
+        Debug.Log("[InterviewTrace] " + name + " | state=" + state + " | interviewId='" + interviewId + "' | " + message, this);
+    }
+
     void ResetPlaybackTimer()
     {
         playbackRealtimeOrigin = -1f;
@@ -307,6 +321,7 @@ public class Interview : MonoBehaviour
         }
 
         playbackExpectedEndTime = playbackRealtimeOrigin + (float)knownVideoLength;
+        TracePlayback("Playback timer armed. realtimeOrigin=" + playbackRealtimeOrigin.ToString("0.00") + ", knownVideoLength=" + knownVideoLength.ToString("0.00") + ", expectedEndTime=" + playbackExpectedEndTime.ToString("0.00"));
         LogDebug("Armed playback timer for '" + interviewId + "' at t=" + playbackExpectedEndTime.ToString("0.00"));
     }
 
@@ -315,10 +330,12 @@ public class Interview : MonoBehaviour
         playbackCompletionHandled = false;
         playbackRealtimeOrigin = Time.time - Mathf.Max(0f, startTime);
         playbackExpectedEndTime = -1f;
+        TracePlayback("Starting playback timer with startTime=" + startTime.ToString("0.00") + ", realtimeOrigin=" + playbackRealtimeOrigin.ToString("0.00"));
         TryArmPlaybackTimer();
 
         if (playbackExpectedEndTime < 0f)
         {
+            TracePlayback("Playback timer waiting for video length. Calling PrepareVideoMetadata().");
             PrepareVideoMetadata();
         }
     }
@@ -328,15 +345,6 @@ public class Interview : MonoBehaviour
         if (state != State.Playing || playbackCompletionHandled)
         {
             return false;
-        }
-
-        if (!forceAudioOnlyForNextSequenceEntry
-            && HasPendingSequenceEntry()
-            && videoEventID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID
-            && (videoPlayer == null || !videoPlayer.isPlaying))
-        {
-            forceAudioOnlyForNextSequenceEntry = true;
-            LogDebug("Video visuals stopped before sequence completion; next entry will start audio-only");
         }
 
         if (playbackExpectedEndTime < 0f)
@@ -350,13 +358,15 @@ public class Interview : MonoBehaviour
             return false;
         }
 
+        TracePlayback("Playback timer reached completion threshold at Time.time=" + Time.time.ToString("0.00") + ", expectedEndTime=" + playbackExpectedEndTime.ToString("0.00"));
         CompleteCurrentPlayback("timer");
         return true;
     }
 
-    bool ShouldPlayDepthkitVideo(bool audioOnly)
+    bool ShouldPlayDepthkitVideo()
     {
-        return !audioOnly
+        bool isStillInSalle = salle == null || mainController == null || mainController.isInSalle(salle);
+        return isStillInSalle
             && isActiveAndEnabled
             && videoPlayer != null
             && videoPlayer.isActiveAndEnabled
@@ -520,10 +530,8 @@ public class Interview : MonoBehaviour
             HandleSalleExitWhileListening();
             if (leaveRequestedWhileListening)
             {
-                vfx.enabled = true;
-                state = State.Ending;
-                progression = 0;
-                shouldEvaporate = true;
+                TracePlayback("show(false) kept playback running after salle exit; hiding VFX without moving to Ending state");
+                vfx.enabled = false;
             }
             else
             {
@@ -799,9 +807,10 @@ public class Interview : MonoBehaviour
         previewLoadCoroutine = null;
     }
 
-    public void play(bool audioOnly = false)
+    public void play()
     {
         LogDebug("Starting playback for mediaPath='" + interviewId + "' depthkitPath='" + itwName + "'");
+        TracePlayback("play() called. playbackIndex=" + playbackIndex + ", hasSequence=" + (playbackSequence != null) + ", hasResumeTime=" + hasResumeTime + ", leaveRequestedWhileListening=" + leaveRequestedWhileListening);
         leaveRequestedWhileListening = false;
         OnInterviewStarted?.Invoke(this);
         InterviewManager manager = FindAnyObjectByType<InterviewManager>();
@@ -829,8 +838,10 @@ public class Interview : MonoBehaviour
 
         Debug.Log("Start Wwise Event from play");
         videoEventID = AkUnitySoundEngine.PostEvent(wwiseEventName, gameObject);
+    TracePlayback("Posted Wwise event '" + wwiseEventName + "' with playingId=" + videoEventID);
 
         double knownVideoLength = GetKnownVideoLength();
+    TracePlayback("Known video length before playback start: " + knownVideoLength.ToString("0.00"));
 
         float startTime = 0f;
         bool applyResume = hasResumeTime;
@@ -855,13 +866,22 @@ public class Interview : MonoBehaviour
             }
         }
 
-        bool playDepthkitVideo = ShouldPlayDepthkitVideo(audioOnly);
+        bool playDepthkitVideo = ShouldPlayDepthkitVideo();
+        bool isStillInSalle = salle == null || mainController == null || mainController.isInSalle(salle);
+        TracePlayback("Playback mode decision: playDepthkitVideo=" + playDepthkitVideo
+            + ", isStillInSalle=" + isStillInSalle
+            + ", isActiveAndEnabled=" + isActiveAndEnabled
+            + ", videoPlayerActive=" + (videoPlayer != null && videoPlayer.isActiveAndEnabled)
+            + ", clipActive=" + (clip != null && clip.isActiveAndEnabled)
+            + ", vfxEnabled=" + (vfx == null || vfx.enabled));
         if (playDepthkitVideo)
         {
             videoPlayer.Play();
+            TracePlayback("VideoPlayer.Play() called. isPlaying=" + (videoPlayer != null && videoPlayer.isPlaying));
         }
         else if (videoPlayer != null)
         {
+            TracePlayback("Skipping VideoPlayer playback and launching audio/subtitles only");
             LogDebug("Skipping VideoPlayer playback and launching audio/subtitles only");
             videoPlayer.Stop();
         }
@@ -874,7 +894,13 @@ public class Interview : MonoBehaviour
         {
             string languageSuffix = mainController != null ? mainController.getLanguageSuffix() : "";
             string subtitlePath = interviewId + languageSuffix + ".srt";
+            Debug.Log("Starting subtitles with path '" + subtitlePath + "' and startTime=" + startTime);
+            TracePlayback("Calling subtitles.play with path='" + subtitlePath + "' and startTime=" + startTime.ToString("0.00"));
             subtitles.play(subtitlePath, startTime);
+        }
+        else
+        {
+            TracePlayback("Subtitles component not found. No subtitle playback will start.");
         }
     }
 
@@ -970,6 +996,7 @@ public class Interview : MonoBehaviour
     void resolveAndPlay()
     {
         LogDebug("Resolving playback at validation time for slot '" + name + "'");
+        TracePlayback("resolveAndPlay() called. isResolvedPlayback=" + isResolvedPlayback + ", current interviewId='" + interviewId + "'");
         if (!isResolvedPlayback && Application.isPlaying)
         {
             InterviewManager manager = FindAnyObjectByType<InterviewManager>();
@@ -978,12 +1005,12 @@ public class Interview : MonoBehaviour
                 playbackSequence = playback.sequence;
                 playbackIndex = 0;
                 isResolvedPlayback = true;
+                TracePlayback("Resolved playback sequence with length=" + (playbackSequence != null ? playbackSequence.Length : 0) + ", firstEntry='" + (playbackSequence != null && playbackSequence.Length > 0 ? playbackSequence[0].mediaPath : "<none>") + "'");
                 SkipStartedIntroAtSequenceStart();
-                if (playbackSequence != null && playbackSequence.Length > 0 && playbackIndex >= 0 && playbackIndex < playbackSequence.Length)
-                {
-                    LogDebug("Resolved sequence length=" + playbackSequence.Length + ", first mediaPath='" + playbackSequence[playbackIndex].mediaPath + "'");
-                    loadPlaybackEntry(playbackSequence[playbackIndex]);
-                }
+            }
+            else
+            {
+                TracePlayback("TryResolvePlaybackForSlot returned false");
             }
         }
 
@@ -992,9 +1019,18 @@ public class Interview : MonoBehaviour
             LogDebug("No resolved sequence found, using current assignment directly");
             playbackSequence = null;
             playbackIndex = -1;
+            play();
+            return;
         }
 
-        play();
+        if (!HasActivePlaybackEntry())
+        {
+            TracePlayback("Resolved playlist has no active entry after intro skipping. playbackIndex=" + playbackIndex + ", sequenceLength=" + (playbackSequence != null ? playbackSequence.Length : 0));
+            LogDebug("Resolved playlist is empty after intro skipping");
+            return;
+        }
+
+        StartCurrentPlaybackEntry();
     }
 
     void loadPlaybackEntry(InterviewManager.InterviewData data)
@@ -1022,12 +1058,31 @@ public class Interview : MonoBehaviour
         playbackIndex = nextIndex;
         shouldEvaporate = false;
         evaporateProg = 0;
-        bool playAudioOnly = forceAudioOnlyForNextSequenceEntry;
-        forceAudioOnlyForNextSequenceEntry = false;
-        loadPlaybackEntry(playbackSequence[playbackIndex]);
-        play(playAudioOnly);
+        StartCurrentPlaybackEntry();
         isTransitioningSequence = false;
         return true;
+    }
+
+    bool HasActivePlaybackEntry()
+    {
+        return playbackSequence != null
+            && playbackIndex >= 0
+            && playbackIndex < playbackSequence.Length;
+    }
+
+    void StartCurrentPlaybackEntry()
+    {
+        if (!HasActivePlaybackEntry())
+        {
+            TracePlayback("StartCurrentPlaybackEntry() aborted because there is no active playback entry");
+            return;
+        }
+
+        InterviewManager.InterviewData entry = playbackSequence[playbackIndex];
+        TracePlayback("Starting playlist entry " + (playbackIndex + 1) + " / " + playbackSequence.Length + ": person='" + entry.person + "', mediaPath='" + entry.mediaPath + "', intro=" + entry.isIntro + ", depthkitPath='" + entry.depthkitPath + "'");
+        LogDebug("Starting playlist entry " + (playbackIndex + 1) + " / " + playbackSequence.Length + " -> mediaPath='" + entry.mediaPath + "'");
+        loadPlaybackEntry(entry);
+        play();
     }
 
     void SkipStartedIntroAtSequenceStart()
@@ -1101,12 +1156,9 @@ public class Interview : MonoBehaviour
             return;
         }
 
+        TracePlayback("HandleSalleExitWhileListening() stopping video because the player left the salle. hasPendingSequenceEntry=" + HasPendingSequenceEntry() + ", videoIsPlaying=" + (videoPlayer != null && videoPlayer.isPlaying) + ", audioPlaying=" + (videoEventID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID));
         CaptureResumeTimeForCurrentEntry();
         leaveRequestedWhileListening = true;
-        if (HasPendingSequenceEntry())
-        {
-            forceAudioOnlyForNextSequenceEntry = true;
-        }
         loadingEvent?.evt.Stop(gameObject);
         // subtitles?.stop();
         if (videoPlayer != null)
@@ -1124,6 +1176,7 @@ public class Interview : MonoBehaviour
         }
 
         playbackCompletionHandled = true;
+        TracePlayback("CompleteCurrentPlayback() entered via " + completionSource + ". hasPendingSequenceEntry=" + HasPendingSequenceEntry() + ", playbackIndex=" + playbackIndex + ", sequenceLength=" + (playbackSequence != null ? playbackSequence.Length : 0));
         LogDebug("Playback completed via " + completionSource + " for mediaPath='" + interviewId + "'");
         GetKnownVideoLength();
         string previousInterviewId = interviewId;
@@ -1132,8 +1185,11 @@ public class Interview : MonoBehaviour
 
         if (tryAdvanceSequence())
         {
+            TracePlayback("Sequence advanced successfully after completion via " + completionSource);
             return;
         }
+
+        TracePlayback("No further sequence entry to advance to after completion via " + completionSource);
 
         ResetPlaybackTimer();
 
@@ -1184,6 +1240,7 @@ public class Interview : MonoBehaviour
     void OnVideoPrepared(VideoPlayer vp)
     {
         CacheCurrentVideoLength();
+        TracePlayback("OnVideoPrepared fired. videoLength=" + (vp != null ? vp.length.ToString("0.00") : "<null>") + ", isPrepared=" + (vp != null && vp.isPrepared));
         TryArmPlaybackTimer();
     }
 
