@@ -29,6 +29,9 @@ public class GameOutro : MonoBehaviour
 
     bool outroFinished = false;
     bool waitingForCartons;
+    bool hasLockedCartonLayout;
+    Vector3 lockedLayoutForward = Vector3.forward;
+    Vector3 lockedCameraPosition;
 
     MainController mainController;
     DataManager dataManager;
@@ -48,10 +51,9 @@ public class GameOutro : MonoBehaviour
             mainController = GameObject.FindAnyObjectByType<MainController>();
         }
 
-        UpdateCartonLayout();
-
         if (!isActive)
         {
+            UpdateCartonLayout();
             return;
         }
 
@@ -80,6 +82,7 @@ public class GameOutro : MonoBehaviour
     {
         isActive = active;
         timeOnActiveChange = Time.time;
+        ResetCartonLayoutLock();
 
         if (active)
         {
@@ -176,6 +179,7 @@ public class GameOutro : MonoBehaviour
     void CreateCartonObjects()
     {
         HideCurrentCartons();
+        ResetCartonLayoutLock();
 
         Debug.Log("Creating carton objects for " + cartons.Count + " carton(s).");
         Camera targetCamera = Camera.main;
@@ -232,6 +236,66 @@ public class GameOutro : MonoBehaviour
         UpdateCartonLayout();
     }
 
+    void ResetCartonLayoutLock()
+    {
+        hasLockedCartonLayout = false;
+        lockedLayoutForward = Vector3.forward;
+        lockedCameraPosition = Vector3.zero;
+    }
+
+    bool TryGetCartonLayoutBasis(out Vector3 layoutForward, out Vector3 cameraPosition)
+    {
+        Camera targetCamera = Camera.main;
+        if (targetCamera == null)
+        {
+            layoutForward = Vector3.zero;
+            cameraPosition = Vector3.zero;
+            return false;
+        }
+
+        cameraPosition = hasLockedCartonLayout ? lockedCameraPosition : targetCamera.transform.position;
+        layoutForward = hasLockedCartonLayout ? lockedLayoutForward : targetCamera.transform.forward;
+        layoutForward.y = 0f;
+
+        if (layoutForward == Vector3.zero)
+        {
+            layoutForward = cameraPosition - transform.position;
+            layoutForward.y = 0f;
+        }
+
+        if (layoutForward == Vector3.zero)
+        {
+            layoutForward = transform.forward;
+            layoutForward.y = 0f;
+        }
+
+        if (layoutForward == Vector3.zero)
+        {
+            layoutForward = Vector3.forward;
+        }
+
+        layoutForward.Normalize();
+        return true;
+    }
+
+    void EnsureCartonLayoutLocked(float elapsed)
+    {
+        if (hasLockedCartonLayout || elapsed < GetCartonStartTime(0))
+        {
+            return;
+        }
+
+        if (!TryGetCartonLayoutBasis(out Vector3 layoutForward, out Vector3 cameraPosition))
+        {
+            return;
+        }
+
+        hasLockedCartonLayout = true;
+        lockedLayoutForward = layoutForward;
+        lockedCameraPosition = cameraPosition;
+        UpdateCartonLayout();
+    }
+
     float GetCartonAngle(int index)
     {
         if (cartons == null || cartons.Count == 0)
@@ -274,25 +338,10 @@ public class GameOutro : MonoBehaviour
             return;
         }
 
-        Camera targetCamera = Camera.main;
-        if (targetCamera == null)
+        if (!TryGetCartonLayoutBasis(out Vector3 forward, out Vector3 cameraPosition))
         {
             return;
         }
-
-        Vector3 forward = transform.forward;
-        forward.y = 0f;
-        if (forward == Vector3.zero)
-        {
-            forward = targetCamera.transform.forward;
-            forward.y = 0f;
-            if (forward == Vector3.zero)
-            {
-                forward = Vector3.forward;
-            }
-        }
-
-        forward.Normalize();
 
         for (int i = 0; i < cartonObjects.Count; i++)
         {
@@ -309,7 +358,15 @@ public class GameOutro : MonoBehaviour
             Quaternion rotationOffset = Quaternion.AngleAxis(angle, Vector3.up);
             Vector3 direction = rotationOffset * forward;
             cartonObject.transform.position = transform.position + (direction * layoutRadius);
-            cartonObject.transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
+
+            Vector3 faceDirection = cartonObject.transform.position - cameraPosition;
+            faceDirection.y = 0f;
+            if (faceDirection == Vector3.zero)
+            {
+                faceDirection = direction;
+            }
+
+            cartonObject.transform.rotation = Quaternion.LookRotation(faceDirection, Vector3.up);
         }
     }
 
@@ -341,6 +398,8 @@ public class GameOutro : MonoBehaviour
 
     void UpdateCartonReveal(float elapsed)
     {
+        EnsureCartonLayoutLocked(elapsed);
+
         float revealEndTime = GetRevealEndTime();
         float fadeOutStart = revealEndTime;
 
