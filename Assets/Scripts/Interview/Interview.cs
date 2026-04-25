@@ -951,27 +951,7 @@ public class Interview : MonoBehaviour
         }
 
         LogDebug("Stopping playback because another interview started");
-        CaptureResumeTimeForCurrentEntry();
-        ResetPlaybackTimer();
-        leaveRequestedWhileListening = false;
-        if (stopWwiseEvent)
-        {
-            stopWwiseVideoEvent(true);
-        }
-        ReleasePlaybackResources(false);
-        shouldEvaporate = false;
-        evaporateProg = 0;
-        evaporateReachedFullTime = -1f;
-        keepVfxAliveAfterSalleExit = false;
-        progression = 0;
-        playbackSequence = null;
-        playbackIndex = -1;
-        isResolvedPlayback = false;
-        isTransitioningSequence = false;
-        state = State.Loaded;
-
-        InterviewManager manager = FindAnyObjectByType<InterviewManager>();
-        manager?.NotifyInterviewStopped(this);
+        FinalizeInterruptedPlayback(stopWwiseEvent);
     }
 
     public void evaporate()
@@ -1204,13 +1184,59 @@ public class Interview : MonoBehaviour
         }
 
         TracePlayback("HandleSalleExitWhileListening() stopping video because the player left the salle. hasPendingSequenceEntry=" + HasPendingSequenceEntry() + ", videoIsPlaying=" + (videoPlayer != null && videoPlayer.isPlaying) + ", audioPlaying=" + (videoEventID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID));
-        CaptureResumeTimeForCurrentEntry();
-        leaveRequestedWhileListening = true;
+        FinalizeInterruptedPlayback(true);
+    }
+
+    void FinalizeInterruptedPlayback(bool stopWwiseEvent)
+    {
+        TracePlayback("FinalizeInterruptedPlayback() marking current playback as viewed after interruption");
+
+        InterviewManager manager = FindAnyObjectByType<InterviewManager>();
+        InterviewManager.InterviewData[] interruptedSequence = playbackSequence;
+        string interruptedInterviewId = interviewId;
+
+        ClearResumeState();
+        ResetPlaybackTimer();
+        leaveRequestedWhileListening = false;
         loadingEvent?.evt.Stop(gameObject);
-        // subtitles?.stop();
+        subtitles?.stop();
+
+        if (stopWwiseEvent)
+        {
+            stopWwiseVideoEvent(true);
+        }
+        else
+        {
+            videoEventID = AkUnitySoundEngine.AK_INVALID_PLAYING_ID;
+        }
+
         if (videoPlayer != null)
         {
             videoPlayer.Stop();
+        }
+
+        ReleasePlaybackResources(false);
+        shouldEvaporate = false;
+        evaporateProg = 0;
+        evaporateReachedFullTime = -1f;
+        keepVfxAliveAfterSalleExit = false;
+        progression = 0;
+        playbackSequence = null;
+        playbackIndex = -1;
+        isResolvedPlayback = false;
+        isTransitioningSequence = false;
+        state = State.Loaded;
+
+        manager?.MarkSlotConsumed(this);
+        manager?.NotifyInterviewStopped(this);
+
+        if (interruptedSequence != null && interruptedSequence.Length > 0)
+        {
+            manager?.MarkInterviewSequenceVisited(interruptedSequence);
+        }
+        else if (!string.IsNullOrWhiteSpace(interruptedInterviewId))
+        {
+            manager?.MarkInterviewVisited(interruptedInterviewId);
         }
     }
 
