@@ -1457,7 +1457,7 @@ PrefabInstance:
       objectReference: {fileID: 517590615602817253}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: gameState
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: menuRefSO
@@ -1514,6 +1514,10 @@ PrefabInstance:
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: globalSpeedMultiplier
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+      propertyPath: enablePointCloudDiagnostics
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4533285172532570741, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
       propertyPath: speedCurve.m_Curve.Array.size
@@ -1812,7 +1816,7 @@ MonoBehaviour:
   previewLoadStagger: 1
   interviewLeaveSO: {fileID: 11400000, guid: a6e47d41aba4fea43803baee0dfd01d5, type: 2}
   interviewLeaveTime: 1
-  interviewStopAllEvent: {fileID: 0}
+  interviewStopAllEvent: {fileID: 11400000, guid: 71c7474abd437e94f809ceb4618bb799, type: 2}
 --- !u!4 &332919419242661547 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2218496723442559053, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
