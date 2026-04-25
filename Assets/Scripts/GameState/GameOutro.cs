@@ -11,6 +11,7 @@ public class GameOutro : MonoBehaviour
     public float totalRevealTime = 15f;
     public float cartonRevealTime = 1f;
     public float firstCartonExtraTime = 1f;
+    public float lastCartonExtraTime = 1f;
     public float finishFadeOutTime = 1f;
     public float layoutRadius = 2f;
     public float angleStep = 20f;
@@ -71,7 +72,7 @@ public class GameOutro : MonoBehaviour
         UpdateCartonReveal(timeSinceActiveChange);
         UpdatePointCloudFade(timeSinceActiveChange);
 
-        float totalOutroDuration = salleTotalRevealTime + finishFadeOutTime + nextDelay;
+        float totalOutroDuration = GetFadeOutStartTime() + finishFadeOutTime + nextDelay;
         if (timeSinceActiveChange >= totalOutroDuration)
         {
             FinishOutro();
@@ -396,12 +397,16 @@ public class GameOutro : MonoBehaviour
         return Mathf.Max(0f, salleTotalRevealTime);
     }
 
+    float GetFadeOutStartTime()
+    {
+        return GetRevealEndTime() + Mathf.Max(0f, lastCartonExtraTime);
+    }
+
     void UpdateCartonReveal(float elapsed)
     {
         EnsureCartonLayoutLocked(elapsed);
 
-        float revealEndTime = GetRevealEndTime();
-        float fadeOutStart = revealEndTime;
+        float fadeOutStart = GetFadeOutStartTime();
 
         for (int i = 0; i < cartonObjects.Count; i++)
         {
