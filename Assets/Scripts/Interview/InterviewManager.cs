@@ -78,6 +78,7 @@ public class InterviewManager : MonoBehaviour
 
     public bool generateAssignment;
     public bool simulateGameplay;
+    public bool ignoreTagRules;
     [Range(0f, 1f)]
     public float simulatedCuriosity = 0.5f;
     [Min(0f)]
@@ -479,7 +480,7 @@ public class InterviewManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("Salle transition: previous='" + (previousSalle != null ? previousSalle.name : "None") + "', next='" + (nextSalle != null ? nextSalle.name : "None") + "'. Updating interviewLeave RTPC target.", this);
+        // Debug.Log("Salle transition: previous='" + (previousSalle != null ? previousSalle.name : "None") + "', next='" + (nextSalle != null ? nextSalle.name : "None") + "'. Updating interviewLeave RTPC target.", this);
         UpdateInterviewLeaveRtpcTarget(true);
     }
 
@@ -756,6 +757,11 @@ public class InterviewManager : MonoBehaviour
         if (candidates.Count == 0)
         {
             return null;
+        }
+
+        if (ignoreTagRules)
+        {
+            return PickBestByNote(candidates);
         }
 
         List<InterviewData> themedCandidates = FilterCandidatesByThemeHistory(candidates, themeHistory);
@@ -1659,6 +1665,11 @@ public class InterviewManager : MonoBehaviour
         if (candidates == null || candidates.Count == 0)
         {
             return new List<InterviewData>();
+        }
+
+        if (ignoreTagRules)
+        {
+            return candidates;
         }
 
         if (themeHistory == null || themeHistory.Count == 0)
