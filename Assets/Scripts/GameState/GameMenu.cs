@@ -19,6 +19,7 @@ public class GameMenu : MonoBehaviour
     readonly Dictionary<string, Texture2D> languageTextures = new Dictionary<string, Texture2D>(StringComparer.OrdinalIgnoreCase);
     readonly List<GameObject> langObjects = new List<GameObject>();
 
+    const int MenuTextureAnisoLevel = 8;
     MainController mainController;
     bool isActive;
     bool waitingForMenuData;
@@ -944,7 +945,7 @@ void UpdateAudioProgressionState()
         try
         {
             byte[] pngData = File.ReadAllBytes(texturePath);
-            Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, true);
             if (!texture.LoadImage(pngData))
             {
                 Destroy(texture);
@@ -952,6 +953,7 @@ void UpdateAudioProgressionState()
             }
 
             texture.name = language;
+            ConfigureLanguageTexture(texture);
             languageTextures[language] = texture;
             return texture;
         }
@@ -960,6 +962,13 @@ void UpdateAudioProgressionState()
             Debug.LogError("Failed to load language texture '" + language + ".png': " + ex.Message, this);
             return null;
         }
+    }
+
+    void ConfigureLanguageTexture(Texture2D texture)
+    {
+        texture.wrapMode = TextureWrapMode.Clamp;
+        texture.filterMode = texture.mipmapCount > 1 ? FilterMode.Trilinear : FilterMode.Bilinear;
+        texture.anisoLevel = MenuTextureAnisoLevel;
     }
 
     void ReleaseLanguageTextures()

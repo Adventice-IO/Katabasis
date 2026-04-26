@@ -98,7 +98,6 @@ public class Tunnel : MonoBehaviour
 
 
         checkpointContainer = GetComponent<CheckpointContainer>();
-    EnsureCheckpointDataVersion();
         lineRenderer = GetComponentInChildren<LineRenderer>();
 
 
@@ -108,7 +107,6 @@ public class Tunnel : MonoBehaviour
     {
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
         if (checkpointContainer == null) checkpointContainer = GetComponent<CheckpointContainer>();
-        EnsureCheckpointDataVersion();
 
 #if UNITY_EDITOR
         Spline.Changed += OnSplineChanged;
@@ -197,30 +195,7 @@ public class Tunnel : MonoBehaviour
             return;
         }
 
-        if (salleDepart != null && splineContainer != null)
-        {
-            Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleDepart.origin.position);
-            var current = splineContainer.Spline[0];
-            Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
-            if ((curPos - localPos).sqrMagnitude > .01f)
-            {
-                //Debug.Log("Aligning start knot with salleDepart " + curPos + " / " + localPos);
-                splineContainer.Spline.SetKnot(0, new BezierKnot(localPos));
-            }
-
-        }
-        if (salleArrivee != null && splineContainer != null)
-        {
-            int last = splineContainer.Spline.Count - 1;
-            Vector3 localPos = splineContainer.transform.InverseTransformPoint(salleArrivee.origin.position);
-            var current = splineContainer.Spline[last];
-            Vector3 curPos = new Vector3(current.Position.x, current.Position.y, current.Position.z);
-            if ((curPos - localPos).sqrMagnitude > .01f)
-            {
-                //Debug.Log("[" + gameObject.name + "] Aligning end knot with salleArrivee " + curPos + " / " + localPos);
-                splineContainer.Spline.SetKnot(last, new BezierKnot(localPos));
-            }
-        }
+        SyncEndpointsToSalleOrigins();
 
         string n = $"{salleDepart?.name} > {salleArrivee?.name}";
 
@@ -299,138 +274,6 @@ public class Tunnel : MonoBehaviour
         }
 
         return initSpeed;
-    }
-
-    private void EnsureCheckpointDataVersion()
-    {
-        if (checkpointContainer == null) return;
-
-        if (checkpointContainer.speedCheckpointDataVersion >= CheckpointContainer.CurrentSpeedCheckpointDataVersion)
-        {
-            return;
-        }
-
-        checkpointContainer.speedCheckpoints = MigrateLegacySpeedCheckpoints(checkpointContainer.speedCheckpoints);
-        checkpointContainer.speedCheckpointDataVersion = CheckpointContainer.CurrentSpeedCheckpointDataVersion;
-
-#if UNITY_EDITOR
-        if (Application.isPlaying)
-        {
-            UnityPlayModeSaver.SaveComponent(checkpointContainer);
-        }
-        else
-        {
-            EditorUtility.SetDirty(checkpointContainer);
-        }
-#endif
-    }
-
-    private static List<SpeedCheckpoint> MigrateLegacySpeedCheckpoints(List<SpeedCheckpoint> legacyCheckpoints)
-    {
-        if (legacyCheckpoints == null || legacyCheckpoints.Count == 0)
-        {
-            return legacyCheckpoints ?? new List<SpeedCheckpoint>();
-        }
-
-        var sortedCheckpoints = legacyCheckpoints.OrderBy(c => c.pos).ToList();
-        var migratedCheckpoints = new List<SpeedCheckpoint>();
-
-        AddMigratedCheckpoint(migratedCheckpoints, 0f, EvaluateLegacyDesiredSpeed(sortedCheckpoints, 0f));
-
-        for (int i = 0; i < sortedCheckpoints.Count; i++)
-        {
-            var checkpoint = sortedCheckpoints[i];
-            AddMigratedCheckpoint(migratedCheckpoints, checkpoint.pos, EvaluateLegacyDesiredSpeed(sortedCheckpoints, checkpoint.pos));
-
-            if (i >= sortedCheckpoints.Count - 1)
-            {
-                continue;
-            }
-
-            float nextPos = sortedCheckpoints[i + 1].pos;
-            float segmentLength = nextPos - checkpoint.pos;
-            if (segmentLength <= 0.0001f)
-            {
-                continue;
-            }
-
-            float epsilon = Mathf.Min(0.0005f, segmentLength * 0.25f);
-            float preJumpPos = nextPos - epsilon;
-            if (preJumpPos > checkpoint.pos + 0.0001f)
-            {
-                AddMigratedCheckpoint(migratedCheckpoints, preJumpPos, EvaluateLegacyDesiredSpeed(sortedCheckpoints, preJumpPos));
-            }
-        }
-
-        AddMigratedCheckpoint(migratedCheckpoints, 1f, EvaluateLegacyDesiredSpeed(sortedCheckpoints, 1f));
-
-        return migratedCheckpoints.OrderBy(c => c.pos).ToList();
-    }
-
-    private static void AddMigratedCheckpoint(List<SpeedCheckpoint> checkpoints, float pos, float speed)
-    {
-        var existing = checkpoints.FirstOrDefault(c => Mathf.Abs(c.pos - pos) < 0.0001f);
-        if (existing != null)
-        {
-            existing.speed = speed;
-            return;
-        }
-
-        checkpoints.Add(new SpeedCheckpoint
-        {
-            pos = Mathf.Clamp01(pos),
-            speed = Mathf.Max(speed, 0.01f)
-        });
-    }
-
-    private static float EvaluateLegacyDesiredSpeed(List<SpeedCheckpoint> checkpoints, float t)
-    {
-        SpeedCheckpoint before = null;
-        SpeedCheckpoint after = null;
-
-        foreach (var checkpoint in checkpoints)
-        {
-            if (checkpoint.pos <= t)
-            {
-                before = checkpoint;
-            }
-            else
-            {
-                after = checkpoint;
-                break;
-            }
-        }
-
-        float initSpeed = 0f;
-        float initPos = 0f;
-        float targetSpeed = 0.001f;
-        float targetPos = 1f;
-
-        if (before != null)
-        {
-            initSpeed = before.speed;
-            initPos = before.pos;
-        }
-        else if (after != null)
-        {
-            initSpeed = after.speed;
-        }
-
-        if (after != null)
-        {
-            targetSpeed = after.speed;
-            targetPos = after.pos;
-        }
-
-        float segmentLength = targetPos - initPos;
-        if (segmentLength > 0.0001f)
-        {
-            float tSegment = (t - initPos) / segmentLength;
-            float legacySpeed = initSpeed + Mathf.Lerp(initSpeed, targetSpeed, tSegment);
-            return Mathf.Max(legacySpeed, 0.01f);
-        }
-
-        return Mathf.Max(initSpeed, 0.01f);
     }
 
     Tuple<SpeedCheckpoint, SpeedCheckpoint> getSpeedCheckpointsAtPosition(float trackPosition, bool reverse)
@@ -694,6 +537,39 @@ public class Tunnel : MonoBehaviour
         return refinedT;
     }
 
+    bool SyncEndpointToSalleOrigin(int knotIndex, Salle endpointSalle)
+    {
+        if (endpointSalle == null || endpointSalle.origin == null || splineContainer == null || splineContainer.Spline == null)
+        {
+            return false;
+        }
+
+        Vector3 localPos = splineContainer.transform.InverseTransformPoint(endpointSalle.origin.position);
+        BezierKnot current = splineContainer.Spline[knotIndex];
+        Vector3 currentPosition = new Vector3(current.Position.x, current.Position.y, current.Position.z);
+        if ((currentPosition - localPos).sqrMagnitude <= .01f)
+        {
+            return false;
+        }
+
+        splineContainer.Spline.SetKnot(knotIndex, new BezierKnot(localPos));
+        return true;
+    }
+
+    public bool SyncEndpointsToSalleOrigins()
+    {
+        if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
+        if (splineContainer == null || splineContainer.Spline == null || splineContainer.Spline.Count == 0)
+        {
+            return false;
+        }
+
+        bool changed = false;
+        changed |= SyncEndpointToSalleOrigin(0, salleDepart);
+        changed |= SyncEndpointToSalleOrigin(splineContainer.Spline.Count - 1, salleArrivee);
+        return changed;
+    }
+
     public Vector3 getPositionOnTrack(float positionAlongTunnel)
     {
         return splineContainer.EvaluatePosition(positionAlongTunnel);
@@ -728,7 +604,6 @@ public class Tunnel : MonoBehaviour
         SpeedCheckpoint checkpoint = new SpeedCheckpoint { pos = positionAlongTunnel, speed = 10 };
         checkpointContainer.speedCheckpoints.Add(checkpoint);
         checkpointContainer.speedCheckpoints = checkpointContainer.speedCheckpoints.OrderBy(c => c.pos).ToList();
-        checkpointContainer.speedCheckpointDataVersion = CheckpointContainer.CurrentSpeedCheckpointDataVersion;
 
         updateSpeedCheckpoints();
 #if UNITY_EDITOR

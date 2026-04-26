@@ -719,7 +719,7 @@ public class Interview : MonoBehaviour
             Debug.LogWarning("Poster doesn't exist for " + posterPath);
         }
 
-        Debug.Log("Meta data load result " + result);
+        // Debug.Log("Meta data load result " + result);
         LogDebug("Loaded metadata/poster. Poster assigned=" + (clip.poster != null) + ", videoPrepared=" + (videoPlayer != null && videoPlayer.isPrepared) + ", clipSetup=" + (clip != null && clip.isSetup));
 
         revealStartTime = Time.time;

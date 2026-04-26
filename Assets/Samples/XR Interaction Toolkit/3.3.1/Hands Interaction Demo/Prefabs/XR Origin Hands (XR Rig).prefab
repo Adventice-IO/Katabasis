@@ -3477,6 +3477,7 @@ MonoBehaviour:
   maxAcceleration: 5
   playFullSpeedTime: 2
   globalSpeedMultiplier: 1
+  smoothGoToPath: 0.5
   speedCurve:
     serializedVersion: 2
     m_Curve:
@@ -3659,9 +3660,14 @@ MonoBehaviour:
   turnLoco: {fileID: 0}
   viewDistanceAnimSpeed: 0.2
   viewDistanceHideSpeed: 10
+  pointCloudViewDistanceMultiplier: 1
   enablePointCloudDiagnostics: 1
   pointCloudDiagnosticsLogIntervalSeconds: 10
-  pointCloudViewDistanceMultiplier: 1
+  debugRunStartCamera: 0
+  runStartDiagnosticsDurationSeconds: 0.6
+  runStartDiagnosticsLogIntervalSeconds: 0.05
+  runStartDiagnosticsJumpDistance: 0.2
+  runStartDiagnosticsJumpAngle: 12
 --- !u!114 &3732688429945291836 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4238984354899526239, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}

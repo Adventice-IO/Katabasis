@@ -148,7 +148,7 @@ public class KataPortal : MonoBehaviour
 
         if (showing != shouldShow)
         {
-            Debug.Log($"KataPortal {portalName} should show: {shouldShow}");
+            // Debug.Log($"KataPortal {portalName} should show: {shouldShow}");
             show(shouldShow);
         }
 

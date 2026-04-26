@@ -63,9 +63,12 @@ public class MainController : MonoBehaviour
     public float maxAcceleration = 5f; // km/h/s
     public float playFullSpeedTime = 2f; // seconds after which we ignore acceleration and just set the speed to the target speed
     float timeAtPlay;
+    Vector3 posAtPlay;
     public float globalSpeedMultiplier = 1f;
+    public float smoothGoToPath = 0.5f; // time in seconds to smooth the transition when going to a new path
 
     public AnimationCurve speedCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    AnimationCurve smoothGotoCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
     [Header("Read Only")]
     [SerializeField] private float currentSpeed = 0f;
@@ -139,6 +142,11 @@ public class MainController : MonoBehaviour
     public float runStartDiagnosticsLogIntervalSeconds = 0.05f;
     public float runStartDiagnosticsJumpDistance = 0.2f;
     public float runStartDiagnosticsJumpAngle = 12f;
+
+    [Header("Tunnel Entry Diagnostics")]
+    public bool logTunnelEntrySync = true;
+    public float tunnelEntrySyncWarningDistance = 0.02f;
+    public bool snapRigToTunnelEntryOnPlay = true;
 
     float timeAtArrived; //in a salle or tunnel
     public float timeSinceArrived
@@ -647,6 +655,75 @@ public class MainController : MonoBehaviour
         transform.RotateAround(mainCam.transform.position, Vector3.up, yawToWorldForward);
     }
 
+    void LogTunnelEntrySync(string reason)
+    {
+        if (!Application.isPlaying || !logTunnelEntrySync || tunnel == null)
+        {
+            return;
+        }
+
+        Salle sourceSalle = isReversed ? tunnel.salleArrivee : tunnel.salleDepart;
+        if (sourceSalle == null || sourceSalle.origin == null)
+        {
+            return;
+        }
+
+        float trackStartPosition = GetActualTrackPosition(0f);
+        Vector3 roomOriginPosition = sourceSalle.origin.position;
+        Vector3 rigPosition = transform.position;
+        Vector3 tunnelStartPosition = tunnel.getPositionOnTrack(trackStartPosition);
+        float roomOriginToTrackStartDistance = Vector3.Distance(roomOriginPosition, tunnelStartPosition);
+        float rigToRoomOriginDistance = Vector3.Distance(rigPosition, roomOriginPosition);
+        float rigToTrackStartDistance = Vector3.Distance(rigPosition, tunnelStartPosition);
+        bool hasMismatch = roomOriginToTrackStartDistance > tunnelEntrySyncWarningDistance || rigToTrackStartDistance > tunnelEntrySyncWarningDistance;
+        string direction = isReversed ? "reverse" : "forward";
+        string message =
+            $"[TunnelEntrySync] {(hasMismatch ? "MISMATCH" : "OK")} reason='{reason}' tunnel='{tunnel.name}' direction={direction} salle='{sourceSalle.name}' rigPos={rigPosition:F3} roomOrigin={roomOriginPosition:F3} trackStart={tunnelStartPosition:F3} roomToTrack={roomOriginToTrackStartDistance:F4} rigToRoom={rigToRoomOriginDistance:F4} rigToTrack={rigToTrackStartDistance:F4}";
+
+        if (hasMismatch)
+        {
+            Debug.LogWarning(message, this);
+        }
+        else
+        {
+            Debug.Log(message, this);
+        }
+    }
+
+    void PrepareTunnelEntryForPlay()
+    {
+        if (!Application.isPlaying || tunnel == null || trackPosition > 0.01f)
+        {
+            return;
+        }
+
+        LogTunnelEntrySync("Play start before sync");
+
+        bool tunnelWasAdjusted = tunnel.SyncEndpointsToSalleOrigins();
+        float trackStartPosition = GetActualTrackPosition(0f);
+        Vector3 tunnelEntryPosition = tunnel.getPositionOnTrack(trackStartPosition);
+        float rigToTrackDistance = Vector3.Distance(transform.position, tunnelEntryPosition);
+
+        if (tunnelWasAdjusted)
+        {
+            Debug.LogWarning(
+                $"[TunnelEntrySync] Adjusted tunnel endpoint before play tunnel='{tunnel.name}' entryPos={tunnelEntryPosition:F3}",
+                this
+            );
+        }
+
+        if (snapRigToTunnelEntryOnPlay && rigToTrackDistance > tunnelEntrySyncWarningDistance)
+        {
+            Debug.LogWarning(
+                $"[TunnelEntrySync] Snapping rig to tunnel entry before play tunnel='{tunnel.name}' rigPos={transform.position:F3} entryPos={tunnelEntryPosition:F3} distance={rigToTrackDistance:F4}",
+                this
+            );
+            transform.position = tunnelEntryPosition;
+        }
+
+        LogTunnelEntrySync("Play start after sync");
+    }
+
     private void Tick(float deltaTime)
     {
         moveProvider.enabled = freeMotion && !verticalMove;
@@ -752,7 +829,18 @@ public class MainController : MonoBehaviour
         if (splineContainer != null)
         {
             float actualTrackPosition = GetActualTrackPosition(trackPosition);
-            transform.position = splineContainer.EvaluatePosition(actualTrackPosition);
+            Vector3 targetFinalPos = splineContainer.EvaluatePosition(actualTrackPosition);
+
+            // float relTimeSincePlay = (Time.time - timeAtPlay) / smoothGoToPath;
+            // if (relTimeSincePlay < 1f)
+            // {
+            //     float curvedSmooth = speedCurve.Evaluate(relTimeSincePlay);
+            //     targetFinalPos = Vector3.Lerp(transform.position , targetFinalPos, curvedSmooth);
+            //     Debug.Log($"Smoothing go-to path transition: relTimeSincePlay={relTimeSincePlay:F2} curvedSmooth={curvedSmooth:F2} posAtPlay={posAtPlay:F3} targetFinalPos={targetFinalPos:F3}");
+            // }
+
+            transform.position = targetFinalPos;
+            
             if (animateRotation)
             {
                 Vector3 forward = splineContainer.EvaluateTangent(actualTrackPosition);
@@ -945,18 +1033,22 @@ public class MainController : MonoBehaviour
     public void Play()
     {
         BeginRunStartCameraDiagnostics("Play before state change");
-        timeAtPlay = Time.time;
-        freeMotion = false;
-        isRunning = true;
 
-
-        currentSpeed = 0;
-        // Optional: If we are at the end, restart
         if (trackPosition >= 0.99f)
         {
             trackPosition = 0f;
             currentSpeed = 0f;
         }
+
+        PrepareTunnelEntryForPlay();
+
+        timeAtPlay = Time.time;
+        posAtPlay = transform.position;
+        freeMotion = false;
+        isRunning = true;
+
+
+        currentSpeed = 0;
 
         if (tunnel != null)
         {
@@ -1044,7 +1136,7 @@ public class MainController : MonoBehaviour
             {
                 float actualTrackPosition = GetActualTrackPosition(trackPosition);
                 float lookAheadTrackPosition = Mathf.Clamp01(actualTrackPosition + (isReversed ? -0.01f : 0.01f));
-                transform.position = tunnel.getPositionOnTrack(actualTrackPosition);
+                // transform.position = tunnel.getPositionOnTrack(actualTrackPosition);
                 Vector3 lookAtPos = tunnel.getPositionOnTrack(lookAheadTrackPosition);
                 lookAtPos.y = transform.position.y;
                 if (resetRotation) transform.LookAt(lookAtPos, Vector3.up);

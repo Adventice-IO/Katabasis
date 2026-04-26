@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class GameEnd : MonoBehaviour
 {
+    const int CartonAnisoLevel = 4;
+
     bool isActive = false;
     float timeOnActiveChange = 0f;
 
@@ -134,10 +136,11 @@ public class GameEnd : MonoBehaviour
         foreach (string pngFile in pngFiles)
         {
             byte[] pngData = File.ReadAllBytes(pngFile);
-            Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, true);
             if (texture.LoadImage(pngData))
             {
                 texture.name = Path.GetFileNameWithoutExtension(pngFile);
+                ConfigureCartonTexture(texture);
                 cartons.Add(texture);
             }
             else
@@ -145,6 +148,13 @@ public class GameEnd : MonoBehaviour
                 Destroy(texture);
             }
         }
+    }
+
+    void ConfigureCartonTexture(Texture2D texture)
+    {
+        texture.wrapMode = TextureWrapMode.Clamp;
+        texture.filterMode = texture.mipmapCount > 1 ? FilterMode.Trilinear : FilterMode.Bilinear;
+        texture.anisoLevel = CartonAnisoLevel;
     }
 
     void ShowCarton(int index)
