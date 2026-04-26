@@ -12,11 +12,13 @@ public class Interview : MonoBehaviour
 {
     static readonly Dictionary<string, string> metadataCache = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
     static readonly Dictionary<string, byte[]> posterCache = new Dictionary<string, byte[]>(StringComparer.OrdinalIgnoreCase);
+    static readonly Dictionary<string, Texture2D> posterTextureCache = new Dictionary<string, Texture2D>(StringComparer.OrdinalIgnoreCase);
     static readonly Dictionary<string, double> videoLengthCache = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
 
     Clip clip;
     VideoPlayer videoPlayer;
     Texture2D posterTex;
+    bool posterTexFromSharedCache;
     VisualEffect vfx;
     bool loopPointReachedSubscribed;
     bool prepareCompletedSubscribed;
@@ -69,6 +71,8 @@ public class Interview : MonoBehaviour
     [Header("Preview Reveal")]
     public float revealTime = 2f;
     float revealStartTime = -1f;
+    [Min(0)]
+    public int previewLoadFramesBetweenHeavySteps = 1;
 
     [Header("Glitch Settings")]
     public float glitchTimeAroundCut = 1f;
@@ -254,6 +258,73 @@ public class Interview : MonoBehaviour
         return File.ReadAllBytes(path);
     }
 
+    static Texture2D DecodePosterTexture(string path, byte[] pngData)
+    {
+        if (pngData == null || pngData.Length == 0)
+        {
+            return null;
+        }
+
+        Texture2D decodedTexture = new Texture2D(2, 2);
+        if (!decodedTexture.LoadImage(pngData, true))
+        {
+            if (Application.isPlaying)
+            {
+                Destroy(decodedTexture);
+            }
+            else
+            {
+                DestroyImmediate(decodedTexture);
+            }
+
+            Debug.LogWarning("Failed to decode poster texture at " + path);
+            return null;
+        }
+
+        decodedTexture.name = Path.GetFileNameWithoutExtension(path) + "_Poster";
+        return decodedTexture;
+    }
+
+    public static Texture2D GetOrCreatePosterTextureCached(string path, byte[] pngData = null)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return null;
+        }
+
+        if (posterTextureCache.TryGetValue(path, out Texture2D cachedTexture) && cachedTexture != null)
+        {
+            return cachedTexture;
+        }
+
+        if (pngData == null)
+        {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            pngData = LoadPosterCached(path);
+        }
+        else
+        {
+            posterCache[path] = pngData;
+        }
+
+        Texture2D decodedTexture = DecodePosterTexture(path, pngData);
+        if (decodedTexture != null)
+        {
+            posterTextureCache[path] = decodedTexture;
+        }
+
+        return decodedTexture;
+    }
+
+    public static void WarmPosterTextureCache(string path)
+    {
+        GetOrCreatePosterTextureCached(path);
+    }
+
 
     void resetPlaybackState()
     {
@@ -266,6 +337,7 @@ public class Interview : MonoBehaviour
         previewLoadQueued = false;
         previewLoadInProgress = false;
         revealStartTime = -1f;
+        posterTexFromSharedCache = false;
         playbackSequence = null;
         playbackIndex = -1;
         isResolvedPlayback = false;
@@ -685,6 +757,11 @@ public class Interview : MonoBehaviour
         }
 
         ReleasePosterTexture();
+        if(clip == null)
+        {
+            Debug.LogWarning("Clip is null in load() for interviewId='" + interviewId + "'. This may indicate an initialization issue.");
+            return;
+        }
         clip.metadataFile = null;
         clip.poster = null;
         if (videoPlayer != null)
@@ -709,9 +786,8 @@ public class Interview : MonoBehaviour
         string posterPath = previewBasePath + ".png";
         if (File.Exists(posterPath))
         {
-            posterTex = new Texture2D(2, 2);
-            byte[] pngData = LoadPosterCached(posterPath);
-            posterTex.LoadImage(pngData);
+            posterTex = GetOrCreatePosterTextureCached(posterPath);
+            posterTexFromSharedCache = posterTex != null;
             clip.poster = posterTex;
         }
         else
@@ -799,8 +875,16 @@ public class Interview : MonoBehaviour
             : LoadMetadataCached(metadataPath);
         metadataCache[metadataPath] = metaData;
 
+        for (int i = 0; i < previewLoadFramesBetweenHeavySteps; i++)
+        {
+            yield return null;
+        }
+
         bool result = clip.LoadMetadata(metaData);
-        yield return null;
+        for (int i = 0; i < previewLoadFramesBetweenHeavySteps + 1; i++)
+        {
+            yield return null;
+        }
 
         string posterPath = previewBasePath + ".png";
         if (File.Exists(posterPath))
@@ -815,8 +899,13 @@ public class Interview : MonoBehaviour
                 : LoadPosterCached(posterPath);
             posterCache[posterPath] = pngData;
 
-            posterTex = new Texture2D(2, 2);
-            posterTex.LoadImage(pngData);
+            for (int i = 0; i < previewLoadFramesBetweenHeavySteps; i++)
+            {
+                yield return null;
+            }
+
+            posterTex = GetOrCreatePosterTextureCached(posterPath, pngData);
+            posterTexFromSharedCache = posterTex != null;
             clip.poster = posterTex;
         }
         else
@@ -1415,6 +1504,13 @@ public class Interview : MonoBehaviour
             clip.poster = null;
         }
 
+        if (posterTexFromSharedCache)
+        {
+            posterTex = null;
+            posterTexFromSharedCache = false;
+            return;
+        }
+
         if (Application.isPlaying)
         {
             Destroy(posterTex);
@@ -1425,6 +1521,7 @@ public class Interview : MonoBehaviour
         }
 
         posterTex = null;
+        posterTexFromSharedCache = false;
     }
 
 

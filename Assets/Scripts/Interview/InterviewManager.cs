@@ -83,6 +83,10 @@ public class InterviewManager : MonoBehaviour
     public float simulatedCuriosity = 0.5f;
     [Min(0f)]
     public float previewLoadStagger = 1f;
+    [Range(0f, 1f)]
+    public float tunnelPreviewLoadStartTrackPosition = 0.1f;
+    [Min(1)]
+    public int startupPosterWarmupPerFrame = 2;
 
     public AudioRTPCRefSO interviewLeaveSO;
     public float interviewLeaveTime = 5f;
@@ -98,6 +102,10 @@ public class InterviewManager : MonoBehaviour
         mainController = GameObject.FindAnyObjectByType<MainController>();
         assignmentRandom = new System.Random(Environment.TickCount);
         LoadInterviewData();
+        if (Application.isPlaying)
+        {
+            StartCoroutine(WarmPosterTextureCacheAtStartup());
+        }
         SetInterviewLeaveRtpcValue(GetInterviewLeaveTargetValue());
     }
 
@@ -594,6 +602,11 @@ public class InterviewManager : MonoBehaviour
 
     IEnumerator LoadAssignmentsSequentially(List<Interview> interviewsToLoad)
     {
+        while (ShouldDelayPreviewLoadsForTunnelEntry())
+        {
+            yield return null;
+        }
+
         for (int i = 0; i < interviewsToLoad.Count; i++)
         {
             Interview interview = interviewsToLoad[i];
@@ -616,6 +629,21 @@ public class InterviewManager : MonoBehaviour
         }
 
         loadAssignmentsRoutine = null;
+    }
+
+    bool ShouldDelayPreviewLoadsForTunnelEntry()
+    {
+        if (!Application.isPlaying || mainController == null)
+        {
+            return false;
+        }
+
+        if (mainController.salle != null || mainController.tunnel == null)
+        {
+            return false;
+        }
+
+        return mainController.trackPosition < tunnelPreviewLoadStartTrackPosition;
     }
 
     public bool TryResolvePlaybackForSlot(Interview slot, out ResolvedInterviewPlayback playback)
@@ -966,6 +994,33 @@ public class InterviewManager : MonoBehaviour
         RebuildPersonStats();
 
         logAssignments();
+    }
+
+    IEnumerator WarmPosterTextureCacheAtStartup()
+    {
+        if (dataManager == null)
+        {
+            yield break;
+        }
+
+        List<string> posterPaths = interviewDataList
+            .Select(data => dataManager.GetFolderPath(DataManager.DataFolder.Interviews, data.depthkitPath) + ".png")
+            .Where(File.Exists)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        int warmedThisFrame = 0;
+        for (int i = 0; i < posterPaths.Count; i++)
+        {
+            Interview.WarmPosterTextureCache(posterPaths[i]);
+            warmedThisFrame++;
+
+            if (warmedThisFrame >= Mathf.Max(1, startupPosterWarmupPerFrame))
+            {
+                warmedThisFrame = 0;
+                yield return null;
+            }
+        }
     }
 
 
