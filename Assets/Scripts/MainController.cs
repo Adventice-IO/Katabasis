@@ -128,11 +128,18 @@ public class MainController : MonoBehaviour
     [Range(0.01f, 1f)]
     public float viewDistanceAnimSpeed = 0.2f;
     public float viewDistanceHideSpeed = 10f;
+    [Range(0f, 1f)]
+    public float pointCloudViewDistanceMultiplier = 1.0f;
     public bool enablePointCloudDiagnostics = true;
     public float pointCloudDiagnosticsLogIntervalSeconds = 10f;
 
-    [Range(0f, 1f)]
-    public float pointCloudViewDistanceMultiplier = 1.0f;
+    [Header("Run Start Diagnostics")]
+    public bool debugRunStartCamera = false;
+    public float runStartDiagnosticsDurationSeconds = 0.6f;
+    public float runStartDiagnosticsLogIntervalSeconds = 0.05f;
+    public float runStartDiagnosticsJumpDistance = 0.2f;
+    public float runStartDiagnosticsJumpAngle = 12f;
+
     float timeAtArrived; //in a salle or tunnel
     public float timeSinceArrived
     {
@@ -156,6 +163,11 @@ public class MainController : MonoBehaviour
     bool wasUserPresent;
     float nextPointCloudDiagnosticsLogTime;
     float lastLoggedVisionZoneDistance = -1f;
+    float runStartDiagnosticsUntilTime = -1f;
+    float nextRunStartDiagnosticsLogTime = -1f;
+    Vector3 lastRunStartCameraPosition;
+    Quaternion lastRunStartCameraRotation;
+    bool hasLastRunStartCameraPose;
 
     private void Start()
     {
@@ -417,6 +429,7 @@ public class MainController : MonoBehaviour
         if (Application.isPlaying)
         {
             HandleHeadsetPresence();
+            UpdateRunStartDiagnostics();
 
             if (gameState != lastGameState)
             {
@@ -530,6 +543,90 @@ public class MainController : MonoBehaviour
         return true;
     }
 
+    public void BeginRunStartCameraDiagnostics(string reason)
+    {
+        if (!Application.isPlaying || !debugRunStartCamera)
+        {
+            return;
+        }
+
+        runStartDiagnosticsUntilTime = Time.unscaledTime + Mathf.Max(0.05f, runStartDiagnosticsDurationSeconds);
+        nextRunStartDiagnosticsLogTime = Time.unscaledTime;
+        hasLastRunStartCameraPose = false;
+        LogRunStartCameraState(reason);
+    }
+
+    void UpdateRunStartDiagnostics()
+    {
+        if (!debugRunStartCamera || !Application.isPlaying)
+        {
+            return;
+        }
+
+        if (runStartDiagnosticsUntilTime < 0f)
+        {
+            return;
+        }
+
+        if (Time.unscaledTime > runStartDiagnosticsUntilTime)
+        {
+            LogRunStartCameraState("run-start window end");
+            runStartDiagnosticsUntilTime = -1f;
+            nextRunStartDiagnosticsLogTime = -1f;
+            hasLastRunStartCameraPose = false;
+            return;
+        }
+
+        if (Time.unscaledTime < nextRunStartDiagnosticsLogTime)
+        {
+            return;
+        }
+
+        LogRunStartCameraState("run-start tick");
+        nextRunStartDiagnosticsLogTime = Time.unscaledTime + Mathf.Max(0.01f, runStartDiagnosticsLogIntervalSeconds);
+    }
+
+    void LogRunStartCameraState(string reason)
+    {
+        Camera mainCam = Camera.main;
+        string cameraName = mainCam != null ? mainCam.name : "null";
+        Vector3 rigPosition = transform.position;
+        Vector3 rigEuler = transform.rotation.eulerAngles;
+        Vector3 cameraPosition = mainCam != null ? mainCam.transform.position : Vector3.zero;
+        Vector3 cameraEuler = mainCam != null ? mainCam.transform.rotation.eulerAngles : Vector3.zero;
+        Vector3 cameraLocalPosition = mainCam != null ? transform.InverseTransformPoint(mainCam.transform.position) : Vector3.zero;
+        Vector3 cameraLocalEuler = mainCam != null ? (Quaternion.Inverse(transform.rotation) * mainCam.transform.rotation).eulerAngles : Vector3.zero;
+        float cameraDeltaDistance = 0f;
+        float cameraDeltaAngle = 0f;
+
+        if (mainCam != null && hasLastRunStartCameraPose)
+        {
+            cameraDeltaDistance = Vector3.Distance(lastRunStartCameraPosition, mainCam.transform.position);
+            cameraDeltaAngle = Quaternion.Angle(lastRunStartCameraRotation, mainCam.transform.rotation);
+        }
+
+        string tunnelName = tunnel != null ? tunnel.name : "null";
+        string salleName = salle != null ? salle.name : "null";
+        string jumpMarker = string.Empty;
+        if (mainCam != null && hasLastRunStartCameraPose &&
+            (cameraDeltaDistance >= runStartDiagnosticsJumpDistance || cameraDeltaAngle >= runStartDiagnosticsJumpAngle))
+        {
+            jumpMarker = " JUMP";
+        }
+
+        Debug.Log(
+            $"[RunStartCamera]{jumpMarker} reason='{reason}' freeMotion={freeMotion} isRunning={isRunning} reversed={isReversed} track={trackPosition:F3} tunnel='{tunnelName}' salle='{salleName}' rigPos={rigPosition:F3} rigRot={rigEuler:F1} cam='{cameraName}' camPos={cameraPosition:F3} camRot={cameraEuler:F1} camLocalPos={cameraLocalPosition:F3} camLocalRot={cameraLocalEuler:F1} camDeltaDist={cameraDeltaDistance:F3} camDeltaAngle={cameraDeltaAngle:F1}",
+            this
+        );
+
+        if (mainCam != null)
+        {
+            lastRunStartCameraPosition = mainCam.transform.position;
+            lastRunStartCameraRotation = mainCam.transform.rotation;
+            hasLastRunStartCameraPose = true;
+        }
+    }
+
     void ResetViewForward()
     {
         Camera mainCam = Camera.main;
@@ -600,7 +697,7 @@ public class MainController : MonoBehaviour
 
         if (isRunning)
         {
-            float actualTrackPosition = isReversed ? (1f - trackPosition) : trackPosition;
+            float actualTrackPosition = GetActualTrackPosition(trackPosition);
             targetSpeed = Mathf.Min(tunnel.getDesiredSpeedAtPosition(actualTrackPosition, isReversed), maxSpeed);
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, maxAcceleration * deltaTime);
 
@@ -654,7 +751,7 @@ public class MainController : MonoBehaviour
 
         if (splineContainer != null)
         {
-            float actualTrackPosition = isReversed ? (1f - trackPosition) : trackPosition;
+            float actualTrackPosition = GetActualTrackPosition(trackPosition);
             transform.position = splineContainer.EvaluatePosition(actualTrackPosition);
             if (animateRotation)
             {
@@ -734,6 +831,8 @@ public class MainController : MonoBehaviour
 
     public void GoToSalle(Salle targetSalle)
     {
+        BeginRunStartCameraDiagnostics($"GoToSalle begin target='{targetSalle?.name}'");
+
         if (Application.isPlaying)
         {
             InterviewManager manager = FindAnyObjectByType<InterviewManager>();
@@ -755,6 +854,7 @@ public class MainController : MonoBehaviour
                 splineContainer = null; //force re-cache
                 isReversed = false;
                 ResetPosition();
+                BeginRunStartCameraDiagnostics($"GoToSalle forward reset target='{targetSalle?.name}'");
                 Play();
                 return;
             }
@@ -767,6 +867,7 @@ public class MainController : MonoBehaviour
                 splineContainer = null; //force re-cache
                 isReversed = true;
                 ResetPosition();
+                BeginRunStartCameraDiagnostics($"GoToSalle reverse reset target='{targetSalle?.name}'");
                 Play();
 
                 return;
@@ -843,6 +944,7 @@ public class MainController : MonoBehaviour
 
     public void Play()
     {
+        BeginRunStartCameraDiagnostics("Play before state change");
         timeAtPlay = Time.time;
         freeMotion = false;
         isRunning = true;
@@ -873,6 +975,8 @@ public class MainController : MonoBehaviour
             }
         }
 
+        BeginRunStartCameraDiagnostics("Play after state change");
+
 
     }
 
@@ -882,12 +986,17 @@ public class MainController : MonoBehaviour
         currentSpeed = 0f;
     }
 
+    float GetActualTrackPosition(float logicalTrackPosition)
+    {
+        return isReversed ? (1f - logicalTrackPosition) : logicalTrackPosition;
+    }
+
     public void setPosition(float position)
     {
         trackPosition = Mathf.Clamp01(position);
         if (isRunning && followPathOrientation && splineContainer != null)
         {
-            float actualTrackPosition = isReversed ? (1f - trackPosition) : trackPosition;
+            float actualTrackPosition = GetActualTrackPosition(trackPosition);
             Vector3 forward = splineContainer.EvaluateTangent(actualTrackPosition);
             Vector3 up = Vector3.up;
             if (forward != Vector3.zero)
@@ -911,6 +1020,7 @@ public class MainController : MonoBehaviour
             if (salle.origin == null) return;
             transform.position = salle.origin.position;
             timeAtArrived = Time.time;
+            BeginRunStartCameraDiagnostics($"ResetPosition salle='{salle.name}' resetRotation={resetRotation}");
 
             if (gameState == GameState.Playing)
             {
@@ -932,14 +1042,17 @@ public class MainController : MonoBehaviour
             currentSpeed = 0f;
             if (isInATunnel())
             {
-                transform.position = tunnel.getPositionOnTrack(0);
-                Vector3 lookAtPos = tunnel.getPositionOnTrack(0.01f);
+                float actualTrackPosition = GetActualTrackPosition(trackPosition);
+                float lookAheadTrackPosition = Mathf.Clamp01(actualTrackPosition + (isReversed ? -0.01f : 0.01f));
+                transform.position = tunnel.getPositionOnTrack(actualTrackPosition);
+                Vector3 lookAtPos = tunnel.getPositionOnTrack(lookAheadTrackPosition);
                 lookAtPos.y = transform.position.y;
                 if (resetRotation) transform.LookAt(lookAtPos, Vector3.up);
+                BeginRunStartCameraDiagnostics($"ResetPosition tunnel='{tunnel.name}' resetRotation={resetRotation}");
 
                 if (gameState == GameState.Playing)
                 {
-                    AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(0);
+                    AudioStateRefSO audioSO = tunnel.getAudioSOForPosition(actualTrackPosition);
                     if (audioSO != null && audioSO.state != null)
                     {
                         if (debugAudioStates) Debug.Log("Setting tunnel audio state: " + audioSO.state.Name);

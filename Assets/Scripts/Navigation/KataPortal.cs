@@ -183,6 +183,7 @@ public class KataPortal : MonoBehaviour
                 vfx.SetFloat("Progression", progression);
                 if (progression >= 1f)
                 {
+                    mainController.BeginRunStartCameraDiagnostics($"Portal validated portal='{portalName}' tunnel='{tunnel?.name}' reverse={isReverse}");
                     mainController.GoToSalle(tunnel.getOtherSalle(mainController.salle));
                     loadingEvent.evt.Stop(gameObject);
                     validateEvent.evt.Post(gameObject);
