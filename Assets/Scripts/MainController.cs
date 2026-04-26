@@ -969,6 +969,11 @@ public class MainController : MonoBehaviour
     {
         if (!Application.isPlaying) return;
 
+        if (gameState == GameState.Menu)
+        {
+            ResetGame();
+        }
+
         menu.setActive(gameState == GameState.Menu);
         intro.setActive(gameState == GameState.Intro);
         outro.setActive(gameState == GameState.Outro);
@@ -983,7 +988,6 @@ public class MainController : MonoBehaviour
         switch (gameState)
         {
             case GameState.Menu:
-                ResetGame();
                 menuRefSO?.state.SetValue();
                 break;
 
@@ -1019,6 +1023,29 @@ public class MainController : MonoBehaviour
     {
         visitedSalles.Clear();
         GetInterviewManager()?.ResetGame();
+        tunnel?.audioEventSO?.evt.Stop(gameObject);
+        FindAnyObjectByType<Subtitles>()?.stop();
+
+        KataPortal[] portals = FindObjectsByType<KataPortal>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < portals.Length; i++)
+        {
+            if (portals[i] == null)
+            {
+                continue;
+            }
+
+            portals[i].show(false);
+        }
+
+        Pause();
+        targetSpeed = 0f;
+        trackPosition = 0f;
+        freeMotion = true;
+        tunnel = null;
+        comingFromTunnel = null;
+        _lastTunnelAudioSO = null;
+        splineContainer = null;
+        isReversed = false;
         gameState = GameState.Menu;
         if (salle != null) salle.setActive(false);
         salle = null;

@@ -329,6 +329,7 @@ public class Interview : MonoBehaviour
     void resetPlaybackState()
     {
         CancelInvoke(nameof(endEvaporate));
+        isFocused = false;
         progression = 0;
         evaporateProg = 0;
         evaporateReachedFullTime = -1f;
@@ -363,6 +364,44 @@ public class Interview : MonoBehaviour
     public void ResetForPreviewAssignment()
     {
         prepareForNextAssignment();
+    }
+
+    public void ResetForFullGameReset()
+    {
+        if (clip == null || videoPlayer == null || vfx == null)
+        {
+            init();
+        }
+
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
+        if (previewLoadCoroutine != null)
+        {
+            StopCoroutine(previewLoadCoroutine);
+            previewLoadCoroutine = null;
+        }
+
+        loadingEvent?.evt.Stop(gameObject);
+        subtitles?.stop();
+        stopWwiseVideoEvent(true);
+        ClearResumeState();
+        ReleasePlaybackResources(true);
+        resetPlaybackState();
+        isFocused = false;
+        glitchFactor = 0f;
+        progRTPC?.rtpc.SetValue(gameObject, 0f);
+
+        if (vfx != null)
+        {
+            vfx.enabled = false;
+            vfx.SetFloat("Progression", 0f);
+            vfx.SetFloat("Evaporate", 0f);
+            vfx.SetFloat("GlitchFactor", 0f);
+            vfx.SetFloat("SpawnRate", 0f);
+        }
     }
 
     public void ClearResumeState()
@@ -451,6 +490,28 @@ public class Interview : MonoBehaviour
         return true;
     }
 
+    bool CanInteractInCurrentSalle()
+    {
+        return Application.isPlaying
+            && mainController != null
+            && salle != null
+            && mainController.isInSalle(salle);
+    }
+
+    void CancelPendingInteraction()
+    {
+        isFocused = false;
+
+        if (progression <= 0f)
+        {
+            return;
+        }
+
+        progression = 0f;
+        loadingEvent?.evt.Stop(gameObject);
+        progRTPC?.rtpc.SetValue(gameObject, progression);
+    }
+
     bool ShouldPlayDepthkitVideo()
     {
         bool isStillInSalle = salle == null || mainController == null || mainController.isInSalle(salle);
@@ -530,7 +591,13 @@ public class Interview : MonoBehaviour
             return;
         }
 
-        if (progression < 1 && !mainController.editMode)
+        bool canInteractInCurrentSalle = CanInteractInCurrentSalle();
+        if (!canInteractInCurrentSalle)
+        {
+            CancelPendingInteraction();
+        }
+
+        if (progression < 1 && !mainController.editMode && canInteractInCurrentSalle)
         {
             if (Application.isPlaying)
             {
@@ -1111,6 +1178,13 @@ public class Interview : MonoBehaviour
     }
     void resolveAndPlay()
     {
+        if (!CanInteractInCurrentSalle())
+        {
+            TracePlayback("resolveAndPlay() aborted because the player is not currently inside this salle");
+            CancelPendingInteraction();
+            return;
+        }
+
         LogDebug("Resolving playback at validation time for slot '" + name + "'");
         TracePlayback("resolveAndPlay() called. isResolvedPlayback=" + isResolvedPlayback + ", current interviewId='" + interviewId + "'");
         if (!isResolvedPlayback && Application.isPlaying)

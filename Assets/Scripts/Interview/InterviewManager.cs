@@ -146,12 +146,25 @@ public class InterviewManager : MonoBehaviour
 
     public void ResetGame()
     {
+        interviewStopAllEvent?.evt.Post(gameObject);
+
         for (int i = 0; i < interviewDataList.Count; i++)
         {
             var data = interviewDataList[i];
             data.visited = false;
             data.proposed = false;
             interviewDataList[i] = data;
+        }
+
+        Interview[] interviews = FindObjectsByType<Interview>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < interviews.Length; i++)
+        {
+            if (interviews[i] == null)
+            {
+                continue;
+            }
+
+            interviews[i].ResetForFullGameReset();
         }
 
         playedPersonsSinceAssignment.Clear();
@@ -167,6 +180,7 @@ public class InterviewManager : MonoBehaviour
         StopLoadAssignmentsRoutine();
         ResetInterviewLeaveRtpc();
         lastActiveInterviewDebug = null;
+        assignmentRandom = new System.Random(Environment.TickCount);
         RebuildPersonStats();
     }
 
