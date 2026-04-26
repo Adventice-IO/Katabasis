@@ -146,7 +146,13 @@ public class MainController : MonoBehaviour
     [Header("Tunnel Entry Diagnostics")]
     public bool logTunnelEntrySync = true;
     public float tunnelEntrySyncWarningDistance = 0.02f;
-    public bool snapRigToTunnelEntryOnPlay = true;
+    public bool snapRigToTunnelEntryOnPlay = false;
+
+    [Header("Rig Motion Diagnostics")]
+    public bool logRigMotionAttribution = true;
+    public float rigMotionAttributionDistanceThreshold = 0.05f;
+    public float rigMotionAttributionAngleThreshold = 2f;
+    public float rigMotionAttributionCooldownSeconds = 0.25f;
 
     float timeAtArrived; //in a salle or tunnel
     public float timeSinceArrived
@@ -176,6 +182,11 @@ public class MainController : MonoBehaviour
     Vector3 lastRunStartCameraPosition;
     Quaternion lastRunStartCameraRotation;
     bool hasLastRunStartCameraPose;
+    Vector3 lastObservedRigPosition;
+    Quaternion lastObservedRigRotation;
+    bool hasLastObservedRigPose;
+    string pendingRigMotionReason;
+    float nextRigMotionAttributionLogTime;
 
     private void Start()
     {
@@ -196,6 +207,9 @@ public class MainController : MonoBehaviour
         tunnelsGO = GameObject.Find("Tunnels");
 
         wasUserPresent = IsUserPresent();
+        lastObservedRigPosition = transform.position;
+        lastObservedRigRotation = transform.rotation;
+        hasLastObservedRigPose = true;
 
         gameStateUpdate();
     }
@@ -271,7 +285,7 @@ public class MainController : MonoBehaviour
                     if (freeMotion)
                     {
                         Vector3 groundPos = GroundFinder.getGroundForPosition(transform.position, .2f, 1.0f, 6);
-                        transform.position = groundPos;
+                        SetRigPosition(groundPos, "SnapGroundAction");
                     }
                 };
             }
@@ -385,6 +399,7 @@ public class MainController : MonoBehaviour
             return;
 
         Tick(Time.deltaTime);
+        TrackRigMotion("FixedUpdate");
     }
 
     private void Update()
@@ -522,6 +537,99 @@ public class MainController : MonoBehaviour
             teleportationLoco.SetActive(freeMotion);
             turnLoco.SetActive(freeMotion);
         }
+
+        TrackRigMotion("Update");
+    }
+
+    void MarkRigMotionExpected(string reason)
+    {
+        pendingRigMotionReason = reason;
+    }
+
+    void SetRigPosition(Vector3 position, string reason)
+    {
+        MarkRigMotionExpected(reason);
+        transform.position = position;
+    }
+
+    void MoveRig(Vector3 delta, string reason)
+    {
+        MarkRigMotionExpected(reason);
+        transform.position += delta;
+    }
+
+    void SetRigRotation(Quaternion rotation, string reason)
+    {
+        MarkRigMotionExpected(reason);
+        transform.rotation = rotation;
+    }
+
+    void LookRigAt(Vector3 worldPosition, Vector3 worldUp, string reason)
+    {
+        MarkRigMotionExpected(reason);
+        transform.LookAt(worldPosition, worldUp);
+    }
+
+    void RotateRigAround(Vector3 point, Vector3 axis, float angle, string reason)
+    {
+        MarkRigMotionExpected(reason);
+        transform.RotateAround(point, axis, angle);
+    }
+
+    void TrackRigMotion(string phase)
+    {
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        Vector3 rigPosition = transform.position;
+        Quaternion rigRotation = transform.rotation;
+        if (!hasLastObservedRigPose)
+        {
+            lastObservedRigPosition = rigPosition;
+            lastObservedRigRotation = rigRotation;
+            hasLastObservedRigPose = true;
+            pendingRigMotionReason = null;
+            return;
+        }
+
+        float positionDelta = Vector3.Distance(lastObservedRigPosition, rigPosition);
+        float rotationDelta = Quaternion.Angle(lastObservedRigRotation, rigRotation);
+        bool rigMoved = positionDelta >= rigMotionAttributionDistanceThreshold || rotationDelta >= rigMotionAttributionAngleThreshold;
+        if (!rigMoved)
+        {
+            pendingRigMotionReason = null;
+            return;
+        }
+
+        if (logRigMotionAttribution && Time.unscaledTime >= nextRigMotionAttributionLogTime)
+        {
+            Camera mainCam = Camera.main;
+            Vector3 cameraLocalPosition = mainCam != null ? transform.InverseTransformPoint(mainCam.transform.position) : Vector3.zero;
+            string motionSource = string.IsNullOrEmpty(pendingRigMotionReason) ? "UNTRACKED" : pendingRigMotionReason;
+            string tunnelName = tunnel != null ? tunnel.name : "null";
+            string salleName = salle != null ? salle.name : "null";
+            bool teleportEnabled = nativeTeleportAction != null && nativeTeleportAction.action != null && nativeTeleportAction.action.enabled;
+            bool moveProviderEnabled = moveProvider != null && moveProvider.enabled;
+            string message =
+                $"[RigMotion] source='{motionSource}' phase='{phase}' posDelta={positionDelta:F4} rotDelta={rotationDelta:F2} rigPos={rigPosition:F3} prevRigPos={lastObservedRigPosition:F3} camLocalPos={cameraLocalPosition:F3} freeMotion={freeMotion} moveProviderEnabled={moveProviderEnabled} teleportEnabled={teleportEnabled} verticalMove={verticalMove} isRunning={isRunning} salle='{salleName}' tunnel='{tunnelName}'";
+
+            if (string.IsNullOrEmpty(pendingRigMotionReason))
+            {
+                Debug.LogWarning(message, this);
+            }
+            else
+            {
+                Debug.Log(message, this);
+            }
+
+            nextRigMotionAttributionLogTime = Time.unscaledTime + Mathf.Max(0.05f, rigMotionAttributionCooldownSeconds);
+        }
+
+        lastObservedRigPosition = rigPosition;
+        lastObservedRigRotation = rigRotation;
+        pendingRigMotionReason = null;
     }
 
     void HandleHeadsetPresence()
@@ -652,7 +760,7 @@ public class MainController : MonoBehaviour
         }
 
         float yawToWorldForward = Vector3.SignedAngle(cameraForward.normalized, Vector3.forward, Vector3.up);
-        transform.RotateAround(mainCam.transform.position, Vector3.up, yawToWorldForward);
+        RotateRigAround(transform.position, Vector3.up, yawToWorldForward, "ResetViewForward");
     }
 
     void LogTunnelEntrySync(string reason)
@@ -718,7 +826,7 @@ public class MainController : MonoBehaviour
                 $"[TunnelEntrySync] Snapping rig to tunnel entry before play tunnel='{tunnel.name}' rigPos={transform.position:F3} entryPos={tunnelEntryPosition:F3} distance={rigToTrackDistance:F4}",
                 this
             );
-            transform.position = tunnelEntryPosition;
+            SetRigPosition(tunnelEntryPosition, "PrepareTunnelEntryForPlay snap");
         }
 
         LogTunnelEntrySync("Play start after sync");
@@ -736,7 +844,7 @@ public class MainController : MonoBehaviour
 
             if (verticalMove)
             {
-                transform.position += Vector3.up * joystickInput.y * deltaTime;
+                MoveRig(Vector3.up * joystickInput.y * deltaTime, "VerticalMove");
             }
             else if (!freeMotion && isInATunnel())
             {
@@ -759,7 +867,7 @@ public class MainController : MonoBehaviour
 
         if (isInASalle())
         {
-            transform.position = salle.origin.position;
+            SetRigPosition(salle.origin.position, "Tick salle origin lock");
             return;
         }
 
@@ -839,7 +947,7 @@ public class MainController : MonoBehaviour
             //     Debug.Log($"Smoothing go-to path transition: relTimeSincePlay={relTimeSincePlay:F2} curvedSmooth={curvedSmooth:F2} posAtPlay={posAtPlay:F3} targetFinalPos={targetFinalPos:F3}");
             // }
 
-            transform.position = targetFinalPos;
+            SetRigPosition(targetFinalPos, "Tick spline follow");
             
             if (animateRotation)
             {
@@ -847,7 +955,7 @@ public class MainController : MonoBehaviour
                 Vector3 up = Vector3.up;
                 if (forward != Vector3.zero)
                 {
-                    transform.rotation = Quaternion.LookRotation(forward, up);
+                    SetRigRotation(Quaternion.LookRotation(forward, up), "Tick spline rotation");
                 }
             }
         }
@@ -1093,7 +1201,7 @@ public class MainController : MonoBehaviour
             Vector3 up = Vector3.up;
             if (forward != Vector3.zero)
             {
-                transform.rotation = Quaternion.LookRotation(forward, up);
+                SetRigRotation(Quaternion.LookRotation(forward, up), "setPosition followPathOrientation");
             }
         }
     }
@@ -1110,7 +1218,7 @@ public class MainController : MonoBehaviour
         if (isInASalle())
         {
             if (salle.origin == null) return;
-            transform.position = salle.origin.position;
+            SetRigPosition(salle.origin.position, "ResetPosition salle");
             timeAtArrived = Time.time;
             BeginRunStartCameraDiagnostics($"ResetPosition salle='{salle.name}' resetRotation={resetRotation}");
 
@@ -1139,7 +1247,7 @@ public class MainController : MonoBehaviour
                 // transform.position = tunnel.getPositionOnTrack(actualTrackPosition);
                 Vector3 lookAtPos = tunnel.getPositionOnTrack(lookAheadTrackPosition);
                 lookAtPos.y = transform.position.y;
-                if (resetRotation) transform.LookAt(lookAtPos, Vector3.up);
+                if (resetRotation) LookRigAt(lookAtPos, Vector3.up, "ResetPosition tunnel rotation");
                 BeginRunStartCameraDiagnostics($"ResetPosition tunnel='{tunnel.name}' resetRotation={resetRotation}");
 
                 if (gameState == GameState.Playing)
