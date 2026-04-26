@@ -9,6 +9,7 @@ using System.Globalization; // Required for CultureInfo
 [ExecuteAlways]
 public class InterviewManager : MonoBehaviour
 {
+
     [Serializable]
     public struct RoomPersonAssignment
     {
@@ -76,9 +77,11 @@ public class InterviewManager : MonoBehaviour
 
     System.Random assignmentRandom;
 
+    public bool loadCSVFromResources;
     public bool generateAssignment;
     public bool simulateGameplay;
     public bool ignoreTagRules;
+    public List<string> ignoredInterviewNameContains = new List<string>();
     [Range(0f, 1f)]
     public float simulatedCuriosity = 0.5f;
     [Min(0f)]
@@ -91,7 +94,7 @@ public class InterviewManager : MonoBehaviour
     public AudioRTPCRefSO interviewLeaveSO;
     public float interviewLeaveTime = 5f;
     public AudioEventRefSO interviewStopAllEvent;
-    
+
 
     MainController mainController;
     DataManager dataManager;
@@ -530,7 +533,7 @@ public class InterviewManager : MonoBehaviour
         if (forceLog || !alreadyAtTarget)
         {
             string stateLabel = Mathf.Approximately(targetValue, 0f) ? "salle" : "tunnel";
-           // Debug.Log("Animating interviewLeave RTPC from " + interviewLeaveValue + " to " + targetValue + " over " + interviewLeaveTime + "s because player is in " + stateLabel + ".", this);
+            // Debug.Log("Animating interviewLeave RTPC from " + interviewLeaveValue + " to " + targetValue + " over " + interviewLeaveTime + "s because player is in " + stateLabel + ".", this);
         }
 
         isInterviewLeaveAnimating = true;
@@ -733,7 +736,7 @@ public class InterviewManager : MonoBehaviour
         int salleLevel = assignment.salle != null ? assignment.salle.niveau : 0;
         bool hasPlayedBefore = playedPersonsSinceAssignment.Contains(assignment.person) || HasVisitedAnyInterview(stats.Value) || HasIntroStarted(assignment.person);
 
-        if (!hasPlayedBefore && !string.IsNullOrWhiteSpace(stats.Value.introInterview.depthkitId))
+        if (!hasPlayedBefore && !string.IsNullOrWhiteSpace(stats.Value.introInterview.depthkitId) && !IsInterviewIgnored(stats.Value.introInterview))
         {
             return stats.Value.introInterview;
         }
@@ -744,7 +747,7 @@ public class InterviewManager : MonoBehaviour
             return bestInterview.Value;
         }
 
-        if (!string.IsNullOrWhiteSpace(stats.Value.introInterview.depthkitId))
+        if (!string.IsNullOrWhiteSpace(stats.Value.introInterview.depthkitId) && !IsInterviewIgnored(stats.Value.introInterview))
         {
             return stats.Value.introInterview;
         }
@@ -768,7 +771,7 @@ public class InterviewManager : MonoBehaviour
         List<InterviewData> result = new List<InterviewData>();
         bool hasPlayedBefore = playedPersons.Contains(person) || HasVisitedAnyInterview(stats.Value) || HasIntroStarted(person);
 
-        if (!hasPlayedBefore && !string.IsNullOrEmpty(stats.Value.introInterview.filename))
+        if (!hasPlayedBefore && !string.IsNullOrEmpty(stats.Value.introInterview.filename) && !IsInterviewIgnored(stats.Value.introInterview))
         {
             result.Add(stats.Value.introInterview);
         }
@@ -824,6 +827,7 @@ public class InterviewManager : MonoBehaviour
 
         List<InterviewData> candidates = interviewDataList
             .Where(data => !data.isIntro)
+            .Where(data => !IsInterviewIgnored(data))
             .Where(data => data.themes.Any(t => string.Equals(t, theme, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
@@ -894,6 +898,11 @@ public class InterviewManager : MonoBehaviour
             return null;
         }
 
+        if (IsInterviewIgnored(stats.Value.introInterview))
+        {
+            return null;
+        }
+
         return stats.Value.introInterview;
     }
 
@@ -919,16 +928,34 @@ public class InterviewManager : MonoBehaviour
         personStatsList.Clear();
 
 
-        string csvPath = dataManager.GetRootFilePath("interviews/interviews.csv");
-        if (!File.Exists(csvPath))
+        string[] lines;
+        if (loadCSVFromResources)
         {
-            Debug.LogWarning("Interview CSV not found at " + csvPath);
-            return;
+            TextAsset csvAsset = Resources.Load<TextAsset>("interviews");
+            if (csvAsset == null)
+            {
+                Debug.LogWarning("Interview CSV not found in Resources at interviews.csv");
+                return;
+            }
+
+            Debug.Log("Loading interview data from Resources at interviews.csv");
+
+            lines = csvAsset.text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+        }
+        else
+        {
+            string csvPath = dataManager.GetRootFilePath("interviews/interviews.csv");
+            if (!File.Exists(csvPath))
+            {
+                Debug.LogWarning("Interview CSV not found at " + csvPath);
+                return;
+            }
+
+            Debug.Log("Loading interview data from " + csvPath);
+
+            lines = File.ReadAllLines(csvPath);
         }
 
-        Debug.Log("Loading interview data from " + csvPath);
-
-        string[] lines = File.ReadAllLines(csvPath);
         if (lines.Length <= 1)
         {
             return;
@@ -1095,17 +1122,56 @@ public class InterviewManager : MonoBehaviour
     List<InterviewData> GetPlayableCandidates(string person, List<InterviewData> interviews, int? salleLevel)
     {
         return interviews
-            .Where(data => !HasPlaybackIdentityState(data, candidate => candidate.visited))
-            .Where(data => !HasPlaybackIdentityState(data, candidate => candidate.proposed))
-            .Where(data => !salleLevel.HasValue || data.levels.Contains(salleLevel.Value))
+            .Where(data => IsPlayableCandidate(data, salleLevel))
             .ToList();
     }
 
     bool IsInterviewAllowedForPlayback(InterviewData candidate, int? salleLevel)
     {
-        return !HasPlaybackIdentityState(candidate, data => data.visited)
-            && !HasPlaybackIdentityState(candidate, data => data.proposed)
-            && (!salleLevel.HasValue || candidate.levels.Contains(salleLevel.Value));
+        return IsPlayableCandidate(candidate, salleLevel);
+    }
+
+    bool IsPlayableCandidate(InterviewData data, int? salleLevel)
+    {
+        return !IsInterviewIgnored(data)
+            && !HasPlaybackIdentityState(data, candidate => candidate.visited)
+            && !HasPlaybackIdentityState(data, candidate => candidate.proposed)
+            && (!salleLevel.HasValue || data.levels.Contains(salleLevel.Value));
+    }
+
+    bool IsInterviewIgnored(InterviewData data)
+    {
+        if (ignoredInterviewNameContains == null || ignoredInterviewNameContains.Count == 0)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < ignoredInterviewNameContains.Count; i++)
+        {
+            string fragment = ignoredInterviewNameContains[i];
+            if (string.IsNullOrWhiteSpace(fragment))
+            {
+                continue;
+            }
+
+            string trimmedFragment = fragment.Trim();
+            if (ContainsIgnoreFragment(data.filename, trimmedFragment)
+                || ContainsIgnoreFragment(data.depthkitId, trimmedFragment)
+                || ContainsIgnoreFragment(data.mediaPath, trimmedFragment)
+                || ContainsIgnoreFragment(data.depthkitPath, trimmedFragment))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    static bool ContainsIgnoreFragment(string value, string fragment)
+    {
+        return !string.IsNullOrWhiteSpace(value)
+            && !string.IsNullOrWhiteSpace(fragment)
+            && value.IndexOf(fragment, StringComparison.OrdinalIgnoreCase) >= 0;
     }
 
     void RegisterPlayedInterview(InterviewData interview)
@@ -1693,7 +1759,7 @@ public class InterviewManager : MonoBehaviour
 
         int salleLevel = currentSalle.niveau;
         List<string> candidatePersons = personStatsList
-            .Where(stats => stats.interviews.Any(interview => !interview.visited && interview.levels.Contains(salleLevel)))
+            .Where(stats => stats.interviews.Any(interview => IsPlayableCandidate(interview, salleLevel)))
             .Select(stats => stats.person)
             .OrderBy(_ => assignmentRandom.Next())
             .ToList();
@@ -1701,6 +1767,7 @@ public class InterviewManager : MonoBehaviour
         if (candidatePersons.Count == 0)
         {
             candidatePersons = personStatsList
+                .Where(stats => stats.interviews.Any(interview => IsPlayableCandidate(interview, null)) || HasAvailableIntro(stats))
                 .Select(stats => stats.person)
                 .OrderBy(_ => assignmentRandom.Next())
                 .ToList();
@@ -1773,5 +1840,13 @@ public class InterviewManager : MonoBehaviour
 
         int randomIndex = assignmentRandom != null ? assignmentRandom.Next(bestNoteCandidates.Count) : UnityEngine.Random.Range(0, bestNoteCandidates.Count);
         return bestNoteCandidates[randomIndex];
+    }
+
+    bool HasAvailableIntro(PersonInterviewStats stats)
+    {
+        return !HasVisitedAnyInterview(stats)
+            && !HasIntroStarted(stats.person)
+            && !string.IsNullOrWhiteSpace(stats.introInterview.depthkitId)
+            && !IsInterviewIgnored(stats.introInterview);
     }
 }

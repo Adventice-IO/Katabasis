@@ -202,7 +202,10 @@ public class KataPortal : MonoBehaviour
         GetComponent<Collider>().enabled = showing;
         GetComponent<VisualEffect>().SetFloat("Progression", progression);
 
-        GetComponentInParent<KataTransformer>().forceDisabled = !showing;
+        if(GetComponentInParent<KataTransformer>() != null)
+        {
+            GetComponentInParent<KataTransformer>().forceDisabled = !showing;
+        }
     }
 
     //public bool isFirst()

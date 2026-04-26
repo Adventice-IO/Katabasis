@@ -42,6 +42,8 @@ public class Interview : MonoBehaviour
 
     string wwiseEventName;
     string currentPerson;
+    Vector3 currentOffset;
+    float currentAngle;
     float resumeTimeSeconds;
     bool hasResumeTime;
     bool leaveRequestedWhileListening;
@@ -221,6 +223,13 @@ public class Interview : MonoBehaviour
             && string.Equals(loadedInterviewId, interviewId, StringComparison.OrdinalIgnoreCase);
     }
 
+    bool HasPreviewAssignment()
+    {
+        return !string.IsNullOrWhiteSpace(previewBasePath)
+            && !string.IsNullOrWhiteSpace(itwName)
+            && !string.IsNullOrWhiteSpace(interviewId);
+    }
+
     public void SetPreviewLoadQueued(bool queued)
     {
         previewLoadQueued = queued;
@@ -345,6 +354,8 @@ public class Interview : MonoBehaviour
         isTransitioningSequence = false;
         currentEntryIsIntro = false;
         currentPerson = null;
+        currentOffset = Vector3.zero;
+        currentAngle = 0f;
         ResetPlaybackTimer();
         resourcesReleased = false;
         state = State.Idle;
@@ -356,9 +367,22 @@ public class Interview : MonoBehaviour
         ClearResumeState();
         resetPlaybackState();
         ReleasePlaybackResources(true);
+        ClearAssignmentIdentity();
 
         InterviewManager manager = FindAnyObjectByType<InterviewManager>();
         manager?.NotifyInterviewStopped(this);
+    }
+
+    void ClearAssignmentIdentity()
+    {
+        itwName = string.Empty;
+        interviewId = string.Empty;
+        wwiseEventName = string.Empty;
+        basePath = string.Empty;
+        previewBasePath = string.Empty;
+        metadataLoadTask = null;
+        posterLoadTask = null;
+        cutTimes = null;
     }
 
     public void ResetForPreviewAssignment()
@@ -720,6 +744,8 @@ public class Interview : MonoBehaviour
         this.itwName = data.depthkitPath;
         this.interviewId = data.mediaPath;
         this.currentPerson = data.person;
+        this.currentOffset = data.offset;
+        this.currentAngle = data.angle;
         this.currentEntryIsIntro = data.isIntro;
         this.level = data.level;
         vfx.SetVector3("Offset", data.offset);
@@ -818,6 +844,12 @@ public class Interview : MonoBehaviour
         previewLoadQueued = false;
         previewLoadInProgress = false;
 
+        if (!HasPreviewAssignment())
+        {
+            LogDebug("Skipped preview load because no preview assignment is set");
+            return;
+        }
+
         if (IsPreviewLoadedForCurrentAssignment())
         {
             return;
@@ -873,6 +905,14 @@ public class Interview : MonoBehaviour
 
     public void BeginPreviewLoad()
     {
+        if (!HasPreviewAssignment())
+        {
+            previewLoadQueued = false;
+            previewLoadInProgress = false;
+            LogDebug("Skipped BeginPreviewLoad because no preview assignment is set");
+            return;
+        }
+
         if (!Application.isPlaying)
         {
             load();
@@ -902,6 +942,14 @@ public class Interview : MonoBehaviour
     {
         previewLoadQueued = false;
         previewLoadInProgress = true;
+
+        if (!HasPreviewAssignment())
+        {
+            LogDebug("Cancelled async preview load because no preview assignment is set");
+            previewLoadInProgress = false;
+            previewLoadCoroutine = null;
+            yield break;
+        }
 
         if (IsPreviewLoadedForCurrentAssignment())
         {
@@ -1073,6 +1121,7 @@ public class Interview : MonoBehaviour
         StartPlaybackTimer(startTime);
 
         state = State.Playing;
+        Debug.Log($"Starting interview playback: slot='{name}', person='{currentPerson}', media='{interviewId}', depthkit='{itwName}', offset={currentOffset}, angle={currentAngle}, intro={currentEntryIsIntro}", this);
 
         if (subtitles != null)
         {

@@ -466,13 +466,15 @@ namespace Depthkit
                 volumeViewpoint = Camera.main.transform; //use main camera by default
             }
 
+            Vector3 viewForward = volumeViewpoint != null ? volumeViewpoint.forward : transform.forward;
+
             for (int perspectiveIndex = 0; perspectiveIndex < clip.metadata.perspectivesCount; ++perspectiveIndex)
             {
                 float viewWeight = 1.0f;
                 if (enableViewDependentGeometry)
                 {
                     Vector3 cameraNormal = transform.localToWorldMatrix * clip.metadata.perspectives[perspectiveIndex].cameraNormal;
-                    viewWeight = Mathf.Max(Vector3.Dot(volumeViewpoint.transform.forward, cameraNormal), 0.0001f);
+                    viewWeight = Mathf.Max(Vector3.Dot(viewForward, cameraNormal), 0.0001f);
 
                     float power;
                     if (perspectiveGeometryData.MatchViewDependentColorWeight(perspectiveIndex))
@@ -1070,12 +1072,13 @@ namespace Depthkit
         protected override void OnUpdate()
         {
             base.OnUpdate();
-            if(clip.isSetup && radialBiasPersp != null && radialBiasPerspInMeters != null)
+            if(clip.isSetup && radialBiasPersp != null && radialBiasPerspInMeters != null && overrideRadialBias != null)
             {
                 // convert per perspective radial bias from cm to meters
-                for (int i = 0; i < radialBiasPersp.Length; ++i)
+                int radialBiasCount = Math.Min(radialBiasPersp.Length, Math.Min(radialBiasPerspInMeters.Length, overrideRadialBias.Length));
+                for (int i = 0; i < radialBiasCount; ++i)
                 {
-                    if (overrideRadialBias.Length > 0 && overrideRadialBias[i])
+                    if (overrideRadialBias[i])
                     {
                         radialBiasPerspInMeters[i].x = Util.cmToMeters(radialBiasPersp[i]);
                     }
@@ -1083,10 +1086,15 @@ namespace Depthkit
             }
             if (enableViewDependentGeometry && globalViewDependentGeometryBlendWeight > 0)
             {
-                if (volumeViewpoint.transform.hasChanged)
+                if (volumeViewpoint == null && Camera.main != null)
+                {
+                    volumeViewpoint = Camera.main.transform;
+                }
+
+                if (volumeViewpoint != null && volumeViewpoint.hasChanged)
                 {
                     ScheduleGenerate();
-                    volumeViewpoint.transform.hasChanged = false;
+                    volumeViewpoint.hasChanged = false;
                 }
 
                 if (transform.hasChanged)
@@ -1102,17 +1110,20 @@ namespace Depthkit
                 {
                     m_mainCamera = Camera.main;
                 }
-                //if the main camera position changed and we are using distance based LOD then force an update
-                float dist = Vector3.Magnitude((transform.position + volumeBounds.center) - m_mainCamera.transform.position);
-                float nrmdist = dist / (m_mainCamera.farClipPlane / levelOfDetailDistance);
-                int newLOD = Math.Min((int)((float)numLevelOfDetailLevels * nrmdist), numLevelOfDetailLevels);
-#if UNITY_EDITOR
-                if (newLOD != currentLevelOfDetailLevel)
+                if (m_mainCamera != null)
                 {
-                    Generate();
-                }
+                    //if the main camera position changed and we are using distance based LOD then force an update
+                    float dist = Vector3.Magnitude((transform.position + volumeBounds.center) - m_mainCamera.transform.position);
+                    float nrmdist = dist / (m_mainCamera.farClipPlane / levelOfDetailDistance);
+                    int newLOD = Math.Min((int)((float)numLevelOfDetailLevels * nrmdist), numLevelOfDetailLevels);
+#if UNITY_EDITOR
+                    if (newLOD != currentLevelOfDetailLevel)
+                    {
+                        Generate();
+                    }
 #endif
-                currentLevelOfDetailLevel = newLOD;
+                    currentLevelOfDetailLevel = newLOD;
+                }
             }
             if (showVolumePreview)
             {
