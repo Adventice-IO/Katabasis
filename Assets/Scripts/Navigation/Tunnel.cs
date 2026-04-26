@@ -80,7 +80,7 @@ public class Tunnel : MonoBehaviour
     public class SpeedCheckpoint
     {
         [Range(0f, 1f)] public float pos = 0.5f;
-        [Tooltip("Desired speed multiplier t this point in m/s")]
+        [Tooltip("Desired speed at this point in km/h")]
         public float speed = 0.5f;
     }
 
@@ -98,6 +98,7 @@ public class Tunnel : MonoBehaviour
 
 
         checkpointContainer = GetComponent<CheckpointContainer>();
+    EnsureCheckpointDataVersion();
         lineRenderer = GetComponentInChildren<LineRenderer>();
 
 
@@ -107,6 +108,7 @@ public class Tunnel : MonoBehaviour
     {
         if (splineContainer == null) splineContainer = GetComponent<SplineContainer>();
         if (checkpointContainer == null) checkpointContainer = GetComponent<CheckpointContainer>();
+        EnsureCheckpointDataVersion();
 
 #if UNITY_EDITOR
         Spline.Changed += OnSplineChanged;
@@ -292,11 +294,143 @@ public class Tunnel : MonoBehaviour
         if (segmentLength > 0.0001f)
         {
             float tSegment = (t - initPos) / segmentLength;
-            float tSpeed = initSpeed + Mathf.Lerp(initSpeed, targetSpeed, tSegment);//mainController.speedCurve.Evaluate(tSegment));
+            float tSpeed = Mathf.Lerp(initSpeed, targetSpeed, tSegment);//mainController.speedCurve.Evaluate(tSegment));
             return Math.Max(tSpeed, 0.01f);
         }
 
         return initSpeed;
+    }
+
+    private void EnsureCheckpointDataVersion()
+    {
+        if (checkpointContainer == null) return;
+
+        if (checkpointContainer.speedCheckpointDataVersion >= CheckpointContainer.CurrentSpeedCheckpointDataVersion)
+        {
+            return;
+        }
+
+        checkpointContainer.speedCheckpoints = MigrateLegacySpeedCheckpoints(checkpointContainer.speedCheckpoints);
+        checkpointContainer.speedCheckpointDataVersion = CheckpointContainer.CurrentSpeedCheckpointDataVersion;
+
+#if UNITY_EDITOR
+        if (Application.isPlaying)
+        {
+            UnityPlayModeSaver.SaveComponent(checkpointContainer);
+        }
+        else
+        {
+            EditorUtility.SetDirty(checkpointContainer);
+        }
+#endif
+    }
+
+    private static List<SpeedCheckpoint> MigrateLegacySpeedCheckpoints(List<SpeedCheckpoint> legacyCheckpoints)
+    {
+        if (legacyCheckpoints == null || legacyCheckpoints.Count == 0)
+        {
+            return legacyCheckpoints ?? new List<SpeedCheckpoint>();
+        }
+
+        var sortedCheckpoints = legacyCheckpoints.OrderBy(c => c.pos).ToList();
+        var migratedCheckpoints = new List<SpeedCheckpoint>();
+
+        AddMigratedCheckpoint(migratedCheckpoints, 0f, EvaluateLegacyDesiredSpeed(sortedCheckpoints, 0f));
+
+        for (int i = 0; i < sortedCheckpoints.Count; i++)
+        {
+            var checkpoint = sortedCheckpoints[i];
+            AddMigratedCheckpoint(migratedCheckpoints, checkpoint.pos, EvaluateLegacyDesiredSpeed(sortedCheckpoints, checkpoint.pos));
+
+            if (i >= sortedCheckpoints.Count - 1)
+            {
+                continue;
+            }
+
+            float nextPos = sortedCheckpoints[i + 1].pos;
+            float segmentLength = nextPos - checkpoint.pos;
+            if (segmentLength <= 0.0001f)
+            {
+                continue;
+            }
+
+            float epsilon = Mathf.Min(0.0005f, segmentLength * 0.25f);
+            float preJumpPos = nextPos - epsilon;
+            if (preJumpPos > checkpoint.pos + 0.0001f)
+            {
+                AddMigratedCheckpoint(migratedCheckpoints, preJumpPos, EvaluateLegacyDesiredSpeed(sortedCheckpoints, preJumpPos));
+            }
+        }
+
+        AddMigratedCheckpoint(migratedCheckpoints, 1f, EvaluateLegacyDesiredSpeed(sortedCheckpoints, 1f));
+
+        return migratedCheckpoints.OrderBy(c => c.pos).ToList();
+    }
+
+    private static void AddMigratedCheckpoint(List<SpeedCheckpoint> checkpoints, float pos, float speed)
+    {
+        var existing = checkpoints.FirstOrDefault(c => Mathf.Abs(c.pos - pos) < 0.0001f);
+        if (existing != null)
+        {
+            existing.speed = speed;
+            return;
+        }
+
+        checkpoints.Add(new SpeedCheckpoint
+        {
+            pos = Mathf.Clamp01(pos),
+            speed = Mathf.Max(speed, 0.01f)
+        });
+    }
+
+    private static float EvaluateLegacyDesiredSpeed(List<SpeedCheckpoint> checkpoints, float t)
+    {
+        SpeedCheckpoint before = null;
+        SpeedCheckpoint after = null;
+
+        foreach (var checkpoint in checkpoints)
+        {
+            if (checkpoint.pos <= t)
+            {
+                before = checkpoint;
+            }
+            else
+            {
+                after = checkpoint;
+                break;
+            }
+        }
+
+        float initSpeed = 0f;
+        float initPos = 0f;
+        float targetSpeed = 0.001f;
+        float targetPos = 1f;
+
+        if (before != null)
+        {
+            initSpeed = before.speed;
+            initPos = before.pos;
+        }
+        else if (after != null)
+        {
+            initSpeed = after.speed;
+        }
+
+        if (after != null)
+        {
+            targetSpeed = after.speed;
+            targetPos = after.pos;
+        }
+
+        float segmentLength = targetPos - initPos;
+        if (segmentLength > 0.0001f)
+        {
+            float tSegment = (t - initPos) / segmentLength;
+            float legacySpeed = initSpeed + Mathf.Lerp(initSpeed, targetSpeed, tSegment);
+            return Mathf.Max(legacySpeed, 0.01f);
+        }
+
+        return Mathf.Max(initSpeed, 0.01f);
     }
 
     Tuple<SpeedCheckpoint, SpeedCheckpoint> getSpeedCheckpointsAtPosition(float trackPosition, bool reverse)
@@ -594,6 +728,7 @@ public class Tunnel : MonoBehaviour
         SpeedCheckpoint checkpoint = new SpeedCheckpoint { pos = positionAlongTunnel, speed = 10 };
         checkpointContainer.speedCheckpoints.Add(checkpoint);
         checkpointContainer.speedCheckpoints = checkpointContainer.speedCheckpoints.OrderBy(c => c.pos).ToList();
+        checkpointContainer.speedCheckpointDataVersion = CheckpointContainer.CurrentSpeedCheckpointDataVersion;
 
         updateSpeedCheckpoints();
 #if UNITY_EDITOR
