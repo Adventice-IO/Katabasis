@@ -591,11 +591,11 @@ public class Interview : MonoBehaviour
             && mainController.isInSalle(salle);
     }
 
-    void CancelPendingInteraction()
+    void CancelPendingInteraction(bool preserveProgression = false)
     {
         isFocused = false;
 
-        if (progression <= 0f)
+        if (progression <= 0f || preserveProgression)
         {
             return;
         }
@@ -689,7 +689,7 @@ public class Interview : MonoBehaviour
         bool canInteractInCurrentSalle = CanInteractInCurrentSalle();
         if (!canInteractInCurrentSalle)
         {
-            CancelPendingInteraction();
+            CancelPendingInteraction(leaveRequestedWhileListening);
         }
 
         if (progression < 1 && !mainController.editMode && canInteractInCurrentSalle)
@@ -1618,7 +1618,7 @@ public class Interview : MonoBehaviour
         }
 
         leaveRequestedWhileListening = true;
-        CancelPendingInteraction();
+        CancelPendingInteraction(true);
         loadingEvent?.evt.Stop(gameObject);
 
         TracePlayback("HandleSalleExitWhileListening() stopping only Depthkit video after salle exit while keeping audio, subtitles, and playlist active. hasPendingSequenceEntry=" + HasPendingSequenceEntry() + ", videoIsPlaying=" + (videoPlayer != null && videoPlayer.isPlaying) + ", audioPlaying=" + (videoEventID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID));
