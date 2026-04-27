@@ -216,6 +216,44 @@ public class Interview : MonoBehaviour
             && string.Equals(interviewId, data.mediaPath, StringComparison.OrdinalIgnoreCase);
     }
 
+    public bool HasAssignedInterviewIdentity()
+    {
+        return !string.IsNullOrWhiteSpace(itwName)
+            && !string.IsNullOrWhiteSpace(interviewId);
+    }
+
+    void RefreshAssignmentPathsIfNeeded()
+    {
+        if (!HasAssignedInterviewIdentity())
+        {
+            return;
+        }
+
+        if (dataManager == null)
+        {
+            dataManager = GameObject.FindAnyObjectByType<DataManager>();
+            if (dataManager == null)
+            {
+                return;
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(basePath))
+        {
+            basePath = BuildMediaBasePath(itwName);
+        }
+
+        if (string.IsNullOrWhiteSpace(previewBasePath))
+        {
+            previewBasePath = BuildPreviewBasePath(itwName);
+        }
+
+        if (videoPlayer != null && string.IsNullOrWhiteSpace(videoPlayer.url))
+        {
+            videoPlayer.url = BuildVideoUrl(interviewId);
+        }
+    }
+
     public bool IsPreviewLoadedForCurrentAssignment()
     {
         return state == State.Loaded
@@ -223,11 +261,11 @@ public class Interview : MonoBehaviour
             && string.Equals(loadedInterviewId, interviewId, StringComparison.OrdinalIgnoreCase);
     }
 
-    bool HasPreviewAssignment()
+    public bool HasPreviewAssignment()
     {
+        RefreshAssignmentPathsIfNeeded();
         return !string.IsNullOrWhiteSpace(previewBasePath)
-            && !string.IsNullOrWhiteSpace(itwName)
-            && !string.IsNullOrWhiteSpace(interviewId);
+            && HasAssignedInterviewIdentity();
     }
 
     public void SetPreviewLoadQueued(bool queued)
@@ -581,6 +619,8 @@ public class Interview : MonoBehaviour
 
     void WarmPreviewDataAsync()
     {
+        RefreshAssignmentPathsIfNeeded();
+
         if (string.IsNullOrWhiteSpace(previewBasePath))
         {
             return;
@@ -736,7 +776,7 @@ public class Interview : MonoBehaviour
         if (shouldShow)
         {
             vfx.enabled = true;
-            if (!previewLoadQueued && !previewLoadInProgress)
+            if (HasAssignedInterviewIdentity() && !previewLoadQueued && !previewLoadInProgress)
             {
                 BeginPreviewLoad();
             }
@@ -877,6 +917,8 @@ public class Interview : MonoBehaviour
 
     public void load()
     {
+        RefreshAssignmentPathsIfNeeded();
+
         if (previewLoadCoroutine != null)
         {
             StopCoroutine(previewLoadCoroutine);
@@ -888,7 +930,9 @@ public class Interview : MonoBehaviour
 
         if (!HasPreviewAssignment())
         {
-            LogPreviewLoadEvent("sync", "Skipped before metadata load started because no preview assignment is set", LogType.Warning);
+            LogPreviewLoadEvent("sync", HasAssignedInterviewIdentity()
+                ? "Aborted before metadata load because preview path could not be resolved for the assigned interview"
+                : "Skipped before metadata load started because no interview assignment is set", LogType.Warning);
             return;
         }
 
@@ -955,11 +999,13 @@ public class Interview : MonoBehaviour
 
     public void BeginPreviewLoad()
     {
-        if (!HasPreviewAssignment())
+        RefreshAssignmentPathsIfNeeded();
+
+        if (!HasAssignedInterviewIdentity())
         {
             previewLoadQueued = false;
             previewLoadInProgress = false;
-            LogPreviewLoadEvent("begin", "Skipped before starting because no preview assignment is set", LogType.Warning);
+            LogPreviewLoadEvent("begin", "Skipped before starting because no interview assignment is set", LogType.Warning);
             return;
         }
 
@@ -1000,12 +1046,26 @@ public class Interview : MonoBehaviour
         previewLoadQueued = false;
         previewLoadInProgress = true;
 
-        if (!HasPreviewAssignment())
+        float waitStartTime = Time.time;
+        while (!HasPreviewAssignment())
         {
-            LogPreviewLoadEvent("async", "Cancelled before metadata load started because no preview assignment is set", LogType.Warning);
-            previewLoadInProgress = false;
-            previewLoadCoroutine = null;
-            yield break;
+            if (!HasAssignedInterviewIdentity())
+            {
+                LogPreviewLoadEvent("async", "Cancelled before metadata load started because the interview assignment was cleared", LogType.Warning);
+                previewLoadInProgress = false;
+                previewLoadCoroutine = null;
+                yield break;
+            }
+
+            if (Time.time - waitStartTime > 5f)
+            {
+                LogPreviewLoadEvent("async", "Cancelled because preview path could not be resolved for the assigned interview", LogType.Warning);
+                previewLoadInProgress = false;
+                previewLoadCoroutine = null;
+                yield break;
+            }
+
+            yield return null;
         }
 
         if (IsPreviewLoadedForCurrentAssignment())

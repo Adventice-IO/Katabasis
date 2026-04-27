@@ -479,7 +479,10 @@ public class InterviewManager : MonoBehaviour
             for (int i = 0; i < interviewsToLoad.Count; i++)
             {
                 interviewsToLoad[i].SetPreviewLoadQueued(false);
-                interviewsToLoad[i].BeginPreviewLoad();
+                if (interviewsToLoad[i].HasAssignedInterviewIdentity())
+                {
+                    interviewsToLoad[i].BeginPreviewLoad();
+                }
             }
 
             return;
@@ -662,6 +665,11 @@ public class InterviewManager : MonoBehaviour
             }
 
             interview.SetPreviewLoadQueued(false);
+            if (!interview.HasAssignedInterviewIdentity())
+            {
+                continue;
+            }
+
             interview.BeginPreviewLoad();
             while (interview != null && interview.IsPreviewBusy())
             {
