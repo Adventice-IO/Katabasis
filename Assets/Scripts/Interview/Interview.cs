@@ -1491,8 +1491,21 @@ public class Interview : MonoBehaviour
             return;
         }
 
-        TracePlayback("HandleSalleExitWhileListening() stopping video because the player left the salle. hasPendingSequenceEntry=" + HasPendingSequenceEntry() + ", videoIsPlaying=" + (videoPlayer != null && videoPlayer.isPlaying) + ", audioPlaying=" + (videoEventID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID));
-        FinalizeInterruptedPlayback(true);
+        if (leaveRequestedWhileListening)
+        {
+            return;
+        }
+
+        leaveRequestedWhileListening = true;
+        CancelPendingInteraction();
+        loadingEvent?.evt.Stop(gameObject);
+
+        TracePlayback("HandleSalleExitWhileListening() stopping only Depthkit video after salle exit while keeping audio, subtitles, and playlist active. hasPendingSequenceEntry=" + HasPendingSequenceEntry() + ", videoIsPlaying=" + (videoPlayer != null && videoPlayer.isPlaying) + ", audioPlaying=" + (videoEventID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID));
+
+        if (videoPlayer != null && videoPlayer.isPlaying)
+        {
+            videoPlayer.Stop();
+        }
     }
 
     void FinalizeInterruptedPlayback(bool stopWwiseEvent)
