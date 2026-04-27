@@ -330,6 +330,7 @@ public class InterviewManager : MonoBehaviour
             //kill all pending media loads to avoid having interviews popping in after reaching the exit salle
             Debug.LogWarning("PrepareAssignmentsForSalle received null/exit salle. Stopping all interviews and clearing pending playback.", this);
             StopLoadAssignmentsRoutine();
+            CompletePausedPlaybackForSalle(lastAssignedSalle);
             if (activePlayingSlot != null)
             {
                 activePlayingSlot.StopPlaybackForInterviewChange(true);
@@ -505,8 +506,36 @@ public class InterviewManager : MonoBehaviour
             return;
         }
 
+        if (previousSalle != null && previousSalle != nextSalle)
+        {
+            CompletePausedPlaybackForSalle(previousSalle);
+        }
+
         // Debug.Log("Salle transition: previous='" + (previousSalle != null ? previousSalle.name : "None") + "', next='" + (nextSalle != null ? nextSalle.name : "None") + "'. Updating interviewLeave RTPC target.", this);
         UpdateInterviewLeaveRtpcTarget(true);
+    }
+
+    void CompletePausedPlaybackForSalle(Salle salle)
+    {
+        if (salle == null)
+        {
+            return;
+        }
+
+        foreach (KeyValuePair<Interview, RoomPersonAssignment> entry in activeAssignmentsBySlot.ToList())
+        {
+            Interview slot = entry.Key;
+            RoomPersonAssignment assignment = entry.Value;
+            if (slot == null || slot == activePlayingSlot || assignment.salle != salle)
+            {
+                continue;
+            }
+
+            if (slot.HasPausedPlayback())
+            {
+                slot.CompletePausedPlaybackDueToSalleExit();
+            }
+        }
     }
 
     float GetInterviewLeaveTargetValue()

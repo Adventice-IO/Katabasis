@@ -46,6 +46,7 @@ public class Interview : MonoBehaviour
     float currentAngle;
     float resumeTimeSeconds;
     bool hasResumeTime;
+    bool pausedForInterviewChange;
     bool leaveRequestedWhileListening;
     bool keepVfxAliveAfterSalleExit;
     float playbackRealtimeOrigin = -1f;
@@ -355,6 +356,7 @@ public class Interview : MonoBehaviour
         currentPerson = null;
         currentOffset = Vector3.zero;
         currentAngle = 0f;
+        pausedForInterviewChange = false;
         ResetPlaybackTimer();
         resourcesReleased = false;
         state = State.Idle;
@@ -755,6 +757,11 @@ public class Interview : MonoBehaviour
             }
             else
             {
+                if (pausedForInterviewChange)
+                {
+                    CompletePausedPlaybackDueToSalleExit();
+                }
+
                 vfx.enabled = false;
                 ClearResumeState();
                 ReleasePlaybackResources(true);
@@ -1138,6 +1145,7 @@ public class Interview : MonoBehaviour
     {
         LogDebug("Starting playback for mediaPath='" + interviewId + "' depthkitPath='" + itwName + "'");
         TracePlayback("play() called. playbackIndex=" + playbackIndex + ", hasSequence=" + (playbackSequence != null) + ", hasResumeTime=" + hasResumeTime + ", leaveRequestedWhileListening=" + leaveRequestedWhileListening);
+        pausedForInterviewChange = false;
         leaveRequestedWhileListening = false;
         OnInterviewStarted?.Invoke(this);
         InterviewManager manager = FindAnyObjectByType<InterviewManager>();
@@ -1250,8 +1258,49 @@ public class Interview : MonoBehaviour
             return;
         }
 
-        LogDebug("Stopping playback because another interview started");
-        FinalizeInterruptedPlayback(stopWwiseEvent);
+        LogDebug("Pausing playback because another interview started");
+        PausePlaybackForInterviewChange(stopWwiseEvent);
+    }
+
+    public bool HasPausedPlayback()
+    {
+        return pausedForInterviewChange;
+    }
+
+    public void CompletePausedPlaybackDueToSalleExit()
+    {
+        if (!pausedForInterviewChange)
+        {
+            return;
+        }
+
+        TracePlayback("Completing paused playback because the player left the room before resuming it");
+
+        InterviewManager manager = FindAnyObjectByType<InterviewManager>();
+        InterviewManager.InterviewData[] interruptedSequence = playbackSequence;
+        string interruptedInterviewId = interviewId;
+
+        pausedForInterviewChange = false;
+        ClearResumeState();
+        ResetPlaybackTimer();
+        leaveRequestedWhileListening = false;
+        subtitles?.stop();
+
+        if (interruptedSequence != null && interruptedSequence.Length > 0)
+        {
+            manager?.MarkInterviewSequenceVisited(interruptedSequence);
+        }
+        else if (!string.IsNullOrWhiteSpace(interruptedInterviewId))
+        {
+            manager?.MarkInterviewVisited(interruptedInterviewId);
+        }
+
+        playbackSequence = null;
+        playbackIndex = -1;
+        isResolvedPlayback = false;
+        isTransitioningSequence = false;
+        currentEntryIsIntro = false;
+        state = State.Loaded;
     }
 
     public void evaporate()
@@ -1332,6 +1381,13 @@ public class Interview : MonoBehaviour
 
         LogDebug("Resolving playback at validation time for slot '" + name + "'");
         TracePlayback("resolveAndPlay() called. isResolvedPlayback=" + isResolvedPlayback + ", current interviewId='" + interviewId + "'");
+        if (pausedForInterviewChange && !isResolvedPlayback)
+        {
+            TracePlayback("Resuming previously paused direct playback without re-resolving the slot");
+            play();
+            return;
+        }
+
         if (!isResolvedPlayback && Application.isPlaying)
         {
             InterviewManager manager = FindAnyObjectByType<InterviewManager>();
@@ -1506,6 +1562,43 @@ public class Interview : MonoBehaviour
         {
             videoPlayer.Stop();
         }
+    }
+
+    void PausePlaybackForInterviewChange(bool stopWwiseEvent)
+    {
+        TracePlayback("PausePlaybackForInterviewChange() preserving current playback so it can resume later in the same room");
+
+        CaptureResumeTimeForCurrentEntry();
+        ResetPlaybackTimer();
+        pausedForInterviewChange = true;
+        leaveRequestedWhileListening = false;
+        loadingEvent?.evt.Stop(gameObject);
+        subtitles?.stop();
+
+        if (stopWwiseEvent)
+        {
+            stopWwiseVideoEvent(true);
+        }
+        else
+        {
+            videoEventID = AkUnitySoundEngine.AK_INVALID_PLAYING_ID;
+        }
+
+        if (videoPlayer != null)
+        {
+            videoPlayer.Stop();
+        }
+
+        ReleasePlaybackResources(false);
+        shouldEvaporate = false;
+        evaporateProg = 0;
+        evaporateReachedFullTime = -1f;
+        keepVfxAliveAfterSalleExit = false;
+        progression = 0;
+        state = State.Loaded;
+
+        InterviewManager manager = FindAnyObjectByType<InterviewManager>();
+        manager?.NotifyInterviewStopped(this);
     }
 
     void FinalizeInterruptedPlayback(bool stopWwiseEvent)
