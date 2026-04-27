@@ -325,7 +325,14 @@ public class InterviewManager : MonoBehaviour
     {
         if (salle != null && salle.isExit)
         {
-            interviewStopAllEvent?.evt.Post(gameObject);
+            Interview preservedActiveSlot = activePlayingSlot != null && activePlayingSlot.ShouldPreservePlaybackOnSalleExit()
+                ? activePlayingSlot
+                : null;
+
+            if (preservedActiveSlot == null)
+            {
+                interviewStopAllEvent?.evt.Post(gameObject);
+            }
 
             //kill all pending media loads to avoid having interviews popping in after reaching the exit salle
             Debug.LogWarning("PrepareAssignmentsForSalle received null/exit salle. Stopping all interviews and clearing pending playback.", this);
@@ -333,12 +340,19 @@ public class InterviewManager : MonoBehaviour
             CompletePausedPlaybackForSalle(lastAssignedSalle);
             if (activePlayingSlot != null)
             {
-                activePlayingSlot.StopPlaybackForInterviewChange(true);
-                activePlayingSlot = null;
+                if (activePlayingSlot == preservedActiveSlot)
+                {
+                    LogCurrentInterviewDebug(true);
+                }
+                else
+                {
+                    activePlayingSlot.StopPlaybackForInterviewChange(true);
+                    activePlayingSlot = null;
+                }
             }
             foreach (RoomPersonAssignment assignment in roomAssignments)
             {
-                if (assignment.interviewSlot == null)
+                if (assignment.interviewSlot == null || assignment.interviewSlot == preservedActiveSlot)
                 {
                     continue;
                 }
@@ -346,7 +360,7 @@ public class InterviewManager : MonoBehaviour
             }
             foreach (Interview slot in activeAssignmentsBySlot.Keys.ToList())
             {
-                if (slot == null)
+                if (slot == null || slot == preservedActiveSlot)
                 {
                     continue;
                 }
@@ -360,10 +374,13 @@ public class InterviewManager : MonoBehaviour
             preparedSalle = null;
             lastAssignedSalle = salle;
 
-            Subtitles subs = GameObject.FindAnyObjectByType<Subtitles>();
-            if (subs != null)
+            if (preservedActiveSlot == null)
             {
-                subs.stop();
+                Subtitles subs = GameObject.FindAnyObjectByType<Subtitles>();
+                if (subs != null)
+                {
+                    subs.stop();
+                }
             }
             return;
         }

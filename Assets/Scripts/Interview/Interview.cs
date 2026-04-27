@@ -1599,6 +1599,11 @@ public class Interview : MonoBehaviour
                 || videoEventID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID);
     }
 
+    public bool ShouldPreservePlaybackOnSalleExit()
+    {
+        return IsActivelyListening() || leaveRequestedWhileListening;
+    }
+
     void HandleSalleExitWhileListening()
     {
         if (!IsActivelyListening())
@@ -1659,59 +1664,6 @@ public class Interview : MonoBehaviour
 
         InterviewManager manager = FindAnyObjectByType<InterviewManager>();
         manager?.NotifyInterviewStopped(this);
-    }
-
-    void FinalizeInterruptedPlayback(bool stopWwiseEvent)
-    {
-        TracePlayback("FinalizeInterruptedPlayback() marking current playback as viewed after interruption");
-
-        InterviewManager manager = FindAnyObjectByType<InterviewManager>();
-        InterviewManager.InterviewData[] interruptedSequence = playbackSequence;
-        string interruptedInterviewId = interviewId;
-
-        ClearResumeState();
-        ResetPlaybackTimer();
-        leaveRequestedWhileListening = false;
-        loadingEvent?.evt.Stop(gameObject);
-        subtitles?.stop();
-
-        if (stopWwiseEvent)
-        {
-            stopWwiseVideoEvent(true);
-        }
-        else
-        {
-            videoEventID = AkUnitySoundEngine.AK_INVALID_PLAYING_ID;
-        }
-
-        if (videoPlayer != null)
-        {
-            videoPlayer.Stop();
-        }
-
-        ReleasePlaybackResources(false);
-        shouldEvaporate = false;
-        evaporateProg = 0;
-        evaporateReachedFullTime = -1f;
-        keepVfxAliveAfterSalleExit = false;
-        progression = 0;
-        playbackSequence = null;
-        playbackIndex = -1;
-        isResolvedPlayback = false;
-        isTransitioningSequence = false;
-        state = State.Loaded;
-
-        manager?.MarkSlotConsumed(this);
-        manager?.NotifyInterviewStopped(this);
-
-        if (interruptedSequence != null && interruptedSequence.Length > 0)
-        {
-            manager?.MarkInterviewSequenceVisited(interruptedSequence);
-        }
-        else if (!string.IsNullOrWhiteSpace(interruptedInterviewId))
-        {
-            manager?.MarkInterviewVisited(interruptedInterviewId);
-        }
     }
 
 
