@@ -231,7 +231,7 @@ public class Tunnel : MonoBehaviour
         if (splineContainer == null || splineContainer.Spline == null) return mainController.baseSpeed;
 
 
-        Tuple<SpeedCheckpoint, SpeedCheckpoint> checkpoints = getSpeedCheckpointsAtPosition(t, reverse);
+        Tuple<SpeedCheckpoint, SpeedCheckpoint> checkpoints = getSpeedCheckpointsAtPosition(t, false);//, reverse);
 
         if (checkpoints.Item1 == null && checkpoints.Item2 == null)
         {
