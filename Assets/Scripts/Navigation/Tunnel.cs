@@ -80,7 +80,7 @@ public class Tunnel : MonoBehaviour
     public class SpeedCheckpoint
     {
         [Range(0f, 1f)] public float pos = 0.5f;
-        [Tooltip("Desired speed at this point in km/h")]
+        [Tooltip("Desired speed multiplier t this point in m/s")]
         public float speed = 0.5f;
     }
 
@@ -269,7 +269,7 @@ public class Tunnel : MonoBehaviour
         if (segmentLength > 0.0001f)
         {
             float tSegment = (t - initPos) / segmentLength;
-            float tSpeed = Mathf.Lerp(initSpeed, targetSpeed, tSegment);//mainController.speedCurve.Evaluate(tSegment));
+            float tSpeed = initSpeed + Mathf.Lerp(initSpeed, targetSpeed, tSegment);//mainController.speedCurve.Evaluate(tSegment));
             return Math.Max(tSpeed, 0.01f);
         }
 
