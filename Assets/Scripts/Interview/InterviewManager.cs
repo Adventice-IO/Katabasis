@@ -1084,10 +1084,23 @@ public class InterviewManager : MonoBehaviour
 
 
 
+            string rawFilename = GetField(fields, 0);
+            string rawDepthkitId = GetField(fields, 1);
+            string normalizedFilename = NormalizeInterviewPath(rawFilename);
+            string normalizedDepthkitId = NormalizeInterviewPath(rawDepthkitId);
+
+            if (!string.Equals(rawFilename, normalizedFilename, StringComparison.Ordinal)
+                || !string.Equals(rawDepthkitId, normalizedDepthkitId, StringComparison.Ordinal))
+            {
+                Debug.LogWarning("Normalized interview CSV paths on row " + (i + 1)
+                    + ": filename '" + rawFilename + "' -> '" + normalizedFilename
+                    + "', depthkit '" + rawDepthkitId + "' -> '" + normalizedDepthkitId + "'.");
+            }
+
             InterviewData data = new InterviewData
             {
-                filename = GetField(fields, 0),
-                depthkitId = GetField(fields, 1),
+                filename = normalizedFilename,
+                depthkitId = normalizedDepthkitId,
                 level = ParseInt(GetField(fields, 2), 1),
                 note = ParseInt(GetField(fields, 3), 1),
                 person = GetField(fields, 4),
@@ -1784,6 +1797,39 @@ public class InterviewManager : MonoBehaviour
         }
 
         return fields[index].Trim();
+    }
+
+    static string NormalizeInterviewPath(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return string.Empty;
+        }
+
+        string normalizedPath = path.Replace("\\", "/").Trim('/');
+        string[] parts = normalizedPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < parts.Length; i++)
+        {
+            parts[i] = NormalizeInterviewPathSegment(parts[i]);
+        }
+
+        return string.Join("/", parts);
+    }
+
+    static string NormalizeInterviewPathSegment(string segment)
+    {
+        string normalizedSegment = (segment ?? string.Empty).Trim();
+        while (normalizedSegment.Contains(" _"))
+        {
+            normalizedSegment = normalizedSegment.Replace(" _", "_");
+        }
+
+        while (normalizedSegment.Contains("_ "))
+        {
+            normalizedSegment = normalizedSegment.Replace("_ ", "_");
+        }
+
+        return normalizedSegment;
     }
 
     static int ParseInt(string value, int defaultValue = 0)
