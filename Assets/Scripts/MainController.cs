@@ -820,13 +820,17 @@ public class MainController : MonoBehaviour
             );
         }
 
-        if (snapRigToTunnelEntryOnPlay && rigToTrackDistance > tunnelEntrySyncWarningDistance)
+        if (rigToTrackDistance > 0.001f)
         {
-            Debug.LogWarning(
-                $"[TunnelEntrySync] Snapping rig to tunnel entry before play tunnel='{tunnel.name}' rigPos={transform.position:F3} entryPos={tunnelEntryPosition:F3} distance={rigToTrackDistance:F4}",
-                this
-            );
-            SetRigPosition(tunnelEntryPosition, "PrepareTunnelEntryForPlay snap");
+            if (snapRigToTunnelEntryOnPlay || rigToTrackDistance > tunnelEntrySyncWarningDistance)
+            {
+                Debug.LogWarning(
+                    $"[TunnelEntrySync] Aligning rig to tunnel entry before play tunnel='{tunnel.name}' rigPos={transform.position:F3} entryPos={tunnelEntryPosition:F3} distance={rigToTrackDistance:F4}",
+                    this
+                );
+            }
+
+            SetRigPosition(tunnelEntryPosition, "PrepareTunnelEntryForPlay align");
         }
 
         LogTunnelEntrySync("Play start after sync");
@@ -1270,8 +1274,9 @@ public class MainController : MonoBehaviour
             if (isInATunnel())
             {
                 float actualTrackPosition = GetActualTrackPosition(trackPosition);
+                Vector3 tunnelEntryPosition = tunnel.getPositionOnTrack(actualTrackPosition);
+                SetRigPosition(tunnelEntryPosition, "ResetPosition tunnel entry");
                 float lookAheadTrackPosition = Mathf.Clamp01(actualTrackPosition + (isReversed ? -0.01f : 0.01f));
-                // transform.position = tunnel.getPositionOnTrack(actualTrackPosition);
                 Vector3 lookAtPos = tunnel.getPositionOnTrack(lookAheadTrackPosition);
                 lookAtPos.y = transform.position.y;
                 if (resetRotation) LookRigAt(lookAtPos, Vector3.up, "ResetPosition tunnel rotation");

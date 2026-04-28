@@ -73,6 +73,8 @@ public class Tunnel : MonoBehaviour
         }
     }
 
+    const float EndpointSyncSqrTolerance = 0.000001f;
+
 
 
 
@@ -547,7 +549,7 @@ public class Tunnel : MonoBehaviour
         Vector3 localPos = splineContainer.transform.InverseTransformPoint(endpointSalle.origin.position);
         BezierKnot current = splineContainer.Spline[knotIndex];
         Vector3 currentPosition = new Vector3(current.Position.x, current.Position.y, current.Position.z);
-        if ((currentPosition - localPos).sqrMagnitude <= .01f)
+        if ((currentPosition - localPos).sqrMagnitude <= EndpointSyncSqrTolerance)
         {
             return false;
         }
