@@ -204,6 +204,7 @@ public class Tunnel : MonoBehaviour
         if (gameObject.name != n)
             gameObject.name = n;
 
+      
         if (Application.isPlaying) lineRenderer.material.color = mainController.isInTunnel(this) ? Color.yellow : Color.white;
 
 
@@ -233,7 +234,7 @@ public class Tunnel : MonoBehaviour
         if (splineContainer == null || splineContainer.Spline == null) return mainController.baseSpeed;
 
 
-        Tuple<SpeedCheckpoint, SpeedCheckpoint> checkpoints = getSpeedCheckpointsAtPosition(t, false);//, reverse);
+        Tuple<SpeedCheckpoint, SpeedCheckpoint> checkpoints = getSpeedCheckpointsAtPosition(t, reverse);
 
         if (checkpoints.Item1 == null && checkpoints.Item2 == null)
         {
@@ -271,7 +272,7 @@ public class Tunnel : MonoBehaviour
         if (segmentLength > 0.0001f)
         {
             float tSegment = (t - initPos) / segmentLength;
-            float tSpeed = initSpeed + Mathf.Lerp(initSpeed, targetSpeed, tSegment);//mainController.speedCurve.Evaluate(tSegment));
+            float tSpeed = Mathf.Lerp(initSpeed, targetSpeed, tSegment);//mainController.speedCurve.Evaluate(tSegment));
             return Math.Max(tSpeed, 0.01f);
         }
 
