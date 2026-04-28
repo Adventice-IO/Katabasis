@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteAlways]
 public class SpeedFixer : MonoBehaviour
 {
     public bool fix;
@@ -16,7 +17,7 @@ public class SpeedFixer : MonoBehaviour
     {
         if(fix != lastFix)
         {
-            fixSpeeds();
+            if(fix) fixSpeeds();
             lastFix = fix;
         }
     }
