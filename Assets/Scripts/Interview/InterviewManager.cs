@@ -268,6 +268,23 @@ public class InterviewManager : MonoBehaviour
         return slot != null && consumedSlots.Contains(slot);
     }
 
+    public bool HasActiveAssignmentForSlot(Interview slot)
+    {
+        if (slot == null || consumedSlots.Contains(slot))
+        {
+            return false;
+        }
+
+        if (!activeAssignmentsBySlot.TryGetValue(slot, out RoomPersonAssignment assignment)
+            || assignment.interviewSlot != slot
+            || string.IsNullOrWhiteSpace(assignment.person))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     public void NotifyInterviewStarted(Interview slot)
     {
         if (slot == null)
@@ -391,7 +408,7 @@ public class InterviewManager : MonoBehaviour
         startedIntroPersons.Clear();
         roomAssignments.Clear();
         roomAssignments.AddRange(BuildAssignmentsForSalle(salle, consumedSlots));
-        ApplyAssignmentsToScene(roomAssignments);
+        ApplyAssignmentsToScene(roomAssignments, salle);
         preparedSalle = salle;
         lastAssignedSalle = salle;
     }
@@ -440,13 +457,13 @@ public class InterviewManager : MonoBehaviour
             roomAssignments.AddRange(BuildAssignmentsForSalle(salle, consumedSlots));
         }
 
-        ApplyAssignmentsToScene(roomAssignments);
+        ApplyAssignmentsToScene(roomAssignments, salle);
         preparedSalle = salle;
         lastAssignedSalle = salle;
         logAssignments();
     }
 
-    void ApplyAssignmentsToScene(List<RoomPersonAssignment> assignments)
+    void ApplyAssignmentsToScene(List<RoomPersonAssignment> assignments, Salle fallbackSalle = null)
     {
         activeAssignmentsBySlot.Clear();
         resolvedPlaybackBySlot.Clear();
@@ -493,15 +510,20 @@ public class InterviewManager : MonoBehaviour
             .Where(assignment => assignment.salle != null)
             .Select(assignment => assignment.salle));
 
+        if (fallbackSalle != null)
+        {
+            sallesToReset.Add(fallbackSalle);
+        }
+
         foreach (Salle salle in sallesToReset)
         {
-            Interview[] salleSlots = salle.interviews;
-            if (salleSlots == null)
+            IReadOnlyList<Interview> salleSlots = GetInterviewSlotsForSalle(salle);
+            if (salleSlots == null || salleSlots.Count == 0)
             {
                 continue;
             }
 
-            for (int i = 0; i < salleSlots.Length; i++)
+            for (int i = 0; i < salleSlots.Count; i++)
             {
                 Interview slot = salleSlots[i];
                 if (slot == null || assignedSlots.Contains(slot))
@@ -1829,12 +1851,12 @@ public class InterviewManager : MonoBehaviour
     List<RoomPersonAssignment> BuildAssignmentsForSalle(Salle currentSalle, HashSet<Interview> consumedInterviewSlots)
     {
         List<RoomPersonAssignment> assignments = new List<RoomPersonAssignment>();
-        Interview[] slots = currentSalle != null ? currentSalle.interviews : null;
-        if (slots == null || slots.Length == 0)
+        IReadOnlyList<Interview> slots = GetInterviewSlotsForSalle(currentSalle);
+        if (slots == null || slots.Count == 0)
         {
             return assignments;
         }
-        Debug.Log("Build assignments for salle " + currentSalle.name + " with " + slots.Length + " slots, stats list : " + (personStatsList.Count > 0 ? personStatsList[0].person : "None"));
+        Debug.Log("Build assignments for salle " + currentSalle.name + " with " + slots.Count + " slots, stats list : " + (personStatsList.Count > 0 ? personStatsList[0].person : "None"));
 
         int salleLevel = currentSalle.niveau;
         List<string> candidatePersons = personStatsList
@@ -1864,6 +1886,30 @@ public class InterviewManager : MonoBehaviour
         }
 
         return assignments;
+    }
+
+    IReadOnlyList<Interview> GetInterviewSlotsForSalle(Salle salle)
+    {
+        if (salle == null)
+        {
+            return Array.Empty<Interview>();
+        }
+
+        Interview[] discoveredSlots = salle.GetComponentsInChildren<Interview>(true);
+        if (discoveredSlots == null || discoveredSlots.Length == 0)
+        {
+            salle.interviews = Array.Empty<Interview>();
+            return salle.interviews;
+        }
+
+        if (salle.interviews == null
+            || salle.interviews.Length != discoveredSlots.Length
+            || salle.interviews.Except(discoveredSlots).Any())
+        {
+            salle.interviews = discoveredSlots;
+        }
+
+        return discoveredSlots;
     }
 
     List<InterviewData> FilterCandidatesByThemeHistory(List<InterviewData> candidates, List<string> themeHistory)

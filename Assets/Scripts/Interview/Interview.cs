@@ -269,6 +269,31 @@ public class Interview : MonoBehaviour
             && HasAssignedInterviewIdentity();
     }
 
+    bool MatchesCurrentPreviewAssignment(string expectedPreviewBasePath, string expectedInterviewId)
+    {
+        return string.Equals(previewBasePath, expectedPreviewBasePath, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(interviewId, expectedInterviewId, StringComparison.OrdinalIgnoreCase);
+    }
+
+    bool AbortPreviewLoadIfAssignmentChanged(string source, string expectedPreviewBasePath, string expectedInterviewId)
+    {
+        if (MatchesCurrentPreviewAssignment(expectedPreviewBasePath, expectedInterviewId))
+        {
+            return false;
+        }
+
+        LogPreviewLoadEvent(source, "Assignment changed while preview load was running. Expected interviewId='" + expectedInterviewId + "' previewBasePath='" + expectedPreviewBasePath + "', current interviewId='" + interviewId + "' previewBasePath='" + previewBasePath + "'. Restarting for the current assignment.", LogType.Warning);
+        previewLoadInProgress = false;
+        previewLoadCoroutine = null;
+
+        if (HasAssignedInterviewIdentity())
+        {
+            BeginPreviewLoad();
+        }
+
+        return true;
+    }
+
     public void SetPreviewLoadQueued(bool queued)
     {
         previewLoadQueued = queued;
@@ -587,10 +612,31 @@ public class Interview : MonoBehaviour
 
     bool CanInteractInCurrentSalle()
     {
+        if (!HasVisiblePlayableAssignment())
+        {
+            return false;
+        }
+
         return Application.isPlaying
             && mainController != null
             && salle != null
             && mainController.isInSalle(salle);
+    }
+
+    bool HasVisiblePlayableAssignment()
+    {
+        if (!HasAssignedInterviewIdentity())
+        {
+            return false;
+        }
+
+        if (!Application.isPlaying)
+        {
+            return true;
+        }
+
+        InterviewManager manager = FindAnyObjectByType<InterviewManager>();
+        return manager != null && manager.HasActiveAssignmentForSlot(this);
     }
 
     void CancelPendingInteraction(bool preserveProgression = false)
@@ -653,7 +699,7 @@ public class Interview : MonoBehaviour
         {
             if (salle != null)
             {
-                bool shouldEnable = keepVfxAliveAfterSalleExit || mainController.isInSalle(salle);
+                bool shouldEnable = keepVfxAliveAfterSalleExit || (mainController.isInSalle(salle) && HasVisiblePlayableAssignment());
                 if (shouldEnable != vfx.enabled)
                 {
                     show(shouldEnable);
@@ -1078,6 +1124,9 @@ public class Interview : MonoBehaviour
             yield break;
         }
 
+        string assignedPreviewBasePath = previewBasePath;
+        string assignedInterviewId = interviewId;
+
         LogPreviewLoadEvent("async", "Coroutine entered; preparing metadata load");
 
         ReleasePosterTexture();
@@ -1090,7 +1139,7 @@ public class Interview : MonoBehaviour
             videoPlayer.waitForFirstFrame = true;
         }
 
-        string metadataPath = previewBasePath + ".txt";
+        string metadataPath = assignedPreviewBasePath + ".txt";
         if (!File.Exists(metadataPath))
         {
             LogPreviewLoadEvent("async", "Aborted before metadata load because metadata file is missing at '" + metadataPath + "'", LogType.Warning);
@@ -1100,37 +1149,44 @@ public class Interview : MonoBehaviour
         }
 
         WarmPreviewDataAsync();
-        if (metadataLoadTask == null)
+        Task<string> pendingMetadataLoadTask = metadataLoadTask;
+        Task<byte[]> pendingPosterLoadTask = posterLoadTask;
+        if (pendingMetadataLoadTask == null)
         {
             LogPreviewLoadEvent("async", "Metadata background task did not start; using synchronous fallback for '" + metadataPath + "'", LogType.Warning);
         }
 
-        while (metadataLoadTask != null && !metadataLoadTask.IsCompleted)
+        while (pendingMetadataLoadTask != null && !pendingMetadataLoadTask.IsCompleted)
         {
             yield return null;
         }
 
-        if (metadataLoadTask != null)
+        if (AbortPreviewLoadIfAssignmentChanged("async", assignedPreviewBasePath, assignedInterviewId))
         {
-            if (metadataLoadTask.IsFaulted)
+            yield break;
+        }
+
+        if (pendingMetadataLoadTask != null)
+        {
+            if (pendingMetadataLoadTask.IsFaulted)
             {
-                LogPreviewLoadEvent("async", "Metadata background task faulted for '" + metadataPath + "': " + metadataLoadTask.Exception?.GetBaseException().Message, LogType.Error);
+                LogPreviewLoadEvent("async", "Metadata background task faulted for '" + metadataPath + "': " + pendingMetadataLoadTask.Exception?.GetBaseException().Message, LogType.Error);
             }
-            else if (metadataLoadTask.IsCanceled)
+            else if (pendingMetadataLoadTask.IsCanceled)
             {
                 LogPreviewLoadEvent("async", "Metadata background task was canceled for '" + metadataPath + "'", LogType.Warning);
             }
             else
             {
-                LogPreviewLoadEvent("async", "Metadata background task completed with status=" + metadataLoadTask.Status + " for '" + metadataPath + "'");
+                LogPreviewLoadEvent("async", "Metadata background task completed with status=" + pendingMetadataLoadTask.Status + " for '" + metadataPath + "'");
             }
         }
 
         string metaData;
         try
         {
-            metaData = metadataLoadTask != null && metadataLoadTask.Status == TaskStatus.RanToCompletion
-                ? metadataLoadTask.Result
+            metaData = pendingMetadataLoadTask != null && pendingMetadataLoadTask.Status == TaskStatus.RanToCompletion
+                ? pendingMetadataLoadTask.Result
                 : LoadMetadataCached(metadataPath);
             metadataCache[metadataPath] = metaData;
         }
@@ -1145,6 +1201,11 @@ public class Interview : MonoBehaviour
         for (int i = 0; i < previewLoadFramesBetweenHeavySteps; i++)
         {
             yield return null;
+        }
+
+        if (AbortPreviewLoadIfAssignmentChanged("async", assignedPreviewBasePath, assignedInterviewId))
+        {
+            yield break;
         }
 
         bool result;
@@ -1166,22 +1227,37 @@ public class Interview : MonoBehaviour
             yield return null;
         }
 
-        string posterPath = previewBasePath + ".png";
+        if (AbortPreviewLoadIfAssignmentChanged("async", assignedPreviewBasePath, assignedInterviewId))
+        {
+            yield break;
+        }
+
+        string posterPath = assignedPreviewBasePath + ".png";
         if (File.Exists(posterPath))
         {
-            while (posterLoadTask != null && !posterLoadTask.IsCompleted)
+            while (pendingPosterLoadTask != null && !pendingPosterLoadTask.IsCompleted)
             {
                 yield return null;
             }
 
-            byte[] pngData = posterLoadTask != null && posterLoadTask.Status == TaskStatus.RanToCompletion
-                ? posterLoadTask.Result
+            if (AbortPreviewLoadIfAssignmentChanged("async", assignedPreviewBasePath, assignedInterviewId))
+            {
+                yield break;
+            }
+
+            byte[] pngData = pendingPosterLoadTask != null && pendingPosterLoadTask.Status == TaskStatus.RanToCompletion
+                ? pendingPosterLoadTask.Result
                 : LoadPosterCached(posterPath);
             posterCache[posterPath] = pngData;
 
             for (int i = 0; i < previewLoadFramesBetweenHeavySteps; i++)
             {
                 yield return null;
+            }
+
+            if (AbortPreviewLoadIfAssignmentChanged("async", assignedPreviewBasePath, assignedInterviewId))
+            {
+                yield break;
             }
 
             posterTex = GetOrCreatePosterTextureCached(posterPath, pngData);
@@ -1196,8 +1272,8 @@ public class Interview : MonoBehaviour
         LogPreviewLoadEvent("async", "Preview load completed. posterAssigned=" + (clip.poster != null) + ", videoPrepared=" + (videoPlayer != null && videoPlayer.isPrepared) + ", clipSetup=" + (clip != null && clip.isSetup));
 
         revealStartTime = Time.time;
-        loadedPreviewBasePath = previewBasePath;
-        loadedInterviewId = interviewId;
+        loadedPreviewBasePath = assignedPreviewBasePath;
+        loadedInterviewId = assignedInterviewId;
         state = State.Loaded;
         previewLoadInProgress = false;
         previewLoadCoroutine = null;
@@ -1431,11 +1507,6 @@ public class Interview : MonoBehaviour
 
     void endEvaporate()
     {
-        if (!gameObject.activeSelf)
-        {
-            return;
-        }
-
         if (leaveRequestedWhileListening && state == State.Playing)
         {
             TracePlayback("endEvaporate() completed visual-only salle-exit evaporation; hiding VFX while playback continues");
@@ -1453,8 +1524,12 @@ public class Interview : MonoBehaviour
         keepVfxAliveAfterSalleExit = false;
         if (videoPlayer != null) videoPlayer.Stop();
         ReleasePlaybackResources(true);
-        LogPreviewLoadEvent("lifecycle", "Disabling interview slot after evaporation completed");
-        gameObject.SetActive(false);
+        resetPlaybackState();
+        if (vfx != null)
+        {
+            vfx.enabled = false;
+        }
+        LogPreviewLoadEvent("lifecycle", "Parking interview slot after evaporation completed");
     }
     void resolveAndPlay()
     {

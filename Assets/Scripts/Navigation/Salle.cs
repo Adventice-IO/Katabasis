@@ -59,8 +59,7 @@ public class Salle : MonoBehaviour
         }
         else
         {
-            interviews.ToList().ForEach(itw => itw.gameObject.SetActive(true));
-
+            // Interview visibility is controlled by the slot runtime state, not by root GameObject activation.
         }
     }
 
