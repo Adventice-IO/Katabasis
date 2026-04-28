@@ -788,7 +788,8 @@ public class InterviewManager : MonoBehaviour
         }
 
         int salleLevel = assignment.salle != null ? assignment.salle.niveau : 0;
-        bool hasPlayedBefore = playedPersonsSinceAssignment.Contains(assignment.person) || HasVisitedAnyInterview(stats.Value) || HasIntroStarted(assignment.person);
+        bool hasIntroBeenPlayed = HasIntroBeenPlayed(assignment.person);
+        bool hasPlayedBefore = playedPersonsSinceAssignment.Contains(assignment.person) || HasVisitedAnyInterview(stats.Value) || hasIntroBeenPlayed;
 
         if (!hasPlayedBefore && !string.IsNullOrWhiteSpace(stats.Value.introInterview.depthkitId) && !IsInterviewIgnored(stats.Value.introInterview))
         {
@@ -801,7 +802,7 @@ public class InterviewManager : MonoBehaviour
             return bestInterview.Value;
         }
 
-        if (!string.IsNullOrWhiteSpace(stats.Value.introInterview.depthkitId) && !IsInterviewIgnored(stats.Value.introInterview))
+        if (!hasIntroBeenPlayed && !string.IsNullOrWhiteSpace(stats.Value.introInterview.depthkitId) && !IsInterviewIgnored(stats.Value.introInterview))
         {
             return stats.Value.introInterview;
         }
@@ -823,7 +824,7 @@ public class InterviewManager : MonoBehaviour
         }
 
         List<InterviewData> result = new List<InterviewData>();
-        bool hasPlayedBefore = playedPersons.Contains(person) || HasVisitedAnyInterview(stats.Value) || HasIntroStarted(person);
+        bool hasPlayedBefore = playedPersons.Contains(person) || HasVisitedAnyInterview(stats.Value) || HasIntroBeenPlayed(person);
 
         if (!hasPlayedBefore && !string.IsNullOrEmpty(stats.Value.introInterview.filename) && !IsInterviewIgnored(stats.Value.introInterview))
         {
@@ -909,7 +910,7 @@ public class InterviewManager : MonoBehaviour
 
         List<InterviewData> result = new List<InterviewData>();
         PersonInterviewStats? pickedStats = GetPersonStats(picked.person);
-        if (pickedStats.HasValue && !HasVisitedAnyInterview(pickedStats.Value) && !HasIntroStarted(picked.person))
+        if (pickedStats.HasValue && !HasVisitedAnyInterview(pickedStats.Value) && !HasIntroBeenPlayed(picked.person))
         {
             InterviewData? intro = GetIntroForPerson(picked.person);
             if (intro.HasValue)

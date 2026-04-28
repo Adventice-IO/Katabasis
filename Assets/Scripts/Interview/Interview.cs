@@ -46,6 +46,8 @@ public class Interview : MonoBehaviour
     float currentAngle;
     float resumeTimeSeconds;
     bool hasResumeTime;
+    float pendingVideoSeekTimeSeconds;
+    bool hasPendingVideoSeek;
     bool pausedForInterviewChange;
     bool leaveRequestedWhileListening;
     bool keepVfxAliveAfterSalleExit;
@@ -471,6 +473,8 @@ public class Interview : MonoBehaviour
     {
         resumeTimeSeconds = 0f;
         hasResumeTime = false;
+        pendingVideoSeekTimeSeconds = 0f;
+        hasPendingVideoSeek = false;
     }
 
     public bool IsPreviewBusy()
@@ -1227,6 +1231,7 @@ public class Interview : MonoBehaviour
         }
 
         currentEntryIsIntro = isIntroEntry;
+        MarkCurrentPlaybackVisitedOnLaunch(manager);
 
         revealStartTime = -1f;
         vfx.SetFloat("SpawnRate", 1f);
@@ -1249,16 +1254,19 @@ public class Interview : MonoBehaviour
             if (startTime > 0f)
             {
                 Debug.Log("Resuming video at " + startTime + " seconds");
-                if (videoPlayer != null)
-                {
-                    videoPlayer.time = startTime;
-                }
+                QueuePendingVideoSeek(startTime);
+                TryApplyPendingVideoSeek("before playback start");
                 if (videoEventID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID)
                 {
                     Debug.Log("Seeking Wwise Event to " + startTime + " seconds");
                     AkUnitySoundEngine.SeekOnEvent(wwiseEventName, gameObject, Mathf.RoundToInt(startTime * 1000f));
                 }
             }
+        }
+        else
+        {
+            hasPendingVideoSeek = false;
+            pendingVideoSeekTimeSeconds = 0f;
         }
 
         bool playDepthkitVideo = ShouldPlayDepthkitVideo();
@@ -1272,6 +1280,7 @@ public class Interview : MonoBehaviour
         if (playDepthkitVideo)
         {
             videoPlayer.Play();
+            TryApplyPendingVideoSeek("after VideoPlayer.Play()");
             TracePlayback("VideoPlayer.Play() called. isPlaying=" + (videoPlayer != null && videoPlayer.isPlaying));
         }
         else if (videoPlayer != null)
@@ -1297,6 +1306,25 @@ public class Interview : MonoBehaviour
         else
         {
             TracePlayback("Subtitles component not found. No subtitle playback will start.");
+        }
+    }
+
+    void MarkCurrentPlaybackVisitedOnLaunch(InterviewManager manager)
+    {
+        if (manager == null)
+        {
+            return;
+        }
+
+        if (playbackSequence != null && playbackSequence.Length > 0)
+        {
+            manager.MarkInterviewSequenceVisited(playbackSequence);
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(interviewId))
+        {
+            manager.MarkInterviewVisited(interviewId);
         }
     }
 
@@ -1592,6 +1620,31 @@ public class Interview : MonoBehaviour
         hasResumeTime = true;
     }
 
+    void QueuePendingVideoSeek(float startTime)
+    {
+        pendingVideoSeekTimeSeconds = Mathf.Max(0f, startTime);
+        hasPendingVideoSeek = pendingVideoSeekTimeSeconds > 0f;
+    }
+
+    void TryApplyPendingVideoSeek(string source)
+    {
+        if (!hasPendingVideoSeek || videoPlayer == null)
+        {
+            return;
+        }
+
+        if (!videoPlayer.isPrepared && !videoPlayer.isPlaying)
+        {
+            TracePlayback("Delaying pending video seek from " + source + " until the VideoPlayer is prepared");
+            return;
+        }
+
+        videoPlayer.time = pendingVideoSeekTimeSeconds;
+        TracePlayback("Applied pending video seek from " + source + " at t=" + pendingVideoSeekTimeSeconds.ToString("0.00"));
+        hasPendingVideoSeek = false;
+        pendingVideoSeekTimeSeconds = 0f;
+    }
+
     bool IsActivelyListening()
     {
         return state == State.Playing
@@ -1739,6 +1792,7 @@ public class Interview : MonoBehaviour
     void OnVideoPrepared(VideoPlayer vp)
     {
         CacheCurrentVideoLength();
+        TryApplyPendingVideoSeek("prepare completed");
         TracePlayback("OnVideoPrepared fired. videoLength=" + (vp != null ? vp.length.ToString("0.00") : "<null>") + ", isPrepared=" + (vp != null && vp.isPrepared));
         TryArmPlaybackTimer();
     }
