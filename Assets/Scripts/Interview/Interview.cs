@@ -436,7 +436,7 @@ public class Interview : MonoBehaviour
             init();
         }
 
-        if (!gameObject.activeSelf)
+        if (!gameObject.activeSelf && Application.isPlaying)
         {
             gameObject.SetActive(true);
         }
@@ -815,7 +815,7 @@ public class Interview : MonoBehaviour
 
     public void set(InterviewManager.InterviewData data)
     {
-        if (!gameObject.activeSelf)
+        if (!gameObject.activeSelf && Application.isPlaying)
         {
             LogPreviewLoadEvent("assign", "Reactivating disabled interview slot for a new assignment");
             gameObject.SetActive(true);
