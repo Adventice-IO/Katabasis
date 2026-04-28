@@ -28,7 +28,6 @@ public class Interview : MonoBehaviour
     int playbackIndex = -1;
     bool isResolvedPlayback;
     bool isTransitioningSequence;
-    bool resourcesReleased;
     bool currentEntryIsIntro;
     string loadedPreviewBasePath;
     string loadedInterviewId;
@@ -398,7 +397,6 @@ public class Interview : MonoBehaviour
         currentAngle = 0f;
         pausedForInterviewChange = false;
         ResetPlaybackTimer();
-        resourcesReleased = false;
         state = State.Idle;
     }
 
@@ -1495,6 +1493,13 @@ public class Interview : MonoBehaviour
 
         if (!isResolvedPlayback)
         {
+            if (Application.isPlaying)
+            {
+                TracePlayback("No resolved playback sequence is available for this slot. Aborting direct playback to avoid bypassing room assignment rules.");
+                LogDebug("No resolved playback sequence is available for this slot; runtime playback was aborted.");
+                return;
+            }
+
             LogDebug("No resolved sequence found, using current assignment directly");
             playbackSequence = null;
             playbackIndex = -1;
@@ -1879,8 +1884,6 @@ public class Interview : MonoBehaviour
         {
             ReleasePosterTexture();
         }
-
-        resourcesReleased = true;
     }
 
     void ReleasePosterTexture()

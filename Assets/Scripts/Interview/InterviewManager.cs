@@ -457,6 +457,7 @@ public class InterviewManager : MonoBehaviour
             return;
         }
 
+        HashSet<Interview> assignedSlots = new HashSet<Interview>();
         List<Interview> interviewsToLoad = new List<Interview>();
 
         for (int i = 0; i < assignments.Count; i++)
@@ -470,6 +471,8 @@ public class InterviewManager : MonoBehaviour
             InterviewData? selectedInterview = GetPreviewInterviewForAssignment(assignment);
             if (selectedInterview.HasValue && !string.IsNullOrWhiteSpace(selectedInterview.Value.depthkitPath))
             {
+                assignedSlots.Add(assignment.interviewSlot);
+
                 if (!assignment.interviewSlot.MatchesPreviewAssignment(selectedInterview.Value))
                 {
                     assignment.interviewSlot.ResetForPreviewAssignment();
@@ -483,6 +486,30 @@ public class InterviewManager : MonoBehaviour
                 }
 
                 activeAssignmentsBySlot[assignment.interviewSlot] = assignment;
+            }
+        }
+
+        HashSet<Salle> sallesToReset = new HashSet<Salle>(assignments
+            .Where(assignment => assignment.salle != null)
+            .Select(assignment => assignment.salle));
+
+        foreach (Salle salle in sallesToReset)
+        {
+            Interview[] salleSlots = salle.interviews;
+            if (salleSlots == null)
+            {
+                continue;
+            }
+
+            for (int i = 0; i < salleSlots.Length; i++)
+            {
+                Interview slot = salleSlots[i];
+                if (slot == null || assignedSlots.Contains(slot))
+                {
+                    continue;
+                }
+
+                slot.ResetForPreviewAssignment();
             }
         }
 
@@ -790,24 +817,19 @@ public class InterviewManager : MonoBehaviour
         int salleLevel = assignment.salle != null ? assignment.salle.niveau : 0;
         bool hasIntroBeenPlayed = HasIntroBeenPlayed(assignment.person);
         bool hasPlayedBefore = playedPersonsSinceAssignment.Contains(assignment.person) || HasVisitedAnyInterview(stats.Value) || hasIntroBeenPlayed;
+        InterviewData? bestInterview = GetBestInterviewForPerson(stats.Value.person, salleLevel, playedThemesHistory);
+
+        if (!bestInterview.HasValue)
+        {
+            return null;
+        }
 
         if (!hasPlayedBefore && !string.IsNullOrWhiteSpace(stats.Value.introInterview.depthkitId) && !IsInterviewIgnored(stats.Value.introInterview))
         {
             return stats.Value.introInterview;
         }
 
-        InterviewData? bestInterview = GetBestInterviewForPerson(stats.Value.person, salleLevel, playedThemesHistory);
-        if (bestInterview.HasValue)
-        {
-            return bestInterview.Value;
-        }
-
-        if (!hasIntroBeenPlayed && !string.IsNullOrWhiteSpace(stats.Value.introInterview.depthkitId) && !IsInterviewIgnored(stats.Value.introInterview))
-        {
-            return stats.Value.introInterview;
-        }
-
-        return null;
+        return bestInterview.Value;
     }
 
     InterviewData[] GetInterviewsToPlayForPerson(string person, int? salleLevel, HashSet<string> playedPersons, List<string> themeHistory)
@@ -825,17 +847,19 @@ public class InterviewManager : MonoBehaviour
 
         List<InterviewData> result = new List<InterviewData>();
         bool hasPlayedBefore = playedPersons.Contains(person) || HasVisitedAnyInterview(stats.Value) || HasIntroBeenPlayed(person);
+        InterviewData? bestInterview = GetBestInterviewForPerson(stats.Value.person, salleLevel, themeHistory);
+
+        if (!bestInterview.HasValue)
+        {
+            return Array.Empty<InterviewData>();
+        }
 
         if (!hasPlayedBefore && !string.IsNullOrEmpty(stats.Value.introInterview.filename) && !IsInterviewIgnored(stats.Value.introInterview))
         {
             result.Add(stats.Value.introInterview);
         }
 
-        InterviewData? bestInterview = GetBestInterviewForPerson(stats.Value.person, salleLevel, themeHistory);
-        if (bestInterview.HasValue)
-        {
-            result.Add(bestInterview.Value);
-        }
+        result.Add(bestInterview.Value);
 
         return result.ToArray();
     }
@@ -1819,23 +1843,14 @@ public class InterviewManager : MonoBehaviour
             .OrderBy(_ => assignmentRandom.Next())
             .ToList();
 
-        if (candidatePersons.Count == 0)
-        {
-            candidatePersons = personStatsList
-                .Where(stats => stats.interviews.Any(interview => IsPlayableCandidate(interview, null)) || HasAvailableIntro(stats))
-                .Select(stats => stats.person)
-                .OrderBy(_ => assignmentRandom.Next())
-                .ToList();
-        }
-
         List<Interview> availableSlots = slots
             .Where(slot => slot != null)
             .Where(slot => consumedInterviewSlots == null || !consumedInterviewSlots.Contains(slot))
             .ToList();
 
-        while (candidatePersons.Count > 0 && candidatePersons.Count < availableSlots.Count)
+        if (candidatePersons.Count < availableSlots.Count)
         {
-            candidatePersons.Add(candidatePersons[assignmentRandom.Next(candidatePersons.Count)]);
+            Debug.Log($"Salle '{currentSalle.name}' (level {salleLevel}) only has {candidatePersons.Count} playable interview person(s) for {availableSlots.Count} slot(s). Only the available level-compatible interviews will be assigned.");
         }
 
         for (int i = 0; i < availableSlots.Count && i < candidatePersons.Count; i++)
