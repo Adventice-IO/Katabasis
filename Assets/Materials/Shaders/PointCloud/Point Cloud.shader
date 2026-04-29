@@ -97,11 +97,11 @@
                     o.color = float4(0,0,0,0);
                     return o;
                 }
-                float distFade = 1.0;//saturate((_MaxDistance - d) / _DistFade);
+                float relDist = saturate((_MaxDistance - d) / _DistFade);
                 //distFade = 0.01;
-                distFade *= smoothstep(0.0, 0.5, d-1.25);
+                float distFade = smoothstep(0,1, relDist);
                 // distFade *= smoothstep(0.0, 0.5, -cylinder);
-                distFade *= lerp(0.1, 1.0, smoothstep(10.0, 0.0, d-10.0));
+                // distFade *= lerp(0.1, 1.0, smoothstep(10.0, 0.0, d-10.0));
 
                 // 4. Masking Logic
                 float maskAlpha = 1.0;
