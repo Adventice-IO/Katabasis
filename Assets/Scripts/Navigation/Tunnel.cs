@@ -238,15 +238,13 @@ public class Tunnel : MonoBehaviour
 
         if (checkpoints.Item1 == null && checkpoints.Item2 == null)
         {
-            bool isNearEnd = reverse ? t < 0.2f : t > 0.8f;
-
-            return isNearEnd ? 0.001f : mainController.baseSpeed;
+            return mainController.baseSpeed;
         }
 
 
-        float initSpeed = 0;
+        float initSpeed = mainController.baseSpeed;
         float initPos = 0;
-        float targetSpeed = 0.001f;
+        float targetSpeed = mainController.baseSpeed;
         float targetPos = 1;
 
         if (checkpoints != null)

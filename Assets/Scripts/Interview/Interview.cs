@@ -91,6 +91,7 @@ public class Interview : MonoBehaviour
     public bool shouldEvaporate = false;
     [SerializeField] float evaporatePostDelay = 5f;
     float evaporateReachedFullTime = -1f;
+    bool hasCompletedEvaporation;
 
     Salle salle;
 
@@ -185,6 +186,15 @@ public class Interview : MonoBehaviour
 
     public void cleanup()
     {
+        if (hasCompletedEvaporation)
+        {
+            if (vfx != null)
+            {
+                vfx.enabled = false;
+            }
+            return;
+        }
+
         HandleSalleExitWhileListening();
 
         if (leaveRequestedWhileListening)
@@ -199,7 +209,7 @@ public class Interview : MonoBehaviour
 
     void StartSalleExitEvaporation()
     {
-        if (shouldEvaporate)
+        if (hasCompletedEvaporation || shouldEvaporate)
         {
             return;
         }
@@ -407,6 +417,7 @@ public class Interview : MonoBehaviour
         evaporateProg = 0;
         evaporateReachedFullTime = -1f;
         shouldEvaporate = false;
+        hasCompletedEvaporation = false;
         keepVfxAliveAfterSalleExit = false;
         previewLoadQueued = false;
         previewLoadInProgress = false;
@@ -630,6 +641,11 @@ public class Interview : MonoBehaviour
             return false;
         }
 
+        if (hasCompletedEvaporation)
+        {
+            return false;
+        }
+
         if (!Application.isPlaying)
         {
             return true;
@@ -823,6 +839,12 @@ public class Interview : MonoBehaviour
         LogDebug("Show(" + shouldShow + ") for salle " + (salle != null ? salle.name : "None"));
         if (shouldShow)
         {
+            if (hasCompletedEvaporation)
+            {
+                vfx.enabled = false;
+                return;
+            }
+
             vfx.enabled = true;
             if (HasAssignedInterviewIdentity() && !previewLoadQueued && !previewLoadInProgress)
             {
@@ -831,6 +853,12 @@ public class Interview : MonoBehaviour
         }
         else
         {
+            if (hasCompletedEvaporation)
+            {
+                vfx.enabled = false;
+                return;
+            }
+
             if (shouldEvaporate || evaporateProg > 0f || state == State.Ending)
             {
                 vfx.enabled = true;
@@ -861,6 +889,8 @@ public class Interview : MonoBehaviour
 
     public void set(InterviewManager.InterviewData data)
     {
+        hasCompletedEvaporation = false;
+
         if (!gameObject.activeSelf && Application.isPlaying)
         {
             LogPreviewLoadEvent("assign", "Reactivating disabled interview slot for a new assignment");
@@ -1047,6 +1077,14 @@ public class Interview : MonoBehaviour
 
     public void BeginPreviewLoad()
     {
+        if (hasCompletedEvaporation)
+        {
+            previewLoadQueued = false;
+            previewLoadInProgress = false;
+            LogPreviewLoadEvent("begin", "Skipped because the slot already completed evaporation");
+            return;
+        }
+
         RefreshAssignmentPathsIfNeeded();
 
         if (!HasAssignedInterviewIdentity())
@@ -1468,7 +1506,7 @@ public class Interview : MonoBehaviour
     public void evaporate()
     {
 
-        if (evaporateProg > 0 || shouldEvaporate)
+        if (hasCompletedEvaporation || evaporateProg > 0 || shouldEvaporate)
         {
             return;
         }
@@ -1525,6 +1563,7 @@ public class Interview : MonoBehaviour
         if (videoPlayer != null) videoPlayer.Stop();
         ReleasePlaybackResources(true);
         resetPlaybackState();
+        hasCompletedEvaporation = true;
         if (vfx != null)
         {
             vfx.enabled = false;

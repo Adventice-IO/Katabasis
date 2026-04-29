@@ -233,14 +233,33 @@ public class InterviewManager : MonoBehaviour
 
     public bool MarkInterviewVisitedByClip(string depthkitId, int level)
     {
-        return MarkInterviewVisited(depthkitId, level);
+        List<int> levels = new List<int> { level };
+        InterviewData? matchedInterview = MarkInterviewVisitedInternal(null, depthkitId, levels)
+            ? GetInterviewDataByDepthkit(depthkitId, levels)
+            : null;
+
+        if (!matchedInterview.HasValue)
+        {
+            return false;
+        }
+
+        RegisterPlayedInterview(matchedInterview.Value);
+        ClearProposedFlags();
+        RebuildPersonStats();
+        return true;
     }
 
     bool MarkInterviewVisited(string interviewId, int? level)
     {
-        InterviewData? matchedInterview = MarkInterviewVisitedInternal(interviewId, interviewId, level.HasValue ? new List<int> { level.Value } : null)
+        List<int> levels = level.HasValue ? new List<int> { level.Value } : null;
+        InterviewData? matchedInterview = MarkInterviewVisitedInternal(interviewId, null, levels)
             ? GetInterviewData(interviewId, level)
             : null;
+
+        if (!matchedInterview.HasValue && MarkInterviewVisitedInternal(null, interviewId, levels))
+        {
+            matchedInterview = GetInterviewDataByDepthkit(interviewId, levels);
+        }
 
         if (!matchedInterview.HasValue)
         {
@@ -1084,10 +1103,23 @@ public class InterviewManager : MonoBehaviour
 
 
 
+            string rawFilename = GetField(fields, 0);
+            string rawDepthkitId = GetField(fields, 1);
+            string normalizedFilename = NormalizeInterviewPath(rawFilename);
+            string normalizedDepthkitId = NormalizeInterviewPath(rawDepthkitId);
+
+            if (!string.Equals(rawFilename, normalizedFilename, StringComparison.Ordinal)
+                || !string.Equals(rawDepthkitId, normalizedDepthkitId, StringComparison.Ordinal))
+            {
+                Debug.LogWarning("Normalized interview CSV paths on row " + (i + 1)
+                    + ": filename '" + rawFilename + "' -> '" + normalizedFilename
+                    + "', depthkit '" + rawDepthkitId + "' -> '" + normalizedDepthkitId + "'.");
+            }
+
             InterviewData data = new InterviewData
             {
-                filename = GetField(fields, 0),
-                depthkitId = GetField(fields, 1),
+                filename = normalizedFilename,
+                depthkitId = normalizedDepthkitId,
                 level = ParseInt(GetField(fields, 2), 1),
                 note = ParseInt(GetField(fields, 3), 1),
                 person = GetField(fields, 4),
@@ -1316,7 +1348,7 @@ public class InterviewManager : MonoBehaviour
     {
         for (int i = 0; i < interviewDataList.Count; i++)
         {
-            if (!SharesPlaybackIdentity(interviewDataList[i], interview.filename, interview.depthkitId))
+            if (!MatchesInterviewExact(interviewDataList[i], interview.filename, interview.depthkitId, interview.levels))
             {
                 continue;
             }
@@ -1343,7 +1375,7 @@ public class InterviewManager : MonoBehaviour
 
         for (int i = 0; i < interviewDataList.Count; i++)
         {
-            if (!SharesPlaybackIdentity(interviewDataList[i], interviewId, depthkitId))
+            if (!MatchesInterviewExact(interviewDataList[i], interviewId, depthkitId, levels))
             {
                 continue;
             }
@@ -1363,7 +1395,20 @@ public class InterviewManager : MonoBehaviour
         List<int> levels = level.HasValue ? new List<int> { level.Value } : null;
         for (int i = 0; i < interviewDataList.Count; i++)
         {
-            if (MatchesInterviewExact(interviewDataList[i], interviewId, interviewId, levels))
+            if (MatchesInterviewExact(interviewDataList[i], interviewId, null, levels))
+            {
+                return interviewDataList[i];
+            }
+        }
+
+        return null;
+    }
+
+    InterviewData? GetInterviewDataByDepthkit(string depthkitId, List<int> levels)
+    {
+        for (int i = 0; i < interviewDataList.Count; i++)
+        {
+            if (MatchesInterviewExact(interviewDataList[i], null, depthkitId, levels))
             {
                 return interviewDataList[i];
             }
@@ -1407,7 +1452,7 @@ public class InterviewManager : MonoBehaviour
     {
         for (int i = 0; i < interviewDataList.Count; i++)
         {
-            if (SharesPlaybackIdentity(interviewDataList[i], interview.filename, interview.depthkitId) && selector(interviewDataList[i]))
+            if (MatchesInterviewExact(interviewDataList[i], interview.filename, interview.depthkitId, interview.levels) && selector(interviewDataList[i]))
             {
                 return true;
             }
@@ -1416,16 +1461,10 @@ public class InterviewManager : MonoBehaviour
         return false;
     }
 
-    bool SharesPlaybackIdentity(InterviewData data, string filename, string depthkitId)
-    {
-        return
-            string.Equals(data.filename, filename, StringComparison.OrdinalIgnoreCase) ||
-            string.Equals(data.depthkitId, depthkitId, StringComparison.OrdinalIgnoreCase);
-    }
-
     bool MatchesInterviewExact(InterviewData data, string filename, string depthkitId, List<int> levels)
     {
-        bool matchesId = SharesPlaybackIdentity(data, filename, depthkitId);
+        bool matchesId = MatchesInterviewFilename(data, filename)
+            || (string.IsNullOrWhiteSpace(filename) && MatchesInterviewDepthkit(data, depthkitId));
 
         if (!matchesId)
         {
@@ -1438,6 +1477,20 @@ public class InterviewManager : MonoBehaviour
         }
 
         return levels.Any(level => data.levels.Contains(level));
+    }
+
+    bool MatchesInterviewFilename(InterviewData data, string filename)
+    {
+        return !string.IsNullOrWhiteSpace(filename)
+            && (string.Equals(data.filename, filename, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(data.mediaPath, filename, StringComparison.OrdinalIgnoreCase));
+    }
+
+    bool MatchesInterviewDepthkit(InterviewData data, string depthkitId)
+    {
+        return !string.IsNullOrWhiteSpace(depthkitId)
+            && (string.Equals(data.depthkitId, depthkitId, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(data.depthkitPath, depthkitId, StringComparison.OrdinalIgnoreCase));
     }
 
     public void SimulateGameplay()
@@ -1784,6 +1837,39 @@ public class InterviewManager : MonoBehaviour
         }
 
         return fields[index].Trim();
+    }
+
+    static string NormalizeInterviewPath(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return string.Empty;
+        }
+
+        string normalizedPath = path.Replace("\\", "/").Trim('/');
+        string[] parts = normalizedPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < parts.Length; i++)
+        {
+            parts[i] = NormalizeInterviewPathSegment(parts[i]);
+        }
+
+        return string.Join("/", parts);
+    }
+
+    static string NormalizeInterviewPathSegment(string segment)
+    {
+        string normalizedSegment = (segment ?? string.Empty).Trim();
+        while (normalizedSegment.Contains(" _"))
+        {
+            normalizedSegment = normalizedSegment.Replace(" _", "_");
+        }
+
+        while (normalizedSegment.Contains("_ "))
+        {
+            normalizedSegment = normalizedSegment.Replace("_ ", "_");
+        }
+
+        return normalizedSegment;
     }
 
     static int ParseInt(string value, int defaultValue = 0)
