@@ -97,11 +97,14 @@
                     o.color = float4(0,0,0,0);
                     return o;
                 }
+
+                float closeFade = 1.0;
+                closeFade *= smoothstep(0.0, 0.5, d-1.25);
+                closeFade *= lerp(0.1, 1.0, smoothstep(10.0, 0.0, d-10.0));
+
+
                 float relDist = saturate((_MaxDistance - d) / _DistFade);
-                //distFade = 0.01;
                 float distFade = smoothstep(0,1, relDist);
-                // distFade *= smoothstep(0.0, 0.5, -cylinder);
-                // distFade *= lerp(0.1, 1.0, smoothstep(10.0, 0.0, d-10.0));
 
                 // 4. Masking Logic
                 float maskAlpha = 1.0;
@@ -155,7 +158,7 @@
                 float boxFeatherAlpha = saturate(minDist / max(0.001, _BoxFeather * length(boxSize)));
 
                 // 5. Final Visibility Check
-                float visibility = globalAlpha * distFade * maskAlpha * boxFeatherAlpha;
+                float visibility = globalAlpha * distFade * closeFade * maskAlpha * boxFeatherAlpha;
 
                 // Move heavy clip space math to AFTER visibility check
                 // This saves massive overhead on culled points
