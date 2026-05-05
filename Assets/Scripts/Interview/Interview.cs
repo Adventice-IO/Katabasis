@@ -1462,6 +1462,17 @@ public class Interview : MonoBehaviour
         PausePlaybackForInterviewChange(stopWwiseEvent);
     }
 
+    public void StopAudioAndSubtitlesForTunnelAudio()
+    {
+        subtitles?.stop();
+
+        if (videoEventID != AkUnitySoundEngine.AK_INVALID_PLAYING_ID)
+        {
+            TracePlayback("StopAudioAndSubtitlesForTunnelAudio() stopping interview audio because a tunnel audio event is starting");
+            stopWwiseVideoEvent(true);
+        }
+    }
+
     public bool HasPausedPlayback()
     {
         return pausedForInterviewChange;

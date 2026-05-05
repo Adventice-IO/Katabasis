@@ -1191,6 +1191,15 @@ public class MainController : MonoBehaviour
 
         if (tunnel != null)
         {
+            bool tunnelHasAudioEvent = tunnel.audioEventSO != null && tunnel.audioEventSO.evt != null;
+            bool tunnelGoesToExit = tunnel.salleArrivee != null && tunnel.salleArrivee.isExit;
+            bool shouldStopAudio = tunnelHasAudioEvent || tunnelGoesToExit;
+            
+            if (shouldStopAudio)
+            {
+                GetInterviewManager()?.StopActiveInterviewAudioAndSubtitlesForTunnelAudio();
+            }
+
             if (tunnel.subtitlesPath != "")
             {
                 Subtitles subtitleManager = FindAnyObjectByType<Subtitles>();
@@ -1200,9 +1209,12 @@ public class MainController : MonoBehaviour
                 }
             }
 
-            if (tunnel.audioEventSO != null)
+            if (shouldStopAudio)
             {
-                tunnel.audioEventSO.evt.Post(gameObject);
+                if(tunnel.audioEventSO != null && tunnel.audioEventSO.evt != null)
+                {
+                    tunnel.audioEventSO.evt.Post(gameObject);
+                }
             }
         }
 

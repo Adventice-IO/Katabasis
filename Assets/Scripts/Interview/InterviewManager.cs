@@ -329,6 +329,17 @@ public class InterviewManager : MonoBehaviour
         }
     }
 
+    public void StopActiveInterviewAudioAndSubtitlesForTunnelAudio()
+    {
+        activePlayingSlot?.StopAudioAndSubtitlesForTunnelAudio();
+
+        Subtitles subs = GameObject.FindAnyObjectByType<Subtitles>();
+        if (subs != null)
+        {
+            subs.stop();
+        }
+    }
+
     public void NotifyPlaybackEntryStarted(Interview slot, InterviewData entry)
     {
         if (entry.isIntro)
