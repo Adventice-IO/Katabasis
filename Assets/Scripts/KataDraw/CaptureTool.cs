@@ -1,14 +1,42 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using TMPro;
 
 public class CaptureTool : MonoBehaviour
 {
     public GameObject captureCamera;
 
+    public KatabasisMeshConfiguration katabasisMeshConfig;
+
+    public Slider focalDistanceSlider;
+    public Slider focalWidthSlider;
+    public TMP_InputField screenshotNameField;
+
+
+    //enabling and disabling the focal mode when the capture tool is enabled or disabled
+
+    void OnEnable()
+    {
+            if (katabasisMeshConfig != null && katabasisMeshConfig.material != null)
+            {
+                katabasisMeshConfig.material.SetFloat("_EnableFocalMode", 1);
+            }
+    }
+
+    void OnDisable()
+    {
+            if (katabasisMeshConfig != null && katabasisMeshConfig.material != null)
+            {
+                katabasisMeshConfig.material.SetFloat("_EnableFocalMode", 0);
+            }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        focalDistanceSlider.onValueChanged.AddListener(delegate { setFocalDistance(focalDistanceSlider.value); });
+        focalWidthSlider.onValueChanged.AddListener(delegate { setFocalWidth(focalWidthSlider.value); });
     }
 
     // Update is called once per frame
@@ -19,6 +47,10 @@ public class CaptureTool : MonoBehaviour
 
     public void captureFrame()
     {
+        //synchronize the capturecamera's position and ortation with the main camera
+        captureCamera.transform.position = Camera.main.transform.position;
+        captureCamera.transform.rotation = Camera.main.transform.rotation;
+
         // Create a RenderTexture to capture the camera's output
         RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
         captureCamera.SetActive(true);
@@ -39,11 +71,30 @@ public class CaptureTool : MonoBehaviour
         Destroy(renderTexture);
         captureCamera.SetActive(false);
 
+        //get the screenshot name from the input field
+        string screenshotName = screenshotNameField.text;
+
         // Save the captured image as a PNG file
         byte[] bytes = capturedImage.EncodeToPNG();
-        System.IO.File.WriteAllBytes(Application.dataPath + "/CapturedFrame.png", bytes);
+        System.IO.File.WriteAllBytes(Application.dataPath + "/KataDrawCaptures/" + screenshotName + ".png", bytes);
 
-        Debug.Log("Captured frame saved to: " + Application.dataPath + "/CapturedFrame.png");
+        Debug.Log("Captured frame saved to: " + Application.dataPath + "/KataDrawCaptures/" + screenshotName + ".png");
+    }
+
+    public void setFocalDistance(float focalDistance)
+    {
+        if (katabasisMeshConfig != null && katabasisMeshConfig.material != null)
+        {
+            katabasisMeshConfig.material.SetFloat("_Focal", focalDistance);
+        }
+    }
+
+    public void setFocalWidth(float focalWidth)
+    {
+        if (katabasisMeshConfig != null && katabasisMeshConfig.material != null)
+        {
+            katabasisMeshConfig.material.SetFloat("_Focalwidth", focalWidth);
+        }
     }
 
 }

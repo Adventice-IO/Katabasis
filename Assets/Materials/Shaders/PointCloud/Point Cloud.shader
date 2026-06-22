@@ -14,7 +14,7 @@
          _Focal("Focal", float) = 30
          _Focalwidth("Focal Width", float) = 20
          _Threshold("Threshold", float) = 0.5
-         _EnableFocalMode("Enable Focal Mode", float) = 0
+         _EnableFocalMode("Enable Focal Mode", float) = 1
     }
 
     SubShader
@@ -75,7 +75,7 @@
             float _Focal;
             float _Focalwidth;
             float _Threshold;
-            bool _EnableFocalMode;
+            int _EnableFocalMode;
 
             // Buffers
             StructuredBuffer<OrientedMaskBox> _MaskBoxes;
@@ -105,7 +105,7 @@
                 // cylinder = min(cylinder - 1.0, -(abs(_WorldSpaceCameraPos.y-worldPos.y) - 0.5));
                 
 
-                if(_EnableFocalMode){
+                if(_EnableFocalMode > 0){
 					// Calculate the distance from the camera to the world position
 					float distToFocal = d - _Focal;
 
