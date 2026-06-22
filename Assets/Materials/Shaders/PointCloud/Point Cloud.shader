@@ -66,6 +66,9 @@
             float3 _BoxMax;
             float _BoxFeather;
 
+            // KataDraw parameters
+            
+
             // Buffers
             StructuredBuffer<OrientedMaskBox> _MaskBoxes;
             int _MaskCount;
