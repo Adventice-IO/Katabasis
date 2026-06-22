@@ -10,6 +10,11 @@
         _BoxMax("Box Max", Vector) = (1,1,1,0)
         _BoxFeather("Box Feather", float) = 1
         _ColorKey ("Purple Key Color", Color) = (0, 1, 0, 1)
+
+         _Focal("Focal", float) = 30
+         _Focalwidth("Focal Width", float) = 20
+         _Threshold("Threshold", float) = 0.5
+         _EnableFocalMode("Enable Focal Mode", float) = 0
     }
 
     SubShader
@@ -67,7 +72,10 @@
             float _BoxFeather;
 
             // KataDraw parameters
-            
+            float _Focal;
+            float _Focalwidth;
+            float _Threshold;
+            bool _EnableFocalMode;
 
             // Buffers
             StructuredBuffer<OrientedMaskBox> _MaskBoxes;
@@ -80,6 +88,8 @@
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+                
+ 
                 // 1. Quick Global Exit
                 float globalAlpha = _Alpha * _Reveal;
                 if (globalAlpha <= 0.0) {
@@ -94,6 +104,23 @@
                 // float cylinder = distance(_WorldSpaceCameraPos.xz, worldPos.xz);
                 // cylinder = min(cylinder - 1.0, -(abs(_WorldSpaceCameraPos.y-worldPos.y) - 0.5));
                 
+
+                if(_EnableFocalMode){
+					// Calculate the distance from the camera to the world position
+					float distToFocal = d - _Focal;
+
+					// Calculate the alpha factor using the saturate function
+					float alphaFactor = saturate((_Focalwidth - abs(distToFocal)) / _Focalwidth);
+
+					if (alphaFactor <= _Threshold) {
+                        o.position = float4(0,0,0,0);
+                        o.color = float4(0,0,0,0);
+                        return o;
+                    }
+					
+				}
+
+
                 // 3. Distance Cull/Fade
                 if (d > _MaxDistance) {
                     o.position = float4(0,0,0,0);
