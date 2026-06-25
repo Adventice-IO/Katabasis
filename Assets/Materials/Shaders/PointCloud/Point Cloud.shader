@@ -15,6 +15,8 @@
          _Focalwidth("Focal Width", float) = 20
          _Threshold("Threshold", float) = 0.5
          _EnableFocalMode("Enable Focal Mode", float) = 1
+        _EnableBlackAndWhite("Enable Black and White", float) = 0
+        _BlackAndWhiteThreshold("Black and White Threshold", float) = 0.5
     }
 
     SubShader
@@ -72,10 +74,13 @@
             float _BoxFeather;
 
             // KataDraw parameters
+            int _EnableFocalMode;
             float _Focal;
             float _Focalwidth;
             float _Threshold;
-            int _EnableFocalMode;
+            
+            int _EnableBlackAndWhite;
+            float _BlackAndWhiteThreshold;
 
             // Buffers
             StructuredBuffer<OrientedMaskBox> _MaskBoxes;
@@ -222,10 +227,19 @@
                 // o.color = v.color;
                 // o.color = 1 * distFade;;
                 
+                if(_EnableBlackAndWhite > 0){
+                    float brightness = dot(o.color.rgb, float3(0.299, 0.587, 0.114));
+                    if (brightness < _BlackAndWhiteThreshold) {
+                        o.color = float4(0, 0, 0, 1.0); // Black
+                    } else {
+                        o.color = float4(1, 1, 1, 1.0); // White
+                    }
+                }
+
                 return o;
             }
 
-            fixed4 frag(varying i) : SV_Target
+            fixed4 frag(varying i) : SV_Target 
             {
                 // Simple circular point shape
                 float d = dot(i.uv, i.uv);
