@@ -320,6 +320,9 @@ public class InterviewManager : MonoBehaviour
         return true;
     }
 
+    public bool HasActiveInterview => activePlayingSlot != null
+        && activePlayingSlot.state == Interview.State.Playing;
+
     public void NotifyInterviewStarted(Interview slot)
     {
         if (slot == null)

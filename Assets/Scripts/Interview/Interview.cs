@@ -634,6 +634,39 @@ public class Interview : MonoBehaviour
             && mainController.isInSalle(salle);
     }
 
+    public bool CanStartFromDemoMode()
+    {
+        return state == State.Loaded
+            && mainController != null
+            && !mainController.editMode
+            && CanInteractInCurrentSalle();
+    }
+
+    public bool TryStartFromDemoMode()
+    {
+        if (!CanStartFromDemoMode())
+        {
+            return false;
+        }
+
+        resolveAndPlay();
+        if (state != State.Playing)
+        {
+            return false;
+        }
+
+        progression = 1f;
+        progRTPC?.rtpc.SetValue(gameObject, progression);
+        if (vfx != null)
+        {
+            vfx.SetFloat("Progression", progression);
+        }
+
+        loadingEvent?.evt.Stop(gameObject);
+        validateEvent?.evt.Post(gameObject);
+        return true;
+    }
+
     bool HasVisiblePlayableAssignment()
     {
         if (!HasAssignedInterviewIdentity())

@@ -194,14 +194,79 @@ public class KataPortal : MonoBehaviour
                 vfx.SetFloat("Progression", progression);
                 if (progression >= 1f)
                 {
-                    mainController.BeginRunStartCameraDiagnostics($"Portal validated portal='{portalName}' tunnel='{tunnel?.name}' reverse={isReverse}");
-                    mainController.GoToSalle(tunnel.getOtherSalle(mainController.salle));
-                    loadingEvent.evt.Stop(gameObject);
-                    validateEvent.evt.Post(gameObject);
+                    ActivatePortal();
                 }
             }
         }
 
+    }
+
+    public bool CanActivateFromDemoMode()
+    {
+        if (!Application.isPlaying
+            || !isActiveAndEnabled
+            || mainController == null
+            || tunnel == null
+            || mainController.gameState != MainController.GameState.Playing
+            || mainController.editMode
+            || !mainController.isInASalle())
+        {
+            return false;
+        }
+
+        Salle currentSalle = mainController.salle;
+        bool exitsCurrentSalle = (!isReverse && tunnel.salleDepart == currentSalle)
+            || (isReverse && tunnel.canReverse && tunnel.salleArrivee == currentSalle);
+        if (!exitsCurrentSalle || tunnel.getOtherSalle(currentSalle) == null)
+        {
+            return false;
+        }
+
+        if (mainController.infinitePlaying)
+        {
+            return IsEnabledForInfinitePlaying();
+        }
+
+        if (mainController.comingFromTunnel == tunnel)
+        {
+            return false;
+        }
+
+        foreach (Salle blacklistedSalle in blacklist)
+        {
+            if (mainController.hasVisitedSalle(blacklistedSalle))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public bool TryActivateFromDemoMode()
+    {
+        if (!CanActivateFromDemoMode())
+        {
+            return false;
+        }
+
+        progression = 1f;
+        progRTPC?.rtpc.SetValue(gameObject, progression);
+        if (vfx != null)
+        {
+            vfx.SetFloat("Progression", progression);
+        }
+
+        ActivatePortal();
+        return mainController.isInATunnel();
+    }
+
+    void ActivatePortal()
+    {
+        mainController.BeginRunStartCameraDiagnostics($"Portal validated portal='{portalName}' tunnel='{tunnel?.name}' reverse={isReverse}");
+        mainController.GoToSalle(tunnel.getOtherSalle(mainController.salle));
+        loadingEvent?.evt.Stop(gameObject);
+        validateEvent?.evt.Post(gameObject);
     }
 
     bool IsEnabledForInfinitePlaying()

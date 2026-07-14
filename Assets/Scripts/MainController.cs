@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
@@ -53,6 +54,12 @@ public class MainController : MonoBehaviour
     public bool playInterviewIntrosInInfinitePlaying = true;
     public Salle salle;
     public Tunnel tunnel;
+
+    [Header("Demo Mode")]
+    [Tooltip("Automatically continues the experience after a period without viewer activity while inside a salle.")]
+    public bool demoMode;
+    [Tooltip("Seconds without input, viewer motion, or interview playback before demo mode takes an action.")]
+    [Min(1f)] public float demoModeTimeoutSeconds = 60f;
 
     [Header("Controls")]
     public bool animateRotation = false;
@@ -183,6 +190,7 @@ public class MainController : MonoBehaviour
 
 
     Tunnel[] allTunnels;
+    KataPortal[] allPortals;
 
     GameObject sallesGO;
     GameObject tunnelsGO;
@@ -205,6 +213,14 @@ public class MainController : MonoBehaviour
     float followPathOrientationEntryBlendStartTime;
     bool followPathOrientationEntryBlendActive;
     bool wasFollowingPathOrientation;
+    InterviewManager interviewManager;
+    Salle demoModeTrackedSalle;
+    float demoModeLastActivityTime;
+    Camera demoModeTrackedCamera;
+    Vector3 demoModeLastCameraPosition;
+    Quaternion demoModeLastCameraRotation;
+    bool hasDemoModeCameraPose;
+    System.Random demoModeRandom;
 
     private void Start()
     {
@@ -228,6 +244,7 @@ public class MainController : MonoBehaviour
         lastObservedRigPosition = transform.position;
         lastObservedRigRotation = transform.rotation;
         hasLastObservedRigPose = true;
+        ResetDemoModeInactivity(salle);
 
         gameStateUpdate();
     }
@@ -559,9 +576,260 @@ public class MainController : MonoBehaviour
             }
             teleportationLoco.SetActive(freeMotion);
             turnLoco.SetActive(freeMotion);
+            UpdateDemoMode();
         }
 
         TrackRigMotion("Update");
+    }
+
+    void UpdateDemoMode()
+    {
+        if (!demoMode
+            || gameState != GameState.Playing
+            || editMode
+            || !isInASalle()
+            || salle.isExit)
+        {
+            ResetDemoModeInactivity(salle);
+            return;
+        }
+
+        if (demoModeTrackedSalle != salle)
+        {
+            ResetDemoModeInactivity(salle);
+            return;
+        }
+
+        InterviewManager manager = GetInterviewManager();
+        if ((manager != null && manager.HasActiveInterview)
+            || HasDemoModeUserActivity())
+        {
+            ResetDemoModeInactivity(salle);
+            return;
+        }
+
+        float timeout = Mathf.Max(1f, demoModeTimeoutSeconds);
+        if (Time.unscaledTime - demoModeLastActivityTime < timeout)
+        {
+            return;
+        }
+
+        ResetDemoModeInactivity(salle);
+        if (!TryPerformDemoModeAction())
+        {
+            Debug.LogWarning($"Demo mode found no playable interview or available portal in salle '{salle.name}'.", this);
+        }
+    }
+
+    bool HasDemoModeUserActivity()
+    {
+        if (salle != null && salle.interviews != null)
+        {
+            foreach (Interview interview in salle.interviews)
+            {
+                if (interview != null
+                    && interview.CanStartFromDemoMode()
+                    && (interview.isFocused || interview.progression > 0f))
+                {
+                    CaptureDemoModeCameraPose();
+                    return true;
+                }
+            }
+        }
+
+        foreach (KataPortal portal in GetAllPortals())
+        {
+            if (portal != null
+                && portal.CanActivateFromDemoMode()
+                && (portal.isFocused || portal.progression > 0f))
+            {
+                CaptureDemoModeCameraPose();
+                return true;
+            }
+        }
+
+        Mouse mouse = Mouse.current;
+        if (mouse != null
+            && (mouse.delta.ReadValue().sqrMagnitude > 0.01f
+                || mouse.scroll.ReadValue().sqrMagnitude > 0.01f))
+        {
+            CaptureDemoModeCameraPose();
+            return true;
+        }
+
+        foreach (InputDevice device in InputSystem.devices)
+        {
+            bool isUserInputDevice = device is Keyboard
+                || device is Mouse
+                || device is Gamepad
+                || device is Joystick
+                || device is Touchscreen
+                || device is UnityEngine.InputSystem.XR.XRController;
+            if (!isUserInputDevice)
+            {
+                continue;
+            }
+
+            foreach (InputControl control in device.allControls)
+            {
+                if (control is ButtonControl button
+                    && !string.Equals(button.name, "isTracked", System.StringComparison.OrdinalIgnoreCase)
+                    && button.isPressed)
+                {
+                    CaptureDemoModeCameraPose();
+                    return true;
+                }
+            }
+        }
+
+        Gamepad gamepad = Gamepad.current;
+        if (gamepad != null
+            && (gamepad.leftStick.ReadValue().sqrMagnitude > 0.04f
+                || gamepad.rightStick.ReadValue().sqrMagnitude > 0.04f))
+        {
+            CaptureDemoModeCameraPose();
+            return true;
+        }
+
+        Joystick joystick = Joystick.current;
+        if (joystick != null && joystick.stick.ReadValue().sqrMagnitude > 0.04f)
+        {
+            CaptureDemoModeCameraPose();
+            return true;
+        }
+
+        UnityEngine.XR.InputDevice headDevice =
+            UnityEngine.XR.InputDevices.GetDeviceAtXRNode(UnityEngine.XR.XRNode.Head);
+        if (headDevice.isValid
+            && headDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.userPresence, out bool userPresent)
+            && userPresent)
+        {
+            CaptureDemoModeCameraPose();
+            return true;
+        }
+
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            hasDemoModeCameraPose = false;
+            demoModeTrackedCamera = null;
+            return false;
+        }
+
+        if (!hasDemoModeCameraPose || demoModeTrackedCamera != mainCamera)
+        {
+            CaptureDemoModeCameraPose();
+            return false;
+        }
+
+        Transform cameraTransform = mainCamera.transform;
+        bool cameraMoved = Vector3.Distance(demoModeLastCameraPosition, cameraTransform.position) >= 0.01f
+            || Quaternion.Angle(demoModeLastCameraRotation, cameraTransform.rotation) >= 0.5f;
+        CaptureDemoModeCameraPose();
+        return cameraMoved;
+    }
+
+    void ResetDemoModeInactivity(Salle trackedSalle)
+    {
+        demoModeTrackedSalle = trackedSalle;
+        demoModeLastActivityTime = Time.unscaledTime;
+        CaptureDemoModeCameraPose();
+    }
+
+    void CaptureDemoModeCameraPose()
+    {
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            demoModeTrackedCamera = null;
+            hasDemoModeCameraPose = false;
+            return;
+        }
+
+        demoModeTrackedCamera = mainCamera;
+        demoModeLastCameraPosition = mainCamera.transform.position;
+        demoModeLastCameraRotation = mainCamera.transform.rotation;
+        hasDemoModeCameraPose = true;
+    }
+
+    bool TryPerformDemoModeAction()
+    {
+        if (demoModeRandom == null)
+        {
+            demoModeRandom = new System.Random(System.Environment.TickCount ^ GetInstanceID());
+        }
+
+        bool tryInterviewFirst = demoModeRandom.Next(2) == 0;
+        return tryInterviewFirst
+            ? TryLaunchRandomDemoInterview() || TryLaunchRandomDemoPortal()
+            : TryLaunchRandomDemoPortal() || TryLaunchRandomDemoInterview();
+    }
+
+    bool TryLaunchRandomDemoInterview()
+    {
+        if (salle == null || salle.interviews == null)
+        {
+            return false;
+        }
+
+        List<Interview> candidates = new List<Interview>();
+        foreach (Interview interview in salle.interviews)
+        {
+            if (interview != null && interview.CanStartFromDemoMode())
+            {
+                candidates.Add(interview);
+            }
+        }
+
+        while (candidates.Count > 0)
+        {
+            int index = demoModeRandom.Next(candidates.Count);
+            Interview candidate = candidates[index];
+            candidates.RemoveAt(index);
+            if (candidate.TryStartFromDemoMode())
+            {
+                Debug.Log($"Demo mode launched interview '{candidate.name}' in salle '{salle.name}'.", candidate);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool TryLaunchRandomDemoPortal()
+    {
+        List<KataPortal> candidates = new List<KataPortal>();
+        foreach (KataPortal portal in GetAllPortals())
+        {
+            if (portal != null && portal.CanActivateFromDemoMode())
+            {
+                candidates.Add(portal);
+            }
+        }
+
+        while (candidates.Count > 0)
+        {
+            int index = demoModeRandom.Next(candidates.Count);
+            KataPortal candidate = candidates[index];
+            candidates.RemoveAt(index);
+            if (candidate.TryActivateFromDemoMode())
+            {
+                Debug.Log($"Demo mode launched portal '{candidate.name}'.", candidate);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    KataPortal[] GetAllPortals()
+    {
+        if (allPortals == null || allPortals.Length == 0)
+        {
+            allPortals = FindObjectsByType<KataPortal>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        }
+
+        return allPortals;
     }
 
     void MarkRigMotionExpected(string reason)
@@ -1135,7 +1403,12 @@ public class MainController : MonoBehaviour
 
     InterviewManager GetInterviewManager()
     {
-        return FindAnyObjectByType<InterviewManager>();
+        if (interviewManager == null)
+        {
+            interviewManager = FindAnyObjectByType<InterviewManager>();
+        }
+
+        return interviewManager;
     }
 
     public void ResetGame()

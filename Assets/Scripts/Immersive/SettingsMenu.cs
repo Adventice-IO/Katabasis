@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 [DisallowMultipleComponent]
 public sealed class SettingsMenu : MonoBehaviour
 {
-    public const int CurrentSettingsVersion = 4;
+    public const int CurrentSettingsVersion = 5;
 
     private const string PanelSettingsResource = "Immersive/ImmersivePanelSettings";
     private const string StyleSheetResource = "Immersive/ImmersiveRuntimePanel";
@@ -50,6 +50,8 @@ public sealed class SettingsMenu : MonoBehaviour
         public bool infinitePlaying;
         public bool hideExitPortalsInInfinitePlaying;
         public bool playInterviewIntrosInInfinitePlaying = true;
+        public bool demoMode;
+        public float demoModeTimeoutSeconds = 60f;
     }
 
     [Serializable]
@@ -143,6 +145,8 @@ public sealed class SettingsMenu : MonoBehaviour
     private Toggle _infinitePlaying;
     private Toggle _hideExitPortalsInInfinitePlaying;
     private Toggle _playInterviewIntrosInInfinitePlaying;
+    private Toggle _demoMode;
+    private FloatField _demoModeTimeoutSeconds;
 
     private bool _built;
     private bool _refreshing;
@@ -623,12 +627,23 @@ public sealed class SettingsMenu : MonoBehaviour
         infiniteHint.AddToClassList("immersive-hint");
         playback.Add(infiniteHint);
 
+        var demo = CreateSection(content, "DEMO MODE", "Continue automatically when nobody is using or viewing the experience");
+        _demoMode = CreateToggle(demo, "Enable demo mode");
+        _demoMode.AddToClassList("immersive-toggle-wide");
+        _demoModeTimeoutSeconds = CreateFloatField(demo, "Inactivity timeout (seconds)");
+
+        var demoHint = new Label("The timer runs only inside a salle while no interview is playing. Viewer input or movement restarts it.");
+        demoHint.AddToClassList("immersive-hint");
+        demo.Add(demoHint);
+
         _language.RegisterValueChangedCallback(_ => ApplyControls());
         RegisterLiveField(_globalSpeedMultiplier);
         RegisterLiveToggle(_followPath);
         RegisterLiveToggle(_infinitePlaying);
         RegisterLiveToggle(_hideExitPortalsInInfinitePlaying);
         RegisterLiveToggle(_playInterviewIntrosInInfinitePlaying);
+        RegisterLiveToggle(_demoMode);
+        RegisterLiveField(_demoModeTimeoutSeconds);
     }
 
     private void BuildPersistenceSection(VisualElement parent)
@@ -826,6 +841,8 @@ public sealed class SettingsMenu : MonoBehaviour
             _mainController.infinitePlaying = _infinitePlaying.value;
             _mainController.hideExitPortalsInInfinitePlaying = _hideExitPortalsInInfinitePlaying.value;
             _mainController.playInterviewIntrosInInfinitePlaying = _playInterviewIntrosInInfinitePlaying.value;
+            _mainController.demoMode = _demoMode.value;
+            _mainController.demoModeTimeoutSeconds = Mathf.Max(1f, NonNegative(_demoModeTimeoutSeconds.value));
             _gameMenu?.SelectLanguage(_mainController.language);
         }
         finally
@@ -872,6 +889,9 @@ public sealed class SettingsMenu : MonoBehaviour
         SetToggleWithoutNotify(_infinitePlaying, _mainController.infinitePlaying);
         SetToggleWithoutNotify(_hideExitPortalsInInfinitePlaying, _mainController.hideExitPortalsInInfinitePlaying);
         SetToggleWithoutNotify(_playInterviewIntrosInInfinitePlaying, _mainController.playInterviewIntrosInInfinitePlaying);
+        SetToggleWithoutNotify(_demoMode, _mainController.demoMode);
+        _demoModeTimeoutSeconds.SetValueWithoutNotify(_mainController.demoModeTimeoutSeconds);
+        _demoModeTimeoutSeconds.SetEnabled(_mainController.demoMode);
 
         _refreshing = false;
         RefreshRuntimeStatus();
@@ -1113,13 +1133,21 @@ public sealed class SettingsMenu : MonoBehaviour
                 followPath = _followPath.value,
                 infinitePlaying = _mainController.infinitePlaying,
                 hideExitPortalsInInfinitePlaying = _mainController.hideExitPortalsInInfinitePlaying,
-                playInterviewIntrosInInfinitePlaying = _mainController.playInterviewIntrosInInfinitePlaying
+                playInterviewIntrosInInfinitePlaying = _mainController.playInterviewIntrosInInfinitePlaying,
+                demoMode = _mainController.demoMode,
+                demoModeTimeoutSeconds = _mainController.demoModeTimeoutSeconds
             }
         };
     }
 
     private void ApplyConfiguration(UnifiedSettings configuration, bool requestAutosave)
     {
+        if (configuration.version < 5)
+        {
+            configuration.game.demoMode = false;
+            configuration.game.demoModeTimeoutSeconds = 60f;
+        }
+
         if (configuration.version < 4)
         {
             configuration.orb.followPathOrientationEntryBlendDuration = 3f;
@@ -1161,6 +1189,8 @@ public sealed class SettingsMenu : MonoBehaviour
             _mainController.infinitePlaying = configuration.game.infinitePlaying;
             _mainController.hideExitPortalsInInfinitePlaying = configuration.game.hideExitPortalsInInfinitePlaying;
             _mainController.playInterviewIntrosInInfinitePlaying = configuration.game.playInterviewIntrosInInfinitePlaying;
+            _mainController.demoMode = configuration.game.demoMode;
+            _mainController.demoModeTimeoutSeconds = configuration.game.demoModeTimeoutSeconds;
             _gameMenu?.SelectLanguage(_mainController.language);
         }
         finally
@@ -1204,6 +1234,9 @@ public sealed class SettingsMenu : MonoBehaviour
             ? "en"
             : configuration.game.language.Trim();
         configuration.game.globalSpeedMultiplier = NonNegative(configuration.game.globalSpeedMultiplier);
+        configuration.game.demoModeTimeoutSeconds = Mathf.Max(
+            1f,
+            NonNegative(configuration.game.demoModeTimeoutSeconds));
     }
 
     private static float NonNegative(float value)
