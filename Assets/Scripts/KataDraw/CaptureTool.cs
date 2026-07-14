@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using TMPro;
+using BAPointCloudRenderer.CloudController;
 
 public class CaptureTool : MonoBehaviour
 {
@@ -18,7 +19,11 @@ public class CaptureTool : MonoBehaviour
     public TMP_InputField printWidthField;
     public TMP_InputField printHeightField;
 
-    
+    public Slider fovSlider;
+
+    public TMP_InputField budgetField;
+    public DynamicPointCloudSet pointCloudSet;
+
 
     //enabling and disabling the focal mode when the capture tool is enabled or disabled
 
@@ -48,6 +53,8 @@ public class CaptureTool : MonoBehaviour
         focalWidthSlider.onValueChanged.AddListener(delegate { setFocalWidth(focalWidthSlider.value); });
 
         dotsThresholdSlider.onValueChanged.AddListener(delegate { setDotsThreshold(dotsThresholdSlider.value); });
+
+        fovSlider.onValueChanged.AddListener(delegate { setFov(fovSlider.value); });
     }
 
     // Update is called once per frame
@@ -60,8 +67,33 @@ public class CaptureTool : MonoBehaviour
     {
         // Get the screen width and height from the input fields
         //We are assuming that we're printing with 2 pix per mm
-        int printWidth = int.Parse(printWidthField.text) * 2;
-        int printHeight = int.Parse(printHeightField.text) * 2;
+        int printWidth = 0;
+        int printHeight = 0;
+        if(printHeightField.text != "" && printWidthField.text != "")
+        {
+            printWidth = int.Parse(printWidthField.text) * 2;
+            printHeight = int.Parse(printHeightField.text) * 2;
+        }
+        else if(printWidthField.text == "" && printHeightField.text != "")
+        {
+            printWidth = Screen.width;
+            printHeight = int.Parse(printHeightField.text) * 2;
+        }
+        else if(printWidthField.text != "" && printHeightField.text == "")
+        {
+            printWidth = int.Parse(printWidthField.text) * 2;
+            printHeight = Screen.height;
+        }
+        else
+        {
+            printWidth = Screen.width;
+            printHeight = Screen.height;
+        }
+        
+        if(printWidth > Screen.width || printHeight > Screen.height)
+        {
+            Debug.LogError("The print size is too big for this resolution : try augmenting your resolution");
+        }
 
         //synchronize the capturecamera's position and ortation with the main camera
         captureCamera.transform.position = Camera.main.transform.position;
@@ -91,6 +123,10 @@ public class CaptureTool : MonoBehaviour
 
         //get the screenshot name from the input field
         string screenshotName = screenshotNameField.text;
+        if(screenshotName == "")
+        {
+            screenshotName = "Unnamed";
+        }
 
         // Save the captured image as a PNG file
         byte[] bytes = capturedImage.EncodeToPNG();
@@ -119,7 +155,8 @@ public class CaptureTool : MonoBehaviour
     {
         if (katabasisMeshConfig != null && katabasisMeshConfig.material != null)
         {
-            katabasisMeshConfig.material.SetFloat("_BlackAndWhiteThreshold", threshold);
+            float adaptedThreshold = Mathf.Pow(threshold, 5);
+            katabasisMeshConfig.material.SetFloat("_BlackAndWhiteThreshold", adaptedThreshold);
         }
     }
 
@@ -131,4 +168,20 @@ public class CaptureTool : MonoBehaviour
         }
     }
 
+    public void setFov(float fov)
+    {
+        Camera.main.fieldOfView = fov;
+        captureCamera.GetComponent<Camera>().fieldOfView = fov;
+    }
+
+
+    public void setPointBudget()
+    {  
+        pointCloudSet.PointRenderer.Hide();
+
+        uint newBudget = uint.Parse(budgetField.text);
+        print("new budg " + newBudget);
+        pointCloudSet.pointBudget = newBudget;
+        pointCloudSet.PointRenderer.Display();
+    }
 }
