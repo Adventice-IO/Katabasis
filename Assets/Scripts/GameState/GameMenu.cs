@@ -272,7 +272,7 @@ public class GameMenu : MonoBehaviour
 
     void RefreshMenuData()
     {
-        selectedLanguage = "";
+        selectedLanguage = mainController != null ? mainController.language : "";
         selectedObject = null;
         ReleaseLanguageTextures();
         startTransitionRunning = false;
@@ -420,9 +420,19 @@ public class GameMenu : MonoBehaviour
         ApplyLayout();
     }
 
-    List<string> GetAvailableLanguages()
+    public List<string> GetAvailableLanguages()
     {
         List<string> languages = new List<string>();
+
+        if (mainController == null)
+        {
+            mainController = GameObject.FindAnyObjectByType<MainController>();
+        }
+
+        if (dataManager == null)
+        {
+            dataManager = GameObject.FindAnyObjectByType<DataManager>();
+        }
 
         if (dataManager != null)
         {
@@ -707,7 +717,7 @@ void UpdateAudioProgressionState()
         PostAudioEvent(langSelectSO);
     }
 
-    void SelectLanguage(string language)
+    public void SelectLanguage(string language)
     {
         selectedLanguage = string.IsNullOrWhiteSpace(language) ? "" : language;
 

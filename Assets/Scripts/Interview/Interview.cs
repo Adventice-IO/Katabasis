@@ -1703,10 +1703,11 @@ public class Interview : MonoBehaviour
 
         InterviewManager manager = FindAnyObjectByType<InterviewManager>();
         bool shouldResumeCurrentIntro = currentEntryIsIntro;
+        bool shouldAlwaysReplayIntro = manager != null && manager.ShouldReplayIntroForEveryInfiniteInterview();
         while (playbackIndex >= 0 && playbackIndex < playbackSequence.Length)
         {
             InterviewManager.InterviewData data = playbackSequence[playbackIndex];
-            if (!data.isIntro || manager == null || !manager.HasIntroStarted(data.person) || shouldResumeCurrentIntro)
+            if (!data.isIntro || manager == null || shouldAlwaysReplayIntro || !manager.HasIntroStarted(data.person) || shouldResumeCurrentIntro)
             {
                 break;
             }

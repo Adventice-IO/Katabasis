@@ -1,0 +1,522 @@
+.immersive-screen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    color: rgb(231, 238, 247);
+    font-size: 13px;
+}
+
+.immersive-window {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    bottom: 24px;
+    width: 510px;
+    min-width: 420px;
+    max-width: 94%;
+    overflow: hidden;
+    background-color: rgba(10, 15, 24, 0.97);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgba(121, 153, 191, 0.34);
+    border-right-color: rgba(121, 153, 191, 0.34);
+    border-bottom-color: rgba(121, 153, 191, 0.34);
+    border-left-color: rgba(121, 153, 191, 0.34);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.settings-window {
+    width: 540px;
+}
+
+.settings-category-navigation {
+    height: 48px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    flex-direction: row;
+    background-color: rgba(13, 20, 30, 0.96);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(122, 156, 194, 0.18);
+}
+
+.settings-category-button {
+    flex-grow: 1;
+    margin-left: 3px;
+    margin-right: 3px;
+    color: rgb(153, 174, 198);
+    background-color: rgba(124, 157, 194, 0.08);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgba(140, 175, 214, 0.18);
+    border-right-color: rgba(140, 175, 214, 0.18);
+    border-bottom-color: rgba(140, 175, 214, 0.18);
+    border-left-color: rgba(140, 175, 214, 0.18);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+.settings-category-button:hover {
+    color: white;
+    background-color: rgba(78, 162, 222, 0.22);
+}
+
+.settings-category-button-active,
+.settings-category-button-active:hover {
+    color: white;
+    background-color: rgb(30, 119, 180);
+    border-top-color: rgb(70, 174, 240);
+    border-right-color: rgb(70, 174, 240);
+    border-bottom-color: rgb(70, 174, 240);
+    border-left-color: rgb(70, 174, 240);
+}
+
+.settings-category-content {
+    flex-grow: 1;
+}
+
+.settings-persistence-section {
+    margin-top: 4px;
+    border-top-color: rgba(70, 174, 240, 0.34);
+    border-right-color: rgba(70, 174, 240, 0.34);
+    border-bottom-color: rgba(70, 174, 240, 0.34);
+    border-left-color: rgba(70, 174, 240, 0.34);
+}
+
+.immersive-launcher {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    height: 38px;
+    padding-left: 18px;
+    padding-right: 18px;
+    color: rgb(232, 244, 255);
+    background-color: rgba(18, 30, 46, 0.96);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgb(71, 172, 255);
+    border-right-color: rgb(71, 172, 255);
+    border-bottom-color: rgb(71, 172, 255);
+    border-left-color: rgb(71, 172, 255);
+    border-top-left-radius: 19px;
+    border-top-right-radius: 19px;
+    border-bottom-left-radius: 19px;
+    border-bottom-right-radius: 19px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+.immersive-launcher:hover {
+    background-color: rgb(31, 104, 158);
+}
+
+.immersive-header {
+    min-height: 76px;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 14px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(122, 156, 194, 0.22);
+    background-color: rgba(20, 29, 42, 0.86);
+}
+
+.immersive-title-group {
+    flex-grow: 1;
+}
+
+#immersive-title {
+    color: rgb(246, 249, 255);
+    font-size: 17px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+#immersive-subtitle {
+    margin-top: 3px;
+    color: rgb(130, 153, 179);
+    font-size: 12px;
+}
+
+.immersive-close {
+    width: 38px;
+    height: 38px;
+    margin-left: 12px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 4px;
+    color: rgb(197, 211, 226);
+    background-color: rgba(255, 255, 255, 0.04);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-top-left-radius: 19px;
+    border-top-right-radius: 19px;
+    border-bottom-left-radius: 19px;
+    border-bottom-right-radius: 19px;
+    font-size: 25px;
+}
+
+.immersive-close:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.immersive-scroll {
+    flex-grow: 1;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+.immersive-section {
+    margin-bottom: 12px;
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    background-color: rgba(255, 255, 255, 0.035);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgba(152, 178, 207, 0.12);
+    border-right-color: rgba(152, 178, 207, 0.12);
+    border-bottom-color: rgba(152, 178, 207, 0.12);
+    border-left-color: rgba(152, 178, 207, 0.12);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.immersive-section-heading {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#immersive-section-title {
+    color: rgb(81, 181, 255);
+    font-size: 12px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+#immersive-section-note {
+    flex-grow: 1;
+    margin-left: 9px;
+    color: rgb(105, 126, 151);
+    font-size: 11px;
+    -unity-text-align: middle-right;
+}
+
+.immersive-row {
+    flex-direction: row;
+    margin-left: -4px;
+    margin-right: -4px;
+}
+
+.immersive-field {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    min-height: 28px;
+}
+
+.immersive-field > .unity-base-field__label {
+    color: rgb(164, 180, 199);
+    min-width: 142px;
+}
+
+.immersive-field > .unity-base-field__input {
+    color: rgb(234, 240, 247);
+    background-color: rgba(0, 0, 0, 0.28);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+/* SliderInt creates a nested IntegerField when showInputField is enabled.
+   Target that input explicitly so the runtime theme can't make it white. */
+.immersive-field .unity-integer-field,
+.immersive-field .unity-integer-field > .unity-base-field__input,
+.immersive-field .unity-base-text-field__input,
+.immersive-field #unity-text-input {
+    color: rgb(238, 244, 251);
+    background-color: rgb(20, 29, 42);
+    border-top-color: rgba(120, 163, 202, 0.34);
+    border-right-color: rgba(120, 163, 202, 0.34);
+    border-bottom-color: rgba(120, 163, 202, 0.34);
+    border-left-color: rgba(120, 163, 202, 0.34);
+}
+
+.immersive-field .unity-base-slider__tracker {
+    background-color: rgb(24, 35, 50);
+    border-top-color: rgba(120, 163, 202, 0.24);
+    border-right-color: rgba(120, 163, 202, 0.24);
+    border-bottom-color: rgba(120, 163, 202, 0.24);
+    border-left-color: rgba(120, 163, 202, 0.24);
+}
+
+.immersive-field .unity-base-slider__fill {
+    background-color: rgb(49, 157, 224);
+}
+
+.immersive-field .unity-base-slider__dragger {
+    background-color: rgb(205, 237, 255);
+    border-top-color: rgb(49, 157, 224);
+    border-right-color: rgb(49, 157, 224);
+    border-bottom-color: rgb(49, 157, 224);
+    border-left-color: rgb(49, 157, 224);
+}
+
+.immersive-compact-field {
+    flex-grow: 1;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.immersive-compact-field > .unity-base-field__label {
+    min-width: 42px;
+}
+
+.immersive-inline-label {
+    margin-top: 8px;
+    margin-bottom: 1px;
+    color: rgb(133, 151, 172);
+    font-size: 11px;
+}
+
+.immersive-toggle-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-left: -3px;
+    margin-right: -3px;
+}
+
+.immersive-toggle {
+    position: relative;
+    width: 32%;
+    min-width: 116px;
+    height: 38px;
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding-left: 11px;
+    padding-right: 48px;
+    color: rgb(203, 214, 227);
+    background-color: rgb(21, 30, 43);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgba(123, 153, 185, 0.26);
+    border-right-color: rgba(123, 153, 185, 0.26);
+    border-bottom-color: rgba(123, 153, 185, 0.26);
+    border-left-color: rgba(123, 153, 185, 0.26);
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    transition-duration: 0.12s;
+}
+
+.immersive-toggle:hover {
+    background-color: rgb(28, 42, 59);
+    border-top-color: rgba(93, 184, 242, 0.6);
+    border-right-color: rgba(93, 184, 242, 0.6);
+    border-bottom-color: rgba(93, 184, 242, 0.6);
+    border-left-color: rgba(93, 184, 242, 0.6);
+}
+
+.immersive-toggle:checked,
+.immersive-toggle:checked:hover,
+.immersive-toggle:checked:active {
+    color: white;
+    background-color: rgb(25, 103, 154);
+    border-top-color: rgb(74, 185, 247);
+    border-right-color: rgb(74, 185, 247);
+    border-bottom-color: rgb(74, 185, 247);
+    border-left-color: rgb(74, 185, 247);
+}
+
+.immersive-toggle:active {
+    background-color: rgb(36, 59, 80);
+}
+
+.immersive-toggle > .unity-toggle__input {
+    flex-grow: 1;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+.immersive-toggle .unity-toggle__checkmark {
+    display: none;
+}
+
+.immersive-toggle .unity-toggle__text {
+    color: rgb(193, 208, 224);
+    -unity-font-style: bold;
+}
+
+.immersive-toggle:checked .unity-toggle__text {
+    color: white;
+}
+
+.immersive-toggle-state {
+    position: absolute;
+    right: 8px;
+    top: 9px;
+    width: 32px;
+    height: 20px;
+    padding-top: 2px;
+    color: rgb(115, 134, 155);
+    background-color: rgba(0, 0, 0, 0.28);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    font-size: 9px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.immersive-toggle:checked > .immersive-toggle-state {
+    color: rgb(224, 249, 255);
+    background-color: rgb(31, 174, 218);
+}
+
+.immersive-toggle-wide {
+    width: 100%;
+    min-width: 100%;
+}
+
+.immersive-texture-summary {
+    margin-top: 9px;
+    padding-top: 8px;
+    border-top-width: 1px;
+    border-top-color: rgba(140, 169, 199, 0.12);
+    color: rgb(112, 193, 161);
+    font-size: 11px;
+    white-space: normal;
+}
+
+.immersive-hint {
+    margin-top: 5px;
+    color: rgb(112, 193, 161);
+    font-size: 11px;
+}
+
+.immersive-warning {
+    color: rgb(239, 178, 93);
+}
+
+.immersive-path {
+    margin-bottom: 10px;
+    padding-left: 9px;
+    padding-right: 9px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    color: rgb(137, 157, 181);
+    background-color: rgba(0, 0, 0, 0.24);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    font-size: 10px;
+    white-space: normal;
+}
+
+.immersive-button-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-left: -3px;
+    margin-right: -3px;
+    margin-bottom: 6px;
+}
+
+.immersive-button,
+.immersive-button-primary {
+    min-height: 32px;
+    flex-grow: 1;
+    margin-left: 3px;
+    margin-right: 3px;
+    color: rgb(211, 223, 236);
+    background-color: rgba(124, 157, 194, 0.12);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgba(140, 175, 214, 0.28);
+    border-right-color: rgba(140, 175, 214, 0.28);
+    border-bottom-color: rgba(140, 175, 214, 0.28);
+    border-left-color: rgba(140, 175, 214, 0.28);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.immersive-button:hover,
+.immersive-button-primary:hover {
+    background-color: rgba(78, 162, 222, 0.3);
+}
+
+.immersive-button-primary {
+    color: white;
+    background-color: rgb(30, 119, 180);
+    border-top-color: rgb(70, 174, 240);
+    border-right-color: rgb(70, 174, 240);
+    border-bottom-color: rgb(70, 174, 240);
+    border-left-color: rgb(70, 174, 240);
+}
+
+.immersive-status {
+    min-height: 38px;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 10px;
+    padding-bottom: 8px;
+    color: rgb(126, 191, 164);
+    background-color: rgba(5, 10, 17, 0.92);
+    border-top-width: 1px;
+    border-top-color: rgba(122, 156, 194, 0.18);
+    font-size: 11px;
+    white-space: normal;
+}
+
+.immersive-status-error {
+    color: rgb(245, 143, 126);
+}

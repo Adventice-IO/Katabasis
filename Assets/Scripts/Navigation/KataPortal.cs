@@ -102,11 +102,8 @@ public class KataPortal : MonoBehaviour
         else
         {
             bool showInSalle = mainController.isTunnelACurrentOut(tunnel) && mainController.timeSinceArrived > timeBeforeReveal;
-
-
-
             bool showInTunnel = isInTunnel;
-            if(isInTunnel)
+            if (isInTunnel)
             {
                 if (isReverse)
                 {
@@ -117,31 +114,40 @@ public class KataPortal : MonoBehaviour
                     showInTunnel = !mainController.isRunningReversed() && mainController.trackPosition < .5f;
                 }
             }
-            
-            shouldShow = mainController.gameState == MainController.GameState.Playing && (showInTunnel || showInSalle);
-            if (showInSalle)
-            {
-                if (mainController.comingFromTunnel == tunnel)
-                {
-                    shouldShow = false;
-                }
-                else
-                {
-                    foreach (Salle s in blacklist)
-                    {
-                        if (mainController.hasVisitedSalle(s))
-                        {
-                            shouldShow = false;
-                            break;
-                        }
-                    }
 
-                    //Do not show if the destination salle has already been visited
-                    //Salle destSalle = isReverse ? tunnel.salleDepart : tunnel.salleArrivee;
-                    //if (mainController.hasVisitedSalle(destSalle))
-                    //{
-                    //    shouldShow = false;
-                    //}
+            if (mainController.infinitePlaying)
+            {
+                shouldShow = mainController.gameState == MainController.GameState.Playing
+                    && IsEnabledForInfinitePlaying()
+                    && (showInTunnel || showInSalle);
+            }
+            else
+            {
+                shouldShow = mainController.gameState == MainController.GameState.Playing && (showInTunnel || showInSalle);
+                if (showInSalle)
+                {
+                    if (mainController.comingFromTunnel == tunnel)
+                    {
+                        shouldShow = false;
+                    }
+                    else
+                    {
+                        foreach (Salle s in blacklist)
+                        {
+                            if (mainController.hasVisitedSalle(s))
+                            {
+                                shouldShow = false;
+                                break;
+                            }
+                        }
+
+                        //Do not show if the destination salle has already been visited
+                        //Salle destSalle = isReverse ? tunnel.salleDepart : tunnel.salleArrivee;
+                        //if (mainController.hasVisitedSalle(destSalle))
+                        //{
+                        //    shouldShow = false;
+                        //}
+                    }
                 }
             }
         }
@@ -191,6 +197,30 @@ public class KataPortal : MonoBehaviour
             }
         }
 
+    }
+
+    bool IsEnabledForInfinitePlaying()
+    {
+        if (isReverse && IsTunnelBetween("A", "B"))
+        {
+            return false;
+        }
+
+        if (isReverse && IsTunnelBetween("B", "C"))
+        {
+            return false;
+        }
+
+        Salle destination = isReverse ? tunnel.salleDepart : tunnel.salleArrivee;
+        return !mainController.hideExitPortalsInInfinitePlaying || destination == null || !destination.isExit;
+    }
+
+    bool IsTunnelBetween(string departureName, string arrivalName)
+    {
+        return tunnel.salleDepart != null
+            && tunnel.salleArrivee != null
+            && string.Equals(tunnel.salleDepart.name.Trim(), departureName, System.StringComparison.OrdinalIgnoreCase)
+            && string.Equals(tunnel.salleArrivee.name.Trim(), arrivalName, System.StringComparison.OrdinalIgnoreCase);
     }
 
     public void show(bool val)

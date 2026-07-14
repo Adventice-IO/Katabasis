@@ -58,11 +58,26 @@ public class Tunnel : MonoBehaviour
 
     KataPortal portal;
     KataPortal portalReverse;
+    Transform portalReverseRoot;
+    bool portalReverseInitiallyActive;
+    bool hasCapturedPortalReverseInitialState;
+    bool infinitePortalOverrideApplied;
 
 
     List<CheckpointHandle> checkpointHandles = new List<CheckpointHandle>();
 
-    public bool canReverse { get { return portalReverse != null; } }
+    public bool canReverse
+    {
+        get
+        {
+            if (mainController != null && mainController.infinitePlaying)
+            {
+                return portalReverse != null && !IsInfiniteReversePortalException();
+            }
+
+            return portalReverse != null && portalReverseRoot != null && portalReverseRoot.gameObject.activeSelf;
+        }
+    }
 
     Spline spline
     {
@@ -115,7 +130,14 @@ public class Tunnel : MonoBehaviour
 #endif
 
         portal = transform.Find("Portal")?.GetComponentInChildren<KataPortal>();
-        portalReverse = transform.Find("Portal Retour")?.GetComponentInChildren<KataPortal>();
+        portalReverseRoot = transform.Find("Portal Retour");
+        portalReverse = portalReverseRoot?.GetComponentInChildren<KataPortal>(true);
+        if (!hasCapturedPortalReverseInitialState)
+        {
+            portalReverseInitiallyActive = portalReverseRoot != null && portalReverseRoot.gameObject.activeSelf;
+            hasCapturedPortalReverseInitialState = true;
+        }
+        infinitePortalOverrideApplied = false;
 
         if (portal != null)
         {
@@ -126,13 +148,9 @@ public class Tunnel : MonoBehaviour
             }
         }
 
-        if (portalReverse != null)
+        if (portalReverse != null && portalReverseInitiallyActive)
         {
-            portalReverse.isReverse = true;
-            if (portalReverse.transform.parent.localPosition == Vector3.zero)
-            {
-                portalReverse.transform.parent.position = getPositionOnTrack(0.98f);
-            }
+            ConfigureReversePortal();
         }
 
     }
@@ -184,6 +202,8 @@ public class Tunnel : MonoBehaviour
     void Update()
     {
 
+        UpdateInfiniteReversePortalState();
+
         // if (spline.Count != handles.Count -2)
         // {
         //     updateHandles();
@@ -217,7 +237,7 @@ public class Tunnel : MonoBehaviour
             portal.transform.Rotate(Vector3.up, 180); // Face the opposite direction since this is the reverse portal
         }
 
-        if (portalReverse != null && salleArrivee != null)
+        if (canReverse && portalReverse != null && salleArrivee != null)
         {
             Vector3 arriveeLookAt = salleArrivee.origin.position;
             arriveeLookAt.y = portalReverse.transform.parent.position.y;
@@ -225,6 +245,66 @@ public class Tunnel : MonoBehaviour
             portalReverse.transform.LookAt(salleArrivee.origin.position);
             portalReverse.transform.Rotate(Vector3.up, 180); // Face the opposite direction since this is the reverse portal
         }
+    }
+
+    void UpdateInfiniteReversePortalState()
+    {
+        if (!Application.isPlaying || portalReverseRoot == null)
+        {
+            return;
+        }
+
+        if (mainController == null)
+        {
+            mainController = GameObject.FindAnyObjectByType<MainController>();
+        }
+
+        bool infinitePlaying = mainController != null && mainController.infinitePlaying;
+        if (infinitePlaying)
+        {
+            bool shouldEnable = !IsInfiniteReversePortalException();
+            if (!infinitePortalOverrideApplied || portalReverseRoot.gameObject.activeSelf != shouldEnable)
+            {
+                portalReverseRoot.gameObject.SetActive(shouldEnable);
+            }
+            if (shouldEnable)
+            {
+                ConfigureReversePortal();
+            }
+            infinitePortalOverrideApplied = true;
+        }
+        else if (infinitePortalOverrideApplied)
+        {
+            portalReverseRoot.gameObject.SetActive(portalReverseInitiallyActive);
+            infinitePortalOverrideApplied = false;
+        }
+    }
+
+    void ConfigureReversePortal()
+    {
+        if (portalReverse == null)
+        {
+            return;
+        }
+
+        portalReverse.isReverse = true;
+        if (portalReverse.transform.parent.localPosition == Vector3.zero)
+        {
+            portalReverse.transform.parent.position = getPositionOnTrack(0.98f);
+        }
+    }
+
+    bool IsInfiniteReversePortalException()
+    {
+        return IsTunnelBetween("A", "B") || IsTunnelBetween("B", "C");
+    }
+
+    bool IsTunnelBetween(string departureName, string arrivalName)
+    {
+        return salleDepart != null
+            && salleArrivee != null
+            && string.Equals(salleDepart.name.Trim(), departureName, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(salleArrivee.name.Trim(), arrivalName, StringComparison.OrdinalIgnoreCase);
     }
 
 

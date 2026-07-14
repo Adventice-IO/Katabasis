@@ -45,6 +45,12 @@ public class MainController : MonoBehaviour
     GameState lastGameState;
     float timeAtStateChange;
     public string language = "en";
+    [Tooltip("Keeps the experience running continuously without returning to the game menu.")]
+    public bool infinitePlaying;
+    [Tooltip("In infinite playing, hides every portal whose destination is an exit salle.")]
+    public bool hideExitPortalsInInfinitePlaying;
+    [Tooltip("In infinite playing, prepends the person's intro every time an interview is selected. When disabled, intros are always skipped.")]
+    public bool playInterviewIntrosInInfinitePlaying = true;
     public Salle salle;
     public Tunnel tunnel;
 
@@ -453,6 +459,11 @@ public class MainController : MonoBehaviour
         {
             HandleHeadsetPresence();
             UpdateRunStartDiagnostics();
+
+            if (infinitePlaying && gameState == GameState.Menu)
+            {
+                gameState = GameState.Intro;
+            }
 
             if (gameState != lastGameState)
             {
@@ -1026,7 +1037,7 @@ public class MainController : MonoBehaviour
     public void ResetGame()
     {
         visitedSalles.Clear();
-        GetInterviewManager()?.ResetGame();
+        GetInterviewManager()?.ResetGame(infinitePlaying);
         tunnel?.audioEventSO?.evt.Stop(gameObject);
         FindAnyObjectByType<Subtitles>()?.stop();
 
@@ -1050,7 +1061,7 @@ public class MainController : MonoBehaviour
         _lastTunnelAudioSO = null;
         splineContainer = null;
         isReversed = false;
-        gameState = GameState.Menu;
+        gameState = infinitePlaying ? GameState.Intro : GameState.Menu;
         if (salle != null) salle.setActive(false);
         salle = null;
         pointCloudViewDistanceMultiplier = 0f;
@@ -1252,7 +1263,7 @@ public class MainController : MonoBehaviour
     public void Reset()
     {
         visitedSalles = new List<Salle>();
-        GetInterviewManager()?.ResetGame();
+        GetInterviewManager()?.ResetGame(infinitePlaying);
         TeleportToSalle(initialSalle);
         ResetPosition();
     }

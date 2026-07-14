@@ -136,6 +136,11 @@ public class KataTransformer : MonoBehaviour
         Collider collider = GetComponent<Collider>();
 
 #if UNITY_EDITOR
+        if (mainController == null)
+        {
+            mainController = GameObject.FindAnyObjectByType<MainController>();
+        }
+        
         bool editMode = mainController.editMode;
         bool finalActive = editMode && !forceDisabled;
 

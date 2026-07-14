@@ -26,10 +26,12 @@ public class Salle : MonoBehaviour
 
     public Interview[] interviews;
     bool suppressInterviewEndCascade;
+    MainController mainController;
 
     private void Start()
     {
         origin = transform.Find("Origin");
+        mainController = FindAnyObjectByType<MainController>();
         interviews = GetComponentsInChildren<Interview>(true);
         foreach (var i in interviews)
         {
@@ -102,6 +104,16 @@ public class Salle : MonoBehaviour
     public void onInterviewEnd(Interview interview)
     {
         if (suppressInterviewEndCascade)
+        {
+            return;
+        }
+
+        if (mainController == null)
+        {
+            mainController = FindAnyObjectByType<MainController>();
+        }
+
+        if (mainController != null && mainController.infinitePlaying)
         {
             return;
         }

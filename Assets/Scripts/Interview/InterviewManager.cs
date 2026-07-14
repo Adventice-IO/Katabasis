@@ -16,6 +16,8 @@ public class InterviewManager : MonoBehaviour
         public Salle salle;
         public Interview interviewSlot;
         public string person;
+        public bool hasAssignedInterview;
+        public InterviewData assignedInterview;
     }
 
     public struct ResolvedInterviewPlayback
@@ -64,6 +66,8 @@ public class InterviewManager : MonoBehaviour
     readonly Dictionary<Interview, InterviewData[]> resolvedPlaybackBySlot = new Dictionary<Interview, InterviewData[]>();
     readonly HashSet<Interview> consumedSlots = new HashSet<Interview>();
     readonly HashSet<string> startedIntroPersons = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    readonly List<InterviewData> infiniteInterviewSequence = new List<InterviewData>();
+    int infiniteInterviewSequenceIndex;
     Interview activePlayingSlot;
     Salle lastAssignedSalle;
     Salle preparedSalle;
@@ -147,14 +151,17 @@ public class InterviewManager : MonoBehaviour
         }
     }
 
-    public void ResetGame()
+    public void ResetGame(bool preserveInfiniteSequence = false)
     {
         interviewStopAllEvent?.evt.Post(gameObject);
 
         for (int i = 0; i < interviewDataList.Count; i++)
         {
             var data = interviewDataList[i];
-            data.visited = false;
+            if (!preserveInfiniteSequence)
+            {
+                data.visited = false;
+            }
             data.proposed = false;
             interviewDataList[i] = data;
         }
@@ -183,13 +190,22 @@ public class InterviewManager : MonoBehaviour
         StopLoadAssignmentsRoutine();
         ResetInterviewLeaveRtpc();
         lastActiveInterviewDebug = null;
-        assignmentRandom = new System.Random(Environment.TickCount);
+        if (!preserveInfiniteSequence)
+        {
+            infiniteInterviewSequence.Clear();
+            infiniteInterviewSequenceIndex = 0;
+            assignmentRandom = new System.Random(Environment.TickCount);
+        }
+        else if (assignmentRandom == null)
+        {
+            assignmentRandom = new System.Random(Environment.TickCount);
+        }
         RebuildPersonStats();
     }
 
     public void ClearVisits()
     {
-        ResetGame();
+        ResetGame(false);
     }
 
     public bool MarkInterviewVisited(string interviewId)
@@ -854,12 +870,42 @@ public class InterviewManager : MonoBehaviour
 
     InterviewData[] GetInterviewsToPlayForAssignment(RoomPersonAssignment assignment)
     {
+        if (IsInfinitePlaying() && assignment.hasAssignedInterview)
+        {
+            List<InterviewData> infiniteResult = new List<InterviewData>();
+            if (mainController.playInterviewIntrosInInfinitePlaying)
+            {
+                InterviewData? intro = GetIntroForPerson(assignment.assignedInterview.person);
+                if (intro.HasValue && !string.IsNullOrWhiteSpace(intro.Value.depthkitPath))
+                {
+                    infiniteResult.Add(intro.Value);
+                }
+            }
+
+            infiniteResult.Add(assignment.assignedInterview);
+            return infiniteResult.ToArray();
+        }
+
         int salleLevel = assignment.salle != null ? assignment.salle.niveau : 0;
         return GetInterviewsToPlayForPerson(assignment.person, salleLevel, playedPersonsSinceAssignment, playedThemesHistory);
     }
 
     InterviewData? GetPreviewInterviewForAssignment(RoomPersonAssignment assignment)
     {
+        if (IsInfinitePlaying() && assignment.hasAssignedInterview)
+        {
+            if (mainController.playInterviewIntrosInInfinitePlaying)
+            {
+                InterviewData? intro = GetIntroForPerson(assignment.assignedInterview.person);
+                if (intro.HasValue && !string.IsNullOrWhiteSpace(intro.Value.depthkitPath))
+                {
+                    return intro.Value;
+                }
+            }
+
+            return assignment.assignedInterview;
+        }
+
         PersonInterviewStats? stats = GetPersonStats(assignment.person);
         if (!stats.HasValue)
         {
@@ -882,6 +928,21 @@ public class InterviewManager : MonoBehaviour
         }
 
         return bestInterview.Value;
+    }
+
+    public bool ShouldReplayIntroForEveryInfiniteInterview()
+    {
+        return IsInfinitePlaying() && mainController.playInterviewIntrosInInfinitePlaying;
+    }
+
+    bool IsInfinitePlaying()
+    {
+        if (mainController == null)
+        {
+            mainController = GameObject.FindAnyObjectByType<MainController>();
+        }
+
+        return Application.isPlaying && mainController != null && mainController.infinitePlaying;
     }
 
     InterviewData[] GetInterviewsToPlayForPerson(string person, int? salleLevel, HashSet<string> playedPersons, List<string> themeHistory)
@@ -1057,6 +1118,8 @@ public class InterviewManager : MonoBehaviour
     {
         interviewDataList.Clear();
         personStatsList.Clear();
+        infiniteInterviewSequence.Clear();
+        infiniteInterviewSequenceIndex = 0;
 
 
         string[] lines;
@@ -1947,6 +2010,11 @@ public class InterviewManager : MonoBehaviour
 
     List<RoomPersonAssignment> BuildAssignmentsForSalle(Salle currentSalle, HashSet<Interview> consumedInterviewSlots)
     {
+        if (IsInfinitePlaying())
+        {
+            return BuildInfiniteAssignmentsForSalle(currentSalle, consumedInterviewSlots);
+        }
+
         List<RoomPersonAssignment> assignments = new List<RoomPersonAssignment>();
         IReadOnlyList<Interview> slots = GetInterviewSlotsForSalle(currentSalle);
         if (slots == null || slots.Count == 0)
@@ -1983,6 +2051,90 @@ public class InterviewManager : MonoBehaviour
         }
 
         return assignments;
+    }
+
+    List<RoomPersonAssignment> BuildInfiniteAssignmentsForSalle(Salle currentSalle, HashSet<Interview> consumedInterviewSlots)
+    {
+        List<RoomPersonAssignment> assignments = new List<RoomPersonAssignment>();
+        IReadOnlyList<Interview> slots = GetInterviewSlotsForSalle(currentSalle);
+        if (slots == null || slots.Count == 0)
+        {
+            return assignments;
+        }
+
+        List<Interview> availableSlots = slots
+            .Where(slot => slot != null)
+            .Where(slot => consumedInterviewSlots == null || !consumedInterviewSlots.Contains(slot))
+            .ToList();
+
+        for (int i = 0; i < availableSlots.Count; i++)
+        {
+            InterviewData? nextInterview = GetNextInfiniteInterview();
+            if (!nextInterview.HasValue)
+            {
+                break;
+            }
+
+            InterviewData assignedInterview = nextInterview.Value;
+            MarkInterviewAsProposed(assignedInterview);
+            assignments.Add(new RoomPersonAssignment
+            {
+                salle = currentSalle,
+                interviewSlot = availableSlots[i],
+                person = assignedInterview.person,
+                hasAssignedInterview = true,
+                assignedInterview = assignedInterview
+            });
+        }
+
+        return assignments;
+    }
+
+    InterviewData? GetNextInfiniteInterview()
+    {
+        EnsureInfiniteInterviewSequence();
+        if (infiniteInterviewSequence.Count == 0)
+        {
+            return null;
+        }
+
+        if (infiniteInterviewSequenceIndex >= infiniteInterviewSequence.Count)
+        {
+            infiniteInterviewSequenceIndex = 0;
+        }
+
+        InterviewData result = infiniteInterviewSequence[infiniteInterviewSequenceIndex];
+        infiniteInterviewSequenceIndex = (infiniteInterviewSequenceIndex + 1) % infiniteInterviewSequence.Count;
+        return result;
+    }
+
+    void EnsureInfiniteInterviewSequence()
+    {
+        if (infiniteInterviewSequence.Count > 0)
+        {
+            return;
+        }
+
+        if (assignmentRandom == null)
+        {
+            assignmentRandom = new System.Random(Environment.TickCount);
+        }
+
+        infiniteInterviewSequence.AddRange(interviewDataList
+            .Where(data => !data.isIntro)
+            .Where(data => !IsInterviewIgnored(data))
+            .Where(data => !string.IsNullOrWhiteSpace(data.depthkitPath)));
+
+        for (int i = infiniteInterviewSequence.Count - 1; i > 0; i--)
+        {
+            int swapIndex = assignmentRandom.Next(i + 1);
+            InterviewData current = infiniteInterviewSequence[i];
+            infiniteInterviewSequence[i] = infiniteInterviewSequence[swapIndex];
+            infiniteInterviewSequence[swapIndex] = current;
+        }
+
+        infiniteInterviewSequenceIndex = 0;
+        Debug.Log("Built infinite interview sequence with " + infiniteInterviewSequence.Count + " interview(s).", this);
     }
 
     IReadOnlyList<Interview> GetInterviewSlotsForSalle(Salle salle)
