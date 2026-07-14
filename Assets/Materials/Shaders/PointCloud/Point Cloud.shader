@@ -10,6 +10,13 @@
         _BoxMax("Box Max", Vector) = (1,1,1,0)
         _BoxFeather("Box Feather", float) = 1
         _ColorKey ("Purple Key Color", Color) = (0, 1, 0, 1)
+
+         _Focal("Focal", float) = 30
+         _Focalwidth("Focal Width", float) = 20
+         _Threshold("Threshold", float) = 0.5
+         _EnableFocalMode("Enable Focal Mode", float) = 1
+        _EnableBlackAndWhite("Enable Black and White", float) = 0
+        _BlackAndWhiteThreshold("Black and White Threshold", float) = 0.5
     }
 
     SubShader
@@ -66,10 +73,21 @@
             float3 _BoxMax;
             float _BoxFeather;
 
+            // KataDraw parameters
+            int _EnableFocalMode;
+            float _Focal;
+            float _Focalwidth;
+            float _Threshold;
+            
+            int _EnableBlackAndWhite;
+            float _BlackAndWhiteThreshold;
+
             // Buffers
             StructuredBuffer<OrientedMaskBox> _MaskBoxes;
             int _MaskCount;
             float4 _ColorKey;
+
+        
 
             varying vert(attribute v)
             {
@@ -77,6 +95,8 @@
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+                
+ 
                 // 1. Quick Global Exit
                 float globalAlpha = _Alpha * _Reveal;
                 if (globalAlpha <= 0.0) {
@@ -91,6 +111,19 @@
                 // float cylinder = distance(_WorldSpaceCameraPos.xz, worldPos.xz);
                 // cylinder = min(cylinder - 1.0, -(abs(_WorldSpaceCameraPos.y-worldPos.y) - 0.5));
                 
+                float focalFade = 1.0;
+                //cutting out dots that are outside the "focal"
+                if(_EnableFocalMode > 0){
+					// Calculate the distance from the camera to the world position
+					float distToFocal = d - _Focal;
+
+					// Calculate the focal fading using the saturate function
+					focalFade = saturate((_Focalwidth - abs(distToFocal)) / _Focalwidth);
+                    focalFade = smoothstep(0.2, 0.8, focalFade);
+
+				}
+
+
                 // 3. Distance Cull/Fade
                 if (d > _MaxDistance) {
                     o.position = float4(0,0,0,0);
@@ -158,7 +191,7 @@
                 float boxFeatherAlpha = saturate(minDist / max(0.001, _BoxFeather * length(boxSize)));
 
                 // 5. Final Visibility Check
-                float visibility = globalAlpha * distFade * closeFade * maskAlpha * boxFeatherAlpha;
+                float visibility = globalAlpha * distFade * closeFade * maskAlpha * boxFeatherAlpha * focalFade;
 
                 // Move heavy clip space math to AFTER visibility check
                 // This saves massive overhead on culled points
@@ -192,10 +225,20 @@
                 // o.color = v.color;
                 // o.color = 1 * distFade;;
                 
+                if(_EnableBlackAndWhite > 0){
+                    float brightness = dot(o.color.rgb, float3(0.299, 0.587, 0.114));
+                    // brightness *= o.color.a;
+                    if (brightness < _BlackAndWhiteThreshold) {
+                        o.color = float4(0, 0, 0, 1.0); // Black
+                    } else {
+                        o.color = float4(1, 1, 1, 1.0); // White
+                    }
+                }
+
                 return o;
             }
 
-            fixed4 frag(varying i) : SV_Target
+            fixed4 frag(varying i) : SV_Target 
             {
                 // Simple circular point shape
                 float d = dot(i.uv, i.uv);
