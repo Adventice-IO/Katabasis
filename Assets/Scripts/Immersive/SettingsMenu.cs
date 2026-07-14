@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 [DisallowMultipleComponent]
 public sealed class SettingsMenu : MonoBehaviour
 {
-    public const int CurrentSettingsVersion = 3;
+    public const int CurrentSettingsVersion = 4;
 
     private const string PanelSettingsResource = "Immersive/ImmersivePanelSettings";
     private const string StyleSheetResource = "Immersive/ImmersiveRuntimePanel";
@@ -37,6 +37,8 @@ public sealed class SettingsMenu : MonoBehaviour
         public bool lockTilt;
         public float viewResetTimeout = 10f;
         public bool followPathOrientation;
+        public float followPathOrientationEntryBlendDuration = 3f;
+        public float followPathOrientationSmoothing = 0.35f;
     }
 
     [Serializable]
@@ -95,6 +97,8 @@ public sealed class SettingsMenu : MonoBehaviour
     private Toggle _lockPan;
     private Toggle _lockTilt;
     private Toggle _followPathOrientation;
+    private FloatField _followPathOrientationEntryBlendDuration;
+    private FloatField _followPathOrientationSmoothing;
     private Label _orbReadout;
 
     private FloatField _roomWidth;
@@ -424,6 +428,10 @@ public sealed class SettingsMenu : MonoBehaviour
         var orientation = CreateSection(content, "PATH ORIENTATION", "Rotate the rig along the tunnel tangent");
         _followPathOrientation = CreateToggle(orientation, "Follow path orientation");
         _followPathOrientation.AddToClassList("immersive-toggle-wide");
+        _followPathOrientationEntryBlendDuration =
+            CreateFloatField(orientation, "Tunnel entry blend (seconds)");
+        _followPathOrientationSmoothing =
+            CreateFloatField(orientation, "Continuous smoothing (seconds)");
 
         var reset = CreateSection(content, "VIEW RESET", "Zero disables the idle reset");
         _viewResetTimeout = CreateFloatField(reset, "Idle timeout (seconds)");
@@ -443,6 +451,8 @@ public sealed class SettingsMenu : MonoBehaviour
         RegisterLiveToggle(_lockPan);
         RegisterLiveToggle(_lockTilt);
         RegisterLiveToggle(_followPathOrientation);
+        RegisterLiveField(_followPathOrientationEntryBlendDuration);
+        RegisterLiveField(_followPathOrientationSmoothing);
         RegisterLiveField(_viewResetTimeout);
     }
 
@@ -768,6 +778,10 @@ public sealed class SettingsMenu : MonoBehaviour
             _orbController.LockTilt = _lockTilt.value;
             _orbController.ViewResetTimeout = NonNegative(_viewResetTimeout.value);
             _mainController.followPathOrientation = _followPathOrientation.value;
+            _mainController.followPathOrientationEntryBlendDuration =
+                NonNegative(_followPathOrientationEntryBlendDuration.value);
+            _mainController.followPathOrientationSmoothing =
+                NonNegative(_followPathOrientationSmoothing.value);
 
             var immersive = _immersiveController.CaptureConfiguration();
             immersive.roomWidth = _roomWidth.value;
@@ -843,6 +857,10 @@ public sealed class SettingsMenu : MonoBehaviour
         SetToggleWithoutNotify(_lockPan, _orbController.LockPan);
         SetToggleWithoutNotify(_lockTilt, _orbController.LockTilt);
         SetToggleWithoutNotify(_followPathOrientation, _mainController.followPathOrientation);
+        _followPathOrientationEntryBlendDuration.SetValueWithoutNotify(
+            _mainController.followPathOrientationEntryBlendDuration);
+        _followPathOrientationSmoothing.SetValueWithoutNotify(
+            _mainController.followPathOrientationSmoothing);
 
         RefreshImmersiveControls(_immersiveController.CaptureConfiguration());
         RefreshPointCloudRenderingControls(CapturePointCloudRenderingConfiguration());
@@ -1080,7 +1098,11 @@ public sealed class SettingsMenu : MonoBehaviour
                 lockPan = _orbController.LockPan,
                 lockTilt = _orbController.LockTilt,
                 viewResetTimeout = _orbController.ViewResetTimeout,
-                followPathOrientation = _mainController.followPathOrientation
+                followPathOrientation = _mainController.followPathOrientation,
+                followPathOrientationEntryBlendDuration =
+                    _mainController.followPathOrientationEntryBlendDuration,
+                followPathOrientationSmoothing =
+                    _mainController.followPathOrientationSmoothing
             },
             immersive = _immersiveController.CaptureConfiguration(),
             rendering = CapturePointCloudRenderingConfiguration(),
@@ -1098,6 +1120,12 @@ public sealed class SettingsMenu : MonoBehaviour
 
     private void ApplyConfiguration(UnifiedSettings configuration, bool requestAutosave)
     {
+        if (configuration.version < 4)
+        {
+            configuration.orb.followPathOrientationEntryBlendDuration = 3f;
+            configuration.orb.followPathOrientationSmoothing = 0.35f;
+        }
+
         if (configuration.version < 3 || configuration.rendering == null)
         {
             configuration.rendering = CapturePointCloudRenderingConfiguration();
@@ -1119,6 +1147,10 @@ public sealed class SettingsMenu : MonoBehaviour
             _orbController.LockTilt = configuration.orb.lockTilt;
             _orbController.ViewResetTimeout = configuration.orb.viewResetTimeout;
             _mainController.followPathOrientation = configuration.orb.followPathOrientation;
+            _mainController.followPathOrientationEntryBlendDuration =
+                configuration.orb.followPathOrientationEntryBlendDuration;
+            _mainController.followPathOrientationSmoothing =
+                configuration.orb.followPathOrientationSmoothing;
 
             _immersiveController.ApplyConfiguration(configuration.immersive, false);
             _pointCloudConfiguration?.ApplyConfiguration(configuration.rendering);
@@ -1156,6 +1188,10 @@ public sealed class SettingsMenu : MonoBehaviour
         configuration.orb.panSmoothing = NonNegative(configuration.orb.panSmoothing);
         configuration.orb.tiltSmoothing = NonNegative(configuration.orb.tiltSmoothing);
         configuration.orb.viewResetTimeout = NonNegative(configuration.orb.viewResetTimeout);
+        configuration.orb.followPathOrientationEntryBlendDuration =
+            NonNegative(configuration.orb.followPathOrientationEntryBlendDuration);
+        configuration.orb.followPathOrientationSmoothing =
+            NonNegative(configuration.orb.followPathOrientationSmoothing);
         configuration.rendering.pointSize = Mathf.Max(0.1f, NonNegative(configuration.rendering.pointSize));
         configuration.rendering.alpha = Mathf.Clamp01(NonNegative(configuration.rendering.alpha));
         configuration.rendering.maxViewDistance = NonNegative(configuration.rendering.maxViewDistance);

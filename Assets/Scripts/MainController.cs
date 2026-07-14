@@ -100,6 +100,12 @@ public class MainController : MonoBehaviour
     public bool freeMotion;
     public bool followPathOrientation;
 
+    [Header("Path Orientation")]
+    [Tooltip("Seconds used to blend from the current immersive view to full path orientation when entering a tunnel.")]
+    [Min(0f)] public float followPathOrientationEntryBlendDuration = 3f;
+    [Tooltip("Seconds used to smooth path orientation changes after the entry blend. Set to zero for an immediate response.")]
+    [Min(0f)] public float followPathOrientationSmoothing = 0.35f;
+
     public ContinuousMoveProvider moveProvider;
     [SerializeField] private InputActionProperty verticalMoveAction;
     [SerializeField] private InputActionProperty joystickAction;
@@ -193,6 +199,12 @@ public class MainController : MonoBehaviour
     bool hasLastObservedRigPose;
     string pendingRigMotionReason;
     float nextRigMotionAttributionLogTime;
+    OrbController orbController;
+    VRExperienceManager vrExperienceManager;
+    Quaternion followPathOrientationEntryRotation;
+    float followPathOrientationEntryBlendStartTime;
+    bool followPathOrientationEntryBlendActive;
+    bool wasFollowingPathOrientation;
 
     private void Start()
     {
@@ -963,10 +975,11 @@ public class MainController : MonoBehaviour
             // }
 
             SetRigPosition(targetFinalPos, "Tick spline follow");
-            
-            if (animateRotation)
+
+            bool appliedFollowPathOrientation = ApplyFollowPathOrientation(actualTrackPosition, deltaTime);
+            if (!appliedFollowPathOrientation && animateRotation)
             {
-                Vector3 forward = splineContainer.EvaluateTangent(actualTrackPosition);
+                Vector3 forward = GetTravelDirection(actualTrackPosition);
                 Vector3 up = Vector3.up;
                 if (forward != Vector3.zero)
                 {
@@ -975,6 +988,97 @@ public class MainController : MonoBehaviour
             }
         }
 
+    }
+
+    Vector3 GetTravelDirection(float actualTrackPosition)
+    {
+        Vector3 forward = splineContainer.EvaluateTangent(actualTrackPosition);
+        return isReversed ? -forward : forward;
+    }
+
+    void BeginFollowPathOrientation(bool blendFromTunnelEntry)
+    {
+        followPathOrientationEntryRotation = transform.rotation;
+        followPathOrientationEntryBlendStartTime = Time.time;
+        followPathOrientationEntryBlendActive =
+            blendFromTunnelEntry && followPathOrientationEntryBlendDuration > 0f;
+        wasFollowingPathOrientation = followPathOrientation;
+    }
+
+    bool ApplyFollowPathOrientation(float actualTrackPosition, float deltaTime)
+    {
+        if (!isRunning || !followPathOrientation || splineContainer == null)
+        {
+            wasFollowingPathOrientation = false;
+            followPathOrientationEntryBlendActive = false;
+            return false;
+        }
+
+        if (!wasFollowingPathOrientation)
+        {
+            BeginFollowPathOrientation(false);
+        }
+
+        Vector3 forward = GetTravelDirection(actualTrackPosition);
+        if (forward == Vector3.zero)
+        {
+            return true;
+        }
+
+        Quaternion targetRotation = Quaternion.LookRotation(forward, Vector3.up);
+        if (followPathOrientationEntryBlendActive)
+        {
+            float duration = Mathf.Max(0.0001f, followPathOrientationEntryBlendDuration);
+            float entryBlend = Mathf.Clamp01(
+                (Time.time - followPathOrientationEntryBlendStartTime) / duration);
+            entryBlend = entryBlend * entryBlend * (3f - 2f * entryBlend);
+            targetRotation = Quaternion.Slerp(
+                followPathOrientationEntryRotation,
+                targetRotation,
+                entryBlend);
+            followPathOrientationEntryBlendActive = entryBlend < 1f;
+        }
+
+        float smoothing = Mathf.Max(0f, followPathOrientationSmoothing);
+        float rotationBlend = smoothing <= 0f
+            ? 1f
+            : 1f - Mathf.Exp(-Mathf.Max(0f, deltaTime) / smoothing);
+
+        SetRigRotation(
+            Quaternion.Slerp(transform.rotation, targetRotation, rotationBlend),
+            "Tick smoothed followPathOrientation");
+        return true;
+    }
+
+    void TransferImmersiveViewOffsetToRig()
+    {
+        if (!Application.isPlaying || !followPathOrientation)
+        {
+            return;
+        }
+
+        if (vrExperienceManager == null)
+        {
+            vrExperienceManager = GetComponent<VRExperienceManager>();
+        }
+
+        if (vrExperienceManager != null && vrExperienceManager.isInHeadset)
+        {
+            return;
+        }
+
+        if (orbController == null)
+        {
+            orbController = GetComponentInChildren<OrbController>(true);
+        }
+
+        if (orbController == null || !orbController.isActiveAndEnabled)
+        {
+            return;
+        }
+
+        MarkRigMotionExpected("Transfer immersive orb orientation to rig");
+        orbController.TransferViewOffsetTo(transform);
     }
 
 
@@ -1086,6 +1190,7 @@ public class MainController : MonoBehaviour
         {
             if (tunnel.salleArrivee == targetSalle)
             {
+                TransferImmersiveViewOffsetToRig();
                 this.tunnel = tunnel;
                 if (salle != null) salle.setActive(false);
                 salle = null;
@@ -1099,6 +1204,7 @@ public class MainController : MonoBehaviour
             else if (tunnel.canReverse && tunnel.salleDepart == targetSalle)
             {
 
+                TransferImmersiveViewOffsetToRig();
                 this.tunnel = tunnel;
                 if (salle != null) salle.setActive(false);
                 salle = null;
@@ -1196,6 +1302,7 @@ public class MainController : MonoBehaviour
         posAtPlay = transform.position;
         freeMotion = false;
         isRunning = true;
+        BeginFollowPathOrientation(tunnel != null && trackPosition <= 0.01f);
 
 
         currentSpeed = 0;
@@ -1238,6 +1345,8 @@ public class MainController : MonoBehaviour
     {
         isRunning = false;
         currentSpeed = 0f;
+        wasFollowingPathOrientation = false;
+        followPathOrientationEntryBlendActive = false;
     }
 
     float GetActualTrackPosition(float logicalTrackPosition)
@@ -1248,16 +1357,6 @@ public class MainController : MonoBehaviour
     public void setPosition(float position)
     {
         trackPosition = Mathf.Clamp01(position);
-        if (isRunning && followPathOrientation && splineContainer != null)
-        {
-            float actualTrackPosition = GetActualTrackPosition(trackPosition);
-            Vector3 forward = splineContainer.EvaluateTangent(actualTrackPosition);
-            Vector3 up = Vector3.up;
-            if (forward != Vector3.zero)
-            {
-                SetRigRotation(Quaternion.LookRotation(forward, up), "setPosition followPathOrientation");
-            }
-        }
     }
 
     public void Reset()

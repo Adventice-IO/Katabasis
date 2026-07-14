@@ -152,6 +152,11 @@ public class KataPortal : MonoBehaviour
             }
         }
 
+        if (mainController.infinitePlaying && !IsEnabledForInfinitePlaying())
+        {
+            shouldShow = false;
+        }
+
         if (showing != shouldShow)
         {
             // Debug.Log($"KataPortal {portalName} should show: {shouldShow}");
@@ -211,7 +216,9 @@ public class KataPortal : MonoBehaviour
             return false;
         }
 
-        Salle destination = isReverse ? tunnel.salleDepart : tunnel.salleArrivee;
+        Salle destination = mainController.salle != null
+            ? tunnel.getOtherSalle(mainController.salle)
+            : (isReverse ? tunnel.salleDepart : tunnel.salleArrivee);
         return !mainController.hideExitPortalsInInfinitePlaying || destination == null || !destination.isExit;
     }
 

@@ -155,6 +155,39 @@ public sealed class OrbController : MonoBehaviour
         transform.localRotation = _zeroRotation;
     }
 
+    /// <summary>
+    /// Bakes the current orb rotation into an ancestor transform, then resets the
+    /// orb without changing the view's world-space pose.
+    /// </summary>
+    public bool TransferViewOffsetTo(Transform target)
+    {
+        Initialize();
+
+        if (target == null || target == transform || !transform.IsChildOf(target))
+        {
+            return false;
+        }
+
+        var viewWorldPosition = transform.position;
+        var viewWorldRotation = transform.rotation;
+        var orbRotationBeforeReset = transform.localRotation;
+
+        ResetView(true);
+
+        if (Quaternion.Angle(orbRotationBeforeReset, transform.localRotation) <= 0.001f)
+        {
+            return false;
+        }
+
+        var resetViewRotationRelativeToTarget =
+            Quaternion.Inverse(target.rotation) * transform.rotation;
+
+        target.rotation =
+            viewWorldRotation * Quaternion.Inverse(resetViewRotationRelativeToTarget);
+        target.position += viewWorldPosition - transform.position;
+        return true;
+    }
+
     private void Initialize()
     {
         if (_initialized)
