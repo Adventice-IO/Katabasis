@@ -136,7 +136,7 @@
                 closeFade *= lerp(0.1, 1.0, smoothstep(10.0, 0.0, d-10.0));
 
 
-                float relDist = saturate((_MaxDistance - d) / _DistFade);
+                float relDist = saturate((_MaxDistance - d) / max(_DistFade, 0.0001));
                 float distFade = smoothstep(0,1, relDist);
 
                 // 4. Masking Logic

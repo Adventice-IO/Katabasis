@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 [DisallowMultipleComponent]
 public sealed class SettingsMenu : MonoBehaviour
 {
-    public const int CurrentSettingsVersion = 2;
+    public const int CurrentSettingsVersion = 3;
 
     private const string PanelSettingsResource = "Immersive/ImmersivePanelSettings";
     private const string StyleSheetResource = "Immersive/ImmersiveRuntimePanel";
@@ -19,6 +19,7 @@ public sealed class SettingsMenu : MonoBehaviour
     {
         Orb,
         Immersive,
+        Rendering,
         Game
     }
 
@@ -56,6 +57,8 @@ public sealed class SettingsMenu : MonoBehaviour
         public OrbSettings orb = new OrbSettings();
         public ImmersiveController.RuntimeConfiguration immersive =
             new ImmersiveController.RuntimeConfiguration();
+        public KatabasisMeshConfiguration.RuntimeConfiguration rendering =
+            new KatabasisMeshConfiguration.RuntimeConfiguration();
         public GameSettings game = new GameSettings();
     }
 
@@ -70,6 +73,7 @@ public sealed class SettingsMenu : MonoBehaviour
 
     private OrbController _orbController;
     private ImmersiveController _immersiveController;
+    private KatabasisMeshConfiguration _pointCloudConfiguration;
     private MainController _mainController;
     private GameMenu _gameMenu;
     private UIDocument _document;
@@ -116,6 +120,18 @@ public sealed class SettingsMenu : MonoBehaviour
     private Toggle _ndi;
     private Label _textureSummary;
     private Label _spoutSupport;
+
+    private EnumField _pointRenderingMode;
+    private Slider _pointSize;
+    private Slider _pointAlpha;
+    private Toggle _linkMaxDistanceToCamera;
+    private FloatField _pointMaxViewDistance;
+    private FloatField _pointViewDistanceMultiplier;
+    private Slider _pointDistanceFade;
+    private FloatField _pointFadeIn;
+    private FloatField _pointFadeOut;
+    private FloatField _pointBoxFeather;
+    private Label _pointRenderingSummary;
 
     private DropdownField _language;
     private FloatField _globalSpeedMultiplier;
@@ -251,6 +267,7 @@ public sealed class SettingsMenu : MonoBehaviour
 
         BuildOrbCategory(scrollView);
         BuildImmersiveCategory(scrollView);
+        BuildRenderingCategory(scrollView);
         BuildGameCategory(scrollView);
         BuildPersistenceSection(scrollView);
 
@@ -325,6 +342,7 @@ public sealed class SettingsMenu : MonoBehaviour
         }
 
         _immersiveController = FindAnyObjectByType<ImmersiveController>(FindObjectsInactive.Include);
+        _pointCloudConfiguration = FindAnyObjectByType<KatabasisMeshConfiguration>(FindObjectsInactive.Include);
         _mainController = FindAnyObjectByType<MainController>(FindObjectsInactive.Include);
         _gameMenu = _mainController != null ? _mainController.menu : null;
 
@@ -342,7 +360,7 @@ public sealed class SettingsMenu : MonoBehaviour
         var titleGroup = new VisualElement();
         titleGroup.AddToClassList("immersive-title-group");
         titleGroup.Add(new Label("KATABASIS SETTINGS") { name = "immersive-title" });
-        titleGroup.Add(new Label("Orb, immersive output & game configuration") { name = "immersive-subtitle" });
+        titleGroup.Add(new Label("Orb, immersive output, point rendering & game configuration") { name = "immersive-subtitle" });
         header.Add(titleGroup);
 
         var close = new Button(() => SetOpen(false)) { text = "X", tooltip = "Close settings" };
@@ -358,6 +376,7 @@ public sealed class SettingsMenu : MonoBehaviour
 
         AddCategoryButton(navigation, Category.Orb, "ORB");
         AddCategoryButton(navigation, Category.Immersive, "IMMERSIVE");
+        AddCategoryButton(navigation, Category.Rendering, "RENDERING");
         AddCategoryButton(navigation, Category.Game, "GAME");
 
         _window.Add(navigation);
@@ -459,7 +478,7 @@ public sealed class SettingsMenu : MonoBehaviour
         _floor = CreateToggle(surfaceGrid, "Floor");
         _ceiling = CreateToggle(surfaceGrid, "Ceiling");
 
-        var rendering = CreateSection(content, "RENDERING", "Textures rebuild automatically");
+        var rendering = CreateSection(content, "TEXTURES", "Render textures rebuild automatically");
         _resolutionMode = new EnumField("Reference dimension", ImmersiveController.ResolutionMode.Height);
         _resolutionMode.AddToClassList("immersive-field");
         rendering.Add(_resolutionMode);
@@ -518,6 +537,54 @@ public sealed class SettingsMenu : MonoBehaviour
         RegisterLiveEnum(_visualMode);
         RegisterLiveToggle(_ndi);
         RegisterLiveToggle(_spout);
+    }
+
+    private void BuildRenderingCategory(VisualElement parent)
+    {
+        var content = CreateCategoryContent(parent, Category.Rendering);
+
+        var appearance = CreateSection(content, "POINT APPEARANCE", "Size mode expands points in render-target pixels");
+        _pointRenderingMode = new EnumField("Render mode", KatabasisMeshConfiguration.PointRenderingMode.Point);
+        _pointRenderingMode.AddToClassList("immersive-field");
+        appearance.Add(_pointRenderingMode);
+
+        _pointSize = new Slider("Point diameter (pixels)", 0.1f, 64f) { showInputField = true };
+        _pointSize.AddToClassList("immersive-field");
+        appearance.Add(_pointSize);
+
+        _pointAlpha = new Slider("Alpha", 0f, 1f) { showInputField = true };
+        _pointAlpha.AddToClassList("immersive-field");
+        appearance.Add(_pointAlpha);
+
+        var distance = CreateSection(content, "VIEW DISTANCE", "Fade is a fraction of the effective maximum distance");
+        _linkMaxDistanceToCamera = CreateToggle(distance, "Use active camera far distance");
+        _linkMaxDistanceToCamera.AddToClassList("immersive-toggle-wide");
+        _pointMaxViewDistance = CreateFloatField(distance, "Max view distance (meters)");
+        _pointViewDistanceMultiplier = CreateFloatField(distance, "View distance multiplier");
+        _pointDistanceFade = new Slider("Distance fade", 0f, 1f) { showInputField = true };
+        _pointDistanceFade.AddToClassList("immersive-field");
+        distance.Add(_pointDistanceFade);
+
+        var transitions = CreateSection(content, "TRANSITIONS & EDGES", "Applied to point-cloud blocks as they appear and disappear");
+        var fadeRow = CreateRow(transitions);
+        _pointFadeIn = CreateFloatField(fadeRow, "Fade in", true);
+        _pointFadeOut = CreateFloatField(fadeRow, "Fade out", true);
+        _pointBoxFeather = CreateFloatField(transitions, "Block edge feather");
+
+        _pointRenderingSummary = new Label();
+        _pointRenderingSummary.AddToClassList("immersive-texture-summary");
+        transitions.Add(_pointRenderingSummary);
+
+        RegisterLiveEnum(_pointRenderingMode);
+        _pointSize.RegisterValueChangedCallback(_ => ApplyControls());
+        _pointAlpha.RegisterValueChangedCallback(_ => ApplyControls());
+        RegisterLiveToggle(_linkMaxDistanceToCamera);
+        RegisterLiveField(_pointMaxViewDistance);
+        RegisterLiveField(_pointViewDistanceMultiplier);
+        _pointDistanceFade.RegisterValueChangedCallback(_ => ApplyControls());
+        RegisterLiveField(_pointFadeIn);
+        RegisterLiveField(_pointFadeOut);
+        RegisterLiveField(_pointBoxFeather);
     }
 
     private void BuildGameCategory(VisualElement parent)
@@ -724,6 +791,19 @@ public sealed class SettingsMenu : MonoBehaviour
             immersive.enableNdiSender = _ndi.value;
             _immersiveController.ApplyConfiguration(immersive, false);
 
+            var rendering = CapturePointCloudRenderingConfiguration();
+            rendering.renderingMode = (KatabasisMeshConfiguration.PointRenderingMode)_pointRenderingMode.value;
+            rendering.pointSize = _pointSize.value;
+            rendering.alpha = _pointAlpha.value;
+            rendering.linkMaxDistanceToCamera = _linkMaxDistanceToCamera.value;
+            rendering.maxViewDistance = _pointMaxViewDistance.value;
+            rendering.viewDistanceMultiplier = _pointViewDistanceMultiplier.value;
+            rendering.distanceFade = _pointDistanceFade.value;
+            rendering.fadeIn = _pointFadeIn.value;
+            rendering.fadeOut = _pointFadeOut.value;
+            rendering.boxFeather = _pointBoxFeather.value;
+            _pointCloudConfiguration?.ApplyConfiguration(rendering);
+
             _mainController.language = string.IsNullOrWhiteSpace(_language.value)
                 ? "en"
                 : _language.value.Trim();
@@ -765,6 +845,7 @@ public sealed class SettingsMenu : MonoBehaviour
         SetToggleWithoutNotify(_followPathOrientation, _mainController.followPathOrientation);
 
         RefreshImmersiveControls(_immersiveController.CaptureConfiguration());
+        RefreshPointCloudRenderingControls(CapturePointCloudRenderingConfiguration());
 
         RefreshLanguageChoices();
         _language.SetValueWithoutNotify(_mainController.language);
@@ -776,6 +857,41 @@ public sealed class SettingsMenu : MonoBehaviour
 
         _refreshing = false;
         RefreshRuntimeStatus();
+    }
+
+    private KatabasisMeshConfiguration.RuntimeConfiguration CapturePointCloudRenderingConfiguration()
+    {
+        return _pointCloudConfiguration != null
+            ? _pointCloudConfiguration.CaptureConfiguration()
+            : new KatabasisMeshConfiguration.RuntimeConfiguration();
+    }
+
+    private void RefreshPointCloudRenderingControls(
+        KatabasisMeshConfiguration.RuntimeConfiguration configuration)
+    {
+        if (!_built || configuration == null)
+        {
+            return;
+        }
+
+        var wasRefreshing = _refreshing;
+        _refreshing = true;
+
+        _pointRenderingMode.SetValueWithoutNotify(configuration.renderingMode);
+        _pointSize.SetValueWithoutNotify(configuration.pointSize);
+        _pointAlpha.SetValueWithoutNotify(configuration.alpha);
+        SetToggleWithoutNotify(_linkMaxDistanceToCamera, configuration.linkMaxDistanceToCamera);
+        _pointMaxViewDistance.SetValueWithoutNotify(configuration.maxViewDistance);
+        _pointViewDistanceMultiplier.SetValueWithoutNotify(configuration.viewDistanceMultiplier);
+        _pointDistanceFade.SetValueWithoutNotify(configuration.distanceFade);
+        _pointFadeIn.SetValueWithoutNotify(configuration.fadeIn);
+        _pointFadeOut.SetValueWithoutNotify(configuration.fadeOut);
+        _pointBoxFeather.SetValueWithoutNotify(configuration.boxFeather);
+
+        _pointSize.SetEnabled(configuration.renderingMode == KatabasisMeshConfiguration.PointRenderingMode.Size);
+        _pointMaxViewDistance.SetEnabled(!configuration.linkMaxDistanceToCamera);
+
+        _refreshing = wasRefreshing;
     }
 
     private void RefreshImmersiveControls(ImmersiveController.RuntimeConfiguration configuration)
@@ -827,6 +943,19 @@ public sealed class SettingsMenu : MonoBehaviour
             ? "Spout available - Direct3D 11"
             : "Spout configured but inactive - requires Direct3D 11";
         _spoutSupport.EnableInClassList("immersive-warning", !_immersiveController.IsSpoutSupported);
+
+        if (_pointCloudConfiguration == null)
+        {
+            _pointRenderingSummary.text = "No Katabasis point-cloud renderer is active.";
+            _pointRenderingSummary.EnableInClassList("immersive-warning", true);
+            return;
+        }
+
+        var rendering = _pointCloudConfiguration.CaptureConfiguration();
+        _pointRenderingSummary.EnableInClassList("immersive-warning", false);
+        _pointRenderingSummary.text = rendering.renderingMode == KatabasisMeshConfiguration.PointRenderingMode.Size
+            ? $"Sized circular points | {rendering.pointSize:F1}px diameter | {rendering.alpha:F2} alpha"
+            : $"Hardware points | 1 render pixel | {rendering.alpha:F2} alpha";
     }
 
     private void RefreshLanguageChoices()
@@ -954,6 +1083,7 @@ public sealed class SettingsMenu : MonoBehaviour
                 followPathOrientation = _mainController.followPathOrientation
             },
             immersive = _immersiveController.CaptureConfiguration(),
+            rendering = CapturePointCloudRenderingConfiguration(),
             game = new GameSettings
             {
                 language = _mainController.language,
@@ -968,6 +1098,11 @@ public sealed class SettingsMenu : MonoBehaviour
 
     private void ApplyConfiguration(UnifiedSettings configuration, bool requestAutosave)
     {
+        if (configuration.version < 3 || configuration.rendering == null)
+        {
+            configuration.rendering = CapturePointCloudRenderingConfiguration();
+        }
+
         NormalizeConfiguration(configuration);
         _applyingConfiguration = true;
 
@@ -986,6 +1121,7 @@ public sealed class SettingsMenu : MonoBehaviour
             _mainController.followPathOrientation = configuration.orb.followPathOrientation;
 
             _immersiveController.ApplyConfiguration(configuration.immersive, false);
+            _pointCloudConfiguration?.ApplyConfiguration(configuration.rendering);
 
             _mainController.language = configuration.game.language;
             _mainController.globalSpeedMultiplier = configuration.game.globalSpeedMultiplier;
@@ -1020,6 +1156,14 @@ public sealed class SettingsMenu : MonoBehaviour
         configuration.orb.panSmoothing = NonNegative(configuration.orb.panSmoothing);
         configuration.orb.tiltSmoothing = NonNegative(configuration.orb.tiltSmoothing);
         configuration.orb.viewResetTimeout = NonNegative(configuration.orb.viewResetTimeout);
+        configuration.rendering.pointSize = Mathf.Max(0.1f, NonNegative(configuration.rendering.pointSize));
+        configuration.rendering.alpha = Mathf.Clamp01(NonNegative(configuration.rendering.alpha));
+        configuration.rendering.maxViewDistance = NonNegative(configuration.rendering.maxViewDistance);
+        configuration.rendering.viewDistanceMultiplier = NonNegative(configuration.rendering.viewDistanceMultiplier);
+        configuration.rendering.distanceFade = Mathf.Clamp01(NonNegative(configuration.rendering.distanceFade));
+        configuration.rendering.fadeIn = NonNegative(configuration.rendering.fadeIn);
+        configuration.rendering.fadeOut = NonNegative(configuration.rendering.fadeOut);
+        configuration.rendering.boxFeather = NonNegative(configuration.rendering.boxFeather);
         configuration.game.language = string.IsNullOrWhiteSpace(configuration.game.language)
             ? "en"
             : configuration.game.language.Trim();

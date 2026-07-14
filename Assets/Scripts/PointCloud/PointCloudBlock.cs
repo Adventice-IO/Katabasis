@@ -75,8 +75,14 @@ public class PointCloudBlock : MonoBehaviour
     void Update()
     {
 
-        float fadeInVal = Mathf.Clamp01((Time.time - timeAtStart) / profile.fadeIn);
-        float fadeOutVal = timeAtKill > -1 ? 1f - Mathf.Clamp01((Time.time - (float)timeAtKill) / profile.fadeOut) : 1f;
+        float fadeInVal = profile.fadeIn > 0f
+            ? Mathf.Clamp01((Time.time - timeAtStart) / profile.fadeIn)
+            : 1f;
+        float fadeOutVal = timeAtKill > -1
+            ? profile.fadeOut > 0f
+                ? 1f - Mathf.Clamp01((Time.time - (float)timeAtKill) / profile.fadeOut)
+                : 0f
+            : 1f;
 
         if (timeAtKill > -1 && fadeOutVal == 0f)
         {
@@ -102,7 +108,12 @@ public class PointCloudBlock : MonoBehaviour
         block.SetFloat("_Reveal", reveal);
         block.SetFloat("_Alpha", profile._Alpha);
 
-        float maxDistance = (profile.linkMaxDistanceToCamera ? Camera.main.farClipPlane : profile._MaxDistance) * mainController.pointCloudViewDistanceMultiplier;
+        float cameraDistance = Camera.main != null ? Camera.main.farClipPlane : profile._MaxDistance;
+        float baseMaxDistance = profile.linkMaxDistanceToCamera ? cameraDistance : profile._MaxDistance;
+        float gameplayDistanceMultiplier = mainController != null
+            ? mainController.pointCloudViewDistanceMultiplier
+            : 1f;
+        float maxDistance = baseMaxDistance * profile._DistanceMultiplier * gameplayDistanceMultiplier;
         block.SetFloat("_MaxDistance", maxDistance);
         block.SetFloat("_DistFade", profile._DistanceFade * maxDistance);
         block.SetFloat("_NoiseAmplitude", profile._NoiseAmplitude);
