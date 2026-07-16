@@ -28,6 +28,9 @@ public sealed class OrbController : MonoBehaviour
     [Tooltip("Return pan and tilt to zero after this many seconds without accepted mouse motion. Set to zero to disable the automatic reset.")]
     [Min(0f)]
     [SerializeField] private float viewResetTimeout = 10f;
+    [Tooltip("Seconds used to smoothly return pan and tilt to zero. Set to zero for an immediate reset.")]
+    [Min(0f)]
+    [SerializeField] private float viewResetDuration = 1f;
 
     [Header("Tilt Limits")]
     [SerializeField] private float minimumTilt = -85f;
@@ -41,6 +44,10 @@ public sealed class OrbController : MonoBehaviour
     private float _panVelocity;
     private float _tiltVelocity;
     private float _lastManipulationTime;
+    private float _viewResetStartTime;
+    private float _viewResetStartPan;
+    private float _viewResetStartTilt;
+    private bool _isResettingView;
     private bool _initialized;
 
     public float PanSensitivity
@@ -103,6 +110,12 @@ public sealed class OrbController : MonoBehaviour
         set => viewResetTimeout = Mathf.Max(0f, value);
     }
 
+    public float ViewResetDuration
+    {
+        get => viewResetDuration;
+        set => viewResetDuration = Mathf.Max(0f, value);
+    }
+
     public float Pan => _currentPan;
     public float Tilt => _currentTilt;
     private void Awake()
@@ -123,6 +136,7 @@ public sealed class OrbController : MonoBehaviour
         panSmoothing = Mathf.Max(0f, panSmoothing);
         tiltSmoothing = Mathf.Max(0f, tiltSmoothing);
         viewResetTimeout = Mathf.Max(0f, viewResetTimeout);
+        viewResetDuration = Mathf.Max(0f, viewResetDuration);
 
         if (minimumTilt > maximumTilt)
         {
@@ -139,17 +153,23 @@ public sealed class OrbController : MonoBehaviour
 
     public void ResetView(bool immediate = false)
     {
+        Initialize();
         _targetPan = 0f;
         _targetTilt = 0f;
         _panVelocity = 0f;
         _tiltVelocity = 0f;
         _lastManipulationTime = Time.unscaledTime;
 
-        if (!immediate)
+        if (!immediate && viewResetDuration > 0f)
         {
+            _viewResetStartTime = Time.unscaledTime;
+            _viewResetStartPan = _currentPan;
+            _viewResetStartTilt = _currentTilt;
+            _isResettingView = true;
             return;
         }
 
+        _isResettingView = false;
         _currentPan = 0f;
         _currentTilt = 0f;
         transform.localRotation = _zeroRotation;
@@ -215,6 +235,8 @@ public sealed class OrbController : MonoBehaviour
             return;
         }
 
+        _isResettingView = false;
+
         if (!lockPan && !Mathf.Approximately(delta.x, 0f))
         {
             var panDirection = invertPan ? -1f : 1f;
@@ -236,18 +258,50 @@ public sealed class OrbController : MonoBehaviour
     private void UpdateIdleReset()
     {
         if (viewResetTimeout <= 0f
-            || Time.unscaledTime - _lastManipulationTime < viewResetTimeout)
+            || _isResettingView
+            || Time.unscaledTime - _lastManipulationTime < viewResetTimeout
+            || (Mathf.Approximately(_targetPan, 0f)
+                && Mathf.Approximately(_targetTilt, 0f)
+                && Mathf.Approximately(_currentPan, 0f)
+                && Mathf.Approximately(_currentTilt, 0f)))
         {
             return;
         }
 
-        _targetPan = 0f;
-        _targetTilt = 0f;
+        ResetView();
     }
 
     private void UpdateRotation()
     {
         var deltaTime = Time.unscaledDeltaTime;
+
+        if (_isResettingView)
+        {
+            if (viewResetDuration <= 0f)
+            {
+                _currentPan = 0f;
+                _currentTilt = 0f;
+                _isResettingView = false;
+            }
+            else
+            {
+                var resetProgress = Mathf.Clamp01(
+                    (Time.unscaledTime - _viewResetStartTime) / viewResetDuration);
+                var smoothProgress = resetProgress * resetProgress * (3f - 2f * resetProgress);
+                _currentPan = Mathf.LerpAngle(_viewResetStartPan, 0f, smoothProgress);
+                _currentTilt = Mathf.Lerp(_viewResetStartTilt, 0f, smoothProgress);
+
+                if (resetProgress >= 1f)
+                {
+                    _currentPan = 0f;
+                    _currentTilt = 0f;
+                    _isResettingView = false;
+                }
+            }
+
+            transform.localRotation = _zeroRotation * Quaternion.Euler(_currentTilt, _currentPan, 0f);
+            return;
+        }
 
         _currentPan = panSmoothing <= 0f
             ? _targetPan

@@ -41,8 +41,19 @@ public class MainController : MonoBehaviour
         Outro,
         End
     }
+
+    public enum GameResetPoint
+    {
+        GameMenu,
+        GameIntro,
+        GamePlayingAtRoomA,
+        GamePlayingAtRoomC
+    }
+
     [Header("State")]
     public GameState gameState = GameState.Menu;
+    [Tooltip("State and room used whenever the game is reset.")]
+    public GameResetPoint resetPoint = GameResetPoint.GameMenu;
     GameState lastGameState;
     float timeAtStateChange;
     public string language = "en";
@@ -221,6 +232,8 @@ public class MainController : MonoBehaviour
     Quaternion demoModeLastCameraRotation;
     bool hasDemoModeCameraPose;
     System.Random demoModeRandom;
+    bool holdExplicitMenuInInfinitePlaying;
+    Salle pendingPlayingStartSalle;
 
     private void Start()
     {
@@ -489,7 +502,14 @@ public class MainController : MonoBehaviour
             HandleHeadsetPresence();
             UpdateRunStartDiagnostics();
 
-            if (infinitePlaying && gameState == GameState.Menu)
+            if (gameState != GameState.Menu)
+            {
+                holdExplicitMenuInInfinitePlaying = false;
+            }
+
+            if (infinitePlaying
+                && gameState == GameState.Menu
+                && !holdExplicitMenuInInfinitePlaying)
             {
                 gameState = GameState.Intro;
             }
@@ -1358,7 +1378,7 @@ public class MainController : MonoBehaviour
 
         if (gameState == GameState.Menu)
         {
-            ResetGame();
+            ResetGameProgress();
         }
 
         menu.setActive(gameState == GameState.Menu);
@@ -1384,7 +1404,8 @@ public class MainController : MonoBehaviour
 
             case GameState.Playing:
                 playingSO?.state.SetValue();
-                Reset();
+                Reset(pendingPlayingStartSalle != null ? pendingPlayingStartSalle : initialSalle);
+                pendingPlayingStartSalle = null;
                 break;
 
             case GameState.Outro:
@@ -1413,6 +1434,97 @@ public class MainController : MonoBehaviour
 
     public void ResetGame()
     {
+        switch (resetPoint)
+        {
+            case GameResetPoint.GameIntro:
+                GoToIntro();
+                break;
+
+            case GameResetPoint.GamePlayingAtRoomA:
+                GoToPlayingRoom("A");
+                break;
+
+            case GameResetPoint.GamePlayingAtRoomC:
+                GoToPlayingRoom("C");
+                break;
+
+            default:
+                GoToMenu();
+                break;
+        }
+    }
+
+    public void GoToMenu()
+    {
+        holdExplicitMenuInInfinitePlaying = true;
+        pendingPlayingStartSalle = null;
+        RestartGameState(GameState.Menu);
+    }
+
+    public void GoToIntro()
+    {
+        holdExplicitMenuInInfinitePlaying = false;
+        pendingPlayingStartSalle = null;
+        ResetGameProgress();
+        RestartGameState(GameState.Intro);
+    }
+
+    public void GoToCredits()
+    {
+        holdExplicitMenuInInfinitePlaying = false;
+        pendingPlayingStartSalle = null;
+        ResetGameProgress();
+        RestartGameState(GameState.End);
+    }
+
+    void GoToPlayingRoom(string roomName)
+    {
+        holdExplicitMenuInInfinitePlaying = false;
+        pendingPlayingStartSalle = FindResetRoom(roomName);
+        if (pendingPlayingStartSalle == null)
+        {
+            Debug.LogWarning($"Could not find reset room '{roomName}'. Falling back to the initial salle.", this);
+            pendingPlayingStartSalle = initialSalle;
+        }
+
+        RestartGameState(GameState.Playing);
+    }
+
+    Salle FindResetRoom(string roomName)
+    {
+        if (initialSalle != null
+            && string.Equals(initialSalle.name, roomName, System.StringComparison.OrdinalIgnoreCase))
+        {
+            return initialSalle;
+        }
+
+        Salle[] rooms = FindObjectsByType<Salle>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < rooms.Length; i++)
+        {
+            if (rooms[i] != null
+                && string.Equals(rooms[i].name, roomName, System.StringComparison.OrdinalIgnoreCase))
+            {
+                return rooms[i];
+            }
+        }
+
+        return null;
+    }
+
+    void RestartGameState(GameState targetState)
+    {
+        gameState = targetState;
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        gameStateUpdate();
+        lastGameState = gameState;
+    }
+
+    void ResetGameProgress()
+    {
         visitedSalles.Clear();
         GetInterviewManager()?.ResetGame(infinitePlaying);
         tunnel?.audioEventSO?.evt.Stop(gameObject);
@@ -1438,7 +1550,6 @@ public class MainController : MonoBehaviour
         _lastTunnelAudioSO = null;
         splineContainer = null;
         isReversed = false;
-        gameState = infinitePlaying ? GameState.Intro : GameState.Menu;
         if (salle != null) salle.setActive(false);
         salle = null;
         pointCloudViewDistanceMultiplier = 0f;
@@ -1634,9 +1745,19 @@ public class MainController : MonoBehaviour
 
     public void Reset()
     {
-        visitedSalles = new List<Salle>();
-        GetInterviewManager()?.ResetGame(infinitePlaying);
-        TeleportToSalle(initialSalle);
+        Reset(initialSalle);
+    }
+
+    void Reset(Salle targetSalle)
+    {
+        ResetGameProgress();
+        if (targetSalle == null)
+        {
+            Debug.LogWarning("Cannot start playing because no target salle is configured.", this);
+            return;
+        }
+
+        TeleportToSalle(targetSalle);
         ResetPosition();
     }
     public void ResetPosition(bool resetRotation = false)

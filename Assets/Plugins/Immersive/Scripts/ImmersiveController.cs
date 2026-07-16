@@ -13,7 +13,7 @@ public sealed class ImmersiveController : MonoBehaviour
 {
     public const int CurrentConfigurationVersion = 1;
 
-    private enum SurfaceId
+    public enum SurfaceId
     {
         Front,
         Back,
@@ -91,6 +91,8 @@ public sealed class ImmersiveController : MonoBehaviour
     private const string CamerasContainerName = "Cameras";
     private const string WallsContainerName = "Walls";
     private const string PreviewLayerName = "Immersive";
+    public const string SubtitleOverlayLayerName = "SubtitleOverlay";
+    public const string AimOverlayLayerName = "AimOverlay";
 
     [Header("References")]
     [SerializeField] private GameObject cameraPrefab;
@@ -154,6 +156,8 @@ public sealed class ImmersiveController : MonoBehaviour
     private Transform _camerasContainer;
     private Transform _wallsContainer;
     private int _previewLayer = -1;
+    private int _subtitleOverlayLayer = -1;
+    private int _aimOverlayLayer = -1;
     private bool _requiresSync = true;
     private bool _autosavePending;
     private float _autosaveAt;
@@ -170,6 +174,21 @@ public sealed class ImmersiveController : MonoBehaviour
     public RenderTexture BackRenderTexture => backRT;
     public RenderTexture FloorRenderTexture => floorRT;
     public RenderTexture CeilingRenderTexture => ceilingRT;
+    public int SubtitleOverlayLayer => _subtitleOverlayLayer;
+    public int AimOverlayLayer => _aimOverlayLayer;
+
+    public bool TryGetSurfaceCamera(SurfaceId surface, out Camera surfaceCamera)
+    {
+        ProcessPendingChanges();
+        if (_rigs.TryGetValue(surface, out var rig) && rig != null && rig.camera != null)
+        {
+            surfaceCamera = rig.camera;
+            return true;
+        }
+
+        surfaceCamera = null;
+        return false;
+    }
 
     public void UseExternalConfigurationPersistence()
     {
@@ -194,6 +213,8 @@ public sealed class ImmersiveController : MonoBehaviour
     private void OnEnable()
     {
         _previewLayer = GetOrCreatePreviewLayer();
+        _subtitleOverlayLayer = GetOrCreateLayer(SubtitleOverlayLayerName);
+        _aimOverlayLayer = GetOrCreateLayer(AimOverlayLayerName);
         EnsureContainers();
         _requiresSync = true;
         ProcessPendingChanges();
@@ -909,6 +930,16 @@ public sealed class ImmersiveController : MonoBehaviour
             _previewLayer = GetOrCreatePreviewLayer();
         }
 
+        if (_subtitleOverlayLayer < 0)
+        {
+            _subtitleOverlayLayer = GetOrCreateLayer(SubtitleOverlayLayerName);
+        }
+
+        if (_aimOverlayLayer < 0)
+        {
+            _aimOverlayLayer = GetOrCreateLayer(AimOverlayLayerName);
+        }
+
         var eye = _camerasContainer.position;
 
         foreach (var pair in _rigs)
@@ -1063,13 +1094,29 @@ public sealed class ImmersiveController : MonoBehaviour
 
         if (rig.camera != null)
         {
-            rig.camera.cullingMask = ~(1 << _previewLayer);
+            var cullingMask = ~(1 << _previewLayer);
+            if (_subtitleOverlayLayer >= 0)
+            {
+                cullingMask &= ~(1 << _subtitleOverlayLayer);
+            }
+
+            if (_aimOverlayLayer >= 0)
+            {
+                cullingMask &= ~(1 << _aimOverlayLayer);
+            }
+
+            rig.camera.cullingMask = cullingMask;
         }
     }
 
     private static int GetOrCreatePreviewLayer()
     {
-        var layer = LayerMask.NameToLayer(PreviewLayerName);
+        return GetOrCreateLayer(PreviewLayerName);
+    }
+
+    private static int GetOrCreateLayer(string requestedLayerName)
+    {
+        var layer = LayerMask.NameToLayer(requestedLayerName);
         if (layer >= 0)
         {
             return layer;
@@ -1079,7 +1126,7 @@ public sealed class ImmersiveController : MonoBehaviour
         var tagManagerAssets = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset");
         if (tagManagerAssets == null || tagManagerAssets.Length == 0)
         {
-            Debug.LogError("Unable to load TagManager.asset to create the '" + PreviewLayerName + "' layer.");
+            Debug.LogError("Unable to load TagManager.asset to create the '" + requestedLayerName + "' layer.");
             return -1;
         }
 
@@ -1093,19 +1140,19 @@ public sealed class ImmersiveController : MonoBehaviour
 
         for (var i = 8; i < layers.arraySize; i++)
         {
-            var layerName = layers.GetArrayElementAtIndex(i);
-            if (!string.IsNullOrEmpty(layerName.stringValue))
+            var layerNameProperty = layers.GetArrayElementAtIndex(i);
+            if (!string.IsNullOrEmpty(layerNameProperty.stringValue))
             {
                 continue;
             }
 
-            layerName.stringValue = PreviewLayerName;
+            layerNameProperty.stringValue = requestedLayerName;
             tagManager.ApplyModifiedProperties();
             AssetDatabase.SaveAssets();
             return i;
         }
 
-        Debug.LogError("Unable to create the '" + PreviewLayerName + "' layer because all user layers are occupied.");
+        Debug.LogError("Unable to create the '" + requestedLayerName + "' layer because all user layers are occupied.");
 #endif
 
         return -1;

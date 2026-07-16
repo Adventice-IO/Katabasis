@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 [DefaultExecutionOrder(1000)]
 [DisallowMultipleComponent]
 public sealed class SettingsMenu : MonoBehaviour
 {
-    public const int CurrentSettingsVersion = 5;
+    public const int CurrentSettingsVersion = 9;
 
     private const string PanelSettingsResource = "Immersive/ImmersivePanelSettings";
     private const string StyleSheetResource = "Immersive/ImmersiveRuntimePanel";
@@ -20,7 +19,10 @@ public sealed class SettingsMenu : MonoBehaviour
         Orb,
         Immersive,
         Rendering,
-        Game
+        Subtitles,
+        Navigation,
+        Game,
+        Settings
     }
 
     [Serializable]
@@ -36,6 +38,7 @@ public sealed class SettingsMenu : MonoBehaviour
         public bool lockPan;
         public bool lockTilt;
         public float viewResetTimeout = 10f;
+        public float viewResetDuration = 1f;
         public bool followPathOrientation;
         public float followPathOrientationEntryBlendDuration = 3f;
         public float followPathOrientationSmoothing = 0.35f;
@@ -55,14 +58,36 @@ public sealed class SettingsMenu : MonoBehaviour
     }
 
     [Serializable]
+    public sealed class AimSettings
+    {
+        public float verticalOffset = -10f;
+        public bool showOverlay;
+        public float sizePixels = 36f;
+        public float thicknessPixels = 3f;
+        public float opacity = .9f;
+        public Color color = Color.white;
+    }
+
+    [Serializable]
+    public sealed class SubtitleSettings
+    {
+        public bool immersiveMode = true;
+        public ImmersiveController.SurfaceId surface = ImmersiveController.SurfaceId.Front;
+        public Vector2 position = new Vector2(.5f, .12f);
+        public float size = .8f;
+    }
+
+    [Serializable]
     public sealed class UnifiedSettings
     {
         public int version = CurrentSettingsVersion;
         public OrbSettings orb = new OrbSettings();
+        public AimSettings aim = new AimSettings();
         public ImmersiveController.RuntimeConfiguration immersive =
             new ImmersiveController.RuntimeConfiguration();
         public KatabasisMeshConfiguration.RuntimeConfiguration rendering =
             new KatabasisMeshConfiguration.RuntimeConfiguration();
+        public SubtitleSettings subtitles = new SubtitleSettings();
         public GameSettings game = new GameSettings();
     }
 
@@ -80,6 +105,9 @@ public sealed class SettingsMenu : MonoBehaviour
     private KatabasisMeshConfiguration _pointCloudConfiguration;
     private MainController _mainController;
     private GameMenu _gameMenu;
+    private Subtitles _subtitles;
+    private TransformFollower _gazeFollower;
+    private GazeAimOverlay _gazeAimOverlay;
     private UIDocument _document;
     private VisualElement _window;
     private Button _launcher;
@@ -87,12 +115,14 @@ public sealed class SettingsMenu : MonoBehaviour
 
     private readonly Dictionary<Category, Button> _categoryButtons = new Dictionary<Category, Button>();
     private readonly Dictionary<Category, VisualElement> _categoryContents = new Dictionary<Category, VisualElement>();
+    private readonly Dictionary<Salle, Button> _roomButtons = new Dictionary<Salle, Button>();
 
     private FloatField _panSensitivity;
     private FloatField _tiltSensitivity;
     private FloatField _panSmoothing;
     private FloatField _tiltSmoothing;
     private FloatField _viewResetTimeout;
+    private FloatField _viewResetDuration;
     private Toggle _requireRightMouseButton;
     private Toggle _invertPan;
     private Toggle _invertTilt;
@@ -102,6 +132,14 @@ public sealed class SettingsMenu : MonoBehaviour
     private FloatField _followPathOrientationEntryBlendDuration;
     private FloatField _followPathOrientationSmoothing;
     private Label _orbReadout;
+
+    private FloatField _gazeVerticalOffset;
+    private Toggle _showAimOverlay;
+    private Slider _aimSize;
+    private Slider _aimThickness;
+    private Slider _aimOpacity;
+    private TextField _aimColor;
+    private Label _aimSummary;
 
     private FloatField _roomWidth;
     private FloatField _roomHeight;
@@ -118,10 +156,6 @@ public sealed class SettingsMenu : MonoBehaviour
     private Toggle _ceiling;
     private EnumField _resolutionMode;
     private IntegerField _resolutionValue;
-    private SliderInt _resolutionDivider;
-    private DropdownField _depthBuffer;
-    private EnumField _textureFormat;
-    private EnumField _visualMode;
     private Toggle _spout;
     private Toggle _ndi;
     private Label _textureSummary;
@@ -132,16 +166,20 @@ public sealed class SettingsMenu : MonoBehaviour
     private Slider _pointAlpha;
     private Toggle _linkMaxDistanceToCamera;
     private FloatField _pointMaxViewDistance;
-    private FloatField _pointViewDistanceMultiplier;
     private Slider _pointDistanceFade;
-    private FloatField _pointFadeIn;
-    private FloatField _pointFadeOut;
-    private FloatField _pointBoxFeather;
     private Label _pointRenderingSummary;
+
+    private FloatField _subtitlePositionX;
+    private FloatField _subtitlePositionY;
+    private FloatField _subtitleSize;
+    private Toggle _subtitleImmersiveMode;
+    private EnumField _subtitleSurface;
+    private Label _subtitleSummary;
+
+    private Label _navigationSummary;
 
     private DropdownField _language;
     private FloatField _globalSpeedMultiplier;
-    private Toggle _followPath;
     private Toggle _infinitePlaying;
     private Toggle _hideExitPortalsInInfinitePlaying;
     private Toggle _playInterviewIntrosInInfinitePlaying;
@@ -276,8 +314,10 @@ public sealed class SettingsMenu : MonoBehaviour
         BuildOrbCategory(scrollView);
         BuildImmersiveCategory(scrollView);
         BuildRenderingCategory(scrollView);
+        BuildSubtitlesCategory(scrollView);
+        BuildNavigationCategory(scrollView);
         BuildGameCategory(scrollView);
-        BuildPersistenceSection(scrollView);
+        BuildSettingsCategory(scrollView);
 
         _status = new Label("Ready");
         _status.AddToClassList("immersive-status");
@@ -333,9 +373,13 @@ public sealed class SettingsMenu : MonoBehaviour
 
         _categoryButtons.Clear();
         _categoryContents.Clear();
+        _roomButtons.Clear();
         _window = null;
         _launcher = null;
         _status = null;
+        _aimSummary = null;
+        _subtitleSummary = null;
+        _navigationSummary = null;
         _built = false;
         _refreshing = false;
         _applyingConfiguration = false;
@@ -352,12 +396,36 @@ public sealed class SettingsMenu : MonoBehaviour
         _immersiveController = FindAnyObjectByType<ImmersiveController>(FindObjectsInactive.Include);
         _pointCloudConfiguration = FindAnyObjectByType<KatabasisMeshConfiguration>(FindObjectsInactive.Include);
         _mainController = FindAnyObjectByType<MainController>(FindObjectsInactive.Include);
+        _subtitles = FindAnyObjectByType<Subtitles>(FindObjectsInactive.Include);
+        _gazeFollower = FindGazeFollower();
+        _gazeAimOverlay = GetComponent<GazeAimOverlay>();
+        if (_gazeAimOverlay == null)
+        {
+            _gazeAimOverlay = gameObject.AddComponent<GazeAimOverlay>();
+        }
+
+        _gazeAimOverlay.Initialize(_gazeFollower, _immersiveController);
         _gameMenu = _mainController != null ? _mainController.menu : null;
 
         if (_gameMenu == null)
         {
             _gameMenu = FindAnyObjectByType<GameMenu>(FindObjectsInactive.Include);
         }
+    }
+
+    private static TransformFollower FindGazeFollower()
+    {
+        var followers = FindObjectsByType<TransformFollower>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (var index = 0; index < followers.Length; index++)
+        {
+            if (followers[index] != null
+                && followers[index].GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor>() != null)
+            {
+                return followers[index];
+            }
+        }
+
+        return followers.Length > 0 ? followers[0] : null;
     }
 
     private void BuildHeader()
@@ -368,7 +436,7 @@ public sealed class SettingsMenu : MonoBehaviour
         var titleGroup = new VisualElement();
         titleGroup.AddToClassList("immersive-title-group");
         titleGroup.Add(new Label("KATABASIS SETTINGS") { name = "immersive-title" });
-        titleGroup.Add(new Label("Orb, immersive output, point rendering & game configuration") { name = "immersive-subtitle" });
+        titleGroup.Add(new Label("Orb, aiming, immersive output, rendering, subtitles, navigation & game configuration") { name = "immersive-subtitle" });
         header.Add(titleGroup);
 
         var close = new Button(() => SetOpen(false)) { text = "X", tooltip = "Close settings" };
@@ -385,7 +453,10 @@ public sealed class SettingsMenu : MonoBehaviour
         AddCategoryButton(navigation, Category.Orb, "ORB");
         AddCategoryButton(navigation, Category.Immersive, "IMMERSIVE");
         AddCategoryButton(navigation, Category.Rendering, "RENDERING");
+        AddCategoryButton(navigation, Category.Subtitles, "SUBTITLES");
+        AddCategoryButton(navigation, Category.Navigation, "NAVIGATION");
         AddCategoryButton(navigation, Category.Game, "GAME");
+        AddCategoryButton(navigation, Category.Settings, "SETTINGS");
 
         _window.Add(navigation);
     }
@@ -439,11 +510,14 @@ public sealed class SettingsMenu : MonoBehaviour
 
         var reset = CreateSection(content, "VIEW RESET", "Zero disables the idle reset");
         _viewResetTimeout = CreateFloatField(reset, "Idle timeout (seconds)");
+        _viewResetDuration = CreateFloatField(reset, "Reset duration (seconds)");
         var resetButtons = CreateButtonRow(reset);
         resetButtons.Add(CreateButton("Reset view now", () => _orbController.ResetView(), true));
         _orbReadout = new Label();
         _orbReadout.AddToClassList("immersive-texture-summary");
         reset.Add(_orbReadout);
+
+        BuildAimingSections(content);
 
         RegisterLiveToggle(_requireRightMouseButton);
         RegisterLiveField(_panSensitivity);
@@ -458,6 +532,50 @@ public sealed class SettingsMenu : MonoBehaviour
         RegisterLiveField(_followPathOrientationEntryBlendDuration);
         RegisterLiveField(_followPathOrientationSmoothing);
         RegisterLiveField(_viewResetTimeout);
+        RegisterLiveField(_viewResetDuration);
+    }
+
+    private void BuildAimingSections(VisualElement content)
+    {
+        var compensation = CreateSection(
+            content,
+            "GAZE COMPENSATION",
+            "Pitch applied to portal and interview selection in immersive builds");
+        _gazeVerticalOffset = CreateFloatField(compensation, "Vertical offset (degrees)");
+
+        var overlay = CreateSection(
+            content,
+            "AIM CIRCLE",
+            "Fixed theoretical aim point without gaze stabilization or smoothing");
+        _showAimOverlay = CreateToggle(overlay, "Show aim circle");
+        _showAimOverlay.AddToClassList("immersive-toggle-wide");
+
+        _aimSize = new Slider("Diameter (pixels)", 4f, 512f) { showInputField = true };
+        _aimSize.AddToClassList("immersive-field");
+        overlay.Add(_aimSize);
+
+        _aimThickness = new Slider("Thickness (pixels)", .5f, 128f) { showInputField = true };
+        _aimThickness.AddToClassList("immersive-field");
+        overlay.Add(_aimThickness);
+
+        _aimOpacity = new Slider("Opacity", 0f, 1f) { showInputField = true };
+        _aimOpacity.AddToClassList("immersive-field");
+        overlay.Add(_aimOpacity);
+
+        _aimColor = new TextField("Color (hex RGB)") { isDelayed = true };
+        _aimColor.AddToClassList("immersive-field");
+        overlay.Add(_aimColor);
+
+        _aimSummary = new Label();
+        _aimSummary.AddToClassList("immersive-texture-summary");
+        overlay.Add(_aimSummary);
+
+        RegisterLiveField(_gazeVerticalOffset);
+        RegisterLiveToggle(_showAimOverlay);
+        _aimSize.RegisterValueChangedCallback(_ => ApplyControls());
+        _aimThickness.RegisterValueChangedCallback(_ => ApplyControls());
+        _aimOpacity.RegisterValueChangedCallback(_ => ApplyControls());
+        _aimColor.RegisterValueChangedCallback(_ => ApplyControls());
     }
 
     private void BuildImmersiveCategory(VisualElement parent)
@@ -501,22 +619,6 @@ public sealed class SettingsMenu : MonoBehaviour
         _resolutionValue.AddToClassList("immersive-field");
         rendering.Add(_resolutionValue);
 
-        _resolutionDivider = new SliderInt("Quality divider", 1, 4) { showInputField = true };
-        _resolutionDivider.AddToClassList("immersive-field");
-        rendering.Add(_resolutionDivider);
-
-        _depthBuffer = new DropdownField("Depth buffer", new List<string> { "0", "16", "24" }, 2);
-        _depthBuffer.AddToClassList("immersive-field");
-        rendering.Add(_depthBuffer);
-
-        _textureFormat = new EnumField("Texture format", RenderTextureFormat.ARGB32);
-        _textureFormat.AddToClassList("immersive-field");
-        rendering.Add(_textureFormat);
-
-        _visualMode = new EnumField("Preview material", ImmersiveController.VisualMode.Default);
-        _visualMode.AddToClassList("immersive-field");
-        rendering.Add(_visualMode);
-
         _textureSummary = new Label();
         _textureSummary.AddToClassList("immersive-texture-summary");
         rendering.Add(_textureSummary);
@@ -545,10 +647,6 @@ public sealed class SettingsMenu : MonoBehaviour
         RegisterLiveToggle(_ceiling);
         RegisterLiveEnum(_resolutionMode);
         _resolutionValue.RegisterValueChangedCallback(_ => ApplyControls());
-        _resolutionDivider.RegisterValueChangedCallback(_ => ApplyControls());
-        _depthBuffer.RegisterValueChangedCallback(_ => ApplyControls());
-        RegisterLiveEnum(_textureFormat);
-        RegisterLiveEnum(_visualMode);
         RegisterLiveToggle(_ndi);
         RegisterLiveToggle(_spout);
     }
@@ -574,31 +672,49 @@ public sealed class SettingsMenu : MonoBehaviour
         _linkMaxDistanceToCamera = CreateToggle(distance, "Use active camera far distance");
         _linkMaxDistanceToCamera.AddToClassList("immersive-toggle-wide");
         _pointMaxViewDistance = CreateFloatField(distance, "Max view distance (meters)");
-        _pointViewDistanceMultiplier = CreateFloatField(distance, "View distance multiplier");
         _pointDistanceFade = new Slider("Distance fade", 0f, 1f) { showInputField = true };
         _pointDistanceFade.AddToClassList("immersive-field");
         distance.Add(_pointDistanceFade);
 
-        var transitions = CreateSection(content, "TRANSITIONS & EDGES", "Applied to point-cloud blocks as they appear and disappear");
-        var fadeRow = CreateRow(transitions);
-        _pointFadeIn = CreateFloatField(fadeRow, "Fade in", true);
-        _pointFadeOut = CreateFloatField(fadeRow, "Fade out", true);
-        _pointBoxFeather = CreateFloatField(transitions, "Block edge feather");
-
         _pointRenderingSummary = new Label();
         _pointRenderingSummary.AddToClassList("immersive-texture-summary");
-        transitions.Add(_pointRenderingSummary);
+        appearance.Add(_pointRenderingSummary);
 
         RegisterLiveEnum(_pointRenderingMode);
         _pointSize.RegisterValueChangedCallback(_ => ApplyControls());
         _pointAlpha.RegisterValueChangedCallback(_ => ApplyControls());
         RegisterLiveToggle(_linkMaxDistanceToCamera);
         RegisterLiveField(_pointMaxViewDistance);
-        RegisterLiveField(_pointViewDistanceMultiplier);
         _pointDistanceFade.RegisterValueChangedCallback(_ => ApplyControls());
-        RegisterLiveField(_pointFadeIn);
-        RegisterLiveField(_pointFadeOut);
-        RegisterLiveField(_pointBoxFeather);
+    }
+
+    private void BuildSubtitlesCategory(VisualElement parent)
+    {
+        var content = CreateCategoryContent(parent, Category.Subtitles);
+
+        var mode = CreateSection(content, "IMMERSIVE MODE", "Render subtitles as an overlay on exactly one immersive output");
+        _subtitleImmersiveMode = CreateToggle(mode, "Subtitle immersive mode");
+        _subtitleImmersiveMode.AddToClassList("immersive-toggle-wide");
+
+        _subtitleSurface = new EnumField("Surface", ImmersiveController.SurfaceId.Front);
+        _subtitleSurface.AddToClassList("immersive-field");
+        mode.Add(_subtitleSurface);
+
+        var placement = CreateSection(content, "OVERLAY", "Normalized surface coordinates: X 0-1 left to right, Y 0-1 bottom to top");
+        var positionRow = CreateRow(placement);
+        _subtitlePositionX = CreateFloatField(positionRow, "X", true);
+        _subtitlePositionY = CreateFloatField(positionRow, "Y", true);
+        _subtitleSize = CreateFloatField(placement, "Width (fraction of surface)");
+
+        _subtitleSummary = new Label();
+        _subtitleSummary.AddToClassList("immersive-texture-summary");
+        placement.Add(_subtitleSummary);
+
+        RegisterLiveToggle(_subtitleImmersiveMode);
+        RegisterLiveEnum(_subtitleSurface);
+        RegisterLiveField(_subtitlePositionX);
+        RegisterLiveField(_subtitlePositionY);
+        RegisterLiveField(_subtitleSize);
     }
 
     private void BuildGameCategory(VisualElement parent)
@@ -614,8 +730,6 @@ public sealed class SettingsMenu : MonoBehaviour
 
         var playback = CreateSection(content, "PLAYBACK", "Global experience controls");
         _globalSpeedMultiplier = CreateFloatField(playback, "Global speed multiplier");
-        _followPath = CreateToggle(playback, "Follow path");
-        _followPath.AddToClassList("immersive-toggle-wide");
         _infinitePlaying = CreateToggle(playback, "Infinite playing");
         _infinitePlaying.AddToClassList("immersive-toggle-wide");
         _hideExitPortalsInInfinitePlaying = CreateToggle(playback, "Hide portals to exit salles");
@@ -638,12 +752,93 @@ public sealed class SettingsMenu : MonoBehaviour
 
         _language.RegisterValueChangedCallback(_ => ApplyControls());
         RegisterLiveField(_globalSpeedMultiplier);
-        RegisterLiveToggle(_followPath);
         RegisterLiveToggle(_infinitePlaying);
         RegisterLiveToggle(_hideExitPortalsInInfinitePlaying);
         RegisterLiveToggle(_playInterviewIntrosInInfinitePlaying);
         RegisterLiveToggle(_demoMode);
         RegisterLiveField(_demoModeTimeoutSeconds);
+    }
+
+    private void BuildNavigationCategory(VisualElement parent)
+    {
+        var content = CreateCategoryContent(parent, Category.Navigation);
+        var roomsSection = CreateSection(content, "ROOMS", "Teleport immediately to any room in the loaded scene");
+
+        _navigationSummary = new Label();
+        _navigationSummary.AddToClassList("immersive-texture-summary");
+        roomsSection.Add(_navigationSummary);
+
+        var rooms = FindObjectsByType<Salle>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        Array.Sort(rooms, CompareRooms);
+
+        if (rooms.Length == 0)
+        {
+            var noRooms = new Label("No rooms were found in the loaded scene.");
+            noRooms.AddToClassList("immersive-hint");
+            roomsSection.Add(noRooms);
+            RefreshNavigationStatus();
+            return;
+        }
+
+        VisualElement row = null;
+        for (var index = 0; index < rooms.Length; index++)
+        {
+            var room = rooms[index];
+            if (index % 2 == 0)
+            {
+                row = CreateButtonRow(roomsSection);
+            }
+
+            var label = room.isExit ? room.name + " (EXIT)" : room.name;
+            var roomButton = CreateButton(label, () => TeleportToRoom(room));
+            roomButton.tooltip = "Teleport to " + room.name;
+            row.Add(roomButton);
+            _roomButtons[room] = roomButton;
+        }
+
+        RefreshNavigationStatus();
+    }
+
+    private static int CompareRooms(Salle left, Salle right)
+    {
+        if (ReferenceEquals(left, right))
+        {
+            return 0;
+        }
+
+        if (left == null)
+        {
+            return 1;
+        }
+
+        if (right == null)
+        {
+            return -1;
+        }
+
+        var levelComparison = left.niveau.CompareTo(right.niveau);
+        return levelComparison != 0
+            ? levelComparison
+            : string.Compare(left.name, right.name, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void TeleportToRoom(Salle room)
+    {
+        if (_mainController == null || room == null)
+        {
+            SetStatus("The selected room is no longer available.", true);
+            return;
+        }
+
+        _mainController.TeleportToSalle(room);
+        RefreshNavigationStatus();
+        SetStatus("Teleported to " + room.name + ".", false);
+    }
+
+    private void BuildSettingsCategory(VisualElement parent)
+    {
+        var content = CreateCategoryContent(parent, Category.Settings);
+        BuildPersistenceSection(content);
     }
 
     private void BuildPersistenceSection(VisualElement parent)
@@ -792,11 +987,27 @@ public sealed class SettingsMenu : MonoBehaviour
             _orbController.LockPan = _lockPan.value;
             _orbController.LockTilt = _lockTilt.value;
             _orbController.ViewResetTimeout = NonNegative(_viewResetTimeout.value);
+            _orbController.ViewResetDuration = NonNegative(_viewResetDuration.value);
             _mainController.followPathOrientation = _followPathOrientation.value;
             _mainController.followPathOrientationEntryBlendDuration =
                 NonNegative(_followPathOrientationEntryBlendDuration.value);
             _mainController.followPathOrientationSmoothing =
                 NonNegative(_followPathOrientationSmoothing.value);
+
+            if (_gazeFollower != null)
+            {
+                _gazeFollower.ActiveVerticalOffset = Finite(_gazeVerticalOffset.value);
+            }
+
+            if (_gazeAimOverlay != null)
+            {
+                _gazeAimOverlay.Configure(
+                    _showAimOverlay.value,
+                    _aimSize.value,
+                    _aimThickness.value,
+                    _aimOpacity.value,
+                    ParseAimColor(_aimColor.value, _gazeAimOverlay.Color));
+            }
 
             var immersive = _immersiveController.CaptureConfiguration();
             immersive.roomWidth = _roomWidth.value;
@@ -812,10 +1023,6 @@ public sealed class SettingsMenu : MonoBehaviour
             immersive.ceiling = _ceiling.value;
             immersive.resolutionMode = (ImmersiveController.ResolutionMode)_resolutionMode.value;
             immersive.desiredResolutionValue = _resolutionValue.value;
-            immersive.resolutionDivider = _resolutionDivider.value;
-            immersive.depthBufferBits = int.TryParse(_depthBuffer.value, out var depth) ? depth : 24;
-            immersive.renderTextureFormat = (RenderTextureFormat)_textureFormat.value;
-            immersive.visualMode = (ImmersiveController.VisualMode)_visualMode.value;
             immersive.enableSpoutSender = _spout.value;
             immersive.enableNdiSender = _ndi.value;
             _immersiveController.ApplyConfiguration(immersive, false);
@@ -826,18 +1033,26 @@ public sealed class SettingsMenu : MonoBehaviour
             rendering.alpha = _pointAlpha.value;
             rendering.linkMaxDistanceToCamera = _linkMaxDistanceToCamera.value;
             rendering.maxViewDistance = _pointMaxViewDistance.value;
-            rendering.viewDistanceMultiplier = _pointViewDistanceMultiplier.value;
             rendering.distanceFade = _pointDistanceFade.value;
-            rendering.fadeIn = _pointFadeIn.value;
-            rendering.fadeOut = _pointFadeOut.value;
-            rendering.boxFeather = _pointBoxFeather.value;
             _pointCloudConfiguration?.ApplyConfiguration(rendering);
+
+            if (_subtitles != null)
+            {
+                _subtitles.ImmersiveMode = _subtitleImmersiveMode.value;
+                _subtitles.ImmersiveSurface = (ImmersiveController.SurfaceId)_subtitleSurface.value;
+                _subtitles.ImmersivePosition = new Vector2(
+                    Mathf.Clamp01(Finite(_subtitlePositionX.value)),
+                    Mathf.Clamp01(Finite(_subtitlePositionY.value)));
+                _subtitles.ImmersiveSize = Mathf.Clamp(
+                    NonNegative(_subtitleSize.value),
+                    .01f,
+                    2f);
+            }
 
             _mainController.language = string.IsNullOrWhiteSpace(_language.value)
                 ? "en"
                 : _language.value.Trim();
             _mainController.globalSpeedMultiplier = NonNegative(_globalSpeedMultiplier.value);
-            _mainController.freeMotion = !_followPath.value;
             _mainController.infinitePlaying = _infinitePlaying.value;
             _mainController.hideExitPortalsInInfinitePlaying = _hideExitPortalsInInfinitePlaying.value;
             _mainController.playInterviewIntrosInInfinitePlaying = _playInterviewIntrosInInfinitePlaying.value;
@@ -868,6 +1083,7 @@ public sealed class SettingsMenu : MonoBehaviour
         _panSmoothing.SetValueWithoutNotify(_orbController.PanSmoothing);
         _tiltSmoothing.SetValueWithoutNotify(_orbController.TiltSmoothing);
         _viewResetTimeout.SetValueWithoutNotify(_orbController.ViewResetTimeout);
+        _viewResetDuration.SetValueWithoutNotify(_orbController.ViewResetDuration);
         SetToggleWithoutNotify(_requireRightMouseButton, _orbController.RequireRightMouseButton);
         SetToggleWithoutNotify(_invertPan, _orbController.InvertPan);
         SetToggleWithoutNotify(_invertTilt, _orbController.InvertTilt);
@@ -879,13 +1095,15 @@ public sealed class SettingsMenu : MonoBehaviour
         _followPathOrientationSmoothing.SetValueWithoutNotify(
             _mainController.followPathOrientationSmoothing);
 
+        RefreshAimControls(CaptureAimConfiguration());
+
         RefreshImmersiveControls(_immersiveController.CaptureConfiguration());
         RefreshPointCloudRenderingControls(CapturePointCloudRenderingConfiguration());
+        RefreshSubtitleControls(CaptureSubtitleConfiguration());
 
         RefreshLanguageChoices();
         _language.SetValueWithoutNotify(_mainController.language);
         _globalSpeedMultiplier.SetValueWithoutNotify(_mainController.globalSpeedMultiplier);
-        SetToggleWithoutNotify(_followPath, !_mainController.freeMotion);
         SetToggleWithoutNotify(_infinitePlaying, _mainController.infinitePlaying);
         SetToggleWithoutNotify(_hideExitPortalsInInfinitePlaying, _mainController.hideExitPortalsInInfinitePlaying);
         SetToggleWithoutNotify(_playInterviewIntrosInInfinitePlaying, _mainController.playInterviewIntrosInInfinitePlaying);
@@ -904,6 +1122,89 @@ public sealed class SettingsMenu : MonoBehaviour
             : new KatabasisMeshConfiguration.RuntimeConfiguration();
     }
 
+    private AimSettings CaptureAimConfiguration()
+    {
+        return new AimSettings
+        {
+            verticalOffset = _gazeFollower != null
+                ? _gazeFollower.ActiveVerticalOffset
+                : -10f,
+            showOverlay = _gazeAimOverlay != null && _gazeAimOverlay.Visible,
+            sizePixels = _gazeAimOverlay != null ? _gazeAimOverlay.SizePixels : 36f,
+            thicknessPixels = _gazeAimOverlay != null ? _gazeAimOverlay.ThicknessPixels : 3f,
+            opacity = _gazeAimOverlay != null ? _gazeAimOverlay.Opacity : .9f,
+            color = _gazeAimOverlay != null ? _gazeAimOverlay.Color : Color.white
+        };
+    }
+
+    private void RefreshAimControls(AimSettings configuration)
+    {
+        if (!_built || configuration == null)
+        {
+            return;
+        }
+
+        var wasRefreshing = _refreshing;
+        _refreshing = true;
+
+        _gazeVerticalOffset.SetValueWithoutNotify(configuration.verticalOffset);
+        SetToggleWithoutNotify(_showAimOverlay, configuration.showOverlay);
+        _aimSize.SetValueWithoutNotify(configuration.sizePixels);
+        _aimThickness.SetValueWithoutNotify(configuration.thicknessPixels);
+        _aimOpacity.SetValueWithoutNotify(configuration.opacity);
+        _aimColor.SetValueWithoutNotify("#" + ColorUtility.ToHtmlStringRGB(configuration.color));
+
+        var hasFollower = _gazeFollower != null;
+        var hasOverlay = hasFollower && _gazeAimOverlay != null && _immersiveController != null;
+        _gazeVerticalOffset.SetEnabled(hasFollower);
+        _showAimOverlay.SetEnabled(hasOverlay);
+        _aimSize.SetEnabled(hasOverlay && configuration.showOverlay);
+        _aimThickness.SetEnabled(hasOverlay && configuration.showOverlay);
+        _aimOpacity.SetEnabled(hasOverlay && configuration.showOverlay);
+        _aimColor.SetEnabled(hasOverlay && configuration.showOverlay);
+
+        _refreshing = wasRefreshing;
+    }
+
+    private SubtitleSettings CaptureSubtitleConfiguration()
+    {
+        return _subtitles != null
+            ? new SubtitleSettings
+            {
+                immersiveMode = _subtitles.ImmersiveMode,
+                surface = _subtitles.ImmersiveSurface,
+                position = _subtitles.ImmersivePosition,
+                size = _subtitles.ImmersiveSize
+            }
+            : new SubtitleSettings();
+    }
+
+    private void RefreshSubtitleControls(SubtitleSettings configuration)
+    {
+        if (!_built || configuration == null)
+        {
+            return;
+        }
+
+        var wasRefreshing = _refreshing;
+        _refreshing = true;
+
+        _subtitlePositionX.SetValueWithoutNotify(configuration.position.x);
+        _subtitlePositionY.SetValueWithoutNotify(configuration.position.y);
+        _subtitleSize.SetValueWithoutNotify(configuration.size);
+        SetToggleWithoutNotify(_subtitleImmersiveMode, configuration.immersiveMode);
+        _subtitleSurface.SetValueWithoutNotify(configuration.surface);
+
+        var controlsEnabled = _subtitles != null;
+        _subtitleImmersiveMode.SetEnabled(controlsEnabled);
+        _subtitleSurface.SetEnabled(controlsEnabled && configuration.immersiveMode);
+        _subtitlePositionX.SetEnabled(controlsEnabled && configuration.immersiveMode);
+        _subtitlePositionY.SetEnabled(controlsEnabled && configuration.immersiveMode);
+        _subtitleSize.SetEnabled(controlsEnabled && configuration.immersiveMode);
+
+        _refreshing = wasRefreshing;
+    }
+
     private void RefreshPointCloudRenderingControls(
         KatabasisMeshConfiguration.RuntimeConfiguration configuration)
     {
@@ -920,11 +1221,7 @@ public sealed class SettingsMenu : MonoBehaviour
         _pointAlpha.SetValueWithoutNotify(configuration.alpha);
         SetToggleWithoutNotify(_linkMaxDistanceToCamera, configuration.linkMaxDistanceToCamera);
         _pointMaxViewDistance.SetValueWithoutNotify(configuration.maxViewDistance);
-        _pointViewDistanceMultiplier.SetValueWithoutNotify(configuration.viewDistanceMultiplier);
         _pointDistanceFade.SetValueWithoutNotify(configuration.distanceFade);
-        _pointFadeIn.SetValueWithoutNotify(configuration.fadeIn);
-        _pointFadeOut.SetValueWithoutNotify(configuration.fadeOut);
-        _pointBoxFeather.SetValueWithoutNotify(configuration.boxFeather);
 
         _pointSize.SetEnabled(configuration.renderingMode == KatabasisMeshConfiguration.PointRenderingMode.Size);
         _pointMaxViewDistance.SetEnabled(!configuration.linkMaxDistanceToCamera);
@@ -957,10 +1254,6 @@ public sealed class SettingsMenu : MonoBehaviour
         SetToggleWithoutNotify(_ceiling, configuration.ceiling);
         _resolutionMode.SetValueWithoutNotify(configuration.resolutionMode);
         _resolutionValue.SetValueWithoutNotify(configuration.desiredResolutionValue);
-        _resolutionDivider.SetValueWithoutNotify(configuration.resolutionDivider);
-        _depthBuffer.SetValueWithoutNotify(configuration.depthBufferBits.ToString());
-        _textureFormat.SetValueWithoutNotify(configuration.renderTextureFormat);
-        _visualMode.SetValueWithoutNotify(configuration.visualMode);
         SetToggleWithoutNotify(_spout, configuration.enableSpoutSender);
         SetToggleWithoutNotify(_ndi, configuration.enableNdiSender);
 
@@ -981,6 +1274,49 @@ public sealed class SettingsMenu : MonoBehaviour
             ? "Spout available - Direct3D 11"
             : "Spout configured but inactive - requires Direct3D 11";
         _spoutSupport.EnableInClassList("immersive-warning", !_immersiveController.IsSpoutSupported);
+        if (_gazeFollower == null)
+        {
+            _aimSummary.text = "No TransformFollower gaze source is active in the loaded scene.";
+            _aimSummary.EnableInClassList("immersive-warning", true);
+        }
+        else if (_gazeAimOverlay == null || !_gazeAimOverlay.Visible)
+        {
+            _aimSummary.text = $"Compensated gaze pitch: {_gazeFollower.ActiveVerticalOffset:F1} degrees | circle hidden";
+            _aimSummary.EnableInClassList("immersive-warning", false);
+        }
+        else if (_gazeAimOverlay.IsRendering)
+        {
+            _aimSummary.text =
+                $"Compensated gaze pitch: {_gazeFollower.ActiveVerticalOffset:F1} degrees | "
+                + $"circle on {_gazeAimOverlay.CurrentSurface}";
+            _aimSummary.EnableInClassList("immersive-warning", false);
+        }
+        else
+        {
+            _aimSummary.text =
+                $"Compensated gaze pitch: {_gazeFollower.ActiveVerticalOffset:F1} degrees | "
+                + "the aim ray is outside the enabled immersive surfaces";
+            _aimSummary.EnableInClassList("immersive-warning", true);
+        }
+
+        if (_subtitles == null)
+        {
+            _subtitleSummary.text = "No subtitle renderer is active in the loaded scene.";
+            _subtitleSummary.EnableInClassList("immersive-warning", true);
+        }
+        else
+        {
+            var surfaceAvailable = !_subtitles.ImmersiveMode
+                || _immersiveController.TryGetSurfaceCamera(_subtitles.ImmersiveSurface, out _);
+            _subtitleSummary.EnableInClassList("immersive-warning", !surfaceAvailable);
+            _subtitleSummary.text = !_subtitles.ImmersiveMode
+                ? "Immersive overlay disabled; standard camera placement is active."
+                : surfaceAvailable
+                    ? $"Fixed 2D overlay on {_subtitles.ImmersiveSurface} (included in Spout/NDI)."
+                    : $"{_subtitles.ImmersiveSurface} is disabled, so no subtitle overlay can be rendered.";
+        }
+
+        RefreshNavigationStatus();
 
         if (_pointCloudConfiguration == null)
         {
@@ -994,6 +1330,27 @@ public sealed class SettingsMenu : MonoBehaviour
         _pointRenderingSummary.text = rendering.renderingMode == KatabasisMeshConfiguration.PointRenderingMode.Size
             ? $"Sized circular points | {rendering.pointSize:F1}px diameter | {rendering.alpha:F2} alpha"
             : $"Hardware points | 1 render pixel | {rendering.alpha:F2} alpha";
+    }
+
+    private void RefreshNavigationStatus()
+    {
+        if (_navigationSummary == null)
+        {
+            return;
+        }
+
+        var currentRoom = _mainController != null ? _mainController.salle : null;
+        _navigationSummary.text = currentRoom != null
+            ? "Current room: " + currentRoom.name
+            : "Current room: none";
+
+        foreach (var pair in _roomButtons)
+        {
+            if (pair.Value != null)
+            {
+                pair.Value.EnableInClassList("immersive-button-primary", pair.Key == currentRoom);
+            }
+        }
     }
 
     private void RefreshLanguageChoices()
@@ -1118,19 +1475,22 @@ public sealed class SettingsMenu : MonoBehaviour
                 lockPan = _orbController.LockPan,
                 lockTilt = _orbController.LockTilt,
                 viewResetTimeout = _orbController.ViewResetTimeout,
+                viewResetDuration = _orbController.ViewResetDuration,
                 followPathOrientation = _mainController.followPathOrientation,
                 followPathOrientationEntryBlendDuration =
                     _mainController.followPathOrientationEntryBlendDuration,
                 followPathOrientationSmoothing =
                     _mainController.followPathOrientationSmoothing
             },
+            aim = CaptureAimConfiguration(),
             immersive = _immersiveController.CaptureConfiguration(),
             rendering = CapturePointCloudRenderingConfiguration(),
+            subtitles = CaptureSubtitleConfiguration(),
             game = new GameSettings
             {
                 language = _mainController.language,
                 globalSpeedMultiplier = _mainController.globalSpeedMultiplier,
-                followPath = _followPath.value,
+                followPath = !_mainController.freeMotion,
                 infinitePlaying = _mainController.infinitePlaying,
                 hideExitPortalsInInfinitePlaying = _mainController.hideExitPortalsInInfinitePlaying,
                 playInterviewIntrosInInfinitePlaying = _mainController.playInterviewIntrosInInfinitePlaying,
@@ -1142,6 +1502,21 @@ public sealed class SettingsMenu : MonoBehaviour
 
     private void ApplyConfiguration(UnifiedSettings configuration, bool requestAutosave)
     {
+        if (configuration.version < 9 || configuration.aim == null)
+        {
+            configuration.aim = CaptureAimConfiguration();
+        }
+
+        if (configuration.version < 8 || configuration.subtitles == null)
+        {
+            configuration.subtitles = new SubtitleSettings();
+        }
+
+        if (configuration.version < 6)
+        {
+            configuration.orb.viewResetDuration = 1f;
+        }
+
         if (configuration.version < 5)
         {
             configuration.game.demoMode = false;
@@ -1174,14 +1549,35 @@ public sealed class SettingsMenu : MonoBehaviour
             _orbController.LockPan = configuration.orb.lockPan;
             _orbController.LockTilt = configuration.orb.lockTilt;
             _orbController.ViewResetTimeout = configuration.orb.viewResetTimeout;
+            _orbController.ViewResetDuration = configuration.orb.viewResetDuration;
             _mainController.followPathOrientation = configuration.orb.followPathOrientation;
             _mainController.followPathOrientationEntryBlendDuration =
                 configuration.orb.followPathOrientationEntryBlendDuration;
             _mainController.followPathOrientationSmoothing =
                 configuration.orb.followPathOrientationSmoothing;
 
+            if (_gazeFollower != null)
+            {
+                _gazeFollower.ActiveVerticalOffset = configuration.aim.verticalOffset;
+            }
+
+            _gazeAimOverlay?.Configure(
+                configuration.aim.showOverlay,
+                configuration.aim.sizePixels,
+                configuration.aim.thicknessPixels,
+                configuration.aim.opacity,
+                configuration.aim.color);
+
             _immersiveController.ApplyConfiguration(configuration.immersive, false);
             _pointCloudConfiguration?.ApplyConfiguration(configuration.rendering);
+
+            if (_subtitles != null)
+            {
+                _subtitles.ImmersiveMode = configuration.subtitles.immersiveMode;
+                _subtitles.ImmersiveSurface = configuration.subtitles.surface;
+                _subtitles.ImmersivePosition = configuration.subtitles.position;
+                _subtitles.ImmersiveSize = configuration.subtitles.size;
+            }
 
             _mainController.language = configuration.game.language;
             _mainController.globalSpeedMultiplier = configuration.game.globalSpeedMultiplier;
@@ -1218,10 +1614,22 @@ public sealed class SettingsMenu : MonoBehaviour
         configuration.orb.panSmoothing = NonNegative(configuration.orb.panSmoothing);
         configuration.orb.tiltSmoothing = NonNegative(configuration.orb.tiltSmoothing);
         configuration.orb.viewResetTimeout = NonNegative(configuration.orb.viewResetTimeout);
+        configuration.orb.viewResetDuration = NonNegative(configuration.orb.viewResetDuration);
         configuration.orb.followPathOrientationEntryBlendDuration =
             NonNegative(configuration.orb.followPathOrientationEntryBlendDuration);
         configuration.orb.followPathOrientationSmoothing =
             NonNegative(configuration.orb.followPathOrientationSmoothing);
+        configuration.aim.verticalOffset = Finite(configuration.aim.verticalOffset);
+        configuration.aim.sizePixels = Mathf.Clamp(
+            NonNegative(configuration.aim.sizePixels),
+            4f,
+            512f);
+        configuration.aim.thicknessPixels = Mathf.Clamp(
+            NonNegative(configuration.aim.thicknessPixels),
+            .5f,
+            configuration.aim.sizePixels * .5f);
+        configuration.aim.opacity = Mathf.Clamp01(NonNegative(configuration.aim.opacity));
+        configuration.aim.color = SanitizeColor(configuration.aim.color);
         configuration.rendering.pointSize = Mathf.Max(0.1f, NonNegative(configuration.rendering.pointSize));
         configuration.rendering.alpha = Mathf.Clamp01(NonNegative(configuration.rendering.alpha));
         configuration.rendering.maxViewDistance = NonNegative(configuration.rendering.maxViewDistance);
@@ -1230,6 +1638,18 @@ public sealed class SettingsMenu : MonoBehaviour
         configuration.rendering.fadeIn = NonNegative(configuration.rendering.fadeIn);
         configuration.rendering.fadeOut = NonNegative(configuration.rendering.fadeOut);
         configuration.rendering.boxFeather = NonNegative(configuration.rendering.boxFeather);
+        configuration.subtitles.position = new Vector2(
+            Mathf.Clamp01(Finite(configuration.subtitles.position.x)),
+            Mathf.Clamp01(Finite(configuration.subtitles.position.y)));
+        if (!Enum.IsDefined(typeof(ImmersiveController.SurfaceId), configuration.subtitles.surface))
+        {
+            configuration.subtitles.surface = ImmersiveController.SurfaceId.Front;
+        }
+
+        configuration.subtitles.size = Mathf.Clamp(
+            NonNegative(configuration.subtitles.size),
+            .01f,
+            2f);
         configuration.game.language = string.IsNullOrWhiteSpace(configuration.game.language)
             ? "en"
             : configuration.game.language.Trim();
@@ -1242,6 +1662,42 @@ public sealed class SettingsMenu : MonoBehaviour
     private static float NonNegative(float value)
     {
         return float.IsNaN(value) || float.IsInfinity(value) ? 0f : Mathf.Max(0f, value);
+    }
+
+    private static float Finite(float value)
+    {
+        return float.IsNaN(value) || float.IsInfinity(value) ? 0f : value;
+    }
+
+    private static Color ParseAimColor(string html, Color fallback)
+    {
+        if (string.IsNullOrWhiteSpace(html))
+        {
+            return SanitizeColor(fallback);
+        }
+
+        html = html.Trim();
+        if (!html.StartsWith("#", StringComparison.Ordinal))
+        {
+            html = "#" + html;
+        }
+
+        if (!ColorUtility.TryParseHtmlString(html, out var parsed))
+        {
+            return SanitizeColor(fallback);
+        }
+
+        parsed.a = 1f;
+        return SanitizeColor(parsed);
+    }
+
+    private static Color SanitizeColor(Color value)
+    {
+        return new Color(
+            Mathf.Clamp01(Finite(value.r)),
+            Mathf.Clamp01(Finite(value.g)),
+            Mathf.Clamp01(Finite(value.b)),
+            1f);
     }
 
     public string GetConfigurationJson(bool prettyPrint = true)

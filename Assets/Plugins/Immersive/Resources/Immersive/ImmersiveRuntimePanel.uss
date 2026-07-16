@@ -33,16 +33,17 @@
 }
 
 .settings-window {
-    width: 540px;
+    width: 680px;
 }
 
 .settings-category-navigation {
-    height: 48px;
+    min-height: 48px;
     padding-left: 16px;
     padding-right: 16px;
     padding-top: 8px;
     padding-bottom: 8px;
     flex-direction: row;
+    flex-wrap: wrap;
     background-color: rgba(13, 20, 30, 0.96);
     border-bottom-width: 1px;
     border-bottom-color: rgba(122, 156, 194, 0.18);
@@ -50,8 +51,12 @@
 
 .settings-category-button {
     flex-grow: 1;
+    min-width: 140px;
+    height: 32px;
     margin-left: 3px;
     margin-right: 3px;
+    margin-top: 2px;
+    margin-bottom: 2px;
     color: rgb(153, 174, 198);
     background-color: rgba(124, 157, 194, 0.08);
     border-top-width: 1px;
