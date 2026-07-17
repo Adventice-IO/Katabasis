@@ -72,6 +72,8 @@
             float3 _BoxMin;
             float3 _BoxMax;
             float _BoxFeather;
+            float _KatabasisSpectatorPass;
+            float _KatabasisSpectatorPointAlpha;
 
             // KataDraw parameters
             int _EnableFocalMode;
@@ -98,7 +100,11 @@
                 
  
                 // 1. Quick Global Exit
-                float globalAlpha = _Alpha * _Reveal;
+                float effectiveAlpha = lerp(
+                    _Alpha,
+                    _KatabasisSpectatorPointAlpha,
+                    saturate(_KatabasisSpectatorPass));
+                float globalAlpha = effectiveAlpha * _Reveal;
                 if (globalAlpha <= 0.0) {
                     o.position = float4(0,0,0,0);
                     o.color = float4(0,0,0,0);

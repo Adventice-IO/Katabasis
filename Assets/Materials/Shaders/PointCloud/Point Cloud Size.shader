@@ -80,6 +80,10 @@ Shader "Point Cloud/Optimized_Masked_VR_Size"
             float3 _BoxMin;
             float3 _BoxMax;
             float _BoxFeather;
+            float _KatabasisSpectatorPass;
+            float _KatabasisSpectatorPointMode;
+            float _KatabasisSpectatorPointSize;
+            float _KatabasisSpectatorPointAlpha;
 
             int _EnableFocalMode;
             float _Focal;
@@ -98,7 +102,11 @@ Shader "Point Cloud/Optimized_Masked_VR_Size"
                 UNITY_INITIALIZE_OUTPUT(vertex_to_geometry, o);
                 UNITY_TRANSFER_INSTANCE_ID(v, o);
 
-                float globalAlpha = _Alpha * _Reveal;
+                float effectiveAlpha = lerp(
+                    _Alpha,
+                    _KatabasisSpectatorPointAlpha,
+                    saturate(_KatabasisSpectatorPass));
+                float globalAlpha = effectiveAlpha * _Reveal;
                 if (globalAlpha <= 0.0)
                 {
                     return o;
@@ -203,8 +211,16 @@ Shader "Point Cloud/Optimized_Masked_VR_Size"
                 UNITY_TRANSFER_INSTANCE_ID(input, o);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+                float spectatorPointSize = lerp(
+                    1.0,
+                    _KatabasisSpectatorPointSize,
+                    saturate(_KatabasisSpectatorPointMode));
+                float effectivePointSize = lerp(
+                    _PointSize,
+                    spectatorPointSize,
+                    saturate(_KatabasisSpectatorPass));
                 float2 screenSize = max(_ScreenParams.xy, float2(1.0, 1.0));
-                float2 clipOffset = uv * (_PointSize / screenSize);
+                float2 clipOffset = uv * (effectivePointSize / screenSize);
                 o.position = input.position;
                 o.position.xy += clipOffset * o.position.w;
                 o.color = input.color;

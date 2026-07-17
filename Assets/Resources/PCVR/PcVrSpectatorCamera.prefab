@@ -181,19 +181,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PcVrSpectatorCamera
   sourceCamera: {fileID: 0}
   configuration:
-    version: 2
+    version: 4
     enabled: 0
     positionSmoothing: 0.15
     rotationSmoothing: 0.2
     maxPositionSpeed: 10
     maxRotationSpeed: 180
     horizonLock: 0.35
+    oneEuroEnabled: 1
+    oneEuroPositionDeadZone: 0.01
+    oneEuroRotationDeadZone: 1
+    oneEuroPositionMinCutoff: 0.1
+    oneEuroPositionBeta: 4
+    oneEuroRotationMinCutoff: 0.1
+    oneEuroRotationBeta: 1.5
     positionOffset: {x: 0, y: 0, z: 0}
     rotationOffset: {x: 0, y: 0, z: 0}
     fieldOfView: 75
     nearClipPlane: 0.05
     farClipPlane: 1000
     targetDisplay: 0
+    pointRenderingMode: 0
+    pointSize: 2
+    pointAlpha: 1
     outputWidth: 1920
     outputHeight: 1080
     pipCorner: 0

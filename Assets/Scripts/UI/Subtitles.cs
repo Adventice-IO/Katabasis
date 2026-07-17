@@ -9,6 +9,8 @@ using UnityEngine.UIElements;
 [ExecuteInEditMode]
 public class Subtitles : MonoBehaviour
 {
+    public const string HeadsetSubtitleLayerName = "HeadsetSubtitle";
+
     public SubtitleAsset subs;
 
     float timeAtPlay;
@@ -43,10 +45,16 @@ public class Subtitles : MonoBehaviour
 
     DataManager dataManager;
     ImmersiveController immersiveController;
+    PcVrSpectatorCamera pcVrSpectatorCamera;
     Camera overlayCamera;
     Camera overlayBaseCamera;
+    GameObject spectatorSubtitleObject;
+    UIDocument spectatorUiDocument;
+    Label spectatorSubtitleLabel;
     Camera excludedMainCamera;
     int excludedMainCameraMask;
+    PcVrSpectatorCamera excludedPcVrCamera;
+    int excludedPcVrLayer = -1;
     int originalLayer;
     Transform originalParent;
     Vector3 originalLocalPosition;
@@ -56,6 +64,7 @@ public class Subtitles : MonoBehaviour
     bool originalLayerCaptured;
     bool originalTransformCaptured;
     bool overlayStackWarningLogged;
+    bool headsetLayerWarningLogged;
 
     public Vector3 Position
     {
@@ -154,7 +163,7 @@ public class Subtitles : MonoBehaviour
         }
 
         subtitleLabel = uiDocument.rootVisualElement.Q<Label>("subtitle");
-        subtitleLabel.AddToClassList("hidden");
+        SyncSubtitleLabel(subtitleLabel);
         //Debug.Log("Subtitle label: " + (subtitleLabel != null ? subtitleLabel.name : "null"));
     }
 
@@ -174,7 +183,8 @@ public class Subtitles : MonoBehaviour
         if (isPlaying != lastPlaying || (isPlaying && timeAtPlay == 0))
         {
             //Debug.Log("Subtitle playback started at " + Time.time);
-            subtitleLabel.AddToClassList("hidden");
+            curLine = null;
+            SetSubtitleLine(null);
             if (isPlaying)
             {
                 timeAtPlay = Time.time;
@@ -204,8 +214,7 @@ public class Subtitles : MonoBehaviour
                 if (curLine != null)
                 {
                     //Debug.Log($"Current subtitle: {curLine.text}");
-                    subtitleLabel.RemoveFromClassList("hidden");
-                    subtitleLabel.text = subtitle.text;
+                    SetSubtitleLine(curLine);
                 }
                 else
                 {
@@ -214,7 +223,7 @@ public class Subtitles : MonoBehaviour
                         Debug.Log("Subtitle playback finished at " + Time.time);
                         isPlaying = false;
                     }
-                    subtitleLabel.AddToClassList("hidden");
+                    SetSubtitleLine(null);
                 }
             }
 
@@ -228,6 +237,22 @@ public class Subtitles : MonoBehaviour
     void UpdatePlacement()
     {
         Camera targetCamera = Camera.main;
+        PcVrSpectatorCamera targetPcVrCamera = GetPcVrSpectatorCamera();
+        if (Application.isPlaying
+            && targetPcVrCamera != null
+            && targetPcVrCamera.IsEnabled
+            && targetPcVrCamera.SpectatorCamera != null)
+        {
+            if (ConfigurePcVrRouting(targetPcVrCamera, targetCamera))
+            {
+                UpdateStandardCameraPlacement(targetCamera);
+                return;
+            }
+        }
+
+        RestorePcVrExclusion();
+        DestroySpectatorSubtitleDocument();
+
         ImmersiveController targetImmersiveController = GetImmersiveController();
         if (immersiveMode)
         {
@@ -252,6 +277,11 @@ public class Subtitles : MonoBehaviour
         }
 
         RestoreStandardRouting();
+        UpdateStandardCameraPlacement(targetCamera);
+    }
+
+    void UpdateStandardCameraPlacement(Camera targetCamera)
+    {
         if (targetCamera == null)
         {
             return;
@@ -272,6 +302,64 @@ public class Subtitles : MonoBehaviour
 
         transform.position = Vector3.Lerp(transform.position, targetPosition, blend);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, blend);
+    }
+
+    PcVrSpectatorCamera GetPcVrSpectatorCamera()
+    {
+        if (pcVrSpectatorCamera == null)
+        {
+            pcVrSpectatorCamera =
+                FindAnyObjectByType<PcVrSpectatorCamera>(FindObjectsInactive.Include);
+        }
+
+        return pcVrSpectatorCamera;
+    }
+
+    bool ConfigurePcVrRouting(PcVrSpectatorCamera spectator, Camera mainCamera)
+    {
+        int headsetLayer = LayerMask.NameToLayer(HeadsetSubtitleLayerName);
+        int overlayLayer = LayerMask.NameToLayer(ImmersiveController.SubtitleOverlayLayerName);
+        if (headsetLayer < 0 || overlayLayer < 0)
+        {
+            if (!headsetLayerWarningLogged)
+            {
+                Debug.LogError(
+                    $"PC-VR dual subtitles require the {HeadsetSubtitleLayerName} and "
+                    + $"{ImmersiveController.SubtitleOverlayLayerName} layers.",
+                    this);
+                headsetLayerWarningLogged = true;
+            }
+
+            RestoreStandardRouting();
+            return false;
+        }
+
+        headsetLayerWarningLogged = false;
+        RestoreOriginalTransformParent();
+        gameObject.layer = headsetLayer;
+        EnsureOverlayCamera(overlayLayer);
+        EnsureSpectatorSubtitleDocument(overlayLayer);
+        if (overlayCamera == null || spectatorSubtitleObject == null)
+        {
+            RestoreStandardRouting();
+            return false;
+        }
+
+        ExcludeOverlayFromMainCamera(mainCamera, overlayLayer, headsetLayer);
+        ExcludeHeadsetSubtitleFromPcVr(spectator, headsetLayer);
+
+        if (!AttachOverlayCamera(spectator.SpectatorCamera))
+        {
+            return false;
+        }
+
+        if (spectatorSubtitleObject.transform.parent != overlayCamera.transform)
+        {
+            spectatorSubtitleObject.transform.SetParent(overlayCamera.transform, false);
+        }
+
+        UpdateOverlayPlacement(spectator.SpectatorCamera, spectatorSubtitleObject.transform);
+        return true;
     }
 
     ImmersiveController GetImmersiveController()
@@ -315,7 +403,10 @@ public class Subtitles : MonoBehaviour
         }
     }
 
-    void ExcludeOverlayFromMainCamera(Camera mainCamera, int overlayLayer)
+    void ExcludeOverlayFromMainCamera(
+        Camera mainCamera,
+        int overlayLayer,
+        int includedLayer = -1)
     {
         if (mainCamera == null)
         {
@@ -329,7 +420,37 @@ public class Subtitles : MonoBehaviour
             excludedMainCameraMask = mainCamera.cullingMask;
         }
 
-        mainCamera.cullingMask = excludedMainCameraMask & ~(1 << overlayLayer);
+        int mask = excludedMainCameraMask & ~(1 << overlayLayer);
+        if (includedLayer >= 0)
+        {
+            mask |= 1 << includedLayer;
+        }
+
+        mainCamera.cullingMask = mask;
+    }
+
+    void ExcludeHeadsetSubtitleFromPcVr(PcVrSpectatorCamera spectator, int headsetLayer)
+    {
+        if (excludedPcVrCamera == spectator && excludedPcVrLayer == headsetLayer)
+        {
+            return;
+        }
+
+        RestorePcVrExclusion();
+        spectator.SetCullingLayerExcluded(headsetLayer, true);
+        excludedPcVrCamera = spectator;
+        excludedPcVrLayer = headsetLayer;
+    }
+
+    void RestorePcVrExclusion()
+    {
+        if (excludedPcVrCamera != null && excludedPcVrLayer >= 0)
+        {
+            excludedPcVrCamera.SetCullingLayerExcluded(excludedPcVrLayer, false);
+        }
+
+        excludedPcVrCamera = null;
+        excludedPcVrLayer = -1;
     }
 
     void EnsureOverlayCamera(int overlayLayer)
@@ -366,6 +487,71 @@ public class Subtitles : MonoBehaviour
         overlayData.renderType = CameraRenderType.Overlay;
         overlayData.renderPostProcessing = false;
         overlayData.renderShadows = false;
+    }
+
+    void EnsureSpectatorSubtitleDocument(int overlayLayer)
+    {
+        if (spectatorSubtitleObject != null)
+        {
+            spectatorSubtitleObject.layer = overlayLayer;
+            if (spectatorSubtitleLabel == null && spectatorUiDocument?.rootVisualElement != null)
+            {
+                spectatorSubtitleLabel =
+                    spectatorUiDocument.rootVisualElement.Q<Label>("subtitle");
+                SyncSubtitleLabel(spectatorSubtitleLabel);
+            }
+
+            return;
+        }
+
+        if (uiDocument == null)
+        {
+            return;
+        }
+
+        spectatorSubtitleObject = new GameObject("Spectator Subtitle 2D Overlay")
+        {
+            hideFlags = HideFlags.HideInHierarchy,
+            layer = overlayLayer
+        };
+        spectatorSubtitleObject.SetActive(false);
+
+        spectatorUiDocument = spectatorSubtitleObject.AddComponent<UIDocument>();
+        spectatorUiDocument.panelSettings = uiDocument.panelSettings;
+        spectatorUiDocument.visualTreeAsset = uiDocument.visualTreeAsset;
+        spectatorUiDocument.sortingOrder = uiDocument.sortingOrder;
+        spectatorUiDocument.position = uiDocument.position;
+        spectatorUiDocument.worldSpaceSizeMode = uiDocument.worldSpaceSizeMode;
+        spectatorUiDocument.worldSpaceSize = uiDocument.worldSpaceSize;
+        spectatorUiDocument.pivotReferenceSize = uiDocument.pivotReferenceSize;
+        spectatorUiDocument.pivot = uiDocument.pivot;
+        spectatorSubtitleObject.SetActive(true);
+
+        spectatorSubtitleLabel = spectatorUiDocument.rootVisualElement?.Q<Label>("subtitle");
+        SyncSubtitleLabel(spectatorSubtitleLabel);
+    }
+
+    void DestroySpectatorSubtitleDocument()
+    {
+        if (spectatorSubtitleObject == null)
+        {
+            spectatorUiDocument = null;
+            spectatorSubtitleLabel = null;
+            return;
+        }
+
+        GameObject documentObject = spectatorSubtitleObject;
+        spectatorSubtitleObject = null;
+        spectatorUiDocument = null;
+        spectatorSubtitleLabel = null;
+        if (Application.isPlaying)
+        {
+            Destroy(documentObject);
+        }
+        else
+        {
+            DestroyImmediate(documentObject);
+        }
     }
 
     bool AttachOverlayCamera(Camera surfaceCamera)
@@ -422,6 +608,8 @@ public class Subtitles : MonoBehaviour
         RestoreOriginalTransformParent();
         DetachOverlayCamera();
         DestroyOverlayCamera();
+        DestroySpectatorSubtitleDocument();
+        RestorePcVrExclusion();
 
         if (originalLayerCaptured)
         {
@@ -479,7 +667,12 @@ public class Subtitles : MonoBehaviour
 
     void UpdateImmersiveOverlayPlacement(Camera surfaceCamera)
     {
-        if (overlayCamera == null)
+        UpdateOverlayPlacement(surfaceCamera, transform);
+    }
+
+    void UpdateOverlayPlacement(Camera surfaceCamera, Transform panelTransform)
+    {
+        if (overlayCamera == null || panelTransform == null)
         {
             return;
         }
@@ -491,28 +684,59 @@ public class Subtitles : MonoBehaviour
         overlayCamera.aspect = aspect;
         overlayCamera.orthographicSize = .5f;
 
-        float panelWorldWidthAtScaleOne = GetPanelWorldWidthAtScaleOne();
+        UIDocument panelDocument = panelTransform == transform
+            ? uiDocument
+            : spectatorUiDocument;
+        float panelWorldWidthAtScaleOne = GetPanelWorldWidthAtScaleOne(panelDocument);
         float targetScale = aspect * immersiveSize / panelWorldWidthAtScaleOne;
 
-        transform.localPosition = new Vector3(
+        panelTransform.localPosition = new Vector3(
             (immersivePosition.x - .5f) * aspect,
             immersivePosition.y - .5f,
             1f);
-        transform.localRotation = Quaternion.identity;
-        transform.localScale = Vector3.one * targetScale;
+        panelTransform.localRotation = Quaternion.identity;
+        panelTransform.localScale = Vector3.one * targetScale;
     }
 
-    float GetPanelWorldWidthAtScaleOne()
+    float GetPanelWorldWidthAtScaleOne(UIDocument document)
     {
-        if (uiDocument == null)
+        if (document == null)
         {
             return 6.5f;
         }
 
-        float pixelsPerUnit = uiDocument.panelSettings != null
-            ? uiDocument.panelSettings.referenceSpritePixelsPerUnit
+        float pixelsPerUnit = document.panelSettings != null
+            ? document.panelSettings.referenceSpritePixelsPerUnit
             : 100f;
-        return Mathf.Max(.001f, uiDocument.worldSpaceSize.x / Mathf.Max(.001f, pixelsPerUnit));
+        return Mathf.Max(.001f, document.worldSpaceSize.x / Mathf.Max(.001f, pixelsPerUnit));
+    }
+
+    void SetSubtitleLine(SubtitleLine subtitle)
+    {
+        ApplySubtitleLine(subtitleLabel, subtitle);
+        ApplySubtitleLine(spectatorSubtitleLabel, subtitle);
+    }
+
+    void SyncSubtitleLabel(Label label)
+    {
+        ApplySubtitleLine(label, isPlaying ? curLine : null);
+    }
+
+    static void ApplySubtitleLine(Label label, SubtitleLine subtitle)
+    {
+        if (label == null)
+        {
+            return;
+        }
+
+        if (subtitle == null)
+        {
+            label.AddToClassList("hidden");
+            return;
+        }
+
+        label.text = subtitle.text;
+        label.RemoveFromClassList("hidden");
     }
 
     void ApplySize()

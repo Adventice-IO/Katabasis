@@ -159,6 +159,8 @@ public sealed class ImmersiveController : MonoBehaviour
     private int _subtitleOverlayLayer = -1;
     private int _aimOverlayLayer = -1;
     private bool _requiresSync = true;
+    private bool _outputEnabled = true;
+    private bool _cameraOffsetEnabled = true;
     private bool _autosavePending;
     private float _autosaveAt;
 
@@ -176,9 +178,17 @@ public sealed class ImmersiveController : MonoBehaviour
     public RenderTexture CeilingRenderTexture => ceilingRT;
     public int SubtitleOverlayLayer => _subtitleOverlayLayer;
     public int AimOverlayLayer => _aimOverlayLayer;
+    public bool OutputEnabled => _outputEnabled;
+    public bool CameraOffsetEnabled => _cameraOffsetEnabled;
 
     public bool TryGetSurfaceCamera(SurfaceId surface, out Camera surfaceCamera)
     {
+        if (!_outputEnabled)
+        {
+            surfaceCamera = null;
+            return false;
+        }
+
         ProcessPendingChanges();
         if (_rigs.TryGetValue(surface, out var rig) && rig != null && rig.camera != null)
         {
@@ -195,6 +205,48 @@ public sealed class ImmersiveController : MonoBehaviour
         loadSavedConfigurationOnStart = false;
         autosaveRuntimeChanges = false;
         _autosavePending = false;
+    }
+
+    public void SetOutputEnabled(bool enabled)
+    {
+        _outputEnabled = enabled;
+        EnsureContainers();
+
+        if (_camerasContainer != null)
+        {
+            _camerasContainer.gameObject.SetActive(enabled);
+        }
+
+        if (_wallsContainer != null)
+        {
+            _wallsContainer.gameObject.SetActive(enabled);
+        }
+
+        foreach (var pair in _rigs)
+        {
+            var rig = pair.Value;
+            if (rig?.camera != null)
+            {
+                rig.camera.enabled = enabled;
+            }
+
+            if (rig != null)
+            {
+                UpdateSenderState(rig);
+            }
+        }
+    }
+
+    public void SetCameraOffsetEnabled(bool enabled)
+    {
+        if (_cameraOffsetEnabled == enabled)
+        {
+            return;
+        }
+
+        _cameraOffsetEnabled = enabled;
+        UpdateAnchorTransformHeight();
+        UpdateRigs();
     }
 
     private void Awake()
@@ -657,12 +709,13 @@ public sealed class ImmersiveController : MonoBehaviour
         }
 
         var localPosition = anchorTransform.localPosition;
-        if (Mathf.Approximately(localPosition.y, cameraOffsetFromAnchor.y))
+        var effectiveCameraOffset = GetEffectiveCameraOffsetFromAnchor();
+        if (Mathf.Approximately(localPosition.y, effectiveCameraOffset.y))
         {
             return;
         }
 
-        localPosition.y = cameraOffsetFromAnchor.y;
+        localPosition.y = effectiveCameraOffset.y;
         anchorTransform.localPosition = localPosition;
     }
 
@@ -699,6 +752,9 @@ public sealed class ImmersiveController : MonoBehaviour
         {
             _wallsContainer = FindOrCreateContainer(WallsContainerName);
         }
+
+        _camerasContainer.gameObject.SetActive(_outputEnabled);
+        _wallsContainer.gameObject.SetActive(_outputEnabled);
     }
 
     private Transform FindOrCreateContainer(string containerName)
@@ -914,13 +970,18 @@ public sealed class ImmersiveController : MonoBehaviour
             rig.camera = camGo.AddComponent<Camera>();
         }
 
-        rig.camera.enabled = true;
+        rig.camera.enabled = _outputEnabled;
         return rig;
     }
 
     private void UpdateRigs()
     {
         if (_camerasContainer == null)
+        {
+            return;
+        }
+
+        if (!_outputEnabled)
         {
             return;
         }
@@ -945,6 +1006,16 @@ public sealed class ImmersiveController : MonoBehaviour
         foreach (var pair in _rigs)
         {
             var rig = pair.Value;
+            if (rig.wall != null)
+            {
+                rig.wall.SetActive(_outputEnabled);
+            }
+
+            if (rig.camera != null)
+            {
+                rig.camera.enabled = _outputEnabled;
+            }
+
             UpdatePreviewLayer(rig);
             UpdateSurfaceGeometry(rig);
             UpdateRenderTexture(rig);
@@ -1052,7 +1123,12 @@ public sealed class ImmersiveController : MonoBehaviour
         // The camera position is expressed as: selected room anchor + camera offset.
         // Moving the room by the inverse offset keeps the generated cameras at the
         // Cameras container while allowing the room anchor to be chosen freely.
-        return cameraLocalPosition - cameraOffsetFromAnchor - GetRoomAnchorPoint();
+        return cameraLocalPosition - GetEffectiveCameraOffsetFromAnchor() - GetRoomAnchorPoint();
+    }
+
+    private Vector3 GetEffectiveCameraOffsetFromAnchor()
+    {
+        return _cameraOffsetEnabled ? cameraOffsetFromAnchor : Vector3.zero;
     }
 
     private Vector3 GetRoomAnchorPoint()
@@ -1454,10 +1530,12 @@ public sealed class ImmersiveController : MonoBehaviour
 
         var cameraObject = rig.camera.gameObject;
         var streamName = rig.id.ToString();
-        var spoutAllowed = enableSpoutSender && IsSpoutAllowedOnCurrentGraphicsApi();
+        var spoutAllowed = _outputEnabled
+            && enableSpoutSender
+            && IsSpoutAllowedOnCurrentGraphicsApi();
 
         ConfigureSenderComponent(cameraObject, new[] { "SpoutSender" }, spoutAllowed, streamName, rig.camera, rig.renderTexture, true);
-        ConfigureSenderComponent(cameraObject, new[] { "NDISender", "NdiSender" }, enableNdiSender, streamName, rig.camera, rig.renderTexture, true);
+        ConfigureSenderComponent(cameraObject, new[] { "NDISender", "NdiSender" }, _outputEnabled && enableNdiSender, streamName, rig.camera, rig.renderTexture, true);
     }
 
     private static bool IsSpoutAllowedOnCurrentGraphicsApi()

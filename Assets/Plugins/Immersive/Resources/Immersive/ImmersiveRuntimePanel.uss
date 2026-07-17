@@ -36,6 +36,61 @@
     width: 680px;
 }
 
+.settings-global-mode {
+    min-height: 52px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(8, 13, 21, 0.98);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(70, 174, 240, 0.28);
+}
+
+.settings-global-mode-label {
+    min-width: 112px;
+    color: rgb(81, 181, 255);
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+.settings-global-mode-buttons {
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+.settings-global-mode-button {
+    flex-grow: 1;
+    height: 34px;
+    margin-left: 3px;
+    margin-right: 3px;
+    color: rgb(153, 174, 198);
+    background-color: rgba(124, 157, 194, 0.08);
+    border-top-color: rgba(140, 175, 214, 0.22);
+    border-right-color: rgba(140, 175, 214, 0.22);
+    border-bottom-color: rgba(140, 175, 214, 0.22);
+    border-left-color: rgba(140, 175, 214, 0.22);
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+.settings-global-mode-button:hover {
+    color: white;
+    background-color: rgba(78, 162, 222, 0.22);
+}
+
+.settings-global-mode-button-active,
+.settings-global-mode-button-active:hover {
+    color: white;
+    background-color: rgb(30, 119, 180);
+    border-top-color: rgb(70, 174, 240);
+    border-right-color: rgb(70, 174, 240);
+    border-bottom-color: rgb(70, 174, 240);
+    border-left-color: rgb(70, 174, 240);
+}
+
 .settings-category-navigation {
     min-height: 48px;
     padding-left: 16px;
@@ -92,6 +147,182 @@
 
 .settings-category-content {
     flex-grow: 1;
+}
+
+.settings-category-button.settings-category-accent-orb {
+    color: rgb(211, 190, 255);
+    border-bottom-color: rgb(166, 126, 249);
+}
+
+.settings-category-button.settings-category-accent-orb:hover {
+    background-color: rgba(132, 91, 225, 0.28);
+}
+
+.settings-category-button.settings-category-accent-orb.settings-category-button-active,
+.settings-category-button.settings-category-accent-orb.settings-category-button-active:hover {
+    background-color: rgb(91, 61, 158);
+    border-top-color: rgb(183, 151, 255);
+    border-right-color: rgb(183, 151, 255);
+    border-bottom-color: rgb(183, 151, 255);
+    border-left-color: rgb(183, 151, 255);
+}
+
+.settings-category-content.settings-category-accent-orb #immersive-section-title {
+    color: rgb(183, 151, 255);
+}
+
+.settings-category-button.settings-category-accent-pcvr {
+    color: rgb(143, 226, 255);
+    border-bottom-color: rgb(66, 200, 255);
+}
+
+.settings-category-button.settings-category-accent-pcvr:hover {
+    background-color: rgba(38, 175, 222, 0.28);
+}
+
+.settings-category-button.settings-category-accent-pcvr.settings-category-button-active,
+.settings-category-button.settings-category-accent-pcvr.settings-category-button-active:hover {
+    background-color: rgb(23, 114, 148);
+    border-top-color: rgb(99, 215, 255);
+    border-right-color: rgb(99, 215, 255);
+    border-bottom-color: rgb(99, 215, 255);
+    border-left-color: rgb(99, 215, 255);
+}
+
+.settings-category-content.settings-category-accent-pcvr #immersive-section-title {
+    color: rgb(99, 215, 255);
+}
+
+.settings-category-button.settings-category-accent-immersive {
+    color: rgb(255, 196, 132);
+    border-bottom-color: rgb(255, 159, 67);
+}
+
+.settings-category-button.settings-category-accent-immersive:hover {
+    background-color: rgba(220, 125, 42, 0.28);
+}
+
+.settings-category-button.settings-category-accent-immersive.settings-category-button-active,
+.settings-category-button.settings-category-accent-immersive.settings-category-button-active:hover {
+    background-color: rgb(145, 83, 28);
+    border-top-color: rgb(255, 181, 103);
+    border-right-color: rgb(255, 181, 103);
+    border-bottom-color: rgb(255, 181, 103);
+    border-left-color: rgb(255, 181, 103);
+}
+
+.settings-category-content.settings-category-accent-immersive #immersive-section-title {
+    color: rgb(255, 181, 103);
+}
+
+.settings-category-button.settings-category-accent-rendering {
+    color: rgb(126, 232, 175);
+    border-bottom-color: rgb(70, 215, 157);
+}
+
+.settings-category-button.settings-category-accent-rendering:hover {
+    background-color: rgba(48, 181, 119, 0.28);
+}
+
+.settings-category-button.settings-category-accent-rendering.settings-category-button-active,
+.settings-category-button.settings-category-accent-rendering.settings-category-button-active:hover {
+    background-color: rgb(31, 122, 79);
+    border-top-color: rgb(96, 230, 160);
+    border-right-color: rgb(96, 230, 160);
+    border-bottom-color: rgb(96, 230, 160);
+    border-left-color: rgb(96, 230, 160);
+}
+
+.settings-category-content.settings-category-accent-rendering #immersive-section-title {
+    color: rgb(96, 230, 160);
+}
+
+.settings-category-button.settings-category-accent-subtitles {
+    color: rgb(250, 224, 133);
+    border-bottom-color: rgb(245, 207, 85);
+}
+
+.settings-category-button.settings-category-accent-subtitles:hover {
+    background-color: rgba(201, 164, 45, 0.28);
+}
+
+.settings-category-button.settings-category-accent-subtitles.settings-category-button-active,
+.settings-category-button.settings-category-accent-subtitles.settings-category-button-active:hover {
+    background-color: rgb(137, 111, 29);
+    border-top-color: rgb(248, 215, 104);
+    border-right-color: rgb(248, 215, 104);
+    border-bottom-color: rgb(248, 215, 104);
+    border-left-color: rgb(248, 215, 104);
+}
+
+.settings-category-content.settings-category-accent-subtitles #immersive-section-title {
+    color: rgb(248, 215, 104);
+}
+
+.settings-category-button.settings-category-accent-navigation {
+    color: rgb(255, 164, 176);
+    border-bottom-color: rgb(255, 111, 125);
+}
+
+.settings-category-button.settings-category-accent-navigation:hover {
+    background-color: rgba(218, 76, 95, 0.28);
+}
+
+.settings-category-button.settings-category-accent-navigation.settings-category-button-active,
+.settings-category-button.settings-category-accent-navigation.settings-category-button-active:hover {
+    background-color: rgb(147, 55, 69);
+    border-top-color: rgb(255, 141, 156);
+    border-right-color: rgb(255, 141, 156);
+    border-bottom-color: rgb(255, 141, 156);
+    border-left-color: rgb(255, 141, 156);
+}
+
+.settings-category-content.settings-category-accent-navigation #immersive-section-title {
+    color: rgb(255, 141, 156);
+}
+
+.settings-category-button.settings-category-accent-game {
+    color: rgb(153, 183, 255);
+    border-bottom-color: rgb(93, 156, 255);
+}
+
+.settings-category-button.settings-category-accent-game:hover {
+    background-color: rgba(72, 119, 222, 0.28);
+}
+
+.settings-category-button.settings-category-accent-game.settings-category-button-active,
+.settings-category-button.settings-category-accent-game.settings-category-button-active:hover {
+    background-color: rgb(52, 83, 157);
+    border-top-color: rgb(126, 166, 255);
+    border-right-color: rgb(126, 166, 255);
+    border-bottom-color: rgb(126, 166, 255);
+    border-left-color: rgb(126, 166, 255);
+}
+
+.settings-category-content.settings-category-accent-game #immersive-section-title {
+    color: rgb(126, 166, 255);
+}
+
+.settings-category-button.settings-category-accent-settings {
+    color: rgb(200, 211, 224);
+    border-bottom-color: rgb(165, 180, 200);
+}
+
+.settings-category-button.settings-category-accent-settings:hover {
+    background-color: rgba(139, 156, 178, 0.24);
+}
+
+.settings-category-button.settings-category-accent-settings.settings-category-button-active,
+.settings-category-button.settings-category-accent-settings.settings-category-button-active:hover {
+    background-color: rgb(74, 88, 107);
+    border-top-color: rgb(185, 198, 214);
+    border-right-color: rgb(185, 198, 214);
+    border-bottom-color: rgb(185, 198, 214);
+    border-left-color: rgb(185, 198, 214);
+}
+
+.settings-category-content.settings-category-accent-settings #immersive-section-title {
+    color: rgb(185, 198, 214);
 }
 
 .settings-persistence-section {

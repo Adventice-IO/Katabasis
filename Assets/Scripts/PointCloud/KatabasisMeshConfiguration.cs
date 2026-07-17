@@ -65,6 +65,8 @@ public class KatabasisMeshConfiguration : MeshConfiguration
     private MaskBox[] _boxes;
     private Material _sourceMaterial;
     private PointCloudProfile _sourceProfile;
+    private bool _spectatorRenderingEnabled;
+    private PointRenderingMode _spectatorRenderingMode = PointRenderingMode.Point;
 
     public void Start()
     {
@@ -141,6 +143,26 @@ public class KatabasisMeshConfiguration : MeshConfiguration
         ApplyPointAppearance();
     }
 
+    public void ConfigureSpectatorRendering(bool enabled, PointRenderingMode mode)
+    {
+        _spectatorRenderingEnabled = enabled;
+        _spectatorRenderingMode = Enum.IsDefined(typeof(PointRenderingMode), mode)
+            ? mode
+            : PointRenderingMode.Point;
+
+        // Keep the shared material in the immersive state between camera renders.
+        // The spectator shader is selected only for its own render pass.
+        ApplyPointAppearance();
+    }
+
+    public void SetSpectatorPassActive(bool active)
+    {
+        var useSpectatorAppearance = active && _spectatorRenderingEnabled;
+        ApplyPointAppearance(
+            useSpectatorAppearance ? _spectatorRenderingMode : renderingMode,
+            useSpectatorAppearance);
+    }
+
     private void CreateRuntimeResources()
     {
         if (material != null && _sourceMaterial == null)
@@ -162,12 +184,19 @@ public class KatabasisMeshConfiguration : MeshConfiguration
 
     private void ApplyPointAppearance()
     {
+        ApplyPointAppearance(renderingMode, false);
+    }
+
+    private void ApplyPointAppearance(PointRenderingMode activeMode, bool spectatorPass)
+    {
         if (material == null)
         {
             return;
         }
 
-        string shaderName = renderingMode == PointRenderingMode.Size ? SizeShaderName : PointShaderName;
+        string shaderName = activeMode == PointRenderingMode.Size
+            ? SizeShaderName
+            : PointShaderName;
         Shader shader = Shader.Find(shaderName);
         if (shader == null)
         {
@@ -180,7 +209,9 @@ public class KatabasisMeshConfiguration : MeshConfiguration
             material.shader = shader;
         }
 
-        material.SetFloat("_PointSize", pointSize);
+        material.SetFloat(
+            "_PointSize",
+            !spectatorPass && activeMode == PointRenderingMode.Size ? pointSize : 1f);
     }
 
     private static float FiniteOr(float value, float fallback)

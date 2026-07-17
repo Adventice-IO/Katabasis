@@ -8,8 +8,9 @@ public class TransformFollower : MonoBehaviour
     public float editorVerticalOffset = 10.0f;
     public float verticalOffset = -10.0f;
     public bool useOutsideEditor = true;
+    private bool _verticalOffsetEnabled = true;
 
-    public float ActiveVerticalOffset
+    public float ConfiguredVerticalOffset
     {
         get
         {
@@ -28,6 +29,17 @@ public class TransformFollower : MonoBehaviour
             verticalOffset = value;
 #endif
         }
+    }
+
+    public float ActiveVerticalOffset
+    {
+        get => _verticalOffsetEnabled ? ConfiguredVerticalOffset : 0f;
+        set => ConfiguredVerticalOffset = value;
+    }
+
+    public void SetVerticalOffsetEnabled(bool enabled)
+    {
+        _verticalOffsetEnabled = enabled;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

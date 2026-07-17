@@ -12,7 +12,12 @@ using UnityEngine.UI;
 [RequireComponent(typeof(UniversalAdditionalCameraData))]
 public sealed class PcVrSpectatorCamera : MonoBehaviour
 {
-    public const int CurrentConfigurationVersion = 2;
+    public const int CurrentConfigurationVersion = 4;
+
+    private static readonly int SpectatorPassId = Shader.PropertyToID("_KatabasisSpectatorPass");
+    private static readonly int SpectatorPointModeId = Shader.PropertyToID("_KatabasisSpectatorPointMode");
+    private static readonly int SpectatorPointSizeId = Shader.PropertyToID("_KatabasisSpectatorPointSize");
+    private static readonly int SpectatorPointAlphaId = Shader.PropertyToID("_KatabasisSpectatorPointAlpha");
 
     public enum PipCorner
     {
@@ -33,6 +38,13 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
         public float maxPositionSpeed = 10f;
         public float maxRotationSpeed = 180f;
         public float horizonLock = .35f;
+        public bool oneEuroEnabled = true;
+        public float oneEuroPositionDeadZone = .01f;
+        public float oneEuroRotationDeadZone = 1f;
+        public float oneEuroPositionMinCutoff = .1f; 
+        public float oneEuroPositionBeta = 4f;
+        public float oneEuroRotationMinCutoff = .1f;
+        public float oneEuroRotationBeta = 1.5f;
         public Vector3 positionOffset;
         public Vector3 rotationOffset;
 
@@ -40,6 +52,11 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
         public float nearClipPlane = .05f;
         public float farClipPlane = 1000f;
         public int targetDisplay;
+
+        public KatabasisMeshConfiguration.PointRenderingMode pointRenderingMode =
+            KatabasisMeshConfiguration.PointRenderingMode.Point;
+        public float pointSize = 2f;
+        public float pointAlpha = 1f;
 
         public int outputWidth = 1920;
         public int outputHeight = 1080;
@@ -63,6 +80,7 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
     private UniversalAdditionalCameraData _additionalCameraData;
     private SpoutSender _spoutSender;
     private NdiSender _ndiSender;
+    private KatabasisMeshConfiguration _pointCloudConfiguration;
     private RenderTexture _renderTexture;
     private GameObject _pipCanvasObject;
     private Canvas _pipCanvas;
@@ -70,15 +88,22 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
     private RawImage _pipImage;
     private Camera _activeSourceCamera;
     private Vector3 _positionVelocity;
+    private readonly OneEuroPoseFilter _oneEuroPoseFilter = new OneEuroPoseFilter();
+    private double _lastPoseFilterTime;
     private bool _sourceWarningLogged;
+    private bool _hasAudiencePoseOffset;
+    private Vector3 _audiencePositionOffset;
+    private Quaternion _audienceRotationOffset = Quaternion.identity;
     private int _deferredOutputRefreshFrame = -1;
     private int _deferredOutputReactivateFrame = -1;
+    private int _excludedCullingLayers;
 
     public event Action<RuntimeConfiguration> ConfigurationChanged;
 
     public Camera SourceCamera => _activeSourceCamera;
     public Camera SpectatorCamera => _spectatorCamera;
     public RenderTexture OutputTexture => _renderTexture;
+    public bool IsEnabled => configuration != null && configuration.enabled;
     public bool IsSpoutSupported => SystemInfo.graphicsDeviceType == GraphicsDeviceType.Direct3D11;
     public bool IsTargetDisplayAvailable => configuration.targetDisplay >= 0
         && configuration.targetDisplay < Display.displays.Length;
@@ -94,6 +119,7 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
         ResolveSourceCamera();
         ApplyCameraConfiguration();
         ApplySenderConfiguration();
+        ApplyPointCloudRenderingConfiguration();
 
         if (configuration.enabled && _activeSourceCamera != null)
         {
@@ -105,14 +131,34 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
 
     private void OnEnable()
     {
+        RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
+        RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
+        RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
+        RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+
         CacheComponents();
         ResolveSourceCamera();
         ApplyCameraConfiguration();
         ApplySenderConfiguration();
+        ApplyPointCloudRenderingConfiguration();
+    }
+
+    private void OnDisable()
+    {
+        RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
+        RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
+        ResetSpectatorShaderPass();
+        SetOutputEnabled(false);
+        _pointCloudConfiguration?.ConfigureSpectatorRendering(
+            false,
+            KatabasisMeshConfiguration.PointRenderingMode.Point);
     }
 
     private void OnDestroy()
     {
+        RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
+        RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
+        ResetSpectatorShaderPass();
         ReleaseRenderTexture();
         if (_pipCanvasObject != null)
         {
@@ -203,7 +249,7 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
 
         // Keep scene visibility and presentation aligned with the player's camera,
         // while lens and transform settings remain independent for the audience.
-        _spectatorCamera.cullingMask = _activeSourceCamera.cullingMask;
+        ApplySpectatorCullingMask();
         _spectatorCamera.clearFlags = _activeSourceCamera.clearFlags;
         _spectatorCamera.backgroundColor = _activeSourceCamera.backgroundColor;
 
@@ -213,36 +259,7 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
             return;
         }
 
-        var targetPosition = _activeSourceCamera.transform.TransformPoint(configuration.positionOffset);
-        var targetRotation = GetTargetRotation();
-
-        if (configuration.positionSmoothing <= 0f)
-        {
-            transform.position = targetPosition;
-            _positionVelocity = Vector3.zero;
-        }
-        else
-        {
-            transform.position = Vector3.SmoothDamp(
-                transform.position,
-                targetPosition,
-                ref _positionVelocity,
-                configuration.positionSmoothing,
-                configuration.maxPositionSpeed,
-                deltaTime);
-        }
-
-        if (configuration.rotationSmoothing <= 0f)
-        {
-            transform.rotation = targetRotation;
-        }
-        else
-        {
-            var angle = Quaternion.Angle(transform.rotation, targetRotation);
-            var response = 1f - Mathf.Exp(-deltaTime / configuration.rotationSmoothing);
-            var step = Mathf.Min(angle * response, configuration.maxRotationSpeed * deltaTime);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, step);
-        }
+        UpdateSpectatorPose(deltaTime);
     }
 
     private void OnValidate()
@@ -274,6 +291,7 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
         }
 
         var wasEnabled = configuration != null && configuration.enabled;
+        var wasOneEuroEnabled = configuration != null && configuration.oneEuroEnabled;
         configuration = CopyConfiguration(value);
         NormalizeConfiguration(configuration);
 
@@ -281,6 +299,12 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
         ResolveSourceCamera();
         ApplyCameraConfiguration();
         ApplySenderConfiguration();
+        ApplyPointCloudRenderingConfiguration();
+
+        if (wasOneEuroEnabled != configuration.oneEuroEnabled)
+        {
+            ResetPoseFilter();
+        }
 
         if (!wasEnabled && configuration.enabled && _activeSourceCamera != null)
         {
@@ -295,6 +319,7 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
         {
             _deferredOutputRefreshFrame = -1;
             _deferredOutputReactivateFrame = -1;
+            ResetSpectatorShaderPass();
         }
 
         if (notify)
@@ -311,10 +336,33 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
             return;
         }
 
+        ResetPoseFilter();
+        GetFilteredSourcePose(out var sourcePosition, out var sourceRotation);
         transform.SetPositionAndRotation(
-            _activeSourceCamera.transform.TransformPoint(configuration.positionOffset),
-            GetTargetRotation());
+            GetTargetPosition(sourcePosition, sourceRotation),
+            GetTargetRotation(sourceRotation));
         _positionVelocity = Vector3.zero;
+        CacheAudiencePoseOffset();
+    }
+
+    public void SetCullingLayerExcluded(int layer, bool excluded)
+    {
+        if (layer < 0 || layer > 31)
+        {
+            return;
+        }
+
+        int layerMask = 1 << layer;
+        if (excluded)
+        {
+            _excludedCullingLayers |= layerMask;
+        }
+        else
+        {
+            _excludedCullingLayers &= ~layerMask;
+        }
+
+        ApplySpectatorCullingMask();
     }
 
     public string GetStatusSummary()
@@ -340,7 +388,12 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
             ? $"Display {configuration.targetDisplay + 1}"
             : $"Display {configuration.targetDisplay + 1} unavailable";
 
-        return $"{resolution} | {displayState} | {spoutState} | {ndiState}";
+        var pointState = configuration.pointRenderingMode
+            == KatabasisMeshConfiguration.PointRenderingMode.Size
+                ? $"{configuration.pointSize:F1}px points, {configuration.pointAlpha:F2} alpha"
+                : $"point mode, {configuration.pointAlpha:F2} alpha";
+
+        return $"{resolution} | {displayState} | {pointState} | {spoutState} | {ndiState}";
     }
 
     public static void NormalizeConfiguration(RuntimeConfiguration value)
@@ -359,18 +412,66 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
             value.pipMargin = 16;
         }
 
+        if (value.version < 3)
+        {
+            value.pointRenderingMode = KatabasisMeshConfiguration.PointRenderingMode.Point;
+            value.pointSize = 2f;
+            value.pointAlpha = 1f;
+        }
+
+        if (value.version < 4)
+        {
+            value.oneEuroEnabled = true;
+            value.oneEuroPositionDeadZone = .01f;
+            value.oneEuroRotationDeadZone = 1f;
+            value.oneEuroPositionMinCutoff = .1f;
+            value.oneEuroPositionBeta = 4f;
+            value.oneEuroRotationMinCutoff = .1f;
+            value.oneEuroRotationBeta = 1.5f;
+        }
+
         value.version = CurrentConfigurationVersion;
         value.positionSmoothing = NonNegative(value.positionSmoothing);
         value.rotationSmoothing = NonNegative(value.rotationSmoothing);
         value.maxPositionSpeed = Mathf.Max(.01f, NonNegative(value.maxPositionSpeed));
         value.maxRotationSpeed = Mathf.Max(.01f, NonNegative(value.maxRotationSpeed));
         value.horizonLock = Mathf.Clamp01(Finite(value.horizonLock));
+        value.oneEuroPositionDeadZone = Mathf.Clamp(
+            NonNegative(value.oneEuroPositionDeadZone),
+            0f,
+            1f);
+        value.oneEuroRotationDeadZone = Mathf.Clamp(
+            NonNegative(value.oneEuroRotationDeadZone),
+            0f,
+            45f);
+        value.oneEuroPositionMinCutoff = Mathf.Clamp(
+            NonNegative(value.oneEuroPositionMinCutoff),
+            .001f,
+            30f);
+        value.oneEuroPositionBeta = Mathf.Clamp(
+            NonNegative(value.oneEuroPositionBeta),
+            0f,
+            100f);
+        value.oneEuroRotationMinCutoff = Mathf.Clamp(
+            NonNegative(value.oneEuroRotationMinCutoff),
+            .001f,
+            30f);
+        value.oneEuroRotationBeta = Mathf.Clamp(
+            NonNegative(value.oneEuroRotationBeta),
+            0f,
+            100f);
         value.positionOffset = Finite(value.positionOffset);
         value.rotationOffset = Finite(value.rotationOffset);
         value.fieldOfView = Mathf.Clamp(Finite(value.fieldOfView), 10f, 160f);
         value.nearClipPlane = Mathf.Max(.001f, NonNegative(value.nearClipPlane));
         value.farClipPlane = Mathf.Max(value.nearClipPlane + .01f, NonNegative(value.farClipPlane));
         value.targetDisplay = Mathf.Clamp(value.targetDisplay, 0, 7);
+        if (!Enum.IsDefined(typeof(KatabasisMeshConfiguration.PointRenderingMode), value.pointRenderingMode))
+        {
+            value.pointRenderingMode = KatabasisMeshConfiguration.PointRenderingMode.Point;
+        }
+        value.pointSize = Mathf.Clamp(Finite(value.pointSize), .1f, 64f);
+        value.pointAlpha = Mathf.Clamp01(Finite(value.pointAlpha));
         value.outputWidth = Mathf.Clamp(value.outputWidth, 16, 8192);
         value.outputHeight = Mathf.Clamp(value.outputHeight, 16, 8192);
         if (!Enum.IsDefined(typeof(PipCorner), value.pipCorner))
@@ -406,6 +507,12 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
         {
             _ndiSender = GetComponent<NdiSender>();
         }
+
+        if (_pointCloudConfiguration == null)
+        {
+            _pointCloudConfiguration = FindAnyObjectByType<KatabasisMeshConfiguration>(
+                FindObjectsInactive.Include);
+        }
     }
 
     private void ResolveSourceCamera()
@@ -425,6 +532,8 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
         }
 
         _activeSourceCamera = resolved;
+        _hasAudiencePoseOffset = false;
+        ResetPoseFilter();
         if (_activeSourceCamera != null)
         {
             CopySourcePresentationSettings();
@@ -438,7 +547,7 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
             return;
         }
 
-        _spectatorCamera.cullingMask = _activeSourceCamera.cullingMask;
+        ApplySpectatorCullingMask();
         _spectatorCamera.clearFlags = _activeSourceCamera.clearFlags;
         _spectatorCamera.backgroundColor = _activeSourceCamera.backgroundColor;
         _spectatorCamera.renderingPath = _activeSourceCamera.renderingPath;
@@ -447,6 +556,17 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
         _spectatorCamera.allowDynamicResolution = _activeSourceCamera.allowDynamicResolution;
         _spectatorCamera.depthTextureMode = _activeSourceCamera.depthTextureMode;
         _spectatorCamera.useOcclusionCulling = _activeSourceCamera.useOcclusionCulling;
+    }
+
+    private void ApplySpectatorCullingMask()
+    {
+        if (_spectatorCamera == null || _activeSourceCamera == null)
+        {
+            return;
+        }
+
+        _spectatorCamera.cullingMask =
+            _activeSourceCamera.cullingMask & ~_excludedCullingLayers;
     }
 
     private void ApplyCameraConfiguration()
@@ -518,6 +638,19 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
         {
             SetOutputEnabled(configuration.enabled && _activeSourceCamera != null);
         }
+    }
+
+    private void ApplyPointCloudRenderingConfiguration()
+    {
+        if (_pointCloudConfiguration == null)
+        {
+            _pointCloudConfiguration = FindAnyObjectByType<KatabasisMeshConfiguration>(
+                FindObjectsInactive.Include);
+        }
+
+        _pointCloudConfiguration?.ConfigureSpectatorRendering(
+            configuration.enabled,
+            configuration.pointRenderingMode);
     }
 
     private void SetOutputEnabled(bool cameraEnabled)
@@ -728,9 +861,160 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
         }
     }
 
-    private Quaternion GetTargetRotation()
+    private void UpdateSpectatorPose(float deltaTime)
     {
-        var target = _activeSourceCamera.transform.rotation * Quaternion.Euler(configuration.rotationOffset);
+        UpdatePoseFilter(deltaTime);
+        GetFilteredSourcePose(out var sourcePosition, out var sourceRotation);
+        var targetPosition = GetTargetPosition(sourcePosition, sourceRotation);
+        var targetRotation = GetTargetRotation(sourceRotation);
+
+        if (configuration.positionSmoothing <= 0f)
+        {
+            transform.position = targetPosition;
+            _positionVelocity = Vector3.zero;
+        }
+        else
+        {
+            transform.position = Vector3.SmoothDamp(
+                transform.position,
+                targetPosition,
+                ref _positionVelocity,
+                configuration.positionSmoothing,
+                configuration.maxPositionSpeed,
+                deltaTime);
+            if ((transform.position - targetPosition).sqrMagnitude <= .00000001f
+                && _positionVelocity.sqrMagnitude <= .00000001f)
+            {
+                transform.position = targetPosition;
+                _positionVelocity = Vector3.zero;
+            }
+        }
+
+        if (configuration.rotationSmoothing <= 0f)
+        {
+            transform.rotation = targetRotation;
+        }
+        else
+        {
+            var angle = Quaternion.Angle(transform.rotation, targetRotation);
+            var response = 1f - Mathf.Exp(-deltaTime / configuration.rotationSmoothing);
+            var step = Mathf.Min(angle * response, configuration.maxRotationSpeed * deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, step);
+            if (Quaternion.Angle(transform.rotation, targetRotation) <= .001f)
+            {
+                transform.rotation = targetRotation;
+            }
+        }
+
+        CacheAudiencePoseOffset();
+    }
+
+    private void ApplyLatestTrackedPose()
+    {
+        if (!configuration.enabled
+            || _activeSourceCamera == null
+            || !_activeSourceCamera.isActiveAndEnabled)
+        {
+            return;
+        }
+
+        if (!_hasAudiencePoseOffset)
+        {
+            SnapToSource();
+            return;
+        }
+
+        UpdatePoseFilter(Time.unscaledDeltaTime);
+        GetFilteredSourcePose(out var sourcePosition, out var sourceRotation);
+        var targetPosition = GetTargetPosition(sourcePosition, sourceRotation);
+        var targetRotation = GetTargetRotation(sourceRotation);
+        transform.SetPositionAndRotation(
+            targetPosition + _audiencePositionOffset,
+            targetRotation * _audienceRotationOffset);
+    }
+
+    private void CacheAudiencePoseOffset()
+    {
+        if (_activeSourceCamera == null)
+        {
+            _hasAudiencePoseOffset = false;
+            return;
+        }
+
+        GetFilteredSourcePose(out var sourcePosition, out var sourceRotation);
+        var targetPosition = GetTargetPosition(sourcePosition, sourceRotation);
+        var targetRotation = GetTargetRotation(sourceRotation);
+        _audiencePositionOffset = transform.position - targetPosition;
+        _audienceRotationOffset = Quaternion.Inverse(targetRotation) * transform.rotation;
+        _hasAudiencePoseOffset = true;
+    }
+
+    private void ResetPoseFilter()
+    {
+        _lastPoseFilterTime = Time.realtimeSinceStartupAsDouble;
+        if (_activeSourceCamera == null)
+        {
+            _oneEuroPoseFilter.Clear();
+            return;
+        }
+
+        var sourceTransform = _activeSourceCamera.transform;
+        _oneEuroPoseFilter.Reset(sourceTransform.position, sourceTransform.rotation);
+    }
+
+    private void UpdatePoseFilter(float fallbackDeltaTime)
+    {
+        if (_activeSourceCamera == null)
+        {
+            return;
+        }
+
+        var now = Time.realtimeSinceStartupAsDouble;
+        var elapsed = (float)(now - _lastPoseFilterTime);
+        var deltaTime = elapsed > 0f ? elapsed : fallbackDeltaTime;
+        _lastPoseFilterTime = now;
+
+        var sourceTransform = _activeSourceCamera.transform;
+        if (!configuration.oneEuroEnabled || deltaTime <= 0f)
+        {
+            _oneEuroPoseFilter.Reset(sourceTransform.position, sourceTransform.rotation);
+            return;
+        }
+
+        _oneEuroPoseFilter.Filter(
+            sourceTransform.position,
+            sourceTransform.rotation,
+            deltaTime,
+            configuration.oneEuroPositionMinCutoff,
+            configuration.oneEuroPositionBeta,
+            configuration.oneEuroRotationMinCutoff,
+            configuration.oneEuroRotationBeta,
+            configuration.oneEuroPositionDeadZone,
+            configuration.oneEuroRotationDeadZone);
+    }
+
+    private void GetFilteredSourcePose(out Vector3 position, out Quaternion rotation)
+    {
+        if (configuration.oneEuroEnabled && _oneEuroPoseFilter.IsInitialized)
+        {
+            position = _oneEuroPoseFilter.Position;
+            rotation = _oneEuroPoseFilter.Rotation;
+            return;
+        }
+
+        var sourceTransform = _activeSourceCamera.transform;
+        position = sourceTransform.position;
+        rotation = sourceTransform.rotation;
+    }
+
+    private Vector3 GetTargetPosition(Vector3 sourcePosition, Quaternion sourceRotation)
+    {
+        return sourcePosition + sourceRotation * configuration.positionOffset;
+    }
+
+    private Quaternion GetTargetRotation(Quaternion sourceRotation)
+    {
+        var target = sourceRotation * Quaternion.Euler(configuration.rotationOffset);
         if (configuration.horizonLock <= 0f)
         {
             return target;
@@ -746,6 +1030,52 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
         return Quaternion.Slerp(target, level, configuration.horizonLock);
     }
 
+    private void OnBeginCameraRendering(ScriptableRenderContext context, Camera camera)
+    {
+        var isSpectatorPass = configuration.enabled && camera == _spectatorCamera;
+        _pointCloudConfiguration?.SetSpectatorPassActive(isSpectatorPass);
+        if (isSpectatorPass)
+        {
+            ApplyLatestTrackedPose();
+        }
+
+        var commandBuffer = CommandBufferPool.Get("PC-VR point-cloud appearance");
+        commandBuffer.SetGlobalFloat(SpectatorPassId, isSpectatorPass ? 1f : 0f);
+        if (!isSpectatorPass)
+        {
+            context.ExecuteCommandBuffer(commandBuffer);
+            CommandBufferPool.Release(commandBuffer);
+            return;
+        }
+
+        commandBuffer.SetGlobalFloat(
+            SpectatorPointModeId,
+            configuration.pointRenderingMode == KatabasisMeshConfiguration.PointRenderingMode.Size
+                ? 1f
+                : 0f);
+        commandBuffer.SetGlobalFloat(SpectatorPointSizeId, configuration.pointSize);
+        commandBuffer.SetGlobalFloat(SpectatorPointAlphaId, configuration.pointAlpha);
+        context.ExecuteCommandBuffer(commandBuffer);
+        CommandBufferPool.Release(commandBuffer);
+    }
+
+    private void OnEndCameraRendering(ScriptableRenderContext context, Camera camera)
+    {
+        if (camera == _spectatorCamera)
+        {
+            var commandBuffer = CommandBufferPool.Get("Reset PC-VR point-cloud appearance");
+            commandBuffer.SetGlobalFloat(SpectatorPassId, 0f);
+            context.ExecuteCommandBuffer(commandBuffer);
+            CommandBufferPool.Release(commandBuffer);
+            _pointCloudConfiguration?.SetSpectatorPassActive(false);
+        }
+    }
+
+    private static void ResetSpectatorShaderPass()
+    {
+        Shader.SetGlobalFloat(SpectatorPassId, 0f);
+    }
+
     private static RuntimeConfiguration CopyConfiguration(RuntimeConfiguration source)
     {
         return new RuntimeConfiguration
@@ -757,12 +1087,22 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
             maxPositionSpeed = source.maxPositionSpeed,
             maxRotationSpeed = source.maxRotationSpeed,
             horizonLock = source.horizonLock,
+            oneEuroEnabled = source.oneEuroEnabled,
+            oneEuroPositionDeadZone = source.oneEuroPositionDeadZone,
+            oneEuroRotationDeadZone = source.oneEuroRotationDeadZone,
+            oneEuroPositionMinCutoff = source.oneEuroPositionMinCutoff,
+            oneEuroPositionBeta = source.oneEuroPositionBeta,
+            oneEuroRotationMinCutoff = source.oneEuroRotationMinCutoff,
+            oneEuroRotationBeta = source.oneEuroRotationBeta,
             positionOffset = source.positionOffset,
             rotationOffset = source.rotationOffset,
             fieldOfView = source.fieldOfView,
             nearClipPlane = source.nearClipPlane,
             farClipPlane = source.farClipPlane,
             targetDisplay = source.targetDisplay,
+            pointRenderingMode = source.pointRenderingMode,
+            pointSize = source.pointSize,
+            pointAlpha = source.pointAlpha,
             outputWidth = source.outputWidth,
             outputHeight = source.outputHeight,
             pipCorner = source.pipCorner,
@@ -772,6 +1112,131 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
             enableSpoutSender = source.enableSpoutSender,
             enableNdiSender = source.enableNdiSender
         };
+    }
+
+    private sealed class OneEuroPoseFilter
+    {
+        private const float DerivativeCutoff = 1f;
+
+        private Vector3 _lastRawPosition;
+        private Vector3 _positionDeadZoneAnchor;
+        private Vector3 _filteredPosition;
+        private Vector3 _filteredVelocity;
+        private Quaternion _lastRawRotation;
+        private Quaternion _rotationDeadZoneAnchor;
+        private Quaternion _filteredRotation;
+        private float _filteredAngularVelocity;
+
+        public bool IsInitialized { get; private set; }
+        public Vector3 Position => _filteredPosition;
+        public Quaternion Rotation => _filteredRotation;
+
+        public void Clear()
+        {
+            IsInitialized = false;
+        }
+
+        public void Reset(Vector3 position, Quaternion rotation)
+        {
+            _lastRawPosition = position;
+            _positionDeadZoneAnchor = position;
+            _filteredPosition = position;
+            _filteredVelocity = Vector3.zero;
+            _lastRawRotation = rotation;
+            _rotationDeadZoneAnchor = rotation;
+            _filteredRotation = rotation;
+            _filteredAngularVelocity = 0f;
+            IsInitialized = true;
+        }
+
+        public void Filter(
+            Vector3 position,
+            Quaternion rotation,
+            float deltaTime,
+            float positionMinCutoff,
+            float positionBeta,
+            float rotationMinCutoff,
+            float rotationBeta,
+            float positionDeadZone,
+            float rotationDeadZone)
+        {
+            if (!IsInitialized || deltaTime <= 0f)
+            {
+                Reset(position, rotation);
+                return;
+            }
+
+            position = ApplyDeadZone(position, ref _positionDeadZoneAnchor, positionDeadZone);
+            rotation = ApplyDeadZone(rotation, ref _rotationDeadZoneAnchor, rotationDeadZone);
+
+            var derivativeAlpha = Alpha(deltaTime, DerivativeCutoff);
+
+            var velocity = (position - _lastRawPosition) / deltaTime;
+            _filteredVelocity = Vector3.Lerp(
+                _filteredVelocity,
+                velocity,
+                derivativeAlpha);
+            var positionCutoff = positionMinCutoff
+                + positionBeta * _filteredVelocity.magnitude;
+            _filteredPosition = Vector3.Lerp(
+                _filteredPosition,
+                position,
+                Alpha(deltaTime, positionCutoff));
+
+            var angularVelocity = Quaternion.Angle(_lastRawRotation, rotation)
+                * Mathf.Deg2Rad
+                / deltaTime;
+            _filteredAngularVelocity = Mathf.Lerp(
+                _filteredAngularVelocity,
+                angularVelocity,
+                derivativeAlpha);
+            var rotationCutoff = rotationMinCutoff
+                + rotationBeta * _filteredAngularVelocity;
+            _filteredRotation = Quaternion.Slerp(
+                _filteredRotation,
+                rotation,
+                Alpha(deltaTime, rotationCutoff));
+
+            _lastRawPosition = position;
+            _lastRawRotation = rotation;
+        }
+
+        private static Vector3 ApplyDeadZone(
+            Vector3 value,
+            ref Vector3 anchor,
+            float radius)
+        {
+            var delta = value - anchor;
+            var distance = delta.magnitude;
+            if (distance <= radius || distance <= Mathf.Epsilon)
+            {
+                return anchor;
+            }
+
+            anchor += delta * ((distance - radius) / distance);
+            return anchor;
+        }
+
+        private static Quaternion ApplyDeadZone(
+            Quaternion value,
+            ref Quaternion anchor,
+            float angle)
+        {
+            var distance = Quaternion.Angle(anchor, value);
+            if (distance <= angle || distance <= Mathf.Epsilon)
+            {
+                return anchor;
+            }
+
+            anchor = Quaternion.RotateTowards(anchor, value, distance - angle);
+            return anchor;
+        }
+
+        private static float Alpha(float deltaTime, float cutoff)
+        {
+            var frequency = 2f * Mathf.PI * cutoff;
+            return frequency * deltaTime / (1f + frequency * deltaTime);
+        }
     }
 
     private static float NonNegative(float value)
