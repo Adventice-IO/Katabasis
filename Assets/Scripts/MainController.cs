@@ -1404,7 +1404,7 @@ public class MainController : MonoBehaviour
 
             case GameState.Playing:
                 playingSO?.state.SetValue();
-                Reset(pendingPlayingStartSalle != null ? pendingPlayingStartSalle : initialSalle);
+                ResetPlaying(pendingPlayingStartSalle != null ? pendingPlayingStartSalle : initialSalle);
                 pendingPlayingStartSalle = null;
                 break;
 
@@ -1745,10 +1745,10 @@ public class MainController : MonoBehaviour
 
     public void Reset()
     {
-        Reset(initialSalle);
+        ResetPlaying(initialSalle);
     }
 
-    void Reset(Salle targetSalle)
+    void ResetPlaying(Salle targetSalle)
     {
         ResetGameProgress();
         if (targetSalle == null)
@@ -1764,8 +1764,9 @@ public class MainController : MonoBehaviour
     {
         if (isInASalle())
         {
-            if (salle.origin == null) return;
-            SetRigPosition(salle.origin.position, "ResetPosition salle");
+            Transform salleOrigin = salle.origin != null ? salle.origin : salle.transform.Find("Origin");
+            if (salleOrigin == null) return;
+            SetRigPosition(salleOrigin.position, "ResetPosition salle");
             timeAtArrived = Time.time;
             BeginRunStartCameraDiagnostics($"ResetPosition salle='{salle.name}' resetRotation={resetRotation}");
 

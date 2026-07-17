@@ -8,15 +8,17 @@ using UnityEngine.UIElements;
 [DisallowMultipleComponent]
 public sealed class SettingsMenu : MonoBehaviour
 {
-    public const int CurrentSettingsVersion = 9;
+    public const int CurrentSettingsVersion = 12;
 
     private const string PanelSettingsResource = "Immersive/ImmersivePanelSettings";
     private const string StyleSheetResource = "Immersive/ImmersiveRuntimePanel";
+    private const string PcVrSpectatorPrefabResource = "PCVR/PcVrSpectatorCamera";
     private const string SettingsFileName = "katabasis-settings.json";
 
     private enum Category
     {
         Orb,
+        PcVr,
         Immersive,
         Rendering,
         Subtitles,
@@ -50,6 +52,7 @@ public sealed class SettingsMenu : MonoBehaviour
         public string language = "en";
         public float globalSpeedMultiplier = 1f;
         public bool followPath = true;
+        public MainController.GameResetPoint resetPoint = MainController.GameResetPoint.GameMenu;
         public bool infinitePlaying;
         public bool hideExitPortalsInInfinitePlaying;
         public bool playInterviewIntrosInInfinitePlaying = true;
@@ -83,6 +86,8 @@ public sealed class SettingsMenu : MonoBehaviour
         public int version = CurrentSettingsVersion;
         public OrbSettings orb = new OrbSettings();
         public AimSettings aim = new AimSettings();
+        public PcVrSpectatorCamera.RuntimeConfiguration pcVr =
+            new PcVrSpectatorCamera.RuntimeConfiguration();
         public ImmersiveController.RuntimeConfiguration immersive =
             new ImmersiveController.RuntimeConfiguration();
         public KatabasisMeshConfiguration.RuntimeConfiguration rendering =
@@ -101,6 +106,7 @@ public sealed class SettingsMenu : MonoBehaviour
     [Min(0f)][SerializeField] private float autosaveDelay = 0.5f;
 
     private OrbController _orbController;
+    private PcVrSpectatorCamera _pcVrSpectatorCamera;
     private ImmersiveController _immersiveController;
     private KatabasisMeshConfiguration _pointCloudConfiguration;
     private MainController _mainController;
@@ -141,6 +147,32 @@ public sealed class SettingsMenu : MonoBehaviour
     private TextField _aimColor;
     private Label _aimSummary;
 
+    private Toggle _pcVrEnabled;
+    private FloatField _pcVrPositionSmoothing;
+    private FloatField _pcVrRotationSmoothing;
+    private FloatField _pcVrMaxPositionSpeed;
+    private FloatField _pcVrMaxRotationSpeed;
+    private Slider _pcVrHorizonLock;
+    private FloatField _pcVrPositionX;
+    private FloatField _pcVrPositionY;
+    private FloatField _pcVrPositionZ;
+    private FloatField _pcVrRotationX;
+    private FloatField _pcVrRotationY;
+    private FloatField _pcVrRotationZ;
+    private Slider _pcVrFieldOfView;
+    private FloatField _pcVrNearClip;
+    private FloatField _pcVrFarClip;
+    private IntegerField _pcVrTargetDisplay;
+    private IntegerField _pcVrOutputWidth;
+    private IntegerField _pcVrOutputHeight;
+    private EnumField _pcVrPipCorner;
+    private Slider _pcVrPipWidth;
+    private IntegerField _pcVrPipMargin;
+    private TextField _pcVrStreamName;
+    private Toggle _pcVrSpout;
+    private Toggle _pcVrNdi;
+    private Label _pcVrSummary;
+
     private FloatField _roomWidth;
     private FloatField _roomHeight;
     private FloatField _roomDepth;
@@ -180,6 +212,7 @@ public sealed class SettingsMenu : MonoBehaviour
 
     private DropdownField _language;
     private FloatField _globalSpeedMultiplier;
+    private EnumField _resetPoint;
     private Toggle _infinitePlaying;
     private Toggle _hideExitPortalsInInfinitePlaying;
     private Toggle _playInterviewIntrosInInfinitePlaying;
@@ -254,10 +287,14 @@ public sealed class SettingsMenu : MonoBehaviour
         }
 
         ResolveControllers();
-        if (_orbController == null || _immersiveController == null || _mainController == null)
+        if (_orbController == null
+            || _pcVrSpectatorCamera == null
+            || _immersiveController == null
+            || _mainController == null)
         {
             Debug.LogError(
-                "The unified Settings Menu requires OrbController, ImmersiveController, and MainController.",
+                "The unified Settings Menu requires OrbController, PcVrSpectatorCamera, "
+                + "ImmersiveController, and MainController.",
                 this);
             enabled = false;
             return;
@@ -312,6 +349,7 @@ public sealed class SettingsMenu : MonoBehaviour
         _window.Add(scrollView);
 
         BuildOrbCategory(scrollView);
+        BuildPcVrCategory(scrollView);
         BuildImmersiveCategory(scrollView);
         BuildRenderingCategory(scrollView);
         BuildSubtitlesCategory(scrollView);
@@ -378,6 +416,7 @@ public sealed class SettingsMenu : MonoBehaviour
         _launcher = null;
         _status = null;
         _aimSummary = null;
+        _pcVrSummary = null;
         _subtitleSummary = null;
         _navigationSummary = null;
         _built = false;
@@ -394,6 +433,24 @@ public sealed class SettingsMenu : MonoBehaviour
         }
 
         _immersiveController = FindAnyObjectByType<ImmersiveController>(FindObjectsInactive.Include);
+        _pcVrSpectatorCamera = FindAnyObjectByType<PcVrSpectatorCamera>(FindObjectsInactive.Include);
+        if (_pcVrSpectatorCamera == null)
+        {
+            var spectatorPrefab = Resources.Load<PcVrSpectatorCamera>(PcVrSpectatorPrefabResource);
+            if (spectatorPrefab != null)
+            {
+                _pcVrSpectatorCamera = Instantiate(spectatorPrefab);
+                _pcVrSpectatorCamera.name = "PC-VR Spectator Camera";
+            }
+            else
+            {
+                Debug.LogError(
+                    "PC-VR spectator prefab is missing from Resources/"
+                    + PcVrSpectatorPrefabResource + ".",
+                    this);
+            }
+        }
+
         _pointCloudConfiguration = FindAnyObjectByType<KatabasisMeshConfiguration>(FindObjectsInactive.Include);
         _mainController = FindAnyObjectByType<MainController>(FindObjectsInactive.Include);
         _subtitles = FindAnyObjectByType<Subtitles>(FindObjectsInactive.Include);
@@ -436,7 +493,7 @@ public sealed class SettingsMenu : MonoBehaviour
         var titleGroup = new VisualElement();
         titleGroup.AddToClassList("immersive-title-group");
         titleGroup.Add(new Label("KATABASIS SETTINGS") { name = "immersive-title" });
-        titleGroup.Add(new Label("Orb, aiming, immersive output, rendering, subtitles, navigation & game configuration") { name = "immersive-subtitle" });
+        titleGroup.Add(new Label("Orb, PC-VR spectator, immersive output, rendering, subtitles, navigation & game configuration") { name = "immersive-subtitle" });
         header.Add(titleGroup);
 
         var close = new Button(() => SetOpen(false)) { text = "X", tooltip = "Close settings" };
@@ -451,6 +508,7 @@ public sealed class SettingsMenu : MonoBehaviour
         navigation.AddToClassList("settings-category-navigation");
 
         AddCategoryButton(navigation, Category.Orb, "ORB");
+        AddCategoryButton(navigation, Category.PcVr, "PC-VR");
         AddCategoryButton(navigation, Category.Immersive, "IMMERSIVE");
         AddCategoryButton(navigation, Category.Rendering, "RENDERING");
         AddCategoryButton(navigation, Category.Subtitles, "SUBTITLES");
@@ -576,6 +634,128 @@ public sealed class SettingsMenu : MonoBehaviour
         _aimThickness.RegisterValueChangedCallback(_ => ApplyControls());
         _aimOpacity.RegisterValueChangedCallback(_ => ApplyControls());
         _aimColor.RegisterValueChangedCallback(_ => ApplyControls());
+    }
+
+    private void BuildPcVrCategory(VisualElement parent)
+    {
+        var content = CreateCategoryContent(parent, Category.PcVr);
+
+        var mode = CreateSection(
+            content,
+            "SPECTATOR VIEW",
+            "A separate monoscopic camera follows the XR Main Camera without changing the headset view");
+        _pcVrEnabled = CreateToggle(mode, "Enable PC-VR spectator camera");
+        _pcVrEnabled.AddToClassList("immersive-toggle-wide");
+        var modeButtons = CreateButtonRow(mode);
+        modeButtons.Add(CreateButton(
+            "Snap to player now",
+            () => _pcVrSpectatorCamera.SnapToSource(),
+            true));
+        _pcVrSummary = new Label();
+        _pcVrSummary.AddToClassList("immersive-texture-summary");
+        mode.Add(_pcVrSummary);
+
+        var smoothing = CreateSection(
+            content,
+            "AUDIENCE COMFORT",
+            "Response time is in seconds; larger values produce steadier, slower camera motion");
+        _pcVrPositionSmoothing = CreateFloatField(smoothing, "Position response time");
+        _pcVrRotationSmoothing = CreateFloatField(smoothing, "Rotation response time");
+        _pcVrMaxPositionSpeed = CreateFloatField(smoothing, "Maximum position speed (m/s)");
+        _pcVrMaxRotationSpeed = CreateFloatField(smoothing, "Maximum rotation speed (deg/s)");
+        _pcVrHorizonLock = new Slider("Horizon lock", 0f, 1f) { showInputField = true };
+        _pcVrHorizonLock.AddToClassList("immersive-field");
+        smoothing.Add(_pcVrHorizonLock);
+
+        var framing = CreateSection(
+            content,
+            "FRAMING",
+            "Local offsets are relative to the tracked player's head");
+        var positionLabel = new Label("Position offset (meters)");
+        positionLabel.AddToClassList("immersive-inline-label");
+        framing.Add(positionLabel);
+        var positionRow = CreateRow(framing);
+        _pcVrPositionX = CreateFloatField(positionRow, "X", true);
+        _pcVrPositionY = CreateFloatField(positionRow, "Y", true);
+        _pcVrPositionZ = CreateFloatField(positionRow, "Z", true);
+
+        var rotationLabel = new Label("Rotation offset (degrees)");
+        rotationLabel.AddToClassList("immersive-inline-label");
+        framing.Add(rotationLabel);
+        var rotationRow = CreateRow(framing);
+        _pcVrRotationX = CreateFloatField(rotationRow, "Pitch", true);
+        _pcVrRotationY = CreateFloatField(rotationRow, "Yaw", true);
+        _pcVrRotationZ = CreateFloatField(rotationRow, "Roll", true);
+
+        var lens = CreateSection(content, "LENS", "The headset projection is not modified");
+        _pcVrFieldOfView = new Slider("Vertical FOV (degrees)", 10f, 160f) { showInputField = true };
+        _pcVrFieldOfView.AddToClassList("immersive-field");
+        lens.Add(_pcVrFieldOfView);
+        _pcVrNearClip = CreateFloatField(lens, "Near clip (meters)");
+        _pcVrFarClip = CreateFloatField(lens, "Far clip (meters)");
+
+        var pip = CreateSection(
+            content,
+            "PICTURE IN PICTURE",
+            "The original player view stays full-screen while the smoothed view is overlaid in a corner");
+        _pcVrPipCorner = new EnumField("Corner", PcVrSpectatorCamera.PipCorner.TopRight);
+        _pcVrPipCorner.AddToClassList("immersive-field");
+        pip.Add(_pcVrPipCorner);
+        _pcVrPipWidth = new Slider("Monitor width", .1f, .8f) { showInputField = true };
+        _pcVrPipWidth.AddToClassList("immersive-field");
+        pip.Add(_pcVrPipWidth);
+        _pcVrPipMargin = new IntegerField("Margin (pixels)") { isDelayed = true };
+        _pcVrPipMargin.AddToClassList("immersive-field");
+        pip.Add(_pcVrPipMargin);
+        _pcVrTargetDisplay = new IntegerField("Monitor display (1-8)") { isDelayed = true };
+        _pcVrTargetDisplay.AddToClassList("immersive-field");
+        pip.Add(_pcVrTargetDisplay);
+
+        var outputs = CreateSection(
+            content,
+            "SPOUT / NDI",
+            "Both protocols publish the clean full-resolution spectator view, without the PiP frame");
+        var resolutionRow = CreateRow(outputs);
+        _pcVrOutputWidth = new IntegerField("Width") { isDelayed = true };
+        _pcVrOutputHeight = new IntegerField("Height") { isDelayed = true };
+        _pcVrOutputWidth.AddToClassList("immersive-field");
+        _pcVrOutputHeight.AddToClassList("immersive-field");
+        _pcVrOutputWidth.AddToClassList("immersive-compact-field");
+        _pcVrOutputHeight.AddToClassList("immersive-compact-field");
+        resolutionRow.Add(_pcVrOutputWidth);
+        resolutionRow.Add(_pcVrOutputHeight);
+        _pcVrStreamName = new TextField("Stream name") { isDelayed = true };
+        _pcVrStreamName.AddToClassList("immersive-field");
+        outputs.Add(_pcVrStreamName);
+        _pcVrNdi = CreateToggle(outputs, "NDI sender");
+        _pcVrSpout = CreateToggle(outputs, "Spout sender (Direct3D 11)");
+        _pcVrNdi.AddToClassList("immersive-toggle-wide");
+        _pcVrSpout.AddToClassList("immersive-toggle-wide");
+
+        RegisterLiveToggle(_pcVrEnabled);
+        RegisterLiveField(_pcVrPositionSmoothing);
+        RegisterLiveField(_pcVrRotationSmoothing);
+        RegisterLiveField(_pcVrMaxPositionSpeed);
+        RegisterLiveField(_pcVrMaxRotationSpeed);
+        _pcVrHorizonLock.RegisterValueChangedCallback(_ => ApplyControls());
+        RegisterLiveField(_pcVrPositionX);
+        RegisterLiveField(_pcVrPositionY);
+        RegisterLiveField(_pcVrPositionZ);
+        RegisterLiveField(_pcVrRotationX);
+        RegisterLiveField(_pcVrRotationY);
+        RegisterLiveField(_pcVrRotationZ);
+        _pcVrFieldOfView.RegisterValueChangedCallback(_ => ApplyControls());
+        RegisterLiveField(_pcVrNearClip);
+        RegisterLiveField(_pcVrFarClip);
+        RegisterLiveEnum(_pcVrPipCorner);
+        _pcVrPipWidth.RegisterValueChangedCallback(_ => ApplyControls());
+        _pcVrPipMargin.RegisterValueChangedCallback(_ => ApplyControls());
+        _pcVrTargetDisplay.RegisterValueChangedCallback(_ => ApplyControls());
+        _pcVrOutputWidth.RegisterValueChangedCallback(_ => ApplyControls());
+        _pcVrOutputHeight.RegisterValueChangedCallback(_ => ApplyControls());
+        _pcVrStreamName.RegisterValueChangedCallback(_ => ApplyControls());
+        RegisterLiveToggle(_pcVrNdi);
+        RegisterLiveToggle(_pcVrSpout);
     }
 
     private void BuildImmersiveCategory(VisualElement parent)
@@ -741,6 +921,11 @@ public sealed class SettingsMenu : MonoBehaviour
         infiniteHint.AddToClassList("immersive-hint");
         playback.Add(infiniteHint);
 
+        var reset = CreateSection(content, "RESET", "Choose where Reset game starts the experience again");
+        _resetPoint = new EnumField("Reset point", _mainController.resetPoint);
+        _resetPoint.AddToClassList("immersive-field");
+        reset.Add(_resetPoint);
+
         var demo = CreateSection(content, "DEMO MODE", "Continue automatically when nobody is using or viewing the experience");
         _demoMode = CreateToggle(demo, "Enable demo mode");
         _demoMode.AddToClassList("immersive-toggle-wide");
@@ -752,6 +937,7 @@ public sealed class SettingsMenu : MonoBehaviour
 
         _language.RegisterValueChangedCallback(_ => ApplyControls());
         RegisterLiveField(_globalSpeedMultiplier);
+        RegisterLiveEnum(_resetPoint);
         RegisterLiveToggle(_infinitePlaying);
         RegisterLiveToggle(_hideExitPortalsInInfinitePlaying);
         RegisterLiveToggle(_playInterviewIntrosInInfinitePlaying);
@@ -762,6 +948,15 @@ public sealed class SettingsMenu : MonoBehaviour
     private void BuildNavigationCategory(VisualElement parent)
     {
         var content = CreateCategoryContent(parent, Category.Navigation);
+        var gameSection = CreateSection(content, "GAME FLOW", "Reset or jump directly to a major game state");
+        var firstGameRow = CreateButtonRow(gameSection);
+        firstGameRow.Add(CreateButton("Reset game", ResetGameFromNavigation, true));
+        firstGameRow.Add(CreateButton("Go to menu", GoToMenuFromNavigation));
+
+        var secondGameRow = CreateButtonRow(gameSection);
+        secondGameRow.Add(CreateButton("Go to intro", GoToIntroFromNavigation));
+        secondGameRow.Add(CreateButton("Go to credits", GoToCreditsFromNavigation));
+
         var roomsSection = CreateSection(content, "ROOMS", "Teleport immediately to any room in the loaded scene");
 
         _navigationSummary = new Label();
@@ -797,6 +992,49 @@ public sealed class SettingsMenu : MonoBehaviour
         }
 
         RefreshNavigationStatus();
+    }
+
+    private void ResetGameFromNavigation()
+    {
+        _mainController.ResetGame();
+        RefreshNavigationStatus();
+        SetStatus("Game reset to " + GetResetPointLabel(_mainController.resetPoint) + ".", false);
+    }
+
+    private void GoToMenuFromNavigation()
+    {
+        _mainController.GoToMenu();
+        RefreshNavigationStatus();
+        SetStatus("Opened the game menu.", false);
+    }
+
+    private void GoToIntroFromNavigation()
+    {
+        _mainController.GoToIntro();
+        RefreshNavigationStatus();
+        SetStatus("Started the game intro.", false);
+    }
+
+    private void GoToCreditsFromNavigation()
+    {
+        _mainController.GoToCredits();
+        RefreshNavigationStatus();
+        SetStatus("Opened the credits.", false);
+    }
+
+    private static string GetResetPointLabel(MainController.GameResetPoint resetPoint)
+    {
+        switch (resetPoint)
+        {
+            case MainController.GameResetPoint.GameIntro:
+                return "Game Intro";
+            case MainController.GameResetPoint.GamePlayingAtRoomA:
+                return "Game Playing at Room A";
+            case MainController.GameResetPoint.GamePlayingAtRoomC:
+                return "Game Playing at Room C";
+            default:
+                return "Game Menu";
+        }
     }
 
     private static int CompareRooms(Salle left, Salle right)
@@ -1009,6 +1247,35 @@ public sealed class SettingsMenu : MonoBehaviour
                     ParseAimColor(_aimColor.value, _gazeAimOverlay.Color));
             }
 
+            var pcVr = _pcVrSpectatorCamera.CaptureConfiguration();
+            pcVr.enabled = _pcVrEnabled.value;
+            pcVr.positionSmoothing = _pcVrPositionSmoothing.value;
+            pcVr.rotationSmoothing = _pcVrRotationSmoothing.value;
+            pcVr.maxPositionSpeed = _pcVrMaxPositionSpeed.value;
+            pcVr.maxRotationSpeed = _pcVrMaxRotationSpeed.value;
+            pcVr.horizonLock = _pcVrHorizonLock.value;
+            pcVr.positionOffset = new Vector3(
+                _pcVrPositionX.value,
+                _pcVrPositionY.value,
+                _pcVrPositionZ.value);
+            pcVr.rotationOffset = new Vector3(
+                _pcVrRotationX.value,
+                _pcVrRotationY.value,
+                _pcVrRotationZ.value);
+            pcVr.fieldOfView = _pcVrFieldOfView.value;
+            pcVr.nearClipPlane = _pcVrNearClip.value;
+            pcVr.farClipPlane = _pcVrFarClip.value;
+            pcVr.targetDisplay = _pcVrTargetDisplay.value - 1;
+            pcVr.outputWidth = _pcVrOutputWidth.value;
+            pcVr.outputHeight = _pcVrOutputHeight.value;
+            pcVr.pipCorner = (PcVrSpectatorCamera.PipCorner)_pcVrPipCorner.value;
+            pcVr.pipWidth = _pcVrPipWidth.value;
+            pcVr.pipMargin = _pcVrPipMargin.value;
+            pcVr.streamName = _pcVrStreamName.value;
+            pcVr.enableSpoutSender = _pcVrSpout.value;
+            pcVr.enableNdiSender = _pcVrNdi.value;
+            _pcVrSpectatorCamera.ApplyConfiguration(pcVr, false);
+
             var immersive = _immersiveController.CaptureConfiguration();
             immersive.roomWidth = _roomWidth.value;
             immersive.roomHeight = _roomHeight.value;
@@ -1053,6 +1320,7 @@ public sealed class SettingsMenu : MonoBehaviour
                 ? "en"
                 : _language.value.Trim();
             _mainController.globalSpeedMultiplier = NonNegative(_globalSpeedMultiplier.value);
+            _mainController.resetPoint = (MainController.GameResetPoint)_resetPoint.value;
             _mainController.infinitePlaying = _infinitePlaying.value;
             _mainController.hideExitPortalsInInfinitePlaying = _hideExitPortalsInInfinitePlaying.value;
             _mainController.playInterviewIntrosInInfinitePlaying = _playInterviewIntrosInInfinitePlaying.value;
@@ -1096,6 +1364,7 @@ public sealed class SettingsMenu : MonoBehaviour
             _mainController.followPathOrientationSmoothing);
 
         RefreshAimControls(CaptureAimConfiguration());
+        RefreshPcVrControls(_pcVrSpectatorCamera.CaptureConfiguration());
 
         RefreshImmersiveControls(_immersiveController.CaptureConfiguration());
         RefreshPointCloudRenderingControls(CapturePointCloudRenderingConfiguration());
@@ -1104,6 +1373,7 @@ public sealed class SettingsMenu : MonoBehaviour
         RefreshLanguageChoices();
         _language.SetValueWithoutNotify(_mainController.language);
         _globalSpeedMultiplier.SetValueWithoutNotify(_mainController.globalSpeedMultiplier);
+        _resetPoint.SetValueWithoutNotify(_mainController.resetPoint);
         SetToggleWithoutNotify(_infinitePlaying, _mainController.infinitePlaying);
         SetToggleWithoutNotify(_hideExitPortalsInInfinitePlaying, _mainController.hideExitPortalsInInfinitePlaying);
         SetToggleWithoutNotify(_playInterviewIntrosInInfinitePlaying, _mainController.playInterviewIntrosInInfinitePlaying);
@@ -1163,6 +1433,46 @@ public sealed class SettingsMenu : MonoBehaviour
         _aimOpacity.SetEnabled(hasOverlay && configuration.showOverlay);
         _aimColor.SetEnabled(hasOverlay && configuration.showOverlay);
 
+        _refreshing = wasRefreshing;
+    }
+
+    private void RefreshPcVrControls(PcVrSpectatorCamera.RuntimeConfiguration configuration)
+    {
+        if (!_built || configuration == null)
+        {
+            return;
+        }
+
+        var wasRefreshing = _refreshing;
+        _refreshing = true;
+
+        SetToggleWithoutNotify(_pcVrEnabled, configuration.enabled);
+        _pcVrPositionSmoothing.SetValueWithoutNotify(configuration.positionSmoothing);
+        _pcVrRotationSmoothing.SetValueWithoutNotify(configuration.rotationSmoothing);
+        _pcVrMaxPositionSpeed.SetValueWithoutNotify(configuration.maxPositionSpeed);
+        _pcVrMaxRotationSpeed.SetValueWithoutNotify(configuration.maxRotationSpeed);
+        _pcVrHorizonLock.SetValueWithoutNotify(configuration.horizonLock);
+        _pcVrPositionX.SetValueWithoutNotify(configuration.positionOffset.x);
+        _pcVrPositionY.SetValueWithoutNotify(configuration.positionOffset.y);
+        _pcVrPositionZ.SetValueWithoutNotify(configuration.positionOffset.z);
+        _pcVrRotationX.SetValueWithoutNotify(configuration.rotationOffset.x);
+        _pcVrRotationY.SetValueWithoutNotify(configuration.rotationOffset.y);
+        _pcVrRotationZ.SetValueWithoutNotify(configuration.rotationOffset.z);
+        _pcVrFieldOfView.SetValueWithoutNotify(configuration.fieldOfView);
+        _pcVrNearClip.SetValueWithoutNotify(configuration.nearClipPlane);
+        _pcVrFarClip.SetValueWithoutNotify(configuration.farClipPlane);
+        _pcVrTargetDisplay.SetValueWithoutNotify(configuration.targetDisplay + 1);
+        _pcVrOutputWidth.SetValueWithoutNotify(configuration.outputWidth);
+        _pcVrOutputHeight.SetValueWithoutNotify(configuration.outputHeight);
+        _pcVrPipCorner.SetValueWithoutNotify(configuration.pipCorner);
+        _pcVrPipWidth.SetValueWithoutNotify(configuration.pipWidth);
+        _pcVrPipMargin.SetValueWithoutNotify(configuration.pipMargin);
+        _pcVrStreamName.SetValueWithoutNotify(configuration.streamName);
+        SetToggleWithoutNotify(_pcVrSpout, configuration.enableSpoutSender);
+        SetToggleWithoutNotify(_pcVrNdi, configuration.enableNdiSender);
+
+        var hasSource = _pcVrSpectatorCamera.SourceCamera != null;
+        _pcVrSummary.EnableInClassList("immersive-warning", configuration.enabled && !hasSource);
         _refreshing = wasRefreshing;
     }
 
@@ -1269,6 +1579,14 @@ public sealed class SettingsMenu : MonoBehaviour
         }
 
         _orbReadout.text = $"Pan {_orbController.Pan:F1} deg  |  Tilt {_orbController.Tilt:F1} deg";
+        var pcVr = _pcVrSpectatorCamera.CaptureConfiguration();
+        _pcVrSummary.text = _pcVrSpectatorCamera.GetStatusSummary();
+        _pcVrSummary.EnableInClassList(
+            "immersive-warning",
+            pcVr.enabled
+            && (_pcVrSpectatorCamera.SourceCamera == null
+                || !_pcVrSpectatorCamera.IsTargetDisplayAvailable
+                || (pcVr.enableSpoutSender && !_pcVrSpectatorCamera.IsSpoutSupported)));
         _textureSummary.text = _immersiveController.GetRenderTextureSummary();
         _spoutSupport.text = _immersiveController.IsSpoutSupported
             ? "Spout available - Direct3D 11"
@@ -1483,6 +1801,7 @@ public sealed class SettingsMenu : MonoBehaviour
                     _mainController.followPathOrientationSmoothing
             },
             aim = CaptureAimConfiguration(),
+            pcVr = _pcVrSpectatorCamera.CaptureConfiguration(),
             immersive = _immersiveController.CaptureConfiguration(),
             rendering = CapturePointCloudRenderingConfiguration(),
             subtitles = CaptureSubtitleConfiguration(),
@@ -1491,6 +1810,7 @@ public sealed class SettingsMenu : MonoBehaviour
                 language = _mainController.language,
                 globalSpeedMultiplier = _mainController.globalSpeedMultiplier,
                 followPath = !_mainController.freeMotion,
+                resetPoint = _mainController.resetPoint,
                 infinitePlaying = _mainController.infinitePlaying,
                 hideExitPortalsInInfinitePlaying = _mainController.hideExitPortalsInInfinitePlaying,
                 playInterviewIntrosInInfinitePlaying = _mainController.playInterviewIntrosInInfinitePlaying,
@@ -1502,6 +1822,16 @@ public sealed class SettingsMenu : MonoBehaviour
 
     private void ApplyConfiguration(UnifiedSettings configuration, bool requestAutosave)
     {
+        if (configuration.version < 11 || configuration.pcVr == null)
+        {
+            configuration.pcVr = new PcVrSpectatorCamera.RuntimeConfiguration();
+        }
+
+        if (configuration.version < 10)
+        {
+            configuration.game.resetPoint = MainController.GameResetPoint.GameMenu;
+        }
+
         if (configuration.version < 9 || configuration.aim == null)
         {
             configuration.aim = CaptureAimConfiguration();
@@ -1568,6 +1898,7 @@ public sealed class SettingsMenu : MonoBehaviour
                 configuration.aim.opacity,
                 configuration.aim.color);
 
+            _pcVrSpectatorCamera.ApplyConfiguration(configuration.pcVr, false);
             _immersiveController.ApplyConfiguration(configuration.immersive, false);
             _pointCloudConfiguration?.ApplyConfiguration(configuration.rendering);
 
@@ -1582,6 +1913,7 @@ public sealed class SettingsMenu : MonoBehaviour
             _mainController.language = configuration.game.language;
             _mainController.globalSpeedMultiplier = configuration.game.globalSpeedMultiplier;
             _mainController.freeMotion = !configuration.game.followPath;
+            _mainController.resetPoint = configuration.game.resetPoint;
             _mainController.infinitePlaying = configuration.game.infinitePlaying;
             _mainController.hideExitPortalsInInfinitePlaying = configuration.game.hideExitPortalsInInfinitePlaying;
             _mainController.playInterviewIntrosInInfinitePlaying = configuration.game.playInterviewIntrosInInfinitePlaying;
@@ -1630,6 +1962,7 @@ public sealed class SettingsMenu : MonoBehaviour
             configuration.aim.sizePixels * .5f);
         configuration.aim.opacity = Mathf.Clamp01(NonNegative(configuration.aim.opacity));
         configuration.aim.color = SanitizeColor(configuration.aim.color);
+        PcVrSpectatorCamera.NormalizeConfiguration(configuration.pcVr);
         configuration.rendering.pointSize = Mathf.Max(0.1f, NonNegative(configuration.rendering.pointSize));
         configuration.rendering.alpha = Mathf.Clamp01(NonNegative(configuration.rendering.alpha));
         configuration.rendering.maxViewDistance = NonNegative(configuration.rendering.maxViewDistance);
@@ -1654,6 +1987,11 @@ public sealed class SettingsMenu : MonoBehaviour
             ? "en"
             : configuration.game.language.Trim();
         configuration.game.globalSpeedMultiplier = NonNegative(configuration.game.globalSpeedMultiplier);
+        if (!Enum.IsDefined(typeof(MainController.GameResetPoint), configuration.game.resetPoint))
+        {
+            configuration.game.resetPoint = MainController.GameResetPoint.GameMenu;
+        }
+
         configuration.game.demoModeTimeoutSeconds = Mathf.Max(
             1f,
             NonNegative(configuration.game.demoModeTimeoutSeconds));
