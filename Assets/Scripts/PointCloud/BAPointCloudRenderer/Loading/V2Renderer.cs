@@ -70,7 +70,7 @@ namespace BAPointCloudRenderer.Loading {
         /// <param name="rootNode">not null</param>
         public void AddRootNode(Node rootNode, PointCloudLoader loader) {
             rootNodes.Add(rootNode);
-            Debug.Log($"{LogPrefix} Added root node '{rootNode}' for loader '{loader.name}'. Root count is now {rootNodes.Count}.");
+            Debug.Log($"{LogPrefix} Added root node '{rootNode}' for point cloud '{rootNode.MetaData.cloudName}'. Root count is now {rootNodes.Count}.");
         }
 
         /// <summary>
