@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [DefaultExecutionOrder(5000)]
 [DisallowMultipleComponent]
@@ -73,6 +76,10 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
     [Tooltip("Usually the XR Main Camera. When empty, Camera.main is resolved automatically.")]
     [SerializeField] private Camera sourceCamera;
 
+    [Header("Recorder Output")]
+    [Tooltip("Persistent output used directly by the spectator camera, Spout/NDI, picture-in-picture, and Unity Recorder.")]
+    [SerializeField] private RenderTexture outputTextureAsset;
+
     [Header("Runtime Configuration")]
     [SerializeField] private RuntimeConfiguration configuration = new RuntimeConfiguration();
 
@@ -82,6 +89,7 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
     private NdiSender _ndiSender;
     private KatabasisMeshConfiguration _pointCloudConfiguration;
     private RenderTexture _renderTexture;
+    private bool _ownsRenderTexture;
     private GameObject _pipCanvasObject;
     private Canvas _pipCanvas;
     private RectTransform _pipFrame;
@@ -103,6 +111,7 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
     public Camera SourceCamera => _activeSourceCamera;
     public Camera SpectatorCamera => _spectatorCamera;
     public RenderTexture OutputTexture => _renderTexture;
+    public RenderTexture OutputTextureAsset => outputTextureAsset;
     public bool IsEnabled => configuration != null && configuration.enabled;
     public bool IsSpoutSupported => SystemInfo.graphicsDeviceType == GraphicsDeviceType.Direct3D11;
     public bool IsTargetDisplayAvailable => configuration.targetDisplay >= 0
@@ -270,6 +279,7 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
         }
 
         NormalizeConfiguration(configuration);
+        SynchronizeOutputTextureAssetDescriptor();
         if (!Application.isPlaying)
         {
             CacheComponents();
@@ -686,6 +696,41 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
             return false;
         }
 
+        if (outputTextureAsset != null)
+        {
+            var outputChanged = false;
+            if (_renderTexture != outputTextureAsset)
+            {
+                ReleaseRenderTexture();
+                _renderTexture = outputTextureAsset;
+                _ownsRenderTexture = false;
+                outputChanged = true;
+            }
+
+            var descriptorChanged = _renderTexture.width != configuration.outputWidth
+                || _renderTexture.height != configuration.outputHeight
+                || _renderTexture.depth != 24
+                || _renderTexture.format != RenderTextureFormat.ARGB32;
+
+            if (descriptorChanged || !_renderTexture.IsCreated())
+            {
+                DetachOutputTextureReferences();
+                ConfigureRenderTexture(
+                    _renderTexture,
+                    configuration.outputWidth,
+                    configuration.outputHeight);
+                outputChanged = true;
+            }
+
+            AssignOutputTextureReferences();
+            return outputChanged;
+        }
+
+        if (_renderTexture != null && !_ownsRenderTexture)
+        {
+            ReleaseRenderTexture();
+        }
+
         if (_renderTexture != null
             && _renderTexture.IsCreated()
             && _renderTexture.width == configuration.outputWidth
@@ -708,14 +753,88 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
             autoGenerateMips = false
         };
         _renderTexture.Create();
+        _ownsRenderTexture = true;
+        AssignOutputTextureReferences();
+
+        return true;
+    }
+
+    private void SynchronizeOutputTextureAssetDescriptor()
+    {
+        if (outputTextureAsset == null || configuration == null)
+        {
+            return;
+        }
+
+        if (outputTextureAsset.width == configuration.outputWidth
+            && outputTextureAsset.height == configuration.outputHeight
+            && outputTextureAsset.depth == 24
+            && outputTextureAsset.format == RenderTextureFormat.ARGB32)
+        {
+            return;
+        }
+
+        ConfigureRenderTexture(
+            outputTextureAsset,
+            configuration.outputWidth,
+            configuration.outputHeight);
+    }
+
+    private static void ConfigureRenderTexture(RenderTexture texture, int width, int height)
+    {
+        if (texture.IsCreated())
+        {
+            texture.Release();
+        }
+
+        texture.width = width;
+        texture.height = height;
+        texture.depth = 24;
+        texture.format = RenderTextureFormat.ARGB32;
+        texture.antiAliasing = 1;
+        texture.useMipMap = false;
+        texture.autoGenerateMips = false;
+        texture.Create();
+
+#if UNITY_EDITOR
+        if (EditorUtility.IsPersistent(texture))
+        {
+            EditorUtility.SetDirty(texture);
+        }
+#endif
+    }
+
+    private void AssignOutputTextureReferences()
+    {
         _spectatorCamera.targetTexture = _renderTexture;
 
         if (_pipImage != null)
         {
             _pipImage.texture = _renderTexture;
         }
+    }
 
-        return true;
+    private void DetachOutputTextureReferences()
+    {
+        if (_spectatorCamera != null && _spectatorCamera.targetTexture == _renderTexture)
+        {
+            _spectatorCamera.targetTexture = null;
+        }
+
+        if (_spoutSender != null && _spoutSender.sourceTexture == _renderTexture)
+        {
+            _spoutSender.sourceTexture = null;
+        }
+
+        if (_ndiSender != null && _ndiSender.sourceTexture == _renderTexture)
+        {
+            _ndiSender.sourceTexture = null;
+        }
+
+        if (_pipImage != null && _pipImage.texture == _renderTexture)
+        {
+            _pipImage.texture = null;
+        }
     }
 
     private void RecreateRenderTexture()
@@ -744,29 +863,20 @@ public sealed class PcVrSpectatorCamera : MonoBehaviour
             return;
         }
 
-        if (_spectatorCamera != null && _spectatorCamera.targetTexture == _renderTexture)
+        DetachOutputTextureReferences();
+
+        if (_renderTexture.IsCreated())
         {
-            _spectatorCamera.targetTexture = null;
+            _renderTexture.Release();
         }
 
-        if (_spoutSender != null && _spoutSender.sourceTexture == _renderTexture)
+        if (_ownsRenderTexture)
         {
-            _spoutSender.sourceTexture = null;
+            Destroy(_renderTexture);
         }
 
-        if (_ndiSender != null && _ndiSender.sourceTexture == _renderTexture)
-        {
-            _ndiSender.sourceTexture = null;
-        }
-
-        if (_pipImage != null && _pipImage.texture == _renderTexture)
-        {
-            _pipImage.texture = null;
-        }
-
-        _renderTexture.Release();
-        Destroy(_renderTexture);
         _renderTexture = null;
+        _ownsRenderTexture = false;
     }
 
     private void EnsurePipPresenter()

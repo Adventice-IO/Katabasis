@@ -138,6 +138,15 @@ public sealed class ImmersiveController : MonoBehaviour
     [SerializeField] private bool enableSpoutSender = true;
     [SerializeField] private bool enableNdiSender = true;
 
+    [Header("Recorder Render Texture Assets")]
+    [Tooltip("Persistent assets used directly by the surface cameras, Spout/NDI, and Unity Recorder. Their descriptors are kept synchronized with the room setup.")]
+    [SerializeField] private RenderTexture leftRenderTextureAsset;
+    [SerializeField] private RenderTexture rightRenderTextureAsset;
+    [SerializeField] private RenderTexture frontRenderTextureAsset;
+    [SerializeField] private RenderTexture backRenderTextureAsset;
+    [SerializeField] private RenderTexture floorRenderTextureAsset;
+    [SerializeField] private RenderTexture ceilingRenderTextureAsset;
+
     [Header("Runtime Configuration")]
     [SerializeField] private bool loadSavedConfigurationOnStart = true;
     [SerializeField] private bool autosaveRuntimeChanges = true;
@@ -198,6 +207,27 @@ public sealed class ImmersiveController : MonoBehaviour
 
         surfaceCamera = null;
         return false;
+    }
+
+    public RenderTexture GetRenderTextureAsset(SurfaceId surface)
+    {
+        switch (surface)
+        {
+            case SurfaceId.Left:
+                return leftRenderTextureAsset;
+            case SurfaceId.Right:
+                return rightRenderTextureAsset;
+            case SurfaceId.Front:
+                return frontRenderTextureAsset;
+            case SurfaceId.Back:
+                return backRenderTextureAsset;
+            case SurfaceId.Floor:
+                return floorRenderTextureAsset;
+            case SurfaceId.Ceiling:
+                return ceilingRenderTextureAsset;
+            default:
+                return null;
+        }
     }
 
     public void UseExternalConfigurationPersistence()
@@ -1238,18 +1268,22 @@ public sealed class ImmersiveController : MonoBehaviour
     {
         GetSurfaceData(rig.id, out _, out _, out _, out var wallWidth, out var wallHeight);
         var size = ComputeRenderTextureSize(wallWidth, wallHeight);
+        var configuredAsset = GetRenderTextureAsset(rig.id);
 
-        // Scene/editor render textures are never reused in a build. Every active
-        // surface owns a texture that can be recreated as settings change.
-        if (!rig.ownsRenderTexture && rig.renderTexture != null)
+        // Keep the persistent asset object alive so Recorder settings retain their
+        // reference while room dimensions and output resolution change.
+        if (rig.renderTexture != configuredAsset
+            && (configuredAsset != null || !rig.ownsRenderTexture))
         {
-            if (rig.camera != null && rig.camera.targetTexture == rig.renderTexture)
+            DetachRenderTexture(rig);
+
+            if (rig.ownsRenderTexture)
             {
-                rig.camera.targetTexture = null;
+                ReleaseAndDestroyRenderTexture(rig.renderTexture);
             }
 
-            ReleaseAndDestroyRenderTexture(rig.renderTexture);
-            rig.renderTexture = null;
+            rig.renderTexture = configuredAsset;
+            rig.ownsRenderTexture = false;
         }
 
         var textureNeedsRebuild = rig.renderTexture != null
@@ -1260,18 +1294,22 @@ public sealed class ImmersiveController : MonoBehaviour
 
         if (textureNeedsRebuild)
         {
-            if (rig.camera != null && rig.camera.targetTexture == rig.renderTexture)
-            {
-                rig.camera.targetTexture = null;
-            }
+            DetachRenderTexture(rig);
 
-            if (rig.runtimeMaterial != null)
+            if (rig.ownsRenderTexture)
             {
-                SetMaterialTexture(rig.runtimeMaterial, null);
+                ReleaseAndDestroyRenderTexture(rig.renderTexture);
+                rig.renderTexture = null;
             }
-
-            ReleaseAndDestroyRenderTexture(rig.renderTexture);
-            rig.renderTexture = null;
+            else
+            {
+                ConfigureRenderTexture(
+                    rig.renderTexture,
+                    size.x,
+                    size.y,
+                    depthBufferBits,
+                    renderTextureFormat);
+            }
         }
 
         if (rig.renderTexture == null)
@@ -1287,6 +1325,11 @@ public sealed class ImmersiveController : MonoBehaviour
             rig.ownsRenderTexture = true;
         }
 
+        if (!rig.renderTexture.IsCreated())
+        {
+            rig.renderTexture.Create();
+        }
+
         if (rig.ownsRenderTexture)
         {
             rig.renderTexture.name = rig.id.ToString();
@@ -1294,6 +1337,53 @@ public sealed class ImmersiveController : MonoBehaviour
 
         rig.camera.targetTexture = rig.renderTexture;
         SetRenderTextureOutput(rig.id, rig.renderTexture);
+    }
+
+    private static void ConfigureRenderTexture(
+        RenderTexture texture,
+        int width,
+        int height,
+        int depth,
+        RenderTextureFormat format)
+    {
+        if (texture == null)
+        {
+            return;
+        }
+
+        if (texture.IsCreated())
+        {
+            texture.Release();
+        }
+
+        texture.width = width;
+        texture.height = height;
+        texture.depth = depth;
+        texture.format = format;
+        texture.antiAliasing = 1;
+        texture.autoGenerateMips = false;
+        texture.useMipMap = false;
+        texture.Create();
+
+#if UNITY_EDITOR
+        if (EditorUtility.IsPersistent(texture))
+        {
+            EditorUtility.SetDirty(texture);
+        }
+#endif
+    }
+
+    private static void DetachRenderTexture(SurfaceRig rig)
+    {
+        if (rig.camera != null && rig.camera.targetTexture == rig.renderTexture)
+        {
+            rig.camera.targetTexture = null;
+        }
+
+        if (rig.runtimeMaterial != null)
+        {
+            SetMaterialTexture(rig.runtimeMaterial, null);
+        }
     }
 
     private void SetRenderTextureOutput(SurfaceId id, RenderTexture texture)
