@@ -7,19 +7,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 [DisallowMultipleComponent]
 public sealed class GazeAimOverlay : MonoBehaviour
 {
-    private const float ProjectionDistance = 1000f;
-    private const float ViewportTolerance = .0001f;
     private const string OverlayShaderName = "Katabasis/AimCircleOverlay";
-
-    private static readonly ImmersiveController.SurfaceId[] Surfaces =
-    {
-        ImmersiveController.SurfaceId.Front,
-        ImmersiveController.SurfaceId.Back,
-        ImmersiveController.SurfaceId.Left,
-        ImmersiveController.SurfaceId.Right,
-        ImmersiveController.SurfaceId.Floor,
-        ImmersiveController.SurfaceId.Ceiling
-    };
 
     [SerializeField] private bool visible;
     [Min(4f)][SerializeField] private float sizePixels = 36f;
@@ -211,51 +199,21 @@ public sealed class GazeAimOverlay : MonoBehaviour
         out Camera surfaceCamera,
         out Vector3 viewportPosition)
     {
-        surface = ImmersiveController.SurfaceId.Front;
-        surfaceCamera = null;
-        viewportPosition = default;
-
-        var worldPoint = aimOrigin + aimDirection.normalized * ProjectionDistance;
-        var bestScore = float.NegativeInfinity;
-
-        for (var index = 0; index < Surfaces.Length; index++)
+        if (!_immersiveController.TryProjectWorldRayToOutput(
+                aimOrigin,
+                aimDirection,
+                out surface,
+                out surfaceCamera,
+                out viewportPosition)
+            || surfaceCamera == null
+            || !surfaceCamera.isActiveAndEnabled)
         {
-            var candidateSurface = Surfaces[index];
-            if (!_immersiveController.TryGetSurfaceCamera(candidateSurface, out var candidateCamera)
-                || candidateCamera == null
-                || !candidateCamera.isActiveAndEnabled)
-            {
-                continue;
-            }
-
-            var candidateViewport = candidateCamera.WorldToViewportPoint(worldPoint);
-            if (candidateViewport.z <= 0f
-                || candidateViewport.x < -ViewportTolerance
-                || candidateViewport.x > 1f + ViewportTolerance
-                || candidateViewport.y < -ViewportTolerance
-                || candidateViewport.y > 1f + ViewportTolerance)
-            {
-                continue;
-            }
-
-            var score = Mathf.Min(
-                Mathf.Min(candidateViewport.x, 1f - candidateViewport.x),
-                Mathf.Min(candidateViewport.y, 1f - candidateViewport.y));
-            if (score <= bestScore)
-            {
-                continue;
-            }
-
-            bestScore = score;
-            surface = candidateSurface;
-            surfaceCamera = candidateCamera;
-            viewportPosition = new Vector3(
-                Mathf.Clamp01(candidateViewport.x),
-                Mathf.Clamp01(candidateViewport.y),
-                candidateViewport.z);
+            return false;
         }
 
-        return surfaceCamera != null;
+        viewportPosition.x = Mathf.Clamp01(viewportPosition.x);
+        viewportPosition.y = Mathf.Clamp01(viewportPosition.y);
+        return true;
     }
 
     private bool EnsureRuntimeObjects()

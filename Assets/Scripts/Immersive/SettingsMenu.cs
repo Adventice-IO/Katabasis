@@ -12,7 +12,7 @@ using UnityEngine.XR.Interaction.Toolkit.Inputs.Simulation;
 [DisallowMultipleComponent]
 public sealed class SettingsMenu : MonoBehaviour
 {
-    public const int CurrentSettingsVersion = 15;
+    public const int CurrentSettingsVersion = 16;
 
     private const string PanelSettingsResource = "Immersive/ImmersivePanelSettings";
     private const string StyleSheetResource = "Immersive/ImmersiveRuntimePanel";
@@ -217,10 +217,22 @@ public sealed class SettingsMenu : MonoBehaviour
     private IntegerField _capturePointBudget;
     private Label _captureSummary;
 
+    private EnumField _setupShape;
+    private VisualElement _roomSection;
+    private VisualElement _roomSurfacesSection;
+    private VisualElement _cylinderSection;
+    private VisualElement _domeSection;
     private FloatField _roomWidth;
     private FloatField _roomHeight;
     private FloatField _roomDepth;
     private EnumField _roomAlignment;
+    private FloatField _cylinderRadius;
+    private FloatField _cylinderBaseHeight;
+    private FloatField _cylinderPanelHeight;
+    private FloatField _cylinderAngle;
+    private FloatField _domeFloorRadius;
+    private FloatField _domeCenterHeight;
+    private EnumField _domeUnwrapMode;
     private FloatField _cameraX;
     private FloatField _cameraY;
     private FloatField _cameraZ;
@@ -1081,27 +1093,76 @@ public sealed class SettingsMenu : MonoBehaviour
     {
         var content = CreateCategoryContent(parent, Category.Immersive);
 
-        var room = CreateSection(content, "ROOM", "Dimensions are in meters");
-        var dimensionRow = CreateRow(room);
+        var setup = CreateSection(
+            content,
+            "SETUP SHAPE",
+            "Choose the geometry used by the immersive output");
+        _setupShape = new EnumField("Shape", ImmersiveController.SetupShape.Room);
+        _setupShape.tooltip =
+            "Room uses the existing planar surfaces. Cylinder and dome use one curved output.";
+        _setupShape.AddToClassList("immersive-field");
+        setup.Add(_setupShape);
+
+        _roomSection = CreateSection(content, "ROOM GEOMETRY", "Dimensions are in meters");
+        var dimensionRow = CreateRow(_roomSection);
         _roomWidth = CreateFloatField(dimensionRow, "Width", true);
         _roomHeight = CreateFloatField(dimensionRow, "Height", true);
         _roomDepth = CreateFloatField(dimensionRow, "Depth", true);
 
         _roomAlignment = new EnumField("Alignment", ImmersiveController.RoomAlignmentMode.FrontWall);
+        _roomAlignment.tooltip =
+            "Selects the floor-level room point that remains fixed when dimensions change.";
         _roomAlignment.AddToClassList("immersive-field");
-        room.Add(_roomAlignment);
+        _roomSection.Add(_roomAlignment);
 
-        var cameraLabel = new Label("Camera offset from room anchor");
-        cameraLabel.AddToClassList("immersive-inline-label");
-        room.Add(cameraLabel);
+        _cylinderSection = CreateSection(
+            content,
+            "CYLINDER GEOMETRY",
+            "Radius, elevations and angular span are parametric");
+        var cylinderSizeRow = CreateRow(_cylinderSection);
+        _cylinderRadius = CreateFloatField(cylinderSizeRow, "Radius", true);
+        _cylinderRadius.tooltip = "Cylinder radius in meters.";
+        _cylinderBaseHeight = CreateFloatField(cylinderSizeRow, "Base Y", true);
+        _cylinderBaseHeight.tooltip =
+            "Height of the lower panel edge above the setup floor, in meters.";
+        var cylinderPanelRow = CreateRow(_cylinderSection);
+        _cylinderPanelHeight = CreateFloatField(cylinderPanelRow, "Panel height", true);
+        _cylinderPanelHeight.tooltip = "Vertical panel height in meters.";
+        _cylinderAngle = CreateFloatField(cylinderPanelRow, "Arc angle", true);
+        _cylinderAngle.tooltip = "Horizontal angular span in degrees.";
 
-        var cameraRow = CreateRow(room);
+        _domeSection = CreateSection(
+            content,
+            "DOME GEOMETRY",
+            "A spherical cap defined at the floor and center");
+        var domeSizeRow = CreateRow(_domeSection);
+        _domeFloorRadius = CreateFloatField(domeSizeRow, "Floor radius", true);
+        _domeFloorRadius.tooltip = "Radius of the dome footprint on the floor, in meters.";
+        _domeCenterHeight = CreateFloatField(domeSizeRow, "Center height", true);
+        _domeCenterHeight.tooltip =
+            "Height of the dome at its center above the setup floor, in meters.";
+        _domeUnwrapMode = new EnumField(
+            "Unwrapping",
+            ImmersiveController.DomeUnwrapMode.DomemasterEquidistant);
+        _domeUnwrapMode.tooltip =
+            "Projection used to unwrap the dome into its rectangular output texture.";
+        _domeUnwrapMode.AddToClassList("immersive-field");
+        _domeSection.Add(_domeUnwrapMode);
+
+        var camera = CreateSection(
+            content,
+            "CAMERA",
+            "Offset from the selected setup anchor, in meters");
+        var cameraRow = CreateRow(camera);
         _cameraX = CreateFloatField(cameraRow, "X", true);
         _cameraY = CreateFloatField(cameraRow, "Y", true);
         _cameraZ = CreateFloatField(cameraRow, "Z", true);
 
-        var surfaces = CreateSection(content, "SURFACES", "Cameras and textures follow surface state");
-        var surfaceGrid = CreateToggleGrid(surfaces);
+        _roomSurfacesSection = CreateSection(
+            content,
+            "ROOM SURFACES",
+            "Cameras and textures follow surface state");
+        var surfaceGrid = CreateToggleGrid(_roomSurfacesSection);
         _frontWall = CreateToggle(surfaceGrid, "Front");
         _backWall = CreateToggle(surfaceGrid, "Back");
         _leftWall = CreateToggle(surfaceGrid, "Left");
@@ -1131,9 +1192,17 @@ public sealed class SettingsMenu : MonoBehaviour
         _spoutSupport.AddToClassList("immersive-hint");
         outputs.Add(_spoutSupport);
 
+        RegisterLiveEnum(_setupShape);
         RegisterLiveField(_roomWidth);
         RegisterLiveField(_roomHeight);
         RegisterLiveField(_roomDepth);
+        RegisterLiveField(_cylinderRadius);
+        RegisterLiveField(_cylinderBaseHeight);
+        RegisterLiveField(_cylinderPanelHeight);
+        RegisterLiveField(_cylinderAngle);
+        RegisterLiveField(_domeFloorRadius);
+        RegisterLiveField(_domeCenterHeight);
+        RegisterLiveEnum(_domeUnwrapMode);
         RegisterLiveField(_cameraX);
         RegisterLiveField(_cameraY);
         RegisterLiveField(_cameraZ);
@@ -1618,10 +1687,19 @@ public sealed class SettingsMenu : MonoBehaviour
             _captureTool.ApplyConfiguration(CaptureToolConfigurationFromControls(), false);
 
             var immersive = _immersiveController.CaptureConfiguration();
+            immersive.setupShape = (ImmersiveController.SetupShape)_setupShape.value;
             immersive.roomWidth = _roomWidth.value;
             immersive.roomHeight = _roomHeight.value;
             immersive.roomDepth = _roomDepth.value;
             immersive.roomAlignment = (ImmersiveController.RoomAlignmentMode)_roomAlignment.value;
+            immersive.cylinderRadius = _cylinderRadius.value;
+            immersive.cylinderBaseHeight = _cylinderBaseHeight.value;
+            immersive.cylinderPanelHeight = _cylinderPanelHeight.value;
+            immersive.cylinderAngle = _cylinderAngle.value;
+            immersive.domeFloorRadius = _domeFloorRadius.value;
+            immersive.domeCenterHeight = _domeCenterHeight.value;
+            immersive.domeUnwrapMode =
+                (ImmersiveController.DomeUnwrapMode)_domeUnwrapMode.value;
             immersive.cameraOffsetFromAnchor = new Vector3(_cameraX.value, _cameraY.value, _cameraZ.value);
             immersive.leftWall = _leftWall.value;
             immersive.rightWall = _rightWall.value;
@@ -1977,7 +2055,13 @@ public sealed class SettingsMenu : MonoBehaviour
         var controlsEnabled = _subtitles != null;
         _subtitleImmersiveMode.SetEnabled(controlsEnabled);
         var pcVrMode = _globalMode == GlobalMode.PcVr;
-        _subtitleSurface.SetEnabled(controlsEnabled && configuration.immersiveMode && !pcVrMode);
+        var curvedOutput = _immersiveController != null
+            && _immersiveController.CurrentSetupShape != ImmersiveController.SetupShape.Room;
+        _subtitleSurface.SetEnabled(
+            controlsEnabled
+            && configuration.immersiveMode
+            && !pcVrMode
+            && !curvedOutput);
         _subtitlePositionX.SetEnabled(controlsEnabled && (configuration.immersiveMode || pcVrMode));
         _subtitlePositionY.SetEnabled(controlsEnabled && (configuration.immersiveMode || pcVrMode));
         _subtitleSize.SetEnabled(controlsEnabled && (configuration.immersiveMode || pcVrMode));
@@ -2019,10 +2103,19 @@ public sealed class SettingsMenu : MonoBehaviour
         var wasRefreshing = _refreshing;
         _refreshing = true;
 
+        _setupShape.SetValueWithoutNotify(configuration.setupShape);
         _roomWidth.SetValueWithoutNotify(configuration.roomWidth);
         _roomHeight.SetValueWithoutNotify(configuration.roomHeight);
         _roomDepth.SetValueWithoutNotify(configuration.roomDepth);
         _roomAlignment.SetValueWithoutNotify(configuration.roomAlignment);
+        _cylinderRadius.SetValueWithoutNotify(configuration.cylinderRadius);
+        _cylinderBaseHeight.SetValueWithoutNotify(configuration.cylinderBaseHeight);
+        _cylinderPanelHeight.SetValueWithoutNotify(configuration.cylinderPanelHeight);
+        _cylinderAngle.SetValueWithoutNotify(configuration.cylinderAngle);
+        _domeFloorRadius.SetValueWithoutNotify(configuration.domeFloorRadius);
+        _domeCenterHeight.SetValueWithoutNotify(configuration.domeCenterHeight);
+        _domeUnwrapMode.SetValueWithoutNotify(configuration.domeUnwrapMode);
+        RefreshImmersiveShapeVisibility(configuration.setupShape);
         _cameraX.SetValueWithoutNotify(configuration.cameraOffsetFromAnchor.x);
         _cameraY.SetValueWithoutNotify(configuration.cameraOffsetFromAnchor.y);
         _cameraZ.SetValueWithoutNotify(configuration.cameraOffsetFromAnchor.z);
@@ -2042,7 +2135,37 @@ public sealed class SettingsMenu : MonoBehaviour
         SetToggleWithoutNotify(_ndi, configuration.enableNdiSender);
 
         _refreshing = wasRefreshing;
+        RefreshSubtitleControls(CaptureSubtitleConfiguration());
         RefreshRuntimeStatus();
+    }
+
+    private void RefreshImmersiveShapeVisibility(ImmersiveController.SetupShape setupShape)
+    {
+        var roomVisible = setupShape == ImmersiveController.SetupShape.Room;
+        var cylinderVisible = setupShape == ImmersiveController.SetupShape.Cylinder;
+        var domeVisible = setupShape == ImmersiveController.SetupShape.Dome;
+
+        if (_roomSection != null)
+        {
+            _roomSection.style.display = roomVisible ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        if (_roomSurfacesSection != null)
+        {
+            _roomSurfacesSection.style.display =
+                roomVisible ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        if (_cylinderSection != null)
+        {
+            _cylinderSection.style.display =
+                cylinderVisible ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        if (_domeSection != null)
+        {
+            _domeSection.style.display = domeVisible ? DisplayStyle.Flex : DisplayStyle.None;
+        }
     }
 
     private void RefreshRuntimeStatus()
@@ -2063,6 +2186,14 @@ public sealed class SettingsMenu : MonoBehaviour
                 || !_pcVrSpectatorCamera.IsTargetDisplayAvailable
                 || (pcVr.enableSpoutSender && !_pcVrSpectatorCamera.IsSpoutSupported)));
         _textureSummary.text = _immersiveController.GetRenderTextureSummary();
+        var hasSetupWarning = _immersiveController.TryGetSetupWarning(
+            out var setupWarning);
+        if (hasSetupWarning)
+        {
+            _textureSummary.text += "\n" + setupWarning;
+        }
+
+        _textureSummary.EnableInClassList("immersive-warning", hasSetupWarning);
         _spoutSupport.text = _immersiveController.IsSpoutSupported
             ? "Spout available - Direct3D 11"
             : "Spout configured but inactive - requires Direct3D 11";
@@ -2110,14 +2241,23 @@ public sealed class SettingsMenu : MonoBehaviour
             }
             else
             {
+                var curvedOutput = _immersiveController.CurrentSetupShape
+                    != ImmersiveController.SetupShape.Room;
                 var surfaceAvailable = !_subtitles.ImmersiveMode
                     || _immersiveController.TryGetSurfaceCamera(_subtitles.ImmersiveSurface, out _);
                 _subtitleSummary.EnableInClassList("immersive-warning", !surfaceAvailable);
                 _subtitleSummary.text = !_subtitles.ImmersiveMode
                     ? "Immersive overlay disabled; standard camera placement is active."
                     : surfaceAvailable
-                        ? $"Fixed 2D overlay on {_subtitles.ImmersiveSurface} (included in Spout/NDI)."
-                        : $"{_subtitles.ImmersiveSurface} is disabled, so no subtitle overlay can be rendered.";
+                        ? curvedOutput
+                            ? $"Fixed 2D overlay on the {_immersiveController.CurrentSetupShape} output "
+                                + "(included in Spout/NDI)."
+                            : $"Fixed 2D overlay on {_subtitles.ImmersiveSurface} (included in Spout/NDI)."
+                        : curvedOutput
+                            ? $"{_immersiveController.CurrentSetupShape} output is unavailable, "
+                                + "so no subtitle overlay can be rendered."
+                            : $"{_subtitles.ImmersiveSurface} is disabled, "
+                                + "so no subtitle overlay can be rendered.";
             }
         }
 
