@@ -13,6 +13,7 @@ public class MenuController : MonoBehaviour
 
 
     MainController mainController;
+    CaptureTool captureTool;
 
 
     public bool enabledAtStart = false;
@@ -26,6 +27,11 @@ public class MenuController : MonoBehaviour
     Button lockOnTrackButton;
     Button editModeButton;
     Button playpauseButton;
+    Toggle captureBlackAndWhiteToggle;
+    Slider captureThresholdSlider;
+    Label captureThresholdValue;
+    Button captureButton;
+    Label captureStatus;
     bool menuVisible;
 
     private void OnEnable()
@@ -119,6 +125,7 @@ public class MenuController : MonoBehaviour
 
         uiDocument = GetComponent<UIDocument>();
         mainController = FindAnyObjectByType<MainController>();
+        captureTool = FindAnyObjectByType<CaptureTool>(FindObjectsInactive.Include);
 
         if (salles == null)
         {
@@ -142,6 +149,7 @@ public class MenuController : MonoBehaviour
         var root = uiDocument.rootVisualElement;
         if (root == null) return;
 
+        SetupCaptureControls(root);
 
 
         sallesList = root.Q<ListView>("salleslist");
@@ -197,6 +205,123 @@ public class MenuController : MonoBehaviour
         playpauseButton.clicked += onPlayPauseClicked;
 
 
+    }
+
+    private void SetupCaptureControls(VisualElement root)
+    {
+        captureBlackAndWhiteToggle = root.Q<Toggle>("capture-black-and-white");
+        captureThresholdSlider = root.Q<Slider>("capture-threshold");
+        captureThresholdValue = root.Q<Label>("capture-threshold-value");
+        captureButton = root.Q<Button>("capture-button");
+        captureStatus = root.Q<Label>("capture-status");
+
+        if (captureBlackAndWhiteToggle == null
+            || captureThresholdSlider == null
+            || captureThresholdValue == null
+            || captureButton == null
+            || captureStatus == null)
+        {
+            Debug.LogWarning("The VR menu Capture controls are missing from its UI document.", this);
+            return;
+        }
+
+        captureBlackAndWhiteToggle.UnregisterValueChangedCallback(
+            OnCaptureBlackAndWhiteChanged);
+        captureBlackAndWhiteToggle.RegisterValueChangedCallback(
+            OnCaptureBlackAndWhiteChanged);
+        captureThresholdSlider.UnregisterValueChangedCallback(
+            OnCaptureThresholdChanged);
+        captureThresholdSlider.RegisterValueChangedCallback(
+            OnCaptureThresholdChanged);
+        captureButton.clicked -= OnCaptureClicked;
+        captureButton.clicked += OnCaptureClicked;
+
+        var captureAvailable = captureTool != null;
+        captureBlackAndWhiteToggle.SetEnabled(captureAvailable);
+        captureButton.SetEnabled(captureAvailable);
+
+        if (!captureAvailable)
+        {
+            captureThresholdSlider.SetEnabled(false);
+            SetCaptureStatus("CaptureTool unavailable", true);
+            return;
+        }
+
+        var configuration = captureTool.CaptureConfiguration();
+        captureBlackAndWhiteToggle.SetValueWithoutNotify(configuration.blackAndWhite);
+        captureThresholdSlider.SetValueWithoutNotify(configuration.dotsThreshold);
+        captureThresholdSlider.SetEnabled(configuration.blackAndWhite);
+        captureThresholdValue.text = configuration.dotsThreshold.ToString("0.00");
+        SetCaptureStatus("Ready", false);
+    }
+
+    private void OnCaptureBlackAndWhiteChanged(ChangeEvent<bool> changeEvent)
+    {
+        if (captureTool == null)
+        {
+            return;
+        }
+
+        var configuration = captureTool.CaptureConfiguration();
+        configuration.blackAndWhite = changeEvent.newValue;
+        configuration.dotsThreshold = captureThresholdSlider.value;
+        captureTool.ApplyConfiguration(configuration, false);
+        captureThresholdSlider.SetEnabled(changeEvent.newValue);
+        SetCaptureStatus("Ready", false);
+    }
+
+    private void OnCaptureThresholdChanged(ChangeEvent<float> changeEvent)
+    {
+        captureThresholdValue.text = changeEvent.newValue.ToString("0.00");
+        if (captureTool == null)
+        {
+            return;
+        }
+
+        var configuration = captureTool.CaptureConfiguration();
+        configuration.blackAndWhite = captureBlackAndWhiteToggle.value;
+        configuration.dotsThreshold = changeEvent.newValue;
+        captureTool.ApplyConfiguration(configuration, false);
+        SetCaptureStatus("Ready", false);
+    }
+
+    private void OnCaptureClicked()
+    {
+        if (captureTool == null)
+        {
+            SetCaptureStatus("CaptureTool unavailable", true);
+            return;
+        }
+
+        var configuration = captureTool.CaptureConfiguration();
+        var success = captureTool.TryCaptureFrame(
+            configuration.screenshotName,
+            configuration.printWidthMm,
+            configuration.printHeightMm,
+            out var savedPath,
+            out var message);
+
+        SetCaptureStatus(
+            success ? "Saved: " + System.IO.Path.GetFileName(savedPath) : "Capture failed",
+            !success,
+            message);
+
+        if (!success)
+        {
+            Debug.LogWarning(message, this);
+        }
+    }
+
+    private void SetCaptureStatus(string text, bool error, string tooltip = "")
+    {
+        if (captureStatus == null)
+        {
+            return;
+        }
+
+        captureStatus.text = text;
+        captureStatus.tooltip = tooltip;
+        captureStatus.EnableInClassList("capture-error", error);
     }
 
     private void Update()

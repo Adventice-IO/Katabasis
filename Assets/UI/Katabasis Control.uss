@@ -43,3 +43,127 @@
 .unity-button.active {
     background-color: rgb(209, 75, 137);
 }
+
+.capture-section {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 0;
+    padding-top: 7px;
+    padding-right: 8px;
+    padding-bottom: 6px;
+    padding-left: 8px;
+    background-color: rgba(0, 0, 0, 0.78);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgb(72, 72, 72);
+    border-right-color: rgb(72, 72, 72);
+    border-bottom-color: rgb(72, 72, 72);
+    border-left-color: rgb(72, 72, 72);
+}
+
+.capture-title {
+    height: 16px;
+    color: rgb(224, 224, 224);
+    font-size: 10px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.capture-toggle {
+    height: 25px;
+    margin-top: 3px;
+    margin-right: 0;
+    margin-bottom: 2px;
+    margin-left: 0;
+    padding-right: 6px;
+    padding-left: 6px;
+    color: rgb(224, 224, 224);
+    background-color: rgb(42, 42, 42);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.capture-toggle:checked {
+    color: white;
+    background-color: rgb(209, 75, 137);
+}
+
+.capture-threshold-row {
+    height: 28px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.capture-control-label {
+    width: 58px;
+    color: rgb(205, 205, 205);
+    font-size: 9px;
+    -unity-text-align: middle-left;
+}
+
+.capture-threshold {
+    height: 24px;
+    flex-grow: 1;
+    margin-right: 5px;
+    margin-left: 2px;
+}
+
+.capture-threshold .unity-base-slider__tracker {
+    height: 7px;
+}
+
+.capture-threshold .unity-base-slider__dragger {
+    width: 15px;
+    height: 15px;
+    background-color: rgb(209, 75, 137);
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+}
+
+.capture-threshold-value {
+    width: 28px;
+    color: rgb(205, 205, 205);
+    font-size: 9px;
+    -unity-text-align: middle-right;
+}
+
+.capture-button {
+    height: 32px;
+    margin-top: 2px;
+    margin-right: 0;
+    margin-bottom: 2px;
+    margin-left: 0;
+    color: white;
+    background-color: rgb(209, 75, 137);
+    -unity-font-style: bold;
+}
+
+.capture-button:hover {
+    background-color: rgb(225, 94, 153);
+}
+
+.capture-button:active {
+    background-color: rgb(173, 54, 112);
+}
+
+.capture-status {
+    height: 13px;
+    color: rgb(170, 170, 170);
+    font-size: 8px;
+    -unity-text-align: middle-center;
+}
+
+.capture-status.capture-error {
+    color: rgb(255, 119, 119);
+}

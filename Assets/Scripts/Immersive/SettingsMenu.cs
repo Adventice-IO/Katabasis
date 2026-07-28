@@ -4,6 +4,9 @@ using System.IO;
 using BAPointCloudRenderer.CloudController;
 using UnityEngine;
 using UnityEngine.UIElements;
+#if UNITY_EDITOR
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Simulation;
+#endif
 
 [DefaultExecutionOrder(1000)]
 [DisallowMultipleComponent]
@@ -1781,7 +1784,8 @@ public sealed class SettingsMenu : MonoBehaviour
         }
 
         _captureTool.SetCaptureModeActive(captureMode);
-        _immersiveController.SetCameraOffsetEnabled(immersiveMode);
+        _immersiveController.SetCameraOffsetEnabled(
+            immersiveMode || IsXrSimulatorEnabledInEditor());
         _immersiveController.SetOutputEnabled(immersiveMode);
 
         for (var index = 0; index < _pointCloudSets.Length; index++)
@@ -1804,6 +1808,24 @@ public sealed class SettingsMenu : MonoBehaviour
         }
 
         _gazeFollower?.SetVerticalOffsetEnabled(immersiveMode);
+    }
+
+    private static bool IsXrSimulatorEnabledInEditor()
+    {
+#if UNITY_EDITOR
+        var simulators = FindObjectsByType<XRInteractionSimulator>(
+            FindObjectsInactive.Exclude,
+            FindObjectsSortMode.None);
+        for (var index = 0; index < simulators.Length; index++)
+        {
+            if (simulators[index].isActiveAndEnabled)
+            {
+                return true;
+            }
+        }
+#endif
+
+        return false;
     }
 
     private KatabasisMeshConfiguration.RuntimeConfiguration CapturePointCloudRenderingConfiguration()

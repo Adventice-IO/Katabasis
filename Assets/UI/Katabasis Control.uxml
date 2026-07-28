@@ -7,6 +7,17 @@
                 <ui:Button text="Lock On Track" name="freemotionbt" style="height: 36px; width: 128px; left: 59px; top: 32px; position: absolute;"/>
                 <ui:Button text="Edit Mode" name="editmodebt" style="height: 36px; width: 128px; left: 59px; top: 106px; position: absolute;"/>
                 <ui:Button text="Play/Pause" name="playpause" style="height: 36px; width: 128px; left: 59px; top: 186px; position: absolute;"/>
+                <ui:VisualElement name="capture-section" class="capture-section">
+                    <ui:Label text="CAPTURE" class="capture-title"/>
+                    <ui:Toggle label="B&amp;W" name="capture-black-and-white" class="capture-toggle"/>
+                    <ui:VisualElement class="capture-threshold-row">
+                        <ui:Label text="Threshold" class="capture-control-label"/>
+                        <ui:Slider name="capture-threshold" low-value="0" high-value="1" value="0" class="capture-threshold"/>
+                        <ui:Label text="0.00" name="capture-threshold-value" class="capture-threshold-value"/>
+                    </ui:VisualElement>
+                    <ui:Button text="Capture" name="capture-button" class="capture-button"/>
+                    <ui:Label text="Ready" name="capture-status" class="capture-status"/>
+                </ui:VisualElement>
             </ui:GroupBox>
         </ui:VisualElement>
         <ui:GroupBox/>
