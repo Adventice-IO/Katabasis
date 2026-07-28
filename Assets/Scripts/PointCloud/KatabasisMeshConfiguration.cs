@@ -47,6 +47,8 @@ public class KatabasisMeshConfiguration : MeshConfiguration
 
     private const string PointShaderName = "Point Cloud/Optimized_Masked_VR";
     private const string SizeShaderName = "Point Cloud/Optimized_Masked_VR_Size";
+    private const int MaskBoxStride = 96;
+    private static readonly MaskBox[] EmptyMaskBufferData = new MaskBox[1];
 
     public PointCloudProfile profile = null;
     public Material material;
@@ -68,10 +70,27 @@ public class KatabasisMeshConfiguration : MeshConfiguration
     private bool _spectatorRenderingEnabled;
     private PointRenderingMode _spectatorRenderingMode = PointRenderingMode.Point;
 
+    private void OnEnable()
+    {
+        if (Application.isPlaying)
+        {
+            InitializeRuntimeState();
+        }
+    }
+
     public void Start()
     {
+        InitializeRuntimeState();
+    }
+
+    private void InitializeRuntimeState()
+    {
         CreateRuntimeResources();
-        gameObjectCollection = new HashSet<PointCloudBlock>();
+        if (gameObjectCollection == null)
+        {
+            gameObjectCollection = new HashSet<PointCloudBlock>();
+        }
+
         renderCamera = Camera.main;
         if (material != null)
         {
@@ -81,11 +100,45 @@ public class KatabasisMeshConfiguration : MeshConfiguration
 
         masks = GetComponentsInChildren<PointCloudMask>();
         _boxes = new MaskBox[masks.Length];
-        if (_boxes.Length > 0)
+        EnsureMaskBuffer(_boxes.Length);
+        BindMaskBufferToMaterial();
+    }
+
+    private void EnsureMaskBuffer(int maskCount)
+    {
+        int requiredCount = Mathf.Max(1, maskCount);
+        if (_maskBuffer != null && _maskBuffer.count == requiredCount)
         {
-            const int maskBoxSize = 96; // Size of MaskBox struct in bytes (16-byte aligned)
-            _maskBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, _boxes.Length, maskBoxSize);
+            return;
         }
+
+        if (_maskBuffer != null)
+        {
+            _maskBuffer.Release();
+        }
+
+        // D3D12 requires every declared StructuredBuffer to have an SRV bound,
+        // even when _MaskCount is zero and the shader loop will not read it.
+        _maskBuffer = new GraphicsBuffer(
+            GraphicsBuffer.Target.Structured,
+            requiredCount,
+            MaskBoxStride);
+
+        if (maskCount == 0)
+        {
+            _maskBuffer.SetData(EmptyMaskBufferData);
+        }
+    }
+
+    private void BindMaskBufferToMaterial()
+    {
+        if (material == null || _maskBuffer == null)
+        {
+            return;
+        }
+
+        material.SetBuffer("_MaskBoxes", _maskBuffer);
+        material.SetInt("_MaskCount", _boxes != null ? _boxes.Length : 0);
     }
 
     public RuntimeConfiguration CaptureConfiguration()
@@ -209,6 +262,7 @@ public class KatabasisMeshConfiguration : MeshConfiguration
             material.shader = shader;
         }
 
+        BindMaskBufferToMaterial();
         material.SetFloat(
             "_PointSize",
             !spectatorPass && activeMode == PointRenderingMode.Size ? pointSize : 1f);
@@ -303,6 +357,7 @@ public class KatabasisMeshConfiguration : MeshConfiguration
 
         PointCloudBlock pointCloudBlock = gameObject.AddComponent<PointCloudBlock>();
         pointCloudBlock.init(profile);
+        pointCloudBlock.updateMasks(_maskBuffer, _boxes != null ? _boxes.Length : 0);
         pointCloudBlock.GetComponent<MeshRenderer>().sharedMaterial = material;
         pointCloudBlock.onKill += () =>
         {

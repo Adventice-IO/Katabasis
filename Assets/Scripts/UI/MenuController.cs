@@ -26,19 +26,33 @@ public class MenuController : MonoBehaviour
     Button lockOnTrackButton;
     Button editModeButton;
     Button playpauseButton;
+    bool menuVisible;
 
     private void OnEnable()
     {
-        // Safety check: ensure we have the document reference
-        SetupMenu();
+        uiDocument = GetComponent<UIDocument>();
+        if (uiDocument == null)
+        {
+            Debug.LogError("MenuController requires a UIDocument on the same GameObject.", this);
+            enabled = false;
+            return;
+        }
+
+        // Keep this document registered with UI Toolkit. Disabling a UIDocument
+        // here can tear down another runtime panel that is being initialized in
+        // the same frame (for example SettingsMenu).
+        uiDocument.enabled = true;
+        SetMenuVisible(enabledAtStart);
+        if (menuVisible)
+        {
+            SetupMenu();
+        }
 
         if (Application.isPlaying && menuButtonAction.action != null)
         {
             menuButtonAction.action.Enable();
             menuButtonAction.action.performed += OnMenuButtonPressed;
         }
-
-        if (!enabledAtStart) uiDocument.enabled = false;
     }
 
     private void OnDisable()
@@ -52,12 +66,35 @@ public class MenuController : MonoBehaviour
 
     private void OnMenuButtonPressed(InputAction.CallbackContext obj)
     {
-        uiDocument.enabled = !uiDocument.enabled;
-        GetComponent<BoxCollider>().enabled = uiDocument.enabled;
-        if (uiDocument.enabled)
+        if (menuVisible)
         {
-            SetupMenu();
+            SetMenuVisible(false);
+            return;
+        }
 
+        SetupMenu();
+        SetMenuVisible(true);
+    }
+
+    private void SetMenuVisible(bool visible)
+    {
+        menuVisible = visible;
+
+        if (uiDocument != null)
+        {
+            // Toggle only this document's content. The UIDocument itself stays
+            // enabled so it cannot disturb SettingsMenu's independent panel.
+            VisualElement root = uiDocument.rootVisualElement;
+            if (root != null)
+            {
+                root.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+        }
+
+        BoxCollider panelCollider = GetComponent<BoxCollider>();
+        if (panelCollider != null)
+        {
+            panelCollider.enabled = visible;
         }
     }
 

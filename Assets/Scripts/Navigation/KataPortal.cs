@@ -42,11 +42,14 @@ public class KataPortal : MonoBehaviour
 
     public List<Salle> blacklist = new List<Salle>();
 
+    void Awake()
+    {
+        CacheComponents();
+    }
 
     void OnEnable()
     {
-       
-        interactable = GetComponent<XRSimpleInteractable>();
+        CacheComponents();
     }
 
     void OnDisable()
@@ -61,14 +64,19 @@ public class KataPortal : MonoBehaviour
     {
         mainController = GameObject.FindAnyObjectByType<MainController>();
         tunnel = transform.parent.GetComponent<Tunnel>();
-        vfx = GetComponent<VisualEffect>();
-        col = GetComponent<Collider>();
+        CacheComponents();
 
         if (Application.isPlaying)
         {
             showing = false;
-            vfx.enabled = false;
-            col.enabled = false;
+            if (vfx != null)
+            {
+                vfx.enabled = false;
+            }
+            if (col != null)
+            {
+                col.enabled = false;
+            }
         }
 
         
@@ -191,7 +199,7 @@ public class KataPortal : MonoBehaviour
                 progression = newProg;
                 progRTPC.rtpc.SetValue(gameObject, progression);
 
-                vfx.SetFloat("Progression", progression);
+                SetVfxFloatIfPresent("Progression", progression);
                 if (progression >= 1f)
                 {
                     ActivatePortal();
@@ -254,7 +262,7 @@ public class KataPortal : MonoBehaviour
         progRTPC?.rtpc.SetValue(gameObject, progression);
         if (vfx != null)
         {
-            vfx.SetFloat("Progression", progression);
+            SetVfxFloatIfPresent("Progression", progression);
         }
 
         ActivatePortal();
@@ -297,16 +305,58 @@ public class KataPortal : MonoBehaviour
 
     public void show(bool val)
     {
+        CacheComponents();
         progression = 0f;
         showing = val;
 
-        GetComponent<VisualEffect>().enabled = showing;
-        GetComponent<Collider>().enabled = showing;
-        GetComponent<VisualEffect>().SetFloat("Progression", progression);
+        if (vfx != null)
+        {
+            if (showing)
+            {
+                vfx.enabled = true;
+                SetVfxFloatIfPresent("Progression", progression);
+            }
+            else
+            {
+                // Reset while the graph is still active. MainController can
+                // call this before Start(), or while the VFX is already off.
+                SetVfxFloatIfPresent("Progression", progression);
+                vfx.enabled = false;
+            }
+        }
+
+        if (col != null)
+        {
+            col.enabled = showing;
+        }
 
         if(GetComponentInParent<KataTransformer>() != null)
         {
             GetComponentInParent<KataTransformer>().forceDisabled = !showing;
+        }
+    }
+
+    void CacheComponents()
+    {
+        if (interactable == null)
+        {
+            interactable = GetComponent<XRSimpleInteractable>();
+        }
+        if (vfx == null)
+        {
+            vfx = GetComponent<VisualEffect>();
+        }
+        if (col == null)
+        {
+            col = GetComponent<Collider>();
+        }
+    }
+
+    void SetVfxFloatIfPresent(string propertyName, float value)
+    {
+        if (vfx != null && vfx.visualEffectAsset != null && vfx.HasFloat(propertyName))
+        {
+            vfx.SetFloat(propertyName, value);
         }
     }
 

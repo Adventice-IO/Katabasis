@@ -112,12 +112,22 @@ namespace BAPointCloudRenderer.Loading {
             }
         }
 
-        private bool TryGetNodePriority(Node node, Vector3 cameraPosition, Vector3 camForward, float screenHeight, float fieldOfView, float farClipPlane, out double priority) {
+        public void SetRender360(bool enabled) {
+            lock (locker) {
+                render360 = enabled;
+            }
+
+            lock (this) {
+                Monitor.PulseAll(this);
+            }
+        }
+
+        private bool TryGetNodePriority(Node node, Vector3 cameraPosition, Vector3 camForward, float screenHeight, float fieldOfView, float farClipPlane, bool renderAllDirections, out double priority) {
             Vector3 center = node.BoundingBox.GetBoundsObject().center;
             double radius = node.BoundingBox.Radius();
             double distance = Math.Max((center - cameraPosition).magnitude, 0.0001f);
 
-            if (render360) {
+            if (renderAllDirections) {
                 double nearestDistance = Math.Max(0.0, distance - radius);
                 if (nearestDistance > farClipPlane) {
                     priority = 0;
@@ -144,8 +154,8 @@ namespace BAPointCloudRenderer.Loading {
             return true;
         }
 
-        private bool IsNodeVisible(Node node, Vector3 cameraPosition, Plane[] frustum, float farClipPlane) {
-            if (render360) {
+        private bool IsNodeVisible(Node node, Vector3 cameraPosition, Plane[] frustum, float farClipPlane, bool renderAllDirections) {
+            if (renderAllDirections) {
                 Vector3 center = node.BoundingBox.GetBoundsObject().center;
                 double distance = (center - cameraPosition).magnitude;
                 double nearestDistance = Math.Max(0.0, distance - node.BoundingBox.Radius());
@@ -163,14 +173,16 @@ namespace BAPointCloudRenderer.Loading {
             float screenHeight;
             float fieldOfView;
             float farClipPlane;
+            bool renderAllDirections;
 
             PriorityQueue<double, Node> toProcess = new HeapPriorityQueue<double, Node>();
 
             lock (locker) {
-                if (!render360 && this.frustum == null) {
+                renderAllDirections = render360;
+                if (!renderAllDirections && this.frustum == null) {
                     return 0;
                 }
-                if (render360 && this.farClipPlane <= 0) {
+                if (renderAllDirections && this.farClipPlane <= 0) {
                     return 0;
                 }
                 cameraPosition = this.cameraPosition;
@@ -188,7 +200,7 @@ namespace BAPointCloudRenderer.Loading {
 
             foreach (Node rootNode in rootNodes) {
                 double priority;
-                if (TryGetNodePriority(rootNode, cameraPosition, camForward, screenHeight, fieldOfView, farClipPlane, out priority)) {
+                if (TryGetNodePriority(rootNode, cameraPosition, camForward, screenHeight, fieldOfView, farClipPlane, renderAllDirections, out priority)) {
                     toProcess.Enqueue(rootNode, priority);
                 } else {
                     DeleteNode(rootNode);
@@ -199,7 +211,7 @@ namespace BAPointCloudRenderer.Loading {
                 Node n = toProcess.Dequeue(); //Min Node Size was already checked
 
                 //Is Node inside frustum?
-                if (IsNodeVisible(n, cameraPosition, frustum, farClipPlane)) {
+                if (IsNodeVisible(n, cameraPosition, frustum, farClipPlane, renderAllDirections)) {
 
                     bool loadchildren = false;
                     lock (n) {
@@ -245,7 +257,7 @@ namespace BAPointCloudRenderer.Loading {
                     if (loadchildren) {
                         foreach (Node child in n) {
                             double priority;
-                            if (TryGetNodePriority(child, cameraPosition, camForward, screenHeight, fieldOfView, farClipPlane, out priority)) {
+                            if (TryGetNodePriority(child, cameraPosition, camForward, screenHeight, fieldOfView, farClipPlane, renderAllDirections, out priority)) {
                                 toProcess.Enqueue(child, priority);
                             } else {
                                 DeleteNode(child);

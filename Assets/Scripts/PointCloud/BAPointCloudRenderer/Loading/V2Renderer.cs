@@ -102,6 +102,18 @@ namespace BAPointCloudRenderer.Loading {
         }
 
         /// <summary>
+        /// Changes point-cloud traversal between camera-frustum and all-direction loading.
+        /// </summary>
+        public void SetRender360(bool enabled) {
+            if (render360 == enabled) {
+                return;
+            }
+
+            render360 = enabled;
+            traversalThread.SetRender360(enabled);
+        }
+
+        /// <summary>
         /// Gives the current camera data to the traversal thread and updates the GameObjects. Called from the MainThread. As described in the Bachelor Thesis in chapter 3.1.3 "Main Thread"
         /// </summary>
         public void Update() {

@@ -495,11 +495,30 @@ public class Interview : MonoBehaviour
 
         if (vfx != null)
         {
+            // Apply overrides while the graph is still active. Disabling the
+            // component first tears down its runtime property sheet in the
+            // editor and makes otherwise valid exposed properties look absent.
+            SetVfxFloatIfPresent("Progression", 0f);
+            SetVfxFloatIfPresent("Evaporate", 0f);
+            SetVfxFloatIfPresent("GlitchFactor", 0f);
+            SetVfxFloatIfPresent("SpawnRate", 0f);
             vfx.enabled = false;
-            vfx.SetFloat("Progression", 0f);
-            vfx.SetFloat("Evaporate", 0f);
-            vfx.SetFloat("GlitchFactor", 0f);
-            vfx.SetFloat("SpawnRate", 0f);
+        }
+    }
+
+    void SetVfxFloatIfPresent(string propertyName, float value)
+    {
+        if (vfx != null && vfx.visualEffectAsset != null && vfx.HasFloat(propertyName))
+        {
+            vfx.SetFloat(propertyName, value);
+        }
+    }
+
+    void SetVfxVector3IfPresent(string propertyName, Vector3 value)
+    {
+        if (vfx != null && vfx.visualEffectAsset != null && vfx.HasVector3(propertyName))
+        {
+            vfx.SetVector3(propertyName, value);
         }
     }
 
@@ -659,7 +678,7 @@ public class Interview : MonoBehaviour
         progRTPC?.rtpc.SetValue(gameObject, progression);
         if (vfx != null)
         {
-            vfx.SetFloat("Progression", progression);
+            SetVfxFloatIfPresent("Progression", progression);
         }
 
         loadingEvent?.evt.Stop(gameObject);
@@ -861,10 +880,10 @@ public class Interview : MonoBehaviour
             spawnRate = Mathf.Clamp01((Time.time - revealStartTime) / Mathf.Max(0.01f, revealTime));
         }
 
-        vfx.SetFloat("Progression", progression);
-        vfx.SetFloat("Evaporate", evaporateProg);
-        vfx.SetFloat("GlitchFactor", glitchFactor);
-        vfx.SetFloat("SpawnRate", spawnRate);
+        SetVfxFloatIfPresent("Progression", progression);
+        SetVfxFloatIfPresent("Evaporate", evaporateProg);
+        SetVfxFloatIfPresent("GlitchFactor", glitchFactor);
+        SetVfxFloatIfPresent("SpawnRate", spawnRate);
     }
 
     void show(bool shouldShow)
@@ -941,8 +960,8 @@ public class Interview : MonoBehaviour
         this.currentAngle = data.angle;
         this.currentEntryIsIntro = data.isIntro;
         this.level = data.level;
-        vfx.SetVector3("Offset", data.offset);
-        vfx.SetFloat("OffsetAngle", data.angle);
+        SetVfxVector3IfPresent("Offset", data.offset);
+        SetVfxFloatIfPresent("OffsetAngle", data.angle);
 
         if (playbackSequence == null || playbackIndex < 0 || playbackIndex >= playbackSequence.Length)
         {
@@ -1379,7 +1398,7 @@ public class Interview : MonoBehaviour
         MarkCurrentPlaybackVisitedOnLaunch(manager);
 
         revealStartTime = -1f;
-        vfx.SetFloat("SpawnRate", 1f);
+        SetVfxFloatIfPresent("SpawnRate", 1f);
 
         Debug.Log("Start Wwise Event from play");
         videoEventID = AkUnitySoundEngine.PostEvent(wwiseEventName, gameObject);

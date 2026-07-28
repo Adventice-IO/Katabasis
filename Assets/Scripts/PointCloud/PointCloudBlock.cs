@@ -32,6 +32,7 @@ public class PointCloudBlock : MonoBehaviour
 
     private bool trackedAsLive;
     private bool trackedAsPendingKill;
+    private bool cleanupInvoked;
 
     private static int _liveBlockCount;
     private static int _pendingKillCount;
@@ -86,7 +87,7 @@ public class PointCloudBlock : MonoBehaviour
 
         if (timeAtKill > -1 && fadeOutVal == 0f)
         {
-            onKill?.Invoke();
+            InvokeCleanup();
             return;
         }
 
@@ -135,7 +136,7 @@ public class PointCloudBlock : MonoBehaviour
 
     public void kill()
     {
-        if (timeAtKill < 0f)
+        if (!cleanupInvoked && timeAtKill < 0f)
         {
             timeAtKill = Time.time;
             TrackPendingKill();
@@ -144,12 +145,17 @@ public class PointCloudBlock : MonoBehaviour
 
     public void forceKillImmediate()
     {
+        if (cleanupInvoked)
+        {
+            return;
+        }
+
         if (timeAtKill < 0f)
         {
             timeAtKill = Time.time;
-            TrackPendingKill();
         }
-        onKill?.Invoke();
+
+        InvokeCleanup();
     }
 
     public void updateMasks(GraphicsBuffer maskBuffer, int count)
@@ -207,10 +213,36 @@ public class PointCloudBlock : MonoBehaviour
         }
 
         trackedAsPendingKill = true;
-        Interlocked.Increment(ref _pendingKillCount);
-        if (_pendingKillCount > 128)
+        int pendingKillCount = Interlocked.Increment(ref _pendingKillCount);
+        if (pendingKillCount >= 128 && pendingKillCount % 128 == 0)
         {
-            Debug.LogWarning($"{LogPrefix} Pending kill block count is high: {_pendingKillCount}. This usually means cleanup is lagging behind traversal.");
+            Debug.LogWarning($"{LogPrefix} Pending kill block count is high: {pendingKillCount}. This usually means deferred cleanup is lagging behind traversal.");
         }
+    }
+
+    private void InvokeCleanup()
+    {
+        if (cleanupInvoked)
+        {
+            return;
+        }
+
+        cleanupInvoked = true;
+
+        // Destroy is deferred until the end of the frame. Stop rendering now
+        // so a released material buffer cannot be used in the meantime.
+        Renderer currentRenderer = render != null ? render : GetComponent<Renderer>();
+        if (currentRenderer != null)
+        {
+            currentRenderer.enabled = false;
+        }
+
+        if (trackedAsPendingKill)
+        {
+            Interlocked.Decrement(ref _pendingKillCount);
+            trackedAsPendingKill = false;
+        }
+
+        onKill?.Invoke();
     }
 }

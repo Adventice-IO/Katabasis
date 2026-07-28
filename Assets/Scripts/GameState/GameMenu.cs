@@ -162,14 +162,14 @@ public class GameMenu : MonoBehaviour
             VisualEffect selectedVfx = selectedObject.GetComponentInChildren<VisualEffect>(true);
             if (selectedVfx != null)
             {
-                selectedVfx.SetFloat("Evaporate", halfProgress);
+                SetVfxFloatIfPresent(selectedVfx, "Evaporate", halfProgress);
             }
 
             VisualEffect startVfx = startBTObject != null ? startBTObject.GetComponent<VisualEffect>() : null;
             if (startVfx != null)
             {
-                startVfx.SetFloat("SpawnRate", secondHalfProgress);
-                startVfx.SetFloat("ParticleSize", secondHalfProgress);
+                SetVfxFloatIfPresent(startVfx, "SpawnRate", secondHalfProgress);
+                SetVfxFloatIfPresent(startVfx, "ParticleSize", secondHalfProgress);
             }
 
             if (secondHalfProgress > 0)
@@ -536,9 +536,9 @@ public class GameMenu : MonoBehaviour
         VisualEffect vfx = langObject.GetComponentInChildren<VisualEffect>(true);
         if (vfx != null)
         {
-            vfx.SetFloat("Progression", string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase) ? 1f : 0f);
-            vfx.SetFloat("Evaporate", 0f);
-            vfx.SetVector4("Highlight Color", string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase) ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
+            SetVfxFloatIfPresent(vfx, "Progression", string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase) ? 1f : 0f);
+            SetVfxFloatIfPresent(vfx, "Evaporate", 0f);
+            SetVfxVector4IfPresent(vfx, "Highlight Color", string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase) ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
         }
     }
 
@@ -560,10 +560,10 @@ public class GameMenu : MonoBehaviour
             bool isSelectedLanguage = languageByObject.TryGetValue(hoveredObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase);
             bool isStartObject = hoveredObject == startBTObject && !string.IsNullOrWhiteSpace(selectedLanguage);
             float baseProgression = isSelectedLanguage ? 1f : 0f;
-            vfx.SetFloat("Progression", isStartObject ? normalizedHover : Mathf.Max(baseProgression, normalizedHover));
+            SetVfxFloatIfPresent(vfx, "Progression", isStartObject ? normalizedHover : Mathf.Max(baseProgression, normalizedHover));
             if (!isStartObject)
             {
-                vfx.SetVector4("Highlight Color", isSelectedLanguage ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
+                SetVfxVector4IfPresent(vfx, "Highlight Color", isSelectedLanguage ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
             }
         }
 
@@ -691,11 +691,11 @@ void UpdateAudioProgressionState()
             bool isSelectedLanguage = languageByObject.TryGetValue(targetObject, out string language) && string.Equals(language, selectedLanguage, StringComparison.OrdinalIgnoreCase);
             bool isStartObject = targetObject == startBTObject;
             float progression = isSelectedLanguage ? 1f : 0f;
-            vfx.SetFloat("Progression", progression);
+            SetVfxFloatIfPresent(vfx, "Progression", progression);
             if (!isStartObject)
             {
-                vfx.SetFloat("Evaporate", 0f);
-                vfx.SetVector4("Highlight Color", progression > 0f ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
+                SetVfxFloatIfPresent(vfx, "Evaporate", 0f);
+                SetVfxVector4IfPresent(vfx, "Highlight Color", progression > 0f ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
             }
         }
 
@@ -766,9 +766,9 @@ void UpdateAudioProgressionState()
 
         if (vfx != null)
         {
-            vfx.SetFloat("Progression", selected ? 1f : 0f);
-            vfx.SetVector4("Highlight Color", selected ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
-            vfx.SetFloat("Evaporate", 0f);
+            SetVfxFloatIfPresent(vfx, "Progression", selected ? 1f : 0f);
+            SetVfxVector4IfPresent(vfx, "Highlight Color", selected ? (Vector4)selectedHighlightColor : (Vector4)idleHighlightColor);
+            SetVfxFloatIfPresent(vfx, "Evaporate", 0f);
         }
 
         SetTitleTargetPosition(targetObject, selected ? titleSelectionPosition : Vector3.zero, !Application.isPlaying);
@@ -804,7 +804,7 @@ void UpdateAudioProgressionState()
         VisualEffect vfx = startBTObject.GetComponentInChildren<VisualEffect>(true);
         if (vfx != null)
         {
-            vfx.SetFloat("Progression", Mathf.Clamp01(progression));
+            SetVfxFloatIfPresent(vfx, "Progression", Mathf.Clamp01(progression));
         }
     }
 
@@ -895,11 +895,27 @@ void UpdateAudioProgressionState()
             VisualEffect vfx = targetObject.GetComponentInChildren<VisualEffect>(true);
             if (vfx != null)
             {
-                vfx.SetFloat("Evaporate", value);
+                SetVfxFloatIfPresent(vfx, "Evaporate", value);
             }
         }
 
         SetTitleAlpha(targetObject, 1f - Mathf.Clamp01(value));
+    }
+
+    static void SetVfxFloatIfPresent(VisualEffect vfx, string propertyName, float value)
+    {
+        if (vfx != null && vfx.visualEffectAsset != null && vfx.HasFloat(propertyName))
+        {
+            vfx.SetFloat(propertyName, value);
+        }
+    }
+
+    static void SetVfxVector4IfPresent(VisualEffect vfx, string propertyName, Vector4 value)
+    {
+        if (vfx != null && vfx.visualEffectAsset != null && vfx.HasVector4(propertyName))
+        {
+            vfx.SetVector4(propertyName, value);
+        }
     }
 
     void ApplyLanguageTexture(GameObject langObject, string language)

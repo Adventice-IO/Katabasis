@@ -48,6 +48,15 @@ namespace BAPointCloudRenderer.CloudController {
 
         private V2Renderer runtimeRenderer;
 
+        /// <summary>
+        /// Changes whether point-cloud traversal loads nodes in every direction.
+        /// This can be called before or after the runtime renderer is initialized.
+        /// </summary>
+        public void SetRender360(bool enabled) {
+            render360 = enabled;
+            runtimeRenderer?.SetRender360(enabled);
+        }
+
         // Use this for initialization
         protected override void Initialize() {
             if (userCamera == null) {

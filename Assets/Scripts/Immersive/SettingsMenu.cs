@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using BAPointCloudRenderer.CloudController;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -116,11 +117,13 @@ public sealed class SettingsMenu : MonoBehaviour
     private PcVrSpectatorCamera _pcVrSpectatorCamera;
     private ImmersiveController _immersiveController;
     private KatabasisMeshConfiguration _pointCloudConfiguration;
+    private DynamicPointCloudSet[] _pointCloudSets = Array.Empty<DynamicPointCloudSet>();
     private MainController _mainController;
     private GameMenu _gameMenu;
     private Subtitles _subtitles;
     private TransformFollower _gazeFollower;
     private GazeAimOverlay _gazeAimOverlay;
+    private GameObject _runtimeUIHost;
     private UIDocument _document;
     private VisualElement _window;
     private Button _launcher;
@@ -323,12 +326,6 @@ public sealed class SettingsMenu : MonoBehaviour
 
         _immersiveController.UseExternalConfigurationPersistence();
 
-        _document = GetComponent<UIDocument>();
-        if (_document == null)
-        {
-            _document = gameObject.AddComponent<UIDocument>();
-        }
-
         var panelSettings = Resources.Load<PanelSettings>(PanelSettingsResource);
         if (panelSettings == null)
         {
@@ -337,11 +334,26 @@ public sealed class SettingsMenu : MonoBehaviour
             return;
         }
 
-        _document.enabled = true;
+        // A UIDocument automatically joins the document hierarchy formed by its
+        // Transform ancestors. This component lives on the XR Origin, whose
+        // Camera Offset contains a separate world-space UIDocument. Hosting the
+        // settings document at scene root keeps those two panels independent.
+        _runtimeUIHost = new GameObject("Katabasis Settings Runtime UI");
+        _runtimeUIHost.SetActive(false);
+        _document = _runtimeUIHost.AddComponent<UIDocument>();
         _document.panelSettings = panelSettings;
         _document.sortingOrder = 1002;
+        _runtimeUIHost.SetActive(true);
 
         var root = _document.rootVisualElement;
+        if (root == null)
+        {
+            Debug.LogError("Settings Menu failed to create its runtime visual tree.", this);
+            DestroyRuntimeUIHost();
+            enabled = false;
+            return;
+        }
+
         root.Clear();
         root.AddToClassList("immersive-screen");
         root.pickingMode = PickingMode.Ignore;
@@ -447,9 +459,31 @@ public sealed class SettingsMenu : MonoBehaviour
         _pcVrModeButton = null;
         _subtitleSummary = null;
         _navigationSummary = null;
+        DestroyRuntimeUIHost();
         _built = false;
         _refreshing = false;
         _applyingConfiguration = false;
+    }
+
+    private void DestroyRuntimeUIHost()
+    {
+        var host = _runtimeUIHost;
+        _runtimeUIHost = null;
+        _document = null;
+
+        if (host == null)
+        {
+            return;
+        }
+
+        if (Application.isPlaying)
+        {
+            Destroy(host);
+        }
+        else
+        {
+            DestroyImmediate(host);
+        }
     }
 
     private void ResolveControllers()
@@ -480,6 +514,9 @@ public sealed class SettingsMenu : MonoBehaviour
         }
 
         _pointCloudConfiguration = FindAnyObjectByType<KatabasisMeshConfiguration>(FindObjectsInactive.Include);
+        _pointCloudSets = FindObjectsByType<DynamicPointCloudSet>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None);
         _mainController = FindAnyObjectByType<MainController>(FindObjectsInactive.Include);
         _subtitles = FindAnyObjectByType<Subtitles>(FindObjectsInactive.Include);
         _gazeFollower = FindGazeFollower();
@@ -1571,6 +1608,11 @@ public sealed class SettingsMenu : MonoBehaviour
 
         _immersiveController.SetCameraOffsetEnabled(!pcVrMode);
         _immersiveController.SetOutputEnabled(!pcVrMode);
+
+        for (var index = 0; index < _pointCloudSets.Length; index++)
+        {
+            _pointCloudSets[index]?.SetRender360(!pcVrMode);
+        }
 
         if (pcVrMode)
         {
