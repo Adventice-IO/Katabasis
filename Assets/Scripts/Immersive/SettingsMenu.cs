@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 [DisallowMultipleComponent]
 public sealed class SettingsMenu : MonoBehaviour
 {
-    public const int CurrentSettingsVersion = 14;
+    public const int CurrentSettingsVersion = 15;
 
     private const string PanelSettingsResource = "Immersive/ImmersivePanelSettings";
     private const string StyleSheetResource = "Immersive/ImmersiveRuntimePanel";
@@ -20,6 +20,7 @@ public sealed class SettingsMenu : MonoBehaviour
     {
         Orb,
         PcVr,
+        Capture,
         Immersive,
         Rendering,
         Subtitles,
@@ -31,7 +32,8 @@ public sealed class SettingsMenu : MonoBehaviour
     public enum GlobalMode
     {
         Immersive,
-        PcVr
+        PcVr,
+        Capture
     }
 
     [Serializable]
@@ -96,6 +98,8 @@ public sealed class SettingsMenu : MonoBehaviour
         public AimSettings aim = new AimSettings();
         public PcVrSpectatorCamera.RuntimeConfiguration pcVr =
             new PcVrSpectatorCamera.RuntimeConfiguration();
+        public CaptureTool.RuntimeConfiguration capture =
+            new CaptureTool.RuntimeConfiguration();
         public ImmersiveController.RuntimeConfiguration immersive =
             new ImmersiveController.RuntimeConfiguration();
         public KatabasisMeshConfiguration.RuntimeConfiguration rendering =
@@ -115,6 +119,7 @@ public sealed class SettingsMenu : MonoBehaviour
 
     private OrbController _orbController;
     private PcVrSpectatorCamera _pcVrSpectatorCamera;
+    private CaptureTool _captureTool;
     private ImmersiveController _immersiveController;
     private KatabasisMeshConfiguration _pointCloudConfiguration;
     private DynamicPointCloudSet[] _pointCloudSets = Array.Empty<DynamicPointCloudSet>();
@@ -132,6 +137,7 @@ public sealed class SettingsMenu : MonoBehaviour
     private Category _activeCategory = Category.Orb;
     private Button _immersiveModeButton;
     private Button _pcVrModeButton;
+    private Button _captureModeButton;
 
     private readonly Dictionary<Category, Button> _categoryButtons = new Dictionary<Category, Button>();
     private readonly Dictionary<Category, VisualElement> _categoryContents = new Dictionary<Category, VisualElement>();
@@ -196,6 +202,17 @@ public sealed class SettingsMenu : MonoBehaviour
     private Slider _pcVrPointSize;
     private Slider _pcVrPointAlpha;
     private Label _pcVrPointRenderingSummary;
+
+    private Slider _captureFocalDistance;
+    private Slider _captureFocalWidth;
+    private Slider _captureDotsThreshold;
+    private Toggle _captureBlackAndWhite;
+    private Slider _captureFieldOfView;
+    private TextField _captureScreenshotName;
+    private IntegerField _capturePrintWidth;
+    private IntegerField _capturePrintHeight;
+    private IntegerField _capturePointBudget;
+    private Label _captureSummary;
 
     private FloatField _roomWidth;
     private FloatField _roomHeight;
@@ -313,12 +330,13 @@ public sealed class SettingsMenu : MonoBehaviour
         ResolveControllers();
         if (_orbController == null
             || _pcVrSpectatorCamera == null
+            || _captureTool == null
             || _immersiveController == null
             || _mainController == null)
         {
             Debug.LogError(
                 "The unified Settings Menu requires OrbController, PcVrSpectatorCamera, "
-                + "ImmersiveController, and MainController.",
+                + "CaptureTool, ImmersiveController, and MainController.",
                 this);
             enabled = false;
             return;
@@ -384,6 +402,7 @@ public sealed class SettingsMenu : MonoBehaviour
 
         BuildOrbCategory(scrollView);
         BuildPcVrCategory(scrollView);
+        BuildCaptureCategory(scrollView);
         BuildImmersiveCategory(scrollView);
         BuildRenderingCategory(scrollView);
         BuildSubtitlesCategory(scrollView);
@@ -395,6 +414,7 @@ public sealed class SettingsMenu : MonoBehaviour
         _status.AddToClassList("immersive-status");
         _window.Add(_status);
 
+        _captureTool.SetManagedBySettingsMenu(true);
         _built = true;
         SubscribeToControllers();
 
@@ -457,8 +477,15 @@ public sealed class SettingsMenu : MonoBehaviour
         _pcVrPointRenderingSummary = null;
         _immersiveModeButton = null;
         _pcVrModeButton = null;
+        _captureModeButton = null;
+        _captureSummary = null;
         _subtitleSummary = null;
         _navigationSummary = null;
+        if (_captureTool != null)
+        {
+            _captureTool.SetCaptureModeActive(false);
+            _captureTool.SetManagedBySettingsMenu(false);
+        }
         DestroyRuntimeUIHost();
         _built = false;
         _refreshing = false;
@@ -496,6 +523,7 @@ public sealed class SettingsMenu : MonoBehaviour
 
         _immersiveController = FindAnyObjectByType<ImmersiveController>(FindObjectsInactive.Include);
         _pcVrSpectatorCamera = FindAnyObjectByType<PcVrSpectatorCamera>(FindObjectsInactive.Include);
+        _captureTool = FindAnyObjectByType<CaptureTool>(FindObjectsInactive.Include);
         if (_pcVrSpectatorCamera == null)
         {
             var spectatorPrefab = Resources.Load<PcVrSpectatorCamera>(PcVrSpectatorPrefabResource);
@@ -558,7 +586,7 @@ public sealed class SettingsMenu : MonoBehaviour
         var titleGroup = new VisualElement();
         titleGroup.AddToClassList("immersive-title-group");
         titleGroup.Add(new Label("KATABASIS SETTINGS") { name = "immersive-title" });
-        titleGroup.Add(new Label("Orb, PC-VR spectator, immersive output, rendering, subtitles, navigation & game configuration") { name = "immersive-subtitle" });
+        titleGroup.Add(new Label("Orb, PC-VR spectator, capture, immersive output, rendering, subtitles, navigation & game configuration") { name = "immersive-subtitle" });
         header.Add(titleGroup);
 
         var close = new Button(() => SetOpen(false)) { text = "X", tooltip = "Close settings" };
@@ -586,10 +614,16 @@ public sealed class SettingsMenu : MonoBehaviour
         {
             text = "PC-VR"
         };
+        _captureModeButton = new Button(() => SetGlobalMode(GlobalMode.Capture, true))
+        {
+            text = "CAPTURE"
+        };
         _immersiveModeButton.AddToClassList("settings-global-mode-button");
         _pcVrModeButton.AddToClassList("settings-global-mode-button");
+        _captureModeButton.AddToClassList("settings-global-mode-button");
         buttons.Add(_immersiveModeButton);
         buttons.Add(_pcVrModeButton);
+        buttons.Add(_captureModeButton);
         switcher.Add(buttons);
         _window.Add(switcher);
 
@@ -609,12 +643,16 @@ public sealed class SettingsMenu : MonoBehaviour
     private void RefreshGlobalModeControls()
     {
         var pcVrMode = _globalMode == GlobalMode.PcVr;
+        var captureMode = _globalMode == GlobalMode.Capture;
         _immersiveModeButton?.EnableInClassList(
             "settings-global-mode-button-active",
-            !pcVrMode);
+            !pcVrMode && !captureMode);
         _pcVrModeButton?.EnableInClassList(
             "settings-global-mode-button-active",
             pcVrMode);
+        _captureModeButton?.EnableInClassList(
+            "settings-global-mode-button-active",
+            captureMode);
 
         if (_categoryContents.TryGetValue(Category.Orb, out var orbContent))
         {
@@ -641,6 +679,7 @@ public sealed class SettingsMenu : MonoBehaviour
 
         AddCategoryButton(navigation, Category.Orb, "ORB");
         AddCategoryButton(navigation, Category.PcVr, "PC-VR");
+        AddCategoryButton(navigation, Category.Capture, "CAPTURE");
         AddCategoryButton(navigation, Category.Immersive, "ROOM SETUP");
         AddCategoryButton(navigation, Category.Rendering, "RENDERING");
         AddCategoryButton(navigation, Category.Subtitles, "SUBTITLES");
@@ -944,6 +983,95 @@ public sealed class SettingsMenu : MonoBehaviour
         _pcVrStreamName.RegisterValueChangedCallback(_ => ApplyControls());
         RegisterLiveToggle(_pcVrNdi);
         RegisterLiveToggle(_pcVrSpout);
+    }
+
+    private void BuildCaptureCategory(VisualElement parent)
+    {
+        var content = CreateCategoryContent(parent, Category.Capture);
+
+        var focus = CreateSection(
+            content,
+            "FOCAL EFFECT",
+            "Enabled while Capture is the active Global Mode");
+        _captureFocalDistance = new Slider("Focal distance", 0f, 60f)
+        {
+            showInputField = true
+        };
+        _captureFocalDistance.AddToClassList("immersive-field");
+        focus.Add(_captureFocalDistance);
+
+        _captureFocalWidth = new Slider("Focal width", 0.0001f, 60f)
+        {
+            showInputField = true
+        };
+        _captureFocalWidth.AddToClassList("immersive-field");
+        focus.Add(_captureFocalWidth);
+
+        var monochrome = CreateSection(
+            content,
+            "BLACK & WHITE",
+            "Threshold is perceptually remapped before being sent to the point shader");
+        _captureBlackAndWhite = CreateToggle(monochrome, "Enable black and white");
+        _captureBlackAndWhite.AddToClassList("immersive-toggle-wide");
+        _captureDotsThreshold = new Slider("White threshold", 0f, 1f)
+        {
+            showInputField = true
+        };
+        _captureDotsThreshold.AddToClassList("immersive-field");
+        monochrome.Add(_captureDotsThreshold);
+
+        var lens = CreateSection(content, "LENS", "Applied to the player and capture cameras");
+        _captureFieldOfView = new Slider("Vertical FOV (degrees)", 1f, 179f)
+        {
+            showInputField = true
+        };
+        _captureFieldOfView.AddToClassList("immersive-field");
+        lens.Add(_captureFieldOfView);
+
+        var capture = CreateSection(
+            content,
+            "PNG CAPTURE",
+            "Print dimensions use 2 pixels per millimeter; zero uses the current screen dimension");
+        _captureScreenshotName = new TextField("Screenshot name") { isDelayed = true };
+        _captureScreenshotName.AddToClassList("immersive-field");
+        capture.Add(_captureScreenshotName);
+
+        var printSize = CreateRow(capture);
+        _capturePrintWidth = new IntegerField("Width (mm)") { isDelayed = true };
+        _capturePrintHeight = new IntegerField("Height (mm)") { isDelayed = true };
+        _capturePrintWidth.AddToClassList("immersive-field");
+        _capturePrintHeight.AddToClassList("immersive-field");
+        _capturePrintWidth.AddToClassList("immersive-compact-field");
+        _capturePrintHeight.AddToClassList("immersive-compact-field");
+        printSize.Add(_capturePrintWidth);
+        printSize.Add(_capturePrintHeight);
+
+        var captureButtons = CreateButtonRow(capture);
+        captureButtons.Add(CreateButton("Capture PNG", CaptureFrameFromSettings, true));
+
+        _captureSummary = new Label();
+        _captureSummary.AddToClassList("immersive-texture-summary");
+        capture.Add(_captureSummary);
+
+        var density = CreateSection(
+            content,
+            "POINT DENSITY",
+            "Changing the budget updates the point-cloud set used by KataDraw");
+        _capturePointBudget = new IntegerField("Point budget") { isDelayed = true };
+        _capturePointBudget.AddToClassList("immersive-field");
+        density.Add(_capturePointBudget);
+        var budgetButtons = CreateButtonRow(density);
+        budgetButtons.Add(CreateButton("Apply point budget", ApplyCapturePointBudget, true));
+
+        _captureFocalDistance.RegisterValueChangedCallback(_ => ApplyControls());
+        _captureFocalWidth.RegisterValueChangedCallback(_ => ApplyControls());
+        RegisterLiveToggle(_captureBlackAndWhite);
+        _captureDotsThreshold.RegisterValueChangedCallback(_ => ApplyControls());
+        _captureFieldOfView.RegisterValueChangedCallback(_ => ApplyControls());
+        _captureScreenshotName.RegisterValueChangedCallback(_ => ApplyControls());
+        _capturePrintWidth.RegisterValueChangedCallback(_ => ApplyControls());
+        _capturePrintHeight.RegisterValueChangedCallback(_ => ApplyControls());
+        _capturePointBudget.RegisterValueChangedCallback(_ => ApplyControls());
     }
 
     private void BuildImmersiveCategory(VisualElement parent)
@@ -1484,6 +1612,8 @@ public sealed class SettingsMenu : MonoBehaviour
             pcVr.enableNdiSender = _pcVrNdi.value;
             _pcVrSpectatorCamera.ApplyConfiguration(pcVr, false);
 
+            _captureTool.ApplyConfiguration(CaptureToolConfigurationFromControls(), false);
+
             var immersive = _immersiveController.CaptureConfiguration();
             immersive.roomWidth = _roomWidth.value;
             immersive.roomHeight = _roomHeight.value;
@@ -1576,6 +1706,7 @@ public sealed class SettingsMenu : MonoBehaviour
 
         RefreshAimControls(CaptureAimConfiguration());
         RefreshPcVrControls(_pcVrSpectatorCamera.CaptureConfiguration());
+        RefreshCaptureControls(_captureTool.CaptureConfiguration());
 
         RefreshImmersiveControls(_immersiveController.CaptureConfiguration());
         RefreshPointCloudRenderingControls(CapturePointCloudRenderingConfiguration());
@@ -1596,9 +1727,52 @@ public sealed class SettingsMenu : MonoBehaviour
         RefreshRuntimeStatus();
     }
 
+    private CaptureTool.RuntimeConfiguration CaptureToolConfigurationFromControls()
+    {
+        return new CaptureTool.RuntimeConfiguration
+        {
+            focalDistance = _captureFocalDistance.value,
+            focalWidth = _captureFocalWidth.value,
+            dotsThreshold = _captureDotsThreshold.value,
+            blackAndWhite = _captureBlackAndWhite.value,
+            fieldOfView = _captureFieldOfView.value,
+            screenshotName = _captureScreenshotName.value,
+            printWidthMm = Mathf.Max(0, _capturePrintWidth.value),
+            printHeightMm = Mathf.Max(0, _capturePrintHeight.value),
+            pointBudget = Mathf.Max(1, _capturePointBudget.value)
+        };
+    }
+
+    private void RefreshCaptureControls(CaptureTool.RuntimeConfiguration configuration)
+    {
+        if (!_built || configuration == null)
+        {
+            return;
+        }
+
+        var wasRefreshing = _refreshing;
+        _refreshing = true;
+
+        _captureFocalDistance.SetValueWithoutNotify(configuration.focalDistance);
+        _captureFocalWidth.SetValueWithoutNotify(configuration.focalWidth);
+        _captureDotsThreshold.SetValueWithoutNotify(configuration.dotsThreshold);
+        SetToggleWithoutNotify(_captureBlackAndWhite, configuration.blackAndWhite);
+        _captureFieldOfView.SetValueWithoutNotify(configuration.fieldOfView);
+        _captureScreenshotName.SetValueWithoutNotify(configuration.screenshotName);
+        _capturePrintWidth.SetValueWithoutNotify(configuration.printWidthMm);
+        _capturePrintHeight.SetValueWithoutNotify(configuration.printHeightMm);
+        _capturePointBudget.SetValueWithoutNotify(configuration.pointBudget);
+        _captureDotsThreshold.SetEnabled(configuration.blackAndWhite);
+
+        _refreshing = wasRefreshing;
+        RefreshCaptureSummary();
+    }
+
     private void ApplyGlobalModeState()
     {
+        var immersiveMode = _globalMode == GlobalMode.Immersive;
         var pcVrMode = _globalMode == GlobalMode.PcVr;
+        var captureMode = _globalMode == GlobalMode.Capture;
         var pcVr = _pcVrSpectatorCamera.CaptureConfiguration();
         if (pcVr.enabled != pcVrMode)
         {
@@ -1606,12 +1780,13 @@ public sealed class SettingsMenu : MonoBehaviour
             _pcVrSpectatorCamera.ApplyConfiguration(pcVr, false);
         }
 
-        _immersiveController.SetCameraOffsetEnabled(!pcVrMode);
-        _immersiveController.SetOutputEnabled(!pcVrMode);
+        _captureTool.SetCaptureModeActive(captureMode);
+        _immersiveController.SetCameraOffsetEnabled(immersiveMode);
+        _immersiveController.SetOutputEnabled(immersiveMode);
 
         for (var index = 0; index < _pointCloudSets.Length; index++)
         {
-            _pointCloudSets[index]?.SetRender360(!pcVrMode);
+            _pointCloudSets[index]?.SetRender360(immersiveMode);
         }
 
         if (pcVrMode)
@@ -1628,7 +1803,7 @@ public sealed class SettingsMenu : MonoBehaviour
             _orbController.enabled = true;
         }
 
-        _gazeFollower?.SetVerticalOffsetEnabled(!pcVrMode);
+        _gazeFollower?.SetVerticalOffsetEnabled(immersiveMode);
     }
 
     private KatabasisMeshConfiguration.RuntimeConfiguration CapturePointCloudRenderingConfiguration()
@@ -1856,6 +2031,7 @@ public sealed class SettingsMenu : MonoBehaviour
         }
 
         _orbReadout.text = $"Pan {_orbController.Pan:F1} deg  |  Tilt {_orbController.Tilt:F1} deg";
+        RefreshCaptureSummary();
         var pcVr = _pcVrSpectatorCamera.CaptureConfiguration();
         _pcVrSummary.text = _pcVrSpectatorCamera.GetStatusSummary();
         _pcVrSummary.EnableInClassList(
@@ -1937,6 +2113,22 @@ public sealed class SettingsMenu : MonoBehaviour
         _pointRenderingSummary.text = rendering.renderingMode == KatabasisMeshConfiguration.PointRenderingMode.Size
             ? $"Sized circular points | {rendering.pointSize:F1}px diameter | {rendering.alpha:F2} alpha"
             : $"Point mode | 1 render pixel | {rendering.alpha:F2} alpha";
+    }
+
+    private void RefreshCaptureSummary()
+    {
+        if (_captureSummary == null || _captureTool == null)
+        {
+            return;
+        }
+
+        var modeText = _globalMode == GlobalMode.Capture
+            ? "Capture effects active"
+            : "Select the Capture Global Mode to enable capture effects";
+        _captureSummary.text = modeText + " | PNG folder: " + _captureTool.CaptureOutputDirectory;
+        _captureSummary.EnableInClassList(
+            "immersive-warning",
+            _globalMode != GlobalMode.Capture);
     }
 
     private void RefreshNavigationStatus()
@@ -2095,6 +2287,7 @@ public sealed class SettingsMenu : MonoBehaviour
             },
             aim = CaptureAimConfiguration(),
             pcVr = pcVr,
+            capture = _captureTool.CaptureConfiguration(),
             immersive = _immersiveController.CaptureConfiguration(),
             rendering = CapturePointCloudRenderingConfiguration(),
             subtitles = CaptureSubtitleConfiguration(),
@@ -2115,6 +2308,11 @@ public sealed class SettingsMenu : MonoBehaviour
 
     private void ApplyConfiguration(UnifiedSettings configuration, bool requestAutosave)
     {
+        if (configuration.version < 15 || configuration.capture == null)
+        {
+            configuration.capture = _captureTool.CaptureConfiguration();
+        }
+
         if (configuration.version < 11 || configuration.pcVr == null)
         {
             configuration.pcVr = new PcVrSpectatorCamera.RuntimeConfiguration();
@@ -2220,6 +2418,7 @@ public sealed class SettingsMenu : MonoBehaviour
 
             configuration.pcVr.enabled = _globalMode == GlobalMode.PcVr;
             _pcVrSpectatorCamera.ApplyConfiguration(configuration.pcVr, false);
+            _captureTool.ApplyConfiguration(configuration.capture, true);
             _immersiveController.ApplyConfiguration(configuration.immersive, false);
             _pointCloudConfiguration?.ApplyConfiguration(configuration.rendering);
             ApplyGlobalModeState();
@@ -2290,6 +2489,29 @@ public sealed class SettingsMenu : MonoBehaviour
         configuration.aim.opacity = Mathf.Clamp01(NonNegative(configuration.aim.opacity));
         configuration.aim.color = SanitizeColor(configuration.aim.color);
         PcVrSpectatorCamera.NormalizeConfiguration(configuration.pcVr);
+        configuration.capture.focalDistance = NonNegative(configuration.capture.focalDistance);
+        configuration.capture.focalWidth = Mathf.Max(
+            .0001f,
+            NonNegative(configuration.capture.focalWidth));
+        configuration.capture.dotsThreshold = Mathf.Clamp01(
+            NonNegative(configuration.capture.dotsThreshold));
+        configuration.capture.fieldOfView = Mathf.Clamp(
+            NonNegative(configuration.capture.fieldOfView),
+            1f,
+            179f);
+        configuration.capture.screenshotName =
+            string.IsNullOrWhiteSpace(configuration.capture.screenshotName)
+                ? "Unnamed"
+                : configuration.capture.screenshotName.Trim();
+        configuration.capture.printWidthMm = Mathf.Max(
+            0,
+            configuration.capture.printWidthMm);
+        configuration.capture.printHeightMm = Mathf.Max(
+            0,
+            configuration.capture.printHeightMm);
+        configuration.capture.pointBudget = Mathf.Max(
+            1,
+            configuration.capture.pointBudget);
         configuration.rendering.pointSize = Mathf.Max(0.1f, NonNegative(configuration.rendering.pointSize));
         configuration.rendering.alpha = Mathf.Clamp01(NonNegative(configuration.rendering.alpha));
         configuration.rendering.maxViewDistance = NonNegative(configuration.rendering.maxViewDistance);
@@ -2566,7 +2788,9 @@ public sealed class SettingsMenu : MonoBehaviour
             ? category
             : _globalMode == GlobalMode.PcVr
                 ? Category.PcVr
-                : Category.Immersive;
+                : _globalMode == GlobalMode.Capture
+                    ? Category.Capture
+                    : Category.Immersive;
 
         foreach (var pair in _categoryContents)
         {
@@ -2587,10 +2811,19 @@ public sealed class SettingsMenu : MonoBehaviour
     {
         if (_globalMode == GlobalMode.PcVr)
         {
-            return category != Category.Orb && category != Category.Immersive;
+            return category != Category.Orb
+                && category != Category.Capture
+                && category != Category.Immersive;
         }
 
-        return category != Category.PcVr;
+        if (_globalMode == GlobalMode.Capture)
+        {
+            return category != Category.PcVr
+                && category != Category.Immersive
+                && category != Category.Subtitles;
+        }
+
+        return category != Category.PcVr && category != Category.Capture;
     }
 
     private void SetOpen(bool open)
@@ -2612,6 +2845,41 @@ public sealed class SettingsMenu : MonoBehaviour
         {
             root.style.display = enableRuntimeUI ? DisplayStyle.Flex : DisplayStyle.None;
         }
+    }
+
+    private void CaptureFrameFromSettings()
+    {
+        var configuration = CaptureToolConfigurationFromControls();
+        _captureTool.ApplyConfiguration(configuration, false);
+        var success = _captureTool.TryCaptureFrame(
+            configuration.screenshotName,
+            configuration.printWidthMm,
+            configuration.printHeightMm,
+            out _,
+            out var message);
+        if (success)
+        {
+            QueueAutosave();
+        }
+
+        SetStatus(message, !success);
+        RefreshCaptureControls(_captureTool.CaptureConfiguration());
+    }
+
+    private void ApplyCapturePointBudget()
+    {
+        var configuration = CaptureToolConfigurationFromControls();
+        _captureTool.ApplyConfiguration(configuration, false);
+        var success = _captureTool.ApplyPointBudget(
+            configuration.pointBudget,
+            out var message);
+        if (success)
+        {
+            QueueAutosave();
+        }
+
+        SetStatus(message, !success);
+        RefreshCaptureControls(_captureTool.CaptureConfiguration());
     }
 
     private void SaveNow()

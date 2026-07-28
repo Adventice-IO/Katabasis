@@ -193,6 +193,28 @@
     color: rgb(99, 215, 255);
 }
 
+.settings-category-button.settings-category-accent-capture {
+    color: rgb(255, 157, 220);
+    border-bottom-color: rgb(238, 83, 181);
+}
+
+.settings-category-button.settings-category-accent-capture:hover {
+    background-color: rgba(211, 63, 158, 0.28);
+}
+
+.settings-category-button.settings-category-accent-capture.settings-category-button-active,
+.settings-category-button.settings-category-accent-capture.settings-category-button-active:hover {
+    background-color: rgb(139, 42, 103);
+    border-top-color: rgb(255, 126, 208);
+    border-right-color: rgb(255, 126, 208);
+    border-bottom-color: rgb(255, 126, 208);
+    border-left-color: rgb(255, 126, 208);
+}
+
+.settings-category-content.settings-category-accent-capture #immersive-section-title {
+    color: rgb(255, 126, 208);
+}
+
 .settings-category-button.settings-category-accent-immersive {
     color: rgb(255, 196, 132);
     border-bottom-color: rgb(255, 159, 67);
