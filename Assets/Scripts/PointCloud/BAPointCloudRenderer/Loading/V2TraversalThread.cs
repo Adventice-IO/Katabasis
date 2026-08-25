@@ -122,6 +122,16 @@ namespace BAPointCloudRenderer.Loading {
             }
         }
 
+        public void SetPointBudget(uint budget) {
+            lock (locker) {
+                pointBudget = budget > 0 ? budget : 1;
+            }
+
+            lock (this) {
+                Monitor.PulseAll(this);
+            }
+        }
+
         private bool TryGetNodePriority(Node node, Vector3 cameraPosition, Vector3 camForward, float screenHeight, float fieldOfView, float farClipPlane, bool renderAllDirections, out double priority) {
             Vector3 center = node.BoundingBox.GetBoundsObject().center;
             double radius = node.BoundingBox.Radius();
@@ -174,6 +184,7 @@ namespace BAPointCloudRenderer.Loading {
             float fieldOfView;
             float farClipPlane;
             bool renderAllDirections;
+            uint activePointBudget;
 
             PriorityQueue<double, Node> toProcess = new HeapPriorityQueue<double, Node>();
 
@@ -191,6 +202,7 @@ namespace BAPointCloudRenderer.Loading {
                 screenHeight = this.screenHeight;
                 fieldOfView = this.fieldOfView;
                 farClipPlane = this.farClipPlane;
+                activePointBudget = pointBudget;
             }
             //Clearing Queues
             uint renderingpointcount = 0;
@@ -221,7 +233,7 @@ namespace BAPointCloudRenderer.Loading {
                                 --maxnodestoload;
                                 loadchildren = true;
                             }
-                        } else if (renderingpointcount + n.PointCount <= pointBudget) {
+                        } else if (renderingpointcount + n.PointCount <= activePointBudget) {
                             if (n.HasGameObjects()) {
                                 renderingpointcount += (uint)n.PointCount;
                                 visibleNodes.Remove(n);

@@ -9,6 +9,15 @@ using UnityEngine.UIElements;
 [ExecuteInEditMode]
 public class Subtitles : MonoBehaviour
 {
+    sealed class ImmersiveTileOverlay
+    {
+        public Camera camera;
+        public Camera baseCamera;
+        public GameObject documentObject;
+        public UIDocument document;
+        public Label label;
+    }
+
     public const string HeadsetSubtitleLayerName = "HeadsetSubtitle";
 
     public SubtitleAsset subs;
@@ -29,7 +38,7 @@ public class Subtitles : MonoBehaviour
     public float smooth = 9f;
 
     [Header("Immersive Surface Overlay")]
-    [Tooltip("Render subtitles as a fixed overlay on one immersive surface camera.")]
+    [Tooltip("Render subtitles as a fixed overlay on the selected immersive output surface.")]
     public bool immersiveMode = true;
     public ImmersiveController.SurfaceId immersiveSurface = ImmersiveController.SurfaceId.Front;
     [Tooltip("Normalized viewport position: (0,0) is bottom-left and (1,1) is top-right.")]
@@ -65,6 +74,8 @@ public class Subtitles : MonoBehaviour
     bool originalTransformCaptured;
     bool overlayStackWarningLogged;
     bool headsetLayerWarningLogged;
+    readonly List<ImmersiveTileOverlay> immersiveTileOverlays =
+        new List<ImmersiveTileOverlay>();
 
     public Vector3 Position
     {
@@ -243,6 +254,7 @@ public class Subtitles : MonoBehaviour
             && targetPcVrCamera.IsEnabled
             && targetPcVrCamera.SpectatorCamera != null)
         {
+            DestroyImmersiveTileOverlays();
             if (ConfigurePcVrRouting(targetPcVrCamera, targetCamera))
             {
                 UpdateStandardCameraPlacement(targetCamera);
@@ -263,10 +275,30 @@ public class Subtitles : MonoBehaviour
             }
 
             if (targetImmersiveController != null
-                && targetImmersiveController.TryGetSurfaceCamera(immersiveSurface, out var surfaceCamera))
+                && targetImmersiveController.CurrentSetupShape
+                    == ImmersiveController.SetupShape.Cylinder
+                && targetImmersiveController.CylinderRenderTextureCount > 1
+                && ConfigureCylinderTileRouting(
+                    targetImmersiveController,
+                    targetCamera))
+            {
+                return;
+            }
+
+            DestroyImmersiveTileOverlays();
+            if (targetImmersiveController != null
+                && targetImmersiveController.TryGetSurfaceCamera(
+                    immersiveSurface,
+                    immersivePosition,
+                    out var surfaceCamera,
+                    out var localImmersivePosition,
+                    out var globalViewportRect))
             {
                 ConfigureImmersiveRouting(targetImmersiveController, surfaceCamera, targetCamera);
-                UpdateImmersiveOverlayPlacement(surfaceCamera);
+                UpdateImmersiveOverlayPlacement(
+                    surfaceCamera,
+                    localImmersivePosition,
+                    globalViewportRect);
             }
             else
             {
@@ -371,6 +403,284 @@ public class Subtitles : MonoBehaviour
         }
 
         return immersiveController;
+    }
+
+    bool ConfigureCylinderTileRouting(
+        ImmersiveController controller,
+        Camera mainCamera)
+    {
+        int overlayLayer = controller.SubtitleOverlayLayer;
+        if (overlayLayer < 0)
+        {
+            overlayLayer = LayerMask.NameToLayer(
+                ImmersiveController.SubtitleOverlayLayerName);
+        }
+
+        if (overlayLayer < 0 || uiDocument == null)
+        {
+            return false;
+        }
+
+        int tileCount = controller.CylinderRenderTextureCount;
+        EnsureOverlayCamera(overlayLayer);
+        if (overlayCamera == null)
+        {
+            return false;
+        }
+
+        overlayCamera.transform.SetPositionAndRotation(
+            Vector3.zero,
+            Quaternion.identity);
+        gameObject.layer = overlayLayer;
+        ExcludeOverlayFromMainCamera(mainCamera, overlayLayer);
+        EnsureImmersiveTileOverlayCount(tileCount - 1, overlayLayer);
+        if (immersiveTileOverlays.Count != tileCount - 1)
+        {
+            return false;
+        }
+
+        for (int index = 0; index < tileCount; index++)
+        {
+            if (!controller.TryGetCylinderOutputTile(
+                    index,
+                    out var surfaceCamera,
+                    out _,
+                    out var globalViewportRect,
+                    out _)
+                || surfaceCamera == null)
+            {
+                DestroyImmersiveTileOverlays();
+                return false;
+            }
+
+            Vector2 localPosition = new Vector2(
+                (immersivePosition.x - globalViewportRect.xMin)
+                    / Mathf.Max(.0001f, globalViewportRect.width),
+                (immersivePosition.y - globalViewportRect.yMin)
+                    / Mathf.Max(.0001f, globalViewportRect.height));
+            float localSize =
+                immersiveSize / Mathf.Max(.0001f, globalViewportRect.width);
+
+            if (index == 0)
+            {
+                if (!AttachOverlayCamera(surfaceCamera))
+                {
+                    DestroyImmersiveTileOverlays();
+                    return false;
+                }
+
+                if (transform.parent != overlayCamera.transform)
+                {
+                    transform.SetParent(overlayCamera.transform, false);
+                }
+
+                UpdateOverlayPlacement(
+                    surfaceCamera,
+                    overlayCamera,
+                    transform,
+                    uiDocument,
+                    localPosition,
+                    localSize);
+                continue;
+            }
+
+            var tileOverlay = immersiveTileOverlays[index - 1];
+            if (tileOverlay.label == null
+                && tileOverlay.document?.rootVisualElement != null)
+            {
+                tileOverlay.label =
+                    tileOverlay.document.rootVisualElement.Q<Label>("subtitle");
+                SyncSubtitleLabel(tileOverlay.label);
+            }
+
+            if (!AttachImmersiveTileOverlayCamera(
+                    tileOverlay,
+                    surfaceCamera))
+            {
+                DestroyImmersiveTileOverlays();
+                return false;
+            }
+
+            UpdateOverlayPlacement(
+                surfaceCamera,
+                tileOverlay.camera,
+                tileOverlay.documentObject.transform,
+                tileOverlay.document,
+                localPosition,
+                localSize);
+        }
+
+        return true;
+    }
+
+    void EnsureImmersiveTileOverlayCount(int requiredCount, int overlayLayer)
+    {
+        while (immersiveTileOverlays.Count > requiredCount)
+        {
+            int lastIndex = immersiveTileOverlays.Count - 1;
+            DestroyImmersiveTileOverlay(immersiveTileOverlays[lastIndex]);
+            immersiveTileOverlays.RemoveAt(lastIndex);
+        }
+
+        while (immersiveTileOverlays.Count < requiredCount)
+        {
+            int tileIndex = immersiveTileOverlays.Count + 1;
+            var tileOverlay = CreateImmersiveTileOverlay(
+                tileIndex,
+                overlayLayer);
+            if (tileOverlay == null)
+            {
+                return;
+            }
+
+            immersiveTileOverlays.Add(tileOverlay);
+        }
+    }
+
+    ImmersiveTileOverlay CreateImmersiveTileOverlay(
+        int tileIndex,
+        int overlayLayer)
+    {
+        if (uiDocument == null)
+        {
+            return null;
+        }
+
+        var cameraObject = new GameObject(
+            $"Subtitle Cylinder Tile {tileIndex + 1:00} Overlay Camera")
+        {
+            hideFlags = HideFlags.HideInHierarchy,
+            layer = overlayLayer
+        };
+        var camera = cameraObject.AddComponent<Camera>();
+        camera.enabled = true;
+        camera.orthographic = true;
+        camera.orthographicSize = .5f;
+        camera.nearClipPlane = .01f;
+        camera.farClipPlane = 10f;
+        camera.clearFlags = CameraClearFlags.Nothing;
+        camera.cullingMask = 1 << overlayLayer;
+        camera.useOcclusionCulling = false;
+        camera.allowHDR = false;
+        camera.allowMSAA = false;
+        camera.transform.SetPositionAndRotation(
+            Vector3.forward * (tileIndex * 20f),
+            Quaternion.identity);
+
+        var overlayData =
+            cameraObject.AddComponent<UniversalAdditionalCameraData>();
+        overlayData.renderType = CameraRenderType.Overlay;
+        overlayData.renderPostProcessing = false;
+        overlayData.renderShadows = false;
+
+        var documentObject = new GameObject(
+            $"Subtitle Cylinder Tile {tileIndex + 1:00}")
+        {
+            hideFlags = HideFlags.HideInHierarchy,
+            layer = overlayLayer
+        };
+        documentObject.SetActive(false);
+        documentObject.transform.SetParent(camera.transform, false);
+        var document = documentObject.AddComponent<UIDocument>();
+        document.panelSettings = uiDocument.panelSettings;
+        document.visualTreeAsset = uiDocument.visualTreeAsset;
+        document.sortingOrder = uiDocument.sortingOrder;
+        document.position = uiDocument.position;
+        document.worldSpaceSizeMode = uiDocument.worldSpaceSizeMode;
+        document.worldSpaceSize = uiDocument.worldSpaceSize;
+        document.pivotReferenceSize = uiDocument.pivotReferenceSize;
+        document.pivot = uiDocument.pivot;
+        documentObject.SetActive(true);
+
+        var tileOverlay = new ImmersiveTileOverlay
+        {
+            camera = camera,
+            documentObject = documentObject,
+            document = document,
+            label = document.rootVisualElement?.Q<Label>("subtitle")
+        };
+        SyncSubtitleLabel(tileOverlay.label);
+        return tileOverlay;
+    }
+
+    bool AttachImmersiveTileOverlayCamera(
+        ImmersiveTileOverlay tileOverlay,
+        Camera surfaceCamera)
+    {
+        if (tileOverlay?.camera == null || surfaceCamera == null)
+        {
+            return false;
+        }
+
+        var surfaceData = surfaceCamera.GetUniversalAdditionalCameraData();
+        var cameraStack = surfaceData.cameraStack;
+        if (cameraStack == null)
+        {
+            return false;
+        }
+
+        if (tileOverlay.baseCamera == surfaceCamera
+            && cameraStack.Contains(tileOverlay.camera))
+        {
+            return true;
+        }
+
+        DetachImmersiveTileOverlayCamera(tileOverlay);
+        cameraStack.RemoveAll(camera => camera == null);
+        cameraStack.Add(tileOverlay.camera);
+        tileOverlay.baseCamera = surfaceCamera;
+        return true;
+    }
+
+    void DetachImmersiveTileOverlayCamera(ImmersiveTileOverlay tileOverlay)
+    {
+        if (tileOverlay?.baseCamera != null && tileOverlay.camera != null)
+        {
+            var surfaceData = tileOverlay.baseCamera
+                .GetComponent<UniversalAdditionalCameraData>();
+            surfaceData?.cameraStack.Remove(tileOverlay.camera);
+        }
+
+        if (tileOverlay != null)
+        {
+            tileOverlay.baseCamera = null;
+        }
+    }
+
+    void DestroyImmersiveTileOverlays()
+    {
+        for (int index = immersiveTileOverlays.Count - 1; index >= 0; index--)
+        {
+            DestroyImmersiveTileOverlay(immersiveTileOverlays[index]);
+        }
+
+        immersiveTileOverlays.Clear();
+    }
+
+    void DestroyImmersiveTileOverlay(ImmersiveTileOverlay tileOverlay)
+    {
+        if (tileOverlay == null)
+        {
+            return;
+        }
+
+        DetachImmersiveTileOverlayCamera(tileOverlay);
+        GameObject cameraObject = tileOverlay.camera != null
+            ? tileOverlay.camera.gameObject
+            : tileOverlay.documentObject;
+        if (cameraObject == null)
+        {
+            return;
+        }
+
+        if (Application.isPlaying)
+        {
+            Destroy(cameraObject);
+        }
+        else
+        {
+            DestroyImmediate(cameraObject);
+        }
     }
 
     void ConfigureImmersiveRouting(
@@ -607,6 +917,7 @@ public class Subtitles : MonoBehaviour
     {
         RestoreOriginalTransformParent();
         DetachOverlayCamera();
+        DestroyImmersiveTileOverlays();
         DestroyOverlayCamera();
         DestroySpectatorSubtitleDocument();
         RestorePcVrExclusion();
@@ -665,14 +976,41 @@ public class Subtitles : MonoBehaviour
         excludedMainCamera = null;
     }
 
-    void UpdateImmersiveOverlayPlacement(Camera surfaceCamera)
+    void UpdateImmersiveOverlayPlacement(
+        Camera surfaceCamera,
+        Vector2 localPosition,
+        Rect globalViewportRect)
     {
-        UpdateOverlayPlacement(surfaceCamera, transform);
+        float localSize = immersiveSize / Mathf.Max(.0001f, globalViewportRect.width);
+        UpdateOverlayPlacement(
+            surfaceCamera,
+            overlayCamera,
+            transform,
+            uiDocument,
+            localPosition,
+            localSize);
     }
 
     void UpdateOverlayPlacement(Camera surfaceCamera, Transform panelTransform)
     {
-        if (overlayCamera == null || panelTransform == null)
+        UpdateOverlayPlacement(
+            surfaceCamera,
+            overlayCamera,
+            panelTransform,
+            panelTransform == transform ? uiDocument : spectatorUiDocument,
+            immersivePosition,
+            immersiveSize);
+    }
+
+    void UpdateOverlayPlacement(
+        Camera surfaceCamera,
+        Camera targetOverlayCamera,
+        Transform panelTransform,
+        UIDocument panelDocument,
+        Vector2 viewportPosition,
+        float viewportSize)
+    {
+        if (targetOverlayCamera == null || panelTransform == null)
         {
             return;
         }
@@ -681,18 +1019,15 @@ public class Subtitles : MonoBehaviour
         float width = targetTexture != null ? targetTexture.width : Mathf.Max(1, surfaceCamera.pixelWidth);
         float height = targetTexture != null ? targetTexture.height : Mathf.Max(1, surfaceCamera.pixelHeight);
         float aspect = width / Mathf.Max(1f, height);
-        overlayCamera.aspect = aspect;
-        overlayCamera.orthographicSize = .5f;
+        targetOverlayCamera.aspect = aspect;
+        targetOverlayCamera.orthographicSize = .5f;
 
-        UIDocument panelDocument = panelTransform == transform
-            ? uiDocument
-            : spectatorUiDocument;
         float panelWorldWidthAtScaleOne = GetPanelWorldWidthAtScaleOne(panelDocument);
-        float targetScale = aspect * immersiveSize / panelWorldWidthAtScaleOne;
+        float targetScale = aspect * viewportSize / panelWorldWidthAtScaleOne;
 
         panelTransform.localPosition = new Vector3(
-            (immersivePosition.x - .5f) * aspect,
-            immersivePosition.y - .5f,
+            (viewportPosition.x - .5f) * aspect,
+            viewportPosition.y - .5f,
             1f);
         panelTransform.localRotation = Quaternion.identity;
         panelTransform.localScale = Vector3.one * targetScale;
@@ -715,6 +1050,10 @@ public class Subtitles : MonoBehaviour
     {
         ApplySubtitleLine(subtitleLabel, subtitle);
         ApplySubtitleLine(spectatorSubtitleLabel, subtitle);
+        for (int index = 0; index < immersiveTileOverlays.Count; index++)
+        {
+            ApplySubtitleLine(immersiveTileOverlays[index]?.label, subtitle);
+        }
     }
 
     void SyncSubtitleLabel(Label label)

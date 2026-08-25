@@ -24,7 +24,7 @@ namespace BAPointCloudRenderer.Loading {
 
         private MeshConfiguration config;
         private uint renderingpointcount;
-        private readonly uint pointBudget;
+        private uint pointBudget;
 
         //Camera Info
         private Camera camera;
@@ -111,6 +111,20 @@ namespace BAPointCloudRenderer.Loading {
 
             render360 = enabled;
             traversalThread.SetRender360(enabled);
+        }
+
+        /// <summary>
+        /// Changes the maximum number of points selected by traversal.
+        /// </summary>
+        public void SetPointBudget(uint budget) {
+            budget = budget > 0 ? budget : 1;
+            if (pointBudget == budget) {
+                return;
+            }
+
+            pointBudget = budget;
+            traversalThread.SetPointBudget(budget);
+            Debug.Log($"{LogPrefix} Point budget for '{pcset.name}' changed to {budget}.");
         }
 
         /// <summary>

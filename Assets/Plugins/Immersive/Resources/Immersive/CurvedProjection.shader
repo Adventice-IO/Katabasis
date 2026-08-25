@@ -67,7 +67,9 @@ Shader "Immersive/CurvedProjection"
             float4x4 _WorldToCaptureAxes;
 
             int _SetupShape;
+            int _UseFocusedCapture;
             int _DomeUnwrapMode;
+            float4 _OutputUvBounds;
             float _CylinderRadius;
             float _CylinderBaseHeight;
             float _CylinderPanelHeight;
@@ -98,6 +100,7 @@ Shader "Immersive/CurvedProjection"
 
             bool TryGetDomePoint(float2 uv, out float3 surfacePosition)
             {
+                surfacePosition = 0.0;
                 float longitude;
                 float polar;
 
@@ -112,7 +115,6 @@ Shader "Immersive/CurvedProjection"
                     float radial = length(disc);
                     if (radial > 1.0)
                     {
-                        surfacePosition = 0.0;
                         return false;
                     }
 
@@ -157,7 +159,7 @@ Shader "Immersive/CurvedProjection"
             half4 SampleCapture(float3 directionShape, float4 worldPoint)
             {
                 float3 absoluteDirection = abs(directionShape);
-                float2 captureUv;
+                float2 captureUv = 0.0;
 
                 if (absoluteDirection.x >= absoluteDirection.y
                     && absoluteDirection.x >= absoluteDirection.z)
@@ -214,12 +216,16 @@ Shader "Immersive/CurvedProjection"
 
             half4 Frag(Varyings input) : SV_Target
             {
+                float2 outputUv = lerp(
+                    _OutputUvBounds.xy,
+                    _OutputUvBounds.zw,
+                    input.uv);
                 float3 surfacePoint;
                 if (_SetupShape == 1)
                 {
-                    surfacePoint = GetCylinderPoint(input.uv);
+                    surfacePoint = GetCylinderPoint(outputUv);
                 }
-                else if (!TryGetDomePoint(input.uv, surfacePoint))
+                else if (!TryGetDomePoint(outputUv, surfacePoint))
                 {
                     return half4(0.0, 0.0, 0.0, 1.0);
                 }
@@ -233,6 +239,16 @@ Shader "Immersive/CurvedProjection"
                     mul((float3x3)_ShapeToWorld, directionShape));
                 float3 captureDirection = normalize(
                     mul((float3x3)_WorldToCaptureAxes, worldDirection));
+
+                if (_UseFocusedCapture != 0)
+                {
+                    float2 captureUv = ProjectUv(_PositiveXVP, worldPoint);
+                    return SAMPLE_TEXTURE2D(
+                        _PositiveX,
+                        sampler_PositiveX,
+                        captureUv);
+                }
+
                 return SampleCapture(captureDirection, worldPoint);
             }
             ENDHLSL

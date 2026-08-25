@@ -57,6 +57,15 @@ namespace BAPointCloudRenderer.CloudController {
             runtimeRenderer?.SetRender360(enabled);
         }
 
+        /// <summary>
+        /// Changes the live traversal point budget without rebuilding the renderer.
+        /// This can be called before or after the runtime renderer is initialized.
+        /// </summary>
+        public void SetPointBudget(uint budget) {
+            pointBudget = budget > 0 ? budget : 1;
+            runtimeRenderer?.SetPointBudget(pointBudget);
+        }
+
         // Use this for initialization
         protected override void Initialize() {
             if (userCamera == null) {

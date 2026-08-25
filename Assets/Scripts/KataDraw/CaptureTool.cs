@@ -22,6 +22,7 @@ public class CaptureTool : MonoBehaviour
         public int printWidthMm;
         public int printHeightMm;
         public int pointBudget = 1000000;
+        public bool xrSimulatorEnabled;
     }
 
     public GameObject captureCamera;
@@ -195,10 +196,7 @@ public class CaptureTool : MonoBehaviour
             return false;
         }
 
-        var renderer = pointCloudSet.PointRenderer;
-        renderer?.Hide();
-        pointCloudSet.pointBudget = (uint)normalizedBudget;
-        renderer?.Display();
+        pointCloudSet.SetPointBudget((uint)normalizedBudget);
 
         message = $"Point budget set to {normalizedBudget:N0}.";
         return true;
@@ -601,7 +599,8 @@ public class CaptureTool : MonoBehaviour
             screenshotName = NormalizeScreenshotName(configuration.screenshotName),
             printWidthMm = Mathf.Max(0, configuration.printWidthMm),
             printHeightMm = Mathf.Max(0, configuration.printHeightMm),
-            pointBudget = Mathf.Max(1, configuration.pointBudget)
+            pointBudget = Mathf.Max(1, configuration.pointBudget),
+            xrSimulatorEnabled = configuration.xrSimulatorEnabled
         };
     }
 

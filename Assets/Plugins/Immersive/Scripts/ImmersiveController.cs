@@ -105,6 +105,13 @@ public sealed class ImmersiveController : MonoBehaviour
     private sealed class SurfaceRig
     {
         public SurfaceId id;
+        public string generatedName;
+        public string outputName;
+        public bool isAdditionalCylinderTile;
+        public int curvedTileIndex;
+        public int curvedTileCount = 1;
+        public Rect curvedUvRect = new Rect(0f, 0f, 1f, 1f);
+        public Vector2Int curvedTilePixelSize;
         public GameObject wall;
         public MeshRenderer renderer;
         public Material runtimeMaterial;
@@ -121,6 +128,7 @@ public sealed class ImmersiveController : MonoBehaviour
         public readonly Camera[] captureCameras = new Camera[6];
         public readonly RenderTexture[] captureTextures = new RenderTexture[6];
         public int failedCaptureFaceSize;
+        public int failedCaptureFaceHeight;
         public int failedCaptureDepth;
         public RenderTextureFormat failedCaptureFormat;
     }
@@ -133,7 +141,9 @@ public sealed class ImmersiveController : MonoBehaviour
     private const string CurvedCaptureRootSuffix = "_CurvedCapture";
     private const string ProjectionQuadName = "CurvedProjectionQuad";
     private const float CurvedOutputIsolationDistance = 10000f;
+    private const float CurvedTileIsolationSpacing = 10f;
     private const int MaximumCurvedCaptureFaceSize = 4096;
+    private const float MaximumFocusedCylinderAngle = 90f;
     private const float MinimumDimension = 0.01f;
     public const string SubtitleOverlayLayerName = "SubtitleOverlay";
     public const string AimOverlayLayerName = "AimOverlay";
@@ -285,6 +295,7 @@ public sealed class ImmersiveController : MonoBehaviour
     [NonSerialized] public RenderTexture ceilingRT;
 
     private readonly Dictionary<SurfaceId, SurfaceRig> _rigs = new Dictionary<SurfaceId, SurfaceRig>(6);
+    private readonly List<SurfaceRig> _cylinderTileRigs = new List<SurfaceRig>();
     private Transform _camerasContainer;
     private Transform _wallsContainer;
     private int _previewLayer = -1;
@@ -315,6 +326,10 @@ public sealed class ImmersiveController : MonoBehaviour
     public RenderTexture BackRenderTexture => backRT;
     public RenderTexture FloorRenderTexture => floorRT;
     public RenderTexture CeilingRenderTexture => ceilingRT;
+    public int CylinderRenderTextureCount =>
+        setupShape == SetupShape.Cylinder
+            ? Mathf.Max(1, _cylinderTileRigs.Count)
+            : 0;
     public int SubtitleOverlayLayer => _subtitleOverlayLayer;
     public int AimOverlayLayer => _aimOverlayLayer;
     public bool OutputEnabled => _outputEnabled;
@@ -357,7 +372,7 @@ public sealed class ImmersiveController : MonoBehaviour
             }
         }
 
-        if (frontRT != null)
+        if (frontRT != null && setupShape == SetupShape.Dome)
         {
             var requestedFaceSize = GetRequestedCurvedCaptureFaceSize(frontRT);
             var maximumFaceSize = GetMaximumCurvedCaptureFaceSize();
@@ -374,8 +389,70 @@ public sealed class ImmersiveController : MonoBehaviour
         return false;
     }
 
+    public RenderTexture GetCylinderRenderTexture(int tileIndex)
+    {
+        ProcessPendingChanges();
+        if (setupShape != SetupShape.Cylinder
+            || tileIndex < 0
+            || tileIndex >= _cylinderTileRigs.Count)
+        {
+            return null;
+        }
+
+        return _cylinderTileRigs[tileIndex]?.renderTexture;
+    }
+
+    public bool TryGetCylinderOutputTile(
+        int tileIndex,
+        out Camera outputCamera,
+        out RenderTexture renderTexture,
+        out Rect globalViewportRect,
+        out string outputName)
+    {
+        outputCamera = null;
+        renderTexture = null;
+        globalViewportRect = default;
+        outputName = null;
+        ProcessPendingChanges();
+        if (setupShape != SetupShape.Cylinder
+            || tileIndex < 0
+            || tileIndex >= _cylinderTileRigs.Count)
+        {
+            return false;
+        }
+
+        var rig = _cylinderTileRigs[tileIndex];
+        if (rig == null)
+        {
+            return false;
+        }
+
+        outputCamera = rig.camera;
+        renderTexture = rig.renderTexture;
+        globalViewportRect = rig.curvedUvRect;
+        outputName = rig.outputName;
+        return outputCamera != null;
+    }
+
     public bool TryGetSurfaceCamera(SurfaceId surface, out Camera surfaceCamera)
     {
+        return TryGetSurfaceCamera(
+            surface,
+            new Vector2(.5f, .5f),
+            out surfaceCamera,
+            out _,
+            out _);
+    }
+
+    public bool TryGetSurfaceCamera(
+        SurfaceId surface,
+        Vector2 globalViewportPosition,
+        out Camera surfaceCamera,
+        out Vector2 localViewportPosition,
+        out Rect globalViewportRect)
+    {
+        localViewportPosition = globalViewportPosition;
+        globalViewportRect = new Rect(0f, 0f, 1f, 1f);
         if (!_outputEnabled)
         {
             surfaceCamera = null;
@@ -383,6 +460,17 @@ public sealed class ImmersiveController : MonoBehaviour
         }
 
         ProcessPendingChanges();
+        if (setupShape == SetupShape.Cylinder
+            && TryGetCylinderTile(
+                globalViewportPosition,
+                out var cylinderTile,
+                out localViewportPosition))
+        {
+            surfaceCamera = cylinderTile.camera;
+            globalViewportRect = cylinderTile.curvedUvRect;
+            return surfaceCamera != null && surfaceCamera.isActiveAndEnabled;
+        }
+
         if (setupShape != SetupShape.Room)
         {
             surface = SurfaceId.Front;
@@ -449,6 +537,14 @@ public sealed class ImmersiveController : MonoBehaviour
             return false;
         }
 
+        if (setupShape == SetupShape.Cylinder
+            && TryGetCylinderTile(uv, out var cylinderTile, out var localUv))
+        {
+            outputCamera = cylinderTile.camera;
+            viewportPosition = new Vector3(localUv.x, localUv.y, distance);
+            return outputCamera != null && outputCamera.isActiveAndEnabled;
+        }
+
         outputCamera = rig.camera;
         viewportPosition = new Vector3(uv.x, uv.y, distance);
         return true;
@@ -509,6 +605,22 @@ public sealed class ImmersiveController : MonoBehaviour
             {
                 UpdateSenderState(rig);
             }
+        }
+
+        for (var index = 0; index < _cylinderTileRigs.Count; index++)
+        {
+            var rig = _cylinderTileRigs[index];
+            if (rig == null || !rig.isAdditionalCylinderTile)
+            {
+                continue;
+            }
+
+            if (rig.camera != null)
+            {
+                rig.camera.enabled = enabled;
+            }
+
+            UpdateSenderState(rig);
         }
     }
 
@@ -669,6 +781,7 @@ public sealed class ImmersiveController : MonoBehaviour
 
     private void ReleaseTransientResourcesForAssemblyReload()
     {
+        ReleaseCylinderTileRigs();
         foreach (var pair in _rigs)
         {
             var rig = pair.Value;
@@ -945,7 +1058,21 @@ public sealed class ImmersiveController : MonoBehaviour
     {
         if (setupShape == SetupShape.Cylinder)
         {
-            return GetRenderTextureLabel("Cylinder", frontRT);
+            if (_cylinderTileRigs.Count <= 1)
+            {
+                return GetRenderTextureLabel("Cylinder", frontRT);
+            }
+
+            var labels = new string[_cylinderTileRigs.Count];
+            for (var index = 0; index < _cylinderTileRigs.Count; index++)
+            {
+                var rig = _cylinderTileRigs[index];
+                labels[index] = GetRenderTextureLabel(
+                    rig?.outputName ?? $"Cylinder_{index + 1:00}",
+                    rig?.renderTexture);
+            }
+
+            return string.Join("  |  ", labels);
         }
 
         if (setupShape == SetupShape.Dome)
@@ -1217,6 +1344,211 @@ public sealed class ImmersiveController : MonoBehaviour
         SyncSingleRig(SurfaceId.Right, room && rightWall);
         SyncSingleRig(SurfaceId.Floor, room && floor);
         SyncSingleRig(SurfaceId.Ceiling, room && ceiling);
+
+        if (setupShape == SetupShape.Cylinder
+            && _rigs.TryGetValue(SurfaceId.Front, out var frontRig)
+            && frontRig != null)
+        {
+            SyncCylinderTileRigs(frontRig);
+        }
+        else
+        {
+            ReleaseCylinderTileRigs();
+            if (_rigs.TryGetValue(SurfaceId.Front, out var existingFrontRig)
+                && existingFrontRig != null)
+            {
+                ResetCurvedTileMetadata(existingFrontRig);
+            }
+        }
+    }
+
+    private void SyncCylinderTileRigs(SurfaceRig frontRig)
+    {
+        GetOutputSurfaceSize(SurfaceId.Front, out var surfaceWidth, out var surfaceHeight);
+        var fullSize = ComputeRequestedRenderTextureSize(surfaceWidth, surfaceHeight);
+        var maximumTileSize = GetMaximumCurvedCaptureFaceSize();
+        var columns = Mathf.Max(1, Mathf.CeilToInt(fullSize.x / (float)maximumTileSize));
+        var rows = Mathf.Max(1, Mathf.CeilToInt(fullSize.y / (float)maximumTileSize));
+
+        // A focused perspective capture must stay comfortably below 180 degrees.
+        // Only enforce this extra subdivision once the output actually needs
+        // tiling; a single output continues to use the six-face capture.
+        if (columns > 1 || rows > 1)
+        {
+            columns = Mathf.Max(
+                columns,
+                Mathf.CeilToInt(cylinderAngle / MaximumFocusedCylinderAngle));
+        }
+
+        var tileCount = columns * rows;
+
+        var layoutChanged = _cylinderTileRigs.Count != tileCount
+            || _cylinderTileRigs.Count == 0
+            || _cylinderTileRigs[0] != frontRig;
+        if (!layoutChanged)
+        {
+            for (var row = 0; row < rows && !layoutChanged; row++)
+            {
+                for (var column = 0; column < columns; column++)
+                {
+                    var index = row * columns + column;
+                    GetCylinderTileLayout(
+                        fullSize,
+                        columns,
+                        rows,
+                        column,
+                        row,
+                        out var pixelSize,
+                        out var uvRect);
+                    var rig = _cylinderTileRigs[index];
+                    if (rig == null
+                        || rig.curvedTilePixelSize != pixelSize
+                        || !Approximately(rig.curvedUvRect, uvRect))
+                    {
+                        layoutChanged = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!layoutChanged)
+        {
+            return;
+        }
+
+        ReleaseCylinderTileRigs();
+        ReleaseCurvedResources(frontRig);
+        _cylinderTileRigs.Add(frontRig);
+
+        for (var index = 1; index < tileCount; index++)
+        {
+            _cylinderTileRigs.Add(CreateAdditionalCylinderTileRig(index));
+        }
+
+        for (var row = 0; row < rows; row++)
+        {
+            for (var column = 0; column < columns; column++)
+            {
+                var index = row * columns + column;
+                GetCylinderTileLayout(
+                    fullSize,
+                    columns,
+                    rows,
+                    column,
+                    row,
+                    out var pixelSize,
+                    out var uvRect);
+                var rig = _cylinderTileRigs[index];
+                rig.curvedTileIndex = index;
+                rig.curvedTileCount = tileCount;
+                rig.curvedTilePixelSize = pixelSize;
+                rig.curvedUvRect = uvRect;
+                rig.outputName = tileCount == 1
+                    ? SetupShape.Cylinder.ToString()
+                    : rows == 1
+                        ? $"Cylinder_{column + 1:00}"
+                        : $"Cylinder_C{column + 1:00}_R{row + 1:00}";
+            }
+        }
+    }
+
+    private SurfaceRig CreateAdditionalCylinderTileRig(int index)
+    {
+        GameObject cameraObject;
+        if (cameraPrefab != null)
+        {
+            cameraObject = Instantiate(cameraPrefab, _camerasContainer);
+        }
+        else
+        {
+            cameraObject = new GameObject();
+            cameraObject.transform.SetParent(_camerasContainer, false);
+        }
+
+        var generatedName = $"CylinderTile_{index + 1:00}";
+        cameraObject.name = generatedName + "_Camera";
+        cameraObject.hideFlags = HideFlags.DontSave;
+        var camera = cameraObject.GetComponent<Camera>()
+            ?? cameraObject.AddComponent<Camera>();
+        camera.enabled = _outputEnabled;
+
+        return new SurfaceRig
+        {
+            id = SurfaceId.Front,
+            generatedName = generatedName,
+            outputName = $"Cylinder_{index + 1:00}",
+            isAdditionalCylinderTile = true,
+            camera = camera,
+            wall = _rigs[SurfaceId.Front].wall
+        };
+    }
+
+    private void ReleaseCylinderTileRigs()
+    {
+        for (var index = _cylinderTileRigs.Count - 1; index >= 0; index--)
+        {
+            var rig = _cylinderTileRigs[index];
+            if (rig != null && rig.isAdditionalCylinderTile)
+            {
+                DestroyRig(rig);
+            }
+        }
+
+        _cylinderTileRigs.Clear();
+    }
+
+    private static void ResetCurvedTileMetadata(SurfaceRig rig)
+    {
+        rig.curvedTileIndex = 0;
+        rig.curvedTileCount = 1;
+        rig.curvedUvRect = new Rect(0f, 0f, 1f, 1f);
+        rig.curvedTilePixelSize = default;
+        rig.outputName = rig.id.ToString();
+    }
+
+    private static void GetCylinderTileLayout(
+        Vector2Int fullSize,
+        int columns,
+        int rows,
+        int column,
+        int row,
+        out Vector2Int pixelSize,
+        out Rect uvRect)
+    {
+        GetDistributedBlockRange(fullSize.x, columns, column, out var x, out var width);
+        GetDistributedBlockRange(fullSize.y, rows, row, out var y, out var height);
+        pixelSize = new Vector2Int(width, height);
+        uvRect = new Rect(
+            x / (float)fullSize.x,
+            y / (float)fullSize.y,
+            width / (float)fullSize.x,
+            height / (float)fullSize.y);
+    }
+
+    private static void GetDistributedBlockRange(
+        int totalPixels,
+        int partCount,
+        int partIndex,
+        out int start,
+        out int length)
+    {
+        var totalBlocks = Mathf.Max(1, totalPixels / 16);
+        var baseBlocks = totalBlocks / partCount;
+        var remainder = totalBlocks % partCount;
+        var startBlocks =
+            partIndex * baseBlocks + Mathf.Min(partIndex, remainder);
+        var lengthBlocks = baseBlocks + (partIndex < remainder ? 1 : 0);
+        start = startBlocks * 16;
+        length = Mathf.Max(16, lengthBlocks * 16);
+    }
+
+    private static bool Approximately(Rect a, Rect b)
+    {
+        return Mathf.Approximately(a.x, b.x)
+            && Mathf.Approximately(a.y, b.y)
+            && Mathf.Approximately(a.width, b.width)
+            && Mathf.Approximately(a.height, b.height);
     }
 
     private void SyncSingleRig(SurfaceId id, bool shouldExist)
@@ -1281,6 +1613,8 @@ public sealed class ImmersiveController : MonoBehaviour
         var rig = new SurfaceRig
         {
             id = id,
+            generatedName = id.ToString(),
+            outputName = id.ToString(),
             wall = wall.gameObject,
             renderer = renderer,
             camera = camera,
@@ -1391,7 +1725,12 @@ public sealed class ImmersiveController : MonoBehaviour
 
     private SurfaceRig CreateRig(SurfaceId id)
     {
-        var rig = new SurfaceRig { id = id };
+        var rig = new SurfaceRig
+        {
+            id = id,
+            generatedName = id.ToString(),
+            outputName = id.ToString()
+        };
 
         rig.wall = GameObject.CreatePrimitive(PrimitiveType.Quad);
         rig.wall.name = id + "_Wall";
@@ -1495,6 +1834,28 @@ public sealed class ImmersiveController : MonoBehaviour
             }
 
             UpdateSenderState(rig);
+        }
+
+        if (setupShape == SetupShape.Cylinder)
+        {
+            for (var index = 0; index < _cylinderTileRigs.Count; index++)
+            {
+                var rig = _cylinderTileRigs[index];
+                if (rig == null || !rig.isAdditionalCylinderTile)
+                {
+                    continue;
+                }
+
+                if (rig.camera != null)
+                {
+                    rig.camera.enabled = _outputEnabled;
+                }
+
+                ResetSurfaceCamera(rig.camera);
+                UpdateRenderTexture(rig);
+                UpdateCurvedProjection(rig, eye);
+                UpdateSenderState(rig);
+            }
         }
     }
 
@@ -2088,13 +2449,41 @@ public sealed class ImmersiveController : MonoBehaviour
         }
 
         ConfigureCurvedOutputCamera(rig, eyeWorld);
-        var faceSize = GetCurvedCaptureFaceSize(rig.renderTexture);
+        var focusedCylinderCapture = UsesFocusedCylinderCapture(rig);
+        var captureWidth = focusedCylinderCapture
+            ? rig.renderTexture.width
+            : GetCurvedCaptureFaceSize(rig.renderTexture);
+        var captureHeight = focusedCylinderCapture
+            ? rig.renderTexture.height
+            : captureWidth;
+        var captureCount = focusedCylinderCapture ? 1 : rig.captureCameras.Length;
         var sceneCullingMask = GetCurvedCaptureCullingMask();
         var shapeRotation = rig.wall.transform.rotation;
 
         for (var index = 0; index < rig.captureCameras.Length; index++)
         {
-            if (!UpdateCurvedCaptureTexture(rig, index, faceSize))
+            if (index >= captureCount)
+            {
+                if (rig.captureCameras[index] != null)
+                {
+                    rig.captureCameras[index].enabled = false;
+                    rig.captureCameras[index].targetTexture = null;
+                }
+
+                if (rig.captureTextures[index] != null)
+                {
+                    ReleaseAndDestroyRenderTexture(rig.captureTextures[index]);
+                    rig.captureTextures[index] = null;
+                }
+
+                continue;
+            }
+
+            if (!UpdateCurvedCaptureTexture(
+                    rig,
+                    index,
+                    captureWidth,
+                    captureHeight))
             {
                 rig.camera.enabled = false;
                 for (var captureIndex = 0;
@@ -2125,12 +2514,28 @@ public sealed class ImmersiveController : MonoBehaviour
             }
 
             ResetCaptureCamera(captureCamera);
-            captureCamera.transform.SetPositionAndRotation(
-                eyeWorld,
-                shapeRotation
-                * Quaternion.LookRotation(
-                    CaptureDirections[index],
-                    CaptureUpDirections[index]));
+            if (focusedCylinderCapture)
+            {
+                if (!ConfigureFocusedCylinderCapture(
+                        rig,
+                        captureCamera,
+                        eyeWorld))
+                {
+                    rig.camera.enabled = false;
+                    captureCamera.enabled = false;
+                    return;
+                }
+            }
+            else
+            {
+                captureCamera.transform.SetPositionAndRotation(
+                    eyeWorld,
+                    shapeRotation
+                    * Quaternion.LookRotation(
+                        CaptureDirections[index],
+                        CaptureUpDirections[index]));
+            }
+
             captureCamera.targetTexture = rig.captureTextures[index];
             captureCamera.cullingMask = sceneCullingMask;
             captureCamera.depth = rig.camera.depth - 10f + index * .01f;
@@ -2143,11 +2548,28 @@ public sealed class ImmersiveController : MonoBehaviour
 
     private bool EnsureCurvedResources(SurfaceRig rig)
     {
+        var requiredCaptureCount = UsesFocusedCylinderCapture(rig)
+            ? 1
+            : rig.captureCameras.Length;
+        var captureCamerasReady = true;
+        for (var index = 0; index < requiredCaptureCount; index++)
+        {
+            captureCamerasReady &= rig.captureCameras[index] != null;
+        }
+
         if (rig.curvedCaptureRoot != null
             && rig.projectionQuad != null
-            && rig.projectionMaterial != null)
+            && rig.projectionMaterial != null
+            && captureCamerasReady)
         {
             return true;
+        }
+
+        if (rig.curvedCaptureRoot != null
+            || rig.projectionQuad != null
+            || rig.projectionMaterial != null)
+        {
+            ReleaseCurvedResources(rig);
         }
 
         var shader = Resources.Load<Shader>("Immersive/CurvedProjection")
@@ -2171,15 +2593,16 @@ public sealed class ImmersiveController : MonoBehaviour
         _projectionShaderWarningLogged = false;
         DestroyAllChildrenByExactName(
             _camerasContainer,
-            rig.id + CurvedCaptureRootSuffix);
+            rig.generatedName + CurvedCaptureRootSuffix);
         DestroyAllChildrenByExactName(rig.camera.transform, ProjectionQuadName);
 
-        rig.curvedCaptureRoot = new GameObject(rig.id + CurvedCaptureRootSuffix);
+        rig.curvedCaptureRoot = new GameObject(
+            rig.generatedName + CurvedCaptureRootSuffix);
         rig.curvedCaptureRoot.hideFlags = HideFlags.DontSave;
         rig.curvedCaptureRoot.transform.SetParent(_camerasContainer, false);
         rig.curvedCaptureRoot.SetActive(false);
 
-        for (var index = 0; index < rig.captureCameras.Length; index++)
+        for (var index = 0; index < requiredCaptureCount; index++)
         {
             GameObject cameraObject;
             if (cameraPrefab != null)
@@ -2218,7 +2641,7 @@ public sealed class ImmersiveController : MonoBehaviour
 
         rig.projectionMaterial = new Material(shader)
         {
-            name = setupShape + "_CurvedProjectionRuntimeMat",
+            name = rig.outputName + "_CurvedProjectionRuntimeMat",
             hideFlags = HideFlags.DontSave
         };
         var projectionRenderer = rig.projectionQuad.GetComponent<MeshRenderer>();
@@ -2235,7 +2658,10 @@ public sealed class ImmersiveController : MonoBehaviour
         var camera = rig.camera;
         var aspect = rig.renderTexture.width / Mathf.Max(1f, rig.renderTexture.height);
         var isolatedPosition =
-            eyeWorld - transform.up * CurvedOutputIsolationDistance;
+            eyeWorld
+            - transform.up * CurvedOutputIsolationDistance
+            + transform.forward
+            * (rig.curvedTileIndex * CurvedTileIsolationSpacing);
 
         camera.transform.SetPositionAndRotation(isolatedPosition, transform.rotation);
         camera.orthographic = true;
@@ -2286,6 +2712,102 @@ public sealed class ImmersiveController : MonoBehaviour
             cameraData.renderType = CameraRenderType.Base;
             cameraData.allowXRRendering = false;
         }
+    }
+
+    private bool UsesFocusedCylinderCapture(SurfaceRig rig)
+    {
+        return setupShape == SetupShape.Cylinder
+            && (rig.curvedTileCount > 1
+                || GetRequestedCurvedCaptureFaceSize(rig.renderTexture)
+                > GetMaximumCurvedCaptureFaceSize());
+    }
+
+    private bool ConfigureFocusedCylinderCapture(
+        SurfaceRig rig,
+        Camera captureCamera,
+        Vector3 eyeWorld)
+    {
+        var uvRect = rig.curvedUvRect;
+        var centerWorld = rig.wall.transform.TransformPoint(
+            GetCylinderSurfacePoint(uvRect.center));
+        var forward = centerWorld - eyeWorld;
+        if (forward.sqrMagnitude <= Mathf.Epsilon)
+        {
+            return false;
+        }
+
+        forward.Normalize();
+        var up = rig.wall.transform.up;
+        if (Vector3.Cross(up, forward).sqrMagnitude <= .0001f)
+        {
+            up = rig.wall.transform.forward;
+        }
+
+        captureCamera.transform.SetPositionAndRotation(
+            eyeWorld,
+            Quaternion.LookRotation(forward, up));
+
+        var right = captureCamera.transform.right;
+        var cameraUp = captureCamera.transform.up;
+        var minimumX = float.PositiveInfinity;
+        var maximumX = float.NegativeInfinity;
+        var minimumY = float.PositiveInfinity;
+        var maximumY = float.NegativeInfinity;
+        const int sampleSteps = 12;
+
+        for (var yIndex = 0; yIndex <= sampleSteps; yIndex++)
+        {
+            var v = Mathf.Lerp(
+                uvRect.yMin,
+                uvRect.yMax,
+                yIndex / (float)sampleSteps);
+            for (var xIndex = 0; xIndex <= sampleSteps; xIndex++)
+            {
+                var u = Mathf.Lerp(
+                    uvRect.xMin,
+                    uvRect.xMax,
+                    xIndex / (float)sampleSteps);
+                var pointWorld = rig.wall.transform.TransformPoint(
+                    GetCylinderSurfacePoint(new Vector2(u, v)));
+                var direction = pointWorld - eyeWorld;
+                var depth = Vector3.Dot(forward, direction);
+                if (depth <= .001f)
+                {
+                    return false;
+                }
+
+                var tangentX = Vector3.Dot(right, direction) / depth;
+                var tangentY = Vector3.Dot(cameraUp, direction) / depth;
+                minimumX = Mathf.Min(minimumX, tangentX);
+                maximumX = Mathf.Max(maximumX, tangentX);
+                minimumY = Mathf.Min(minimumY, tangentY);
+                maximumY = Mathf.Max(maximumY, tangentY);
+            }
+        }
+
+        const float frustumPadding = .005f;
+        minimumX -= frustumPadding;
+        maximumX += frustumPadding;
+        minimumY -= frustumPadding;
+        maximumY += frustumPadding;
+        var near = Mathf.Max(.001f, captureCamera.nearClipPlane);
+        captureCamera.projectionMatrix = PerspectiveOffCenter(
+            minimumX * near,
+            maximumX * near,
+            minimumY * near,
+            maximumY * near,
+            near,
+            captureCamera.farClipPlane);
+        return true;
+    }
+
+    private Vector3 GetCylinderSurfacePoint(Vector2 uv)
+    {
+        var angle = (uv.x - .5f) * cylinderAngle * Mathf.Deg2Rad;
+        return new Vector3(
+            cylinderRadius * Mathf.Sin(angle),
+            cylinderBaseHeight + uv.y * cylinderPanelHeight,
+            cylinderRadius * Mathf.Cos(angle));
     }
 
     private static void DisableCaptureSenderComponents(GameObject cameraObject)
@@ -2366,11 +2888,13 @@ public sealed class ImmersiveController : MonoBehaviour
     private bool UpdateCurvedCaptureTexture(
         SurfaceRig rig,
         int index,
-        int faceSize)
+        int faceWidth,
+        int faceHeight)
     {
         var texture = rig.captureTextures[index];
         var captureDepth = Mathf.Max(16, depthBufferBits);
-        if (rig.failedCaptureFaceSize == faceSize
+        if (rig.failedCaptureFaceSize == faceWidth
+            && rig.failedCaptureFaceHeight == faceHeight
             && rig.failedCaptureDepth == captureDepth
             && rig.failedCaptureFormat == renderTextureFormat)
         {
@@ -2378,8 +2902,8 @@ public sealed class ImmersiveController : MonoBehaviour
         }
 
         if (texture != null
-            && (texture.width != faceSize
-                || texture.height != faceSize
+            && (texture.width != faceWidth
+                || texture.height != faceHeight
                 || texture.depth != captureDepth
                 || texture.format != renderTextureFormat))
         {
@@ -2395,12 +2919,12 @@ public sealed class ImmersiveController : MonoBehaviour
         if (texture == null)
         {
             texture = new RenderTexture(
-                faceSize,
-                faceSize,
+                faceWidth,
+                faceHeight,
                 captureDepth,
                 renderTextureFormat)
             {
-                name = setupShape + "_Capture_" + CaptureFaceNames[index],
+                name = rig.outputName + "_Capture_" + CaptureFaceNames[index],
                 hideFlags = HideFlags.DontSave,
                 antiAliasing = 1,
                 autoGenerateMips = false,
@@ -2412,13 +2936,14 @@ public sealed class ImmersiveController : MonoBehaviour
             {
                 ReleaseAndDestroyRenderTexture(texture);
                 rig.captureTextures[index] = null;
-                rig.failedCaptureFaceSize = faceSize;
+                rig.failedCaptureFaceSize = faceWidth;
+                rig.failedCaptureFaceHeight = faceHeight;
                 rig.failedCaptureDepth = captureDepth;
                 rig.failedCaptureFormat = renderTextureFormat;
                 if (!_captureTextureWarningLogged)
                 {
                     Debug.LogError(
-                        $"Could not allocate {faceSize}x{faceSize} curved capture textures "
+                        $"Could not allocate {faceWidth}x{faceHeight} curved capture textures "
                         + $"using {renderTextureFormat}; curved immersive output is disabled.",
                         this);
                     _captureTextureWarningLogged = true;
@@ -2433,13 +2958,14 @@ public sealed class ImmersiveController : MonoBehaviour
         {
             if (!texture.Create())
             {
-                rig.failedCaptureFaceSize = faceSize;
+                rig.failedCaptureFaceSize = faceWidth;
+                rig.failedCaptureFaceHeight = faceHeight;
                 rig.failedCaptureDepth = captureDepth;
                 rig.failedCaptureFormat = renderTextureFormat;
                 if (!_captureTextureWarningLogged)
                 {
                     Debug.LogError(
-                        $"Could not recreate {faceSize}x{faceSize} curved capture textures "
+                        $"Could not recreate {faceWidth}x{faceHeight} curved capture textures "
                         + $"using {renderTextureFormat}; curved immersive output is disabled.",
                         this);
                     _captureTextureWarningLogged = true;
@@ -2452,6 +2978,7 @@ public sealed class ImmersiveController : MonoBehaviour
         texture.wrapMode = TextureWrapMode.Clamp;
         texture.filterMode = FilterMode.Bilinear;
         rig.failedCaptureFaceSize = 0;
+        rig.failedCaptureFaceHeight = 0;
         rig.failedCaptureDepth = 0;
         return true;
     }
@@ -2483,6 +3010,16 @@ public sealed class ImmersiveController : MonoBehaviour
 
         GetDomeSphere(out var domeSphereRadius, out _, out var domeMaximumPolar);
         material.SetInt("_SetupShape", (int)setupShape);
+        material.SetInt(
+            "_UseFocusedCapture",
+            UsesFocusedCylinderCapture(rig) ? 1 : 0);
+        material.SetVector(
+            "_OutputUvBounds",
+            new Vector4(
+                rig.curvedUvRect.xMin,
+                rig.curvedUvRect.yMin,
+                rig.curvedUvRect.xMax,
+                rig.curvedUvRect.yMax));
         material.SetInt("_DomeUnwrapMode", (int)domeUnwrapMode);
         material.SetFloat("_CylinderRadius", cylinderRadius);
         material.SetFloat("_CylinderBaseHeight", cylinderBaseHeight);
@@ -2524,6 +3061,7 @@ public sealed class ImmersiveController : MonoBehaviour
         }
 
         rig.failedCaptureFaceSize = 0;
+        rig.failedCaptureFaceHeight = 0;
         rig.failedCaptureDepth = 0;
         _captureTextureWarningLogged = false;
 
@@ -2600,8 +3138,14 @@ public sealed class ImmersiveController : MonoBehaviour
     private void UpdateRenderTexture(SurfaceRig rig)
     {
         GetOutputSurfaceSize(rig.id, out var wallWidth, out var wallHeight);
-        var size = ComputeRenderTextureSize(wallWidth, wallHeight);
-        var configuredAsset = GetRenderTextureAsset(rig.id);
+        var size = setupShape == SetupShape.Cylinder
+            && rig.curvedTilePixelSize.x > 0
+            && rig.curvedTilePixelSize.y > 0
+                ? rig.curvedTilePixelSize
+                : ComputeRenderTextureSize(wallWidth, wallHeight);
+        var configuredAsset = rig.isAdditionalCylinderTile
+            ? null
+            : GetRenderTextureAsset(rig.id);
 
         // Keep the persistent asset object alive so Recorder settings retain their
         // reference while room dimensions and output resolution change.
@@ -2649,7 +3193,7 @@ public sealed class ImmersiveController : MonoBehaviour
         {
             rig.renderTexture = new RenderTexture(size.x, size.y, depthBufferBits, renderTextureFormat)
             {
-                name = rig.id.ToString(),
+                name = rig.outputName ?? rig.id.ToString(),
                 antiAliasing = 1,
                 autoGenerateMips = false,
                 useMipMap = false
@@ -2665,11 +3209,14 @@ public sealed class ImmersiveController : MonoBehaviour
 
         if (rig.ownsRenderTexture)
         {
-            rig.renderTexture.name = rig.id.ToString();
+            rig.renderTexture.name = rig.outputName ?? rig.id.ToString();
         }
 
         rig.camera.targetTexture = rig.renderTexture;
-        SetRenderTextureOutput(rig.id, rig.renderTexture);
+        if (!rig.isAdditionalCylinderTile)
+        {
+            SetRenderTextureOutput(rig.id, rig.renderTexture);
+        }
     }
 
     private static void ConfigureRenderTexture(
@@ -2746,19 +3293,42 @@ public sealed class ImmersiveController : MonoBehaviour
 
     private Vector2Int ComputeRenderTextureSize(float wallWidth, float wallHeight)
     {
-        var pixelsPerMeter = GetPixelsPerMeter() / Mathf.Max(1, resolutionDivider);
-        var width = ComputeAlignedResolution(wallWidth, pixelsPerMeter);
-        var height = ComputeAlignedResolution(wallHeight, pixelsPerMeter);
+        var requested = ComputeRequestedRenderTextureSize(wallWidth, wallHeight);
+        var maximum = Mathf.Max(16, SystemInfo.maxTextureSize);
+        maximum -= maximum % 16;
+        var width = Mathf.Min(requested.x, maximum);
+        var height = Mathf.Min(requested.y, maximum);
 
         return new Vector2Int(width, height);
     }
 
-    private static int ComputeAlignedResolution(float surfaceSizeMeters, float pixelsPerMeter)
+    private Vector2Int ComputeRequestedRenderTextureSize(
+        float wallWidth,
+        float wallHeight)
+    {
+        var pixelsPerMeter = GetPixelsPerMeter() / Mathf.Max(1, resolutionDivider);
+        return new Vector2Int(
+            ComputeRequestedAlignedResolution(wallWidth, pixelsPerMeter),
+            ComputeRequestedAlignedResolution(wallHeight, pixelsPerMeter));
+    }
+
+    private static int ComputeRequestedAlignedResolution(
+        float surfaceSizeMeters,
+        float pixelsPerMeter)
     {
         var resolution = Mathf.Max(16, Mathf.RoundToInt(surfaceSizeMeters * pixelsPerMeter));
 
         // NDI requires dimensions aligned to 16-pixel blocks.
-        resolution = AlignUpToMultiple(resolution, 16);
+        return AlignUpToMultiple(resolution, 16);
+    }
+
+    private static int ComputeAlignedResolution(
+        float surfaceSizeMeters,
+        float pixelsPerMeter)
+    {
+        var resolution = ComputeRequestedAlignedResolution(
+            surfaceSizeMeters,
+            pixelsPerMeter);
         var maximum = Mathf.Max(16, SystemInfo.maxTextureSize);
         maximum -= maximum % 16;
         return Mathf.Min(resolution, maximum);
@@ -2915,6 +3485,51 @@ public sealed class ImmersiveController : MonoBehaviour
         }
 
         return outputCamera != null;
+    }
+
+    private bool TryGetCylinderTile(
+        Vector2 globalUv,
+        out SurfaceRig tile,
+        out Vector2 localUv)
+    {
+        tile = null;
+        localUv = default;
+        if (_cylinderTileRigs.Count == 0)
+        {
+            return false;
+        }
+
+        globalUv = new Vector2(
+            Mathf.Clamp01(globalUv.x),
+            Mathf.Clamp01(globalUv.y));
+        for (var index = 0; index < _cylinderTileRigs.Count; index++)
+        {
+            var candidate = _cylinderTileRigs[index];
+            if (candidate == null)
+            {
+                continue;
+            }
+
+            var rect = candidate.curvedUvRect;
+            var insideX = globalUv.x >= rect.xMin
+                && (globalUv.x < rect.xMax
+                    || Mathf.Approximately(rect.xMax, 1f));
+            var insideY = globalUv.y >= rect.yMin
+                && (globalUv.y < rect.yMax
+                    || Mathf.Approximately(rect.yMax, 1f));
+            if (!insideX || !insideY)
+            {
+                continue;
+            }
+
+            tile = candidate;
+            localUv = new Vector2(
+                Mathf.Clamp01((globalUv.x - rect.xMin) / rect.width),
+                Mathf.Clamp01((globalUv.y - rect.yMin) / rect.height));
+            return true;
+        }
+
+        return false;
     }
 
     private bool TryIntersectCylinder(
@@ -3202,7 +3817,9 @@ public sealed class ImmersiveController : MonoBehaviour
         var cameraObject = rig.camera.gameObject;
         var streamName = setupShape == SetupShape.Room
             ? rig.id.ToString()
-            : setupShape.ToString();
+            : setupShape == SetupShape.Cylinder
+                ? rig.outputName ?? setupShape.ToString()
+                : setupShape.ToString();
         var outputAvailable = _outputEnabled && rig.camera.enabled;
         var spoutAllowed = outputAvailable
             && enableSpoutSender
@@ -3375,9 +3992,15 @@ public sealed class ImmersiveController : MonoBehaviour
 
     private void DestroyRig(SurfaceRig rig)
     {
+        if (rig?.camera != null)
+        {
+            rig.camera.enabled = false;
+            rig.camera.gameObject.SetActive(false);
+        }
+
         ReleaseCurvedResources(rig);
 
-        if (rig.runtimeMaterial != null)
+        if (!rig.isAdditionalCylinderTile && rig.runtimeMaterial != null)
         {
             SetMaterialTexture(rig.runtimeMaterial, null);
             SafeDestroy(rig.runtimeMaterial);
@@ -3396,15 +4019,18 @@ public sealed class ImmersiveController : MonoBehaviour
             }
         }
 
-        SetRenderTextureOutput(rig.id, null);
+        if (!rig.isAdditionalCylinderTile)
+        {
+            SetRenderTextureOutput(rig.id, null);
+        }
 
-        if (rig.generatedPreviewMesh != null)
+        if (!rig.isAdditionalCylinderTile && rig.generatedPreviewMesh != null)
         {
             SafeDestroy(rig.generatedPreviewMesh);
             rig.generatedPreviewMesh = null;
         }
 
-        if (rig.wall != null)
+        if (!rig.isAdditionalCylinderTile && rig.wall != null)
         {
             SafeDestroy(rig.wall);
         }
@@ -3417,6 +4043,7 @@ public sealed class ImmersiveController : MonoBehaviour
 
     private void ReleaseAllResources()
     {
+        ReleaseCylinderTileRigs();
         foreach (var pair in _rigs)
         {
             DestroyRig(pair.Value);
